@@ -16,3 +16,8 @@ export enum ApiStatusCode {
 
     GatewayTimeout = 504 /** Thời gian chờ của máy chủ đã hết */
 }
+
+export enum ApiCode {
+    Success = 0,
+    Error = 1
+}

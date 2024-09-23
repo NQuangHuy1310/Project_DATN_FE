@@ -1,12 +1,14 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
 import { FcGoogle } from 'react-icons/fc'
 import { FaFacebook } from 'react-icons/fa'
+import { Link, useNavigate } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { IoEyeOffSharp, IoEyeSharp } from 'react-icons/io5'
 
 import routes from '@/configs/routes'
+import { userApis } from '@/apis'
+import { useUserStore } from '@/store'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { LoginFormFields, loginSchema } from '@/validations'
@@ -17,13 +19,23 @@ const Login = () => {
         handleSubmit,
         formState: { isSubmitting, errors }
     } = useForm<LoginFormFields>({ resolver: zodResolver(loginSchema) })
+    const navigate = useNavigate()
+
+    const setUser = useUserStore((state) => state.setUser)
+    const setProfile = useUserStore((state) => state.setProfile)
+
     const [showPassword, setShowPassword] = useState(false)
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword)
     }
 
-    const onSubmit: SubmitHandler<LoginFormFields> = async (data) => {}
+    const onSubmit: SubmitHandler<LoginFormFields> = async (data) => {
+        const response = await userApis.login(data)
+        setUser(response.user)
+        setProfile(response.profile)
+        navigate(routes.home)
+    }
 
     return (
         <div className="flex items-center justify-center w-full h-full">

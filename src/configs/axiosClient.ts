@@ -2,11 +2,10 @@ import axios, { AxiosResponse } from 'axios'
 
 import { getAccessTokenFromLocalStorage } from '@/utils'
 import { toast } from 'sonner'
-import { MessageConfig } from '@/constants'
-// import { toast } from '@/hooks/use-toast'
+import { ApiCode, MessageConfig } from '@/constants'
 
 const axiosClient = axios.create({
-    baseURL: '',
+    baseURL: 'http://localhost:8000/api/',
     withCredentials: true,
     headers: {
         'Content-Type': 'application/json'
@@ -30,21 +29,17 @@ axiosClient.interceptors.response.use(
     (response: AxiosResponse) => {
         const { code, message, data } = response.data
 
-        if (code === 0) {
-            return data
-        } else {
-            toast.error(MessageConfig.actionFailed, {
+        if (code === ApiCode.Success) {
+            toast.success(MessageConfig.actionSuccess, {
                 description: message
             })
-            return Promise.reject({
-                message: message || 'An error occurred',
-                code: code,
-                data: data || [],
-                status: response.status
-            })
+            return data
         }
     },
     (error) => {
+        toast.error(MessageConfig.actionFailed, {
+            description: error.response.data?.message
+        })
         return Promise.reject({
             message: error.response?.data?.message || 'An error occurred',
             code: 1,

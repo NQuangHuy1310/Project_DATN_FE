@@ -12,7 +12,20 @@ createRoot(document.getElementById('root')!).render(
     <StrictMode>
         <QueryClientProvider client={queryClient}>
             <App />
-            <Toaster position="top-right" />
+            <Toaster
+                position="top-right"
+                toastOptions={{
+                    unstyled: false,
+                    classNames: {
+                        title: 'text-sm text-white',
+                        description: 'text-xs',
+                        error: 'bg-red-400',
+                        success: 'bg-primary text-white',
+                        warning: 'text-yellow-400',
+                        info: 'bg-blue-400'
+                    }
+                }}
+            />
             <ReactQueryDevtools initialIsOpen={false} />
         </QueryClientProvider>
     </StrictMode>

@@ -8,18 +8,18 @@ export const loginSchema = z.object({
 
 export const registerSchema = z
     .object({
-        username: z.string().min(1, MessageErrors.requiredField),
+        name: z.string().min(1, MessageErrors.requiredField),
         email: z.string().email(MessageErrors.invalidEmail),
         password: z.string().min(8, MessageErrors.passwordTooShort),
-        confirmPassword: z.string()
+        password_confirmation: z.string()
     })
     .refine(
         (values) => {
-            return values.password === values.confirmPassword
+            return values.password === values.password_confirmation
         },
         {
             message: MessageErrors.passwordsDoNotMatch,
-            path: ['confirmPassword']
+            path: ['password_confirmation']
         }
     )
 

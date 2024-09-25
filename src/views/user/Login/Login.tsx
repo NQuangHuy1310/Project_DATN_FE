@@ -9,6 +9,7 @@ import { IoEyeOffSharp, IoEyeSharp } from 'react-icons/io5'
 import routes from '@/configs/routes'
 import { userApis } from '@/apis'
 import { useUserStore } from '@/store'
+import { setAccessToken } from '@/utils'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { LoginFormFields, loginSchema } from '@/validations'
@@ -16,6 +17,7 @@ import { LoginFormFields, loginSchema } from '@/validations'
 const Login = () => {
     const {
         register,
+        setError,
         handleSubmit,
         formState: { isSubmitting, errors }
     } = useForm<LoginFormFields>({ resolver: zodResolver(loginSchema) })
@@ -31,10 +33,25 @@ const Login = () => {
     }
 
     const onSubmit: SubmitHandler<LoginFormFields> = async (data) => {
-        const response = await userApis.login(data)
-        setUser(response.user)
-        setProfile(response.profile)
-        navigate(routes.home)
+        try {
+            const response = await userApis.login(data)
+            setUser(response.user)
+            setProfile(response.profile)
+            setAccessToken(response.access_token)
+            navigate(routes.home)
+        } catch (error: any) {
+            if (error.data && error.data.errors) {
+                error.data.errors.forEach((errorItem: any) => {
+                    Object.entries(errorItem).forEach(([key, value]) => {
+                        const message = value as string
+                        setError(key as keyof LoginFormFields, {
+                            type: key,
+                            message: message
+                        })
+                    })
+                })
+            }
+        }
     }
 
     return (

@@ -14,6 +14,7 @@ import { Button } from '@/components/ui/button'
 import OTPDialog from '@/components/shared/OTPDialog'
 
 import { RegisterFormFields, registerSchema } from '@/validations'
+import { setAccessToken } from '@/utils'
 
 const Register = () => {
     const {
@@ -40,15 +41,15 @@ const Register = () => {
             await userApis.register(data)
             setOpen(true)
         } catch (error: any) {
-            if (error.data && typeof error.data.errors === 'object') {
-                Object.keys(error.data.errors).forEach((key) => {
-                    const messages = error.data.errors[key]
-                    if (Array.isArray(messages) && messages.length > 0) {
+            if (error.data && error.data.errors) {
+                error.data.errors.forEach((errorItem: any) => {
+                    Object.entries(errorItem).forEach(([key, value]) => {
+                        const message = value as string
                         setError(key as keyof RegisterFormFields, {
                             type: key,
-                            message: messages[0]
+                            message: message
                         })
-                    }
+                    })
                 })
             }
         }
@@ -59,6 +60,7 @@ const Register = () => {
         const response = await userApis.verifyOtp({ email, otp_code })
         setUser(response.user)
         setProfile(response.profile)
+        setAccessToken(response.access_token)
         navigate(routes.home)
         reset()
     }

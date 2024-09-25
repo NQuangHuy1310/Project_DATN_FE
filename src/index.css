@@ -77,8 +77,8 @@
         --chart-5: 340 75% 55%;
     }
     .active {
-        background-color: #f5f5f7 !important;
-        color: black !important;
+        background-color: #f5f5f7;
+        color: black;
         font-weight: 500;
     }
 }

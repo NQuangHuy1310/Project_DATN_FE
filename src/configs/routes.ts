@@ -5,11 +5,14 @@ const routes = {
     login: '/login',
     register: '/register',
     forgotPassword: '/forgot-password',
-    overview: '/user',
+
+    overview: '/user-dashboard',
+    teacher: '/user/teacher',
     profile: '/user/profile',
-    mentor: '/user/mentor',
-    exploreCourses: '/user/course/exploreCourses',
-    myCourse: '/user/course/myCourse'
+    settings: 'user/settings',
+    course: '/user/course',
+    myCourse: '/user/course/my-course',
+    exploreCourses: '/user/course/explore-courses'
 
     // Routes for teacher
 }

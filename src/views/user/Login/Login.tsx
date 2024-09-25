@@ -7,7 +7,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { IoEyeOffSharp, IoEyeSharp } from 'react-icons/io5'
 
 import routes from '@/configs/routes'
-import { userApis } from '@/apis'
+import { authApis } from '@/apis'
 import { useUserStore } from '@/store'
 import { setAccessToken } from '@/utils'
 import { Input } from '@/components/ui/input'
@@ -34,7 +34,7 @@ const Login = () => {
 
     const onSubmit: SubmitHandler<LoginFormFields> = async (data) => {
         try {
-            const response = await userApis.login(data)
+            const response = await authApis.login(data)
             setUser(response.user)
             setProfile(response.profile)
             setAccessToken(response.access_token)

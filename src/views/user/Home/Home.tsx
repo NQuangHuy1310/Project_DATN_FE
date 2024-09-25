@@ -7,7 +7,7 @@ const Home = () => {
         <div>
             {JSON.stringify(user)}
             {JSON.stringify(profile)}
-            <img src={user?.avatar || undefined} alt="" className="size-10" />
+            <img src="http://localhost:8000/storage/avatars/avatar_1727016343.jpg" alt="" className="size-10" />
         </div>
     )
 }

@@ -9,6 +9,7 @@ interface UserState {
     setProfile: (profile: IProfile) => void
     clearUser: () => void
     clearProfile: () => void
+    clearUserAndProfile: () => void
 }
 
 export const useUserStore = create<UserState>((set) => ({
@@ -28,6 +29,11 @@ export const useUserStore = create<UserState>((set) => ({
     },
     clearProfile: () => {
         set({ profile: null })
+        localStorage.removeItem('user_profile')
+    },
+    clearUserAndProfile: () => {
+        set({ user: null, profile: null })
+        localStorage.removeItem('user_data')
         localStorage.removeItem('user_profile')
     }
 }))

@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { IoEyeOffSharp, IoEyeSharp } from 'react-icons/io5'
 
-import { userApis } from '@/apis'
+import { authApis } from '@/apis'
 import routes from '@/configs/routes'
 import { useUserStore } from '@/store'
 import { Input } from '@/components/ui/input'
@@ -38,7 +38,7 @@ const Register = () => {
 
     const onSubmit: SubmitHandler<RegisterFormFields> = async (data) => {
         try {
-            await userApis.register(data)
+            await authApis.register(data)
             setOpen(true)
         } catch (error: any) {
             if (error.data && error.data.errors) {
@@ -57,7 +57,7 @@ const Register = () => {
 
     const handleOtpSubmit = async (otp_code: string) => {
         const email = getValues('email')
-        const response = await userApis.verifyOtp({ email, otp_code })
+        const response = await authApis.verifyOtp({ email, otp_code })
         setUser(response.user)
         setProfile(response.profile)
         setAccessToken(response.access_token)
@@ -67,7 +67,7 @@ const Register = () => {
 
     const handleResendOtp = async () => {
         const email = getValues('email')
-        await userApis.resendOtp({ email })
+        await authApis.resendOtp({ email })
     }
 
     return (

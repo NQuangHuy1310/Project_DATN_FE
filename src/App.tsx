@@ -3,6 +3,7 @@ import { privateRoutes, publicRoutes } from '@/routes'
 import HomeLayout from '@/layouts/AuthLayouts/HomeLayout'
 import { getAccessTokenFromLocalStorage } from '@/utils'
 import Login from '@/views/user/Login'
+import Userlayout from '@/layouts/UserLayouts'
 
 function App() {
     const isLoggedIn = getAccessTokenFromLocalStorage()
@@ -32,7 +33,7 @@ function App() {
                     })}
 
                     {privateRoutes?.map((route, index) => {
-                        let Layout: React.ComponentType<any> = HomeLayout
+                        let Layout: React.ComponentType<any> = Userlayout
                         if (route.layout) {
                             Layout = route.layout as React.ComponentType<any>
                         }

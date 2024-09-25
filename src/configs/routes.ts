@@ -5,7 +5,11 @@ const routes = {
     login: '/login',
     register: '/register',
     forgotPassword: '/forgot-password',
-    profile: '/user/profile'
+    overview: '/user',
+    profile: '/user/profile',
+    mentor: '/user/mentor',
+    exploreCourses: '/user/course/exploreCourses',
+    myCourse: '/user/course/myCourse'
 
     // Routes for teacher
 }

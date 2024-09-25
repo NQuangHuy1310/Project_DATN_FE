@@ -1,8 +1,12 @@
+import { toast } from 'sonner'
 import axios, { AxiosResponse } from 'axios'
 
-import { getAccessTokenFromLocalStorage } from '@/utils'
-import { toast } from 'sonner'
-import { ApiCode, MessageConfig } from '@/constants'
+import { authApis } from '@/apis'
+import { useUserStore } from '@/store'
+import { ApiStatusCode, MessageConfig } from '@/constants'
+import { getAccessTokenFromLocalStorage, removeAccessToken, setAccessToken } from '@/utils'
+
+const { clearUserAndProfile } = useUserStore.getState()
 
 const axiosClient = axios.create({
     baseURL: 'http://localhost:8000/api/',
@@ -29,22 +33,38 @@ axiosClient.interceptors.response.use(
     (response: AxiosResponse) => {
         const { code, message, data } = response.data
 
-        if (code === ApiCode.Success) {
+        if (code === ApiStatusCode.Success || ApiStatusCode.Created) {
             toast.success(MessageConfig.actionSuccess, {
                 description: message
             })
             return data
         }
     },
-    (error) => {
+    async (error) => {
+        const status = error.response?.status
+
         toast.error(MessageConfig.actionFailed, {
             description: error.response.data?.message
         })
+
+        if (status === 401) {
+            try {
+                const refreshSuccess = await authApis.refreshToken()
+                if (refreshSuccess) {
+                    setAccessToken(refreshSuccess.access_token)
+                    return axiosClient(error.config)
+                }
+            } catch {
+                toast.error(MessageConfig.sessionExpired)
+                clearUserAndProfile()
+                removeAccessToken()
+            }
+        }
+
         return Promise.reject({
-            message: error.response?.data?.message || 'An error occurred',
-            code: 1,
-            data: error.response?.data || [],
-            status: error.response?.status || 500
+            message: error.response?.data?.message || MessageConfig.retry,
+            data: error.response?.data || {},
+            status: status || 500
         })
     }
 )

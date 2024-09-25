@@ -23,6 +23,10 @@ export interface IUserProfile {
     profile: IProfile
 }
 
+export interface IRefreshToken {
+    access_token: string
+}
+
 // Request
 export interface ILoginData {
     email: string
@@ -41,6 +45,13 @@ export interface IVerifyOtpData {
     otp_code: string
 }
 
-export interface IResendOtpData {
+export interface IUserEmail {
     email: string
+}
+
+export interface IResetPassword {
+    email: string
+    otp_code: string
+    new_password: string
+    new_password_confirmation: string
 }

@@ -29,15 +29,11 @@ function UserHeader() {
                 <h2 className="text-2xl font-semibold">{getTitle()}</h2>
             </div>
             <div className="flex gap-5 items-center">
-                <div>
-                    <FaBell className="size-5" />
-                </div>
-                <div>
-                    <Avatar>
-                        <AvatarImage src="../public/ảnh.jpg" alt="" />
-                        <AvatarFallback>TT</AvatarFallback>
-                    </Avatar>
-                </div>
+                <FaBell className="size-6 text-primary cursor-pointer" />
+                <Avatar className="cursor-pointer">
+                    <AvatarImage src="../public/ảnh.jpg" alt="" />
+                    <AvatarFallback>TT</AvatarFallback>
+                </Avatar>
             </div>
         </header>
     )

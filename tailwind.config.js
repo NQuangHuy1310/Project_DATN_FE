@@ -50,10 +50,16 @@ export default {
                     4: 'hsl(var(--chart-4))',
                     5: 'hsl(var(--chart-5))'
                 },
-                black: '141522'
+                black: '#141522',
+                darkGrey: '#9C9CA4',
+                grey: '#DFDFDF',
+                softGrey: '#F5F5F7'
             },
             screens: {
                 mainScreen: '1440px'
+            },
+            fontFamily: {
+                roboto: 'Roboto'
             },
             keyframes: {
                 'accordion-down': {

@@ -4,6 +4,7 @@ import HomeLayout from '@/layouts/AuthLayouts/HomeLayout'
 
 import Home from '@/views/user/Home'
 import Login from '@/views/user/Login'
+import Profile from '@/views/user/Profile'
 import Register from '@/views/user/Register'
 import ForgotPassword from '@/views/user/ForgotPassword'
 
@@ -16,3 +17,4 @@ export const publicRoutes = [
 ]
 
 // Routes cần đăng nhập
+export const privateRoutes = [{ path: routes.profile, layout: HomeLayout, element: Profile }]

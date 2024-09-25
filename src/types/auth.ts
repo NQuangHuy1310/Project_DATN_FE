@@ -18,6 +18,7 @@ export interface IProfile {
 }
 
 export interface IUserProfile {
+    access_token: string
     user: IUser
     profile: IProfile
 }

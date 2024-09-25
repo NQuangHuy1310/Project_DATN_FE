@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { FaUserCog } from 'react-icons/fa'
 import { TbUserHexagon } from 'react-icons/tb'
 import { HiOutlineTemplate, HiBookOpen } from 'react-icons/hi'
@@ -36,3 +37,15 @@ export const sidebarList = [
         path: routes.settings
     }
 ]
+
+export enum CourseLevel {
+    Beginner = 'Beginner',
+    Intermediate = 'Intermediate',
+    Master = 'Master'
+}
+
+export enum TeacherStatus {
+    follow = 'Theo dõi',
+    followed = 'Đã theo dõi',
+    unFollow = 'Huỷ theo dõi'
+}

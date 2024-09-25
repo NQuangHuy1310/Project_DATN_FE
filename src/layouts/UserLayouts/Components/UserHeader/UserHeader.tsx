@@ -1,35 +1,40 @@
+/* eslint-disable indent */
+import { FaRegBell } from 'react-icons/fa'
 import { useLocation } from 'react-router-dom'
 
 import routes from '@/configs/routes'
+import useGetUserProfile from '@/hooks/useGetUser'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-
-import { FaBell } from 'react-icons/fa'
 
 function UserHeader() {
     const location = useLocation()
     const route = location.pathname
 
+    const { user } = useGetUserProfile()
+
     const getTitle = (): string => {
         switch (route) {
             case routes.overview:
-                return 'Hi, Nguyen Tu Tai'
+                return `Hi, ${user?.name}`
             case routes.exploreCourses:
-                return 'Explore Courses'
+                return 'Khám phá khoá học'
             case routes.myCourse:
-                return 'My Courses'
-            case routes.mentor:
-                return 'Mentors'
+                return 'Khoá học của tôi'
+            case routes.teacher:
+                return 'Giảng viên'
+            case routes.settings:
+                return 'Cài đặt'
             default:
-                return 'Hi, Nguyen Tu Tai'
+                return `Hi, ${user?.name}`
         }
     }
     return (
-        <header className="py-4 flex justify-between items-center px-[30px] fixed w-[calc(100%-16rem)] bg-white z-50">
+        <header className="fixed left-64 right-0 z-50 flex h-20 items-center justify-between bg-white px-8 shadow-sm">
             <div>
-                <h2 className="text-2xl font-semibold">{getTitle()}</h2>
+                <h2 className="text-3xl font-medium">{getTitle()}</h2>
             </div>
-            <div className="flex gap-5 items-center">
-                <FaBell className="size-6 text-primary cursor-pointer" />
+            <div className="flex items-center gap-5">
+                <FaRegBell className="size-5 cursor-pointer text-black" />
                 <Avatar className="cursor-pointer">
                     <AvatarImage src="../public/ảnh.jpg" alt="" />
                     <AvatarFallback>TT</AvatarFallback>

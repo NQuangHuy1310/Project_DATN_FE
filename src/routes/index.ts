@@ -1,5 +1,6 @@
 import routes from '@/configs/routes'
 
+import Dashboard from '@/layouts/UserLayouts/Dashboard'
 import HomeLayout from '@/layouts/AuthLayouts/HomeLayout'
 import ProfileLayout from '@/layouts/UserLayouts/ProfileLayout'
 
@@ -8,6 +9,7 @@ import Login from '@/views/user/Login'
 import Profile from '@/views/user/Profile'
 import Register from '@/views/user/Register'
 import ForgotPassword from '@/views/user/ForgotPassword'
+import ExploreCourses from '@/views/course/ExploreCourses/ExploreCourses'
 
 // Routes không cần đăng nhập
 export const publicRoutes = [
@@ -18,4 +20,7 @@ export const publicRoutes = [
 ]
 
 // Routes cần đăng nhập
-export const privateRoutes = [{ path: routes.profile, layout: ProfileLayout, element: Profile }]
+export const privateRoutes = [
+    { path: routes.profile, layout: ProfileLayout, element: Profile },
+    { path: routes.exploreCourses, layout: Dashboard, element: ExploreCourses }
+]

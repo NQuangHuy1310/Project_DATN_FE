@@ -20,18 +20,26 @@ const Teacher = ({ image, name, job, reviewStart, status, totalCourse, totalRevi
                         </AvatarFallback>
                     </Avatar>
                     <div className="flex flex-col">
-                        <h4 className="text-base font-bold">{name}</h4>
-                        <p className="text-sm text-darkGrey">{job}</p>
+                        <h4 className="text-base font-semibold">{name}</h4>
+                        <p className="text-xs text-darkGrey">{job}</p>
                     </div>
                 </Link>
                 {status === TeacherStatus.follow && (
-                    <Button variant="outline" className="flex gap-1">
+                    <Button variant="outline" className="flex gap-1 px-2 text-xs">
                         <LuPlus />
                         Follow
                     </Button>
                 )}
-                {status === TeacherStatus.followed && <Button variant="default">Followed</Button>}
-                {status === TeacherStatus.unFollow && <Button variant="destructive">Unfollow</Button>}
+                {status === TeacherStatus.followed && (
+                    <Button variant="default" className="px-2 text-xs">
+                        Followed
+                    </Button>
+                )}
+                {status === TeacherStatus.unFollow && (
+                    <Button variant="destructive" className="px-2 text-xs">
+                        Unfollow
+                    </Button>
+                )}
             </div>
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-1">

@@ -38,9 +38,11 @@ const AccountProfile = () => {
         <div className="flex max-w-[500px] flex-col justify-start gap-7">
             <h4 className="text-lg font-bold">Chỉnh sửa thông tin cá nhân</h4>
             <div className="flex items-center gap-7">
-                <Avatar className="relative h-[150px] w-[150px] cursor-pointer hover:opacity-80 hover:transition-all">
-                    <AvatarImage src={getImagesUrl(user?.avatar || '')} alt={user?.name} />
-                    <AvatarFallback className="size-8">{user?.name.charAt(0).toUpperCase()}</AvatarFallback>
+                <Avatar className="relative h-[100px] w-[100px] cursor-pointer hover:opacity-80 hover:transition-all">
+                    <AvatarImage src={getImagesUrl(user?.avatar ?? '')} alt={user?.name} />
+                    <AvatarFallback className="h-full w-full bg-slate-500/50 text-3xl font-semibold">
+                        {user?.name.charAt(0).toUpperCase()}
+                    </AvatarFallback>
                 </Avatar>
                 <div className="flex flex-col gap-2">
                     <h6 className="text-base font-semibold">Ảnh đại điện</h6>
@@ -53,29 +55,29 @@ const AccountProfile = () => {
                         <FiPlus />
                         Tải ảnh mới lên
                     </Button>
-                    <input type="file" ref={fileInputRef} className="hidden" onChange={handleFileChange} />
+                    <input type="file" ref={fileInputRef} className="hidden" onChange={(e) => handleFileChange(e)} />
                 </div>
             </div>
 
             <div className="flex flex-col gap-2">
                 <label className="text-sm font-semibold">Họ và Tên</label>
-                <Input type="text" placeholder="Họ và tên" value={user?.name} />
+                <Input type="text" placeholder="Họ và tên" value={user?.name} onChange={() => {}} />
             </div>
             <div className="flex flex-col gap-2">
                 <label className="text-sm font-semibold">Địa chỉ</label>
-                <Input type="text" placeholder="Địa chỉ" value={profile?.address} />
+                <Input type="text" placeholder="Địa chỉ" value={profile?.address} onChange={() => {}} />
             </div>
             <div className="flex flex-col gap-2">
                 <label className="text-sm font-semibold">Số điện thoại</label>
-                <Input type="number" placeholder="Số điện thoại" value={profile?.phone} />
+                <Input type="number" placeholder="Số điện thoại" value={profile?.phone} onChange={() => {}} />
             </div>
             <div className="flex flex-col gap-2">
                 <label className="text-sm font-semibold">Kinh nghiệm làm việc</label>
-                <Textarea placeholder="Kinh nghiệm làm việc" value={profile?.experience} />
+                <Textarea placeholder="Kinh nghiệm làm việc" value={profile?.experience} onChange={() => {}} />
             </div>
             <div className="flex flex-col gap-2">
                 <label className="text-sm font-semibold">Bio</label>
-                <Textarea placeholder="Bio" value={profile?.bio} />
+                <Textarea placeholder="Bio" value={profile?.bio} onChange={() => {}} />
             </div>
 
             <div className="">

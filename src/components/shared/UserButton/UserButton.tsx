@@ -24,7 +24,9 @@ const UserButton = () => {
             <DropdownMenuTrigger asChild className="relative outline-none transition hover:opacity-75">
                 <Avatar className="size-10 cursor-pointer">
                     <AvatarImage src={getImagesUrl(user?.avatar || '')} alt={user?.name} />
-                    <AvatarFallback>{user?.name.charAt(0).toUpperCase()}</AvatarFallback>
+                    <AvatarFallback className="bg-slate-500/50 text-xl font-semibold">
+                        {user?.name.charAt(0).toUpperCase()}
+                    </AvatarFallback>
                 </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-52">
@@ -33,7 +35,7 @@ const UserButton = () => {
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup className="flex flex-col gap-1">
                     <DropdownMenuItem className="cursor-pointer">
-                        <Link to={routes.profile} className="flex items-center gap-2">
+                        <Link to={routes.accountProfile} className="flex items-center gap-2">
                             <IoSettingsOutline className="size-4" />
                             <span className="text-base font-medium">Quản lý tài khoản</span>
                         </Link>

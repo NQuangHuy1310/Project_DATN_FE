@@ -16,7 +16,7 @@ const routes = {
     exploreCourses: '/user/course/explore-courses',
 
     // Account routes
-    account: '/account',
+    account: '/account/',
     accountProfile: '/account/profile',
     accountHelp: '/account/help',
     accountSetting: '/account/settings',

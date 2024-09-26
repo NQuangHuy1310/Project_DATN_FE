@@ -59,7 +59,7 @@ export default {
                 mainScreen: '1440px'
             },
             fontFamily: {
-                roboto: 'Roboto'
+                roboto: ['Roboto', 'sans-serif']
             },
             keyframes: {
                 'accordion-down': {

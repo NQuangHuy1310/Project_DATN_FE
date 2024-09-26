@@ -8,11 +8,16 @@ const routes = {
 
     overview: '/user-dashboard',
     teacher: '/user/teacher',
-    profile: '/user/profile',
     settings: 'user/settings',
     course: '/user/course',
     myCourse: '/user/course/my-course',
-    exploreCourses: '/user/course/explore-courses'
+    exploreCourses: '/user/course/explore-courses',
+
+    // Account routes
+    profile: '/account/profile',
+    accountHelp: 'account/helps',
+    accountSetting: '/account/settings',
+    accountNotification: '/account/notification'
 
     // Routes for teacher
 }

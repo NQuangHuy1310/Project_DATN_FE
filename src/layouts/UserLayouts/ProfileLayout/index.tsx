@@ -8,7 +8,7 @@ const ProfileLayout = ({ children }: { children: React.ReactNode }) => {
             <UserSidebar />
             <article className="w-full ps-64">
                 <UserHeader />
-                <main className="mt-[80px] flex h-screen w-full items-start gap-7 bg-softGrey p-8">
+                <main className="mt-[80px] flex min-h-screen w-full items-start gap-7 bg-softGrey p-8">
                     <UserAside />
                     <div className="flex-1 rounded-lg bg-white p-7">{children}</div>
                 </main>

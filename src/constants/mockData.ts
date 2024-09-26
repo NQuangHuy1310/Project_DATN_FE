@@ -1,5 +1,6 @@
 import { CourseLevel, TeacherStatus } from '@/constants/constants'
 import { ICourse, ITeacher } from '@/types'
+import { INotificationMessage } from '@/types/notificationmessage';
 
 export const courses: ICourse[] = [
     {
@@ -67,3 +68,47 @@ export const mockTeachers: ITeacher[] = [
         status: TeacherStatus.unFollow
     }
 ]
+export const notificationMessages: INotificationMessage[] = [
+    {
+        isRead: false,
+        title: 'Welcome to our platform!',
+        time: 945, // 9:45 AM
+        description: 'We are excited to have you join our community. Explore our courses and start learning!'
+    },
+    {
+        isRead: true,
+        title: 'Your weekly progress report',
+        time: 1630, // 4:30 PM
+        description: 'Check out your progress for the past week in your enrolled courses.'
+    },
+    {
+        isRead: false,
+        title: 'New message from support',
+        time: 1140, // 11:40 AM
+        description: 'You have a new message from our support team. Please check your inbox for details.'
+    },
+    {
+        isRead: true,
+        title: 'Upcoming system maintenance',
+        time: 2230, // 10:30 PM
+        description: 'Our platform will undergo maintenance on Saturday from 12:00 AM to 4:00 AM UTC.'
+    },
+    {
+        isRead: false,
+        title: 'Course recommendation: Advanced React',
+        time: 810, // 8:10 AM
+        description: 'Based on your recent activity, we recommend the Advanced React course to enhance your skills.'
+    },
+    {
+        isRead: true,
+        title: 'Special offer: 50% off on new courses',
+        time: 1330, // 1:30 PM
+        description: 'For a limited time, enjoy 50% off on all new courses. Start learning today!'
+    },
+    {
+        isRead: false,
+        title: 'Reminder: Upcoming webinar on AI',
+        time: 1000, // 10:00 AM
+        description: 'Don’t forget to join the upcoming webinar on AI and Machine Learning this Friday at 11:00 AM.'
+    }
+];

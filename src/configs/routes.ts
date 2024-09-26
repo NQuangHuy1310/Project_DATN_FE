@@ -6,6 +6,8 @@ const routes = {
     register: '/register',
     forgotPassword: '/forgot-password',
 
+    notification: '/notification',
+
     overview: '/user-dashboard',
     teacher: '/user/teacher',
     settings: 'user/settings',

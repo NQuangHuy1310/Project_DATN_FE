@@ -14,7 +14,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 const maxSizeInMB = 2
 const maxSizeInBytes = maxSizeInMB * 1024 * 1024
 
-const Profile = () => {
+const AccountProfile = () => {
     const { user, profile } = useGetUserProfile()
     const fileInputRef = useRef<HTMLInputElement | null>(null)
 
@@ -85,4 +85,4 @@ const Profile = () => {
     )
 }
 
-export default Profile
+export default AccountProfile

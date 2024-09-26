@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom'
 
 import routes from '@/configs/routes'
 import useGetUserProfile from '@/hooks/useGetUser'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import UserButton from '@/components/shared/UserButton'
 
 function UserHeader() {
     const location = useLocation()
@@ -35,10 +35,7 @@ function UserHeader() {
             </div>
             <div className="flex items-center gap-5">
                 <FaRegBell className="size-5 cursor-pointer text-black" />
-                <Avatar className="cursor-pointer">
-                    <AvatarImage src="../public/ảnh.jpg" alt="" />
-                    <AvatarFallback>TT</AvatarFallback>
-                </Avatar>
+                <UserButton />
             </div>
         </header>
     )

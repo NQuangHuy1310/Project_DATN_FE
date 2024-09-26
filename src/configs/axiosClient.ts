@@ -3,13 +3,14 @@ import axios, { AxiosResponse } from 'axios'
 
 import { authApis } from '@/apis'
 import { useUserStore } from '@/store'
+import { backendUrl } from '@/apis/Uri'
 import { ApiStatusCode, MessageConfig } from '@/constants'
 import { getAccessTokenFromLocalStorage, removeAccessToken, setAccessToken } from '@/utils'
 
 const { clearUserAndProfile } = useUserStore.getState()
 
 const axiosClient = axios.create({
-    baseURL: 'http://localhost:8000/api/',
+    baseURL: backendUrl,
     withCredentials: true,
     headers: {
         'Content-Type': 'application/json'

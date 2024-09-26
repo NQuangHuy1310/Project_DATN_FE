@@ -73,16 +73,16 @@ const Register = () => {
     return (
         <>
             <OTPDialog open={open} setOpen={setOpen} onSubmit={handleOtpSubmit} resendOtp={handleResendOtp} />
-            <div className="flex items-center justify-center w-full h-full">
-                <div className="max-w-[450px] w-full mx-auto rounded-xl border shadow p-4 md:p-6 lg:p-10">
-                    <div className="flex flex-col items-center justify-center lg:gap-5 md:gap-4 gap-3.5">
-                        <div className="flex flex-col items-start gap-1 w-full">
+            <div className="flex h-full w-full items-center justify-center">
+                <div className="mx-auto w-full max-w-[450px] rounded-xl border p-4 shadow md:p-6 lg:p-10">
+                    <div className="flex flex-col items-center justify-center gap-3.5 md:gap-4 lg:gap-5">
+                        <div className="flex w-full flex-col items-start gap-1">
                             <h1 className="text-2xl font-semibold text-foreground">Đăng ký tài khoản</h1>
-                            <p className="text-sm text-back">Sử dụng email hoặc dịch vụ khác để đăng ký</p>
+                            <p className="text-back text-sm">Sử dụng email hoặc dịch vụ khác để đăng ký</p>
                         </div>
                         <form
                             onSubmit={handleSubmit(onSubmit)}
-                            className="w-full flex-col flex items-center justify-center gap-4"
+                            className="flex w-full flex-col items-center justify-center gap-4"
                         >
                             <div className="w-full">
                                 <Input
@@ -95,9 +95,7 @@ const Register = () => {
                                     disabled={isSubmitting}
                                     autoFocus
                                 />
-                                {errors.name && (
-                                    <div className="text-red-500 lg:text-base text-sm">{errors.name?.message}</div>
-                                )}
+                                {errors.name && <div className="text-sm text-red-500">{errors.name?.message}</div>}
                             </div>
                             <div className="w-full">
                                 <Input
@@ -109,11 +107,9 @@ const Register = () => {
                                     className="w-full"
                                     disabled={isSubmitting}
                                 />
-                                {errors.email && (
-                                    <div className="text-red-500 lg:text-base text-sm">{errors.email.message}</div>
-                                )}
+                                {errors.email && <div className="text-sm text-red-500">{errors.email.message}</div>}
                             </div>
-                            <div className="w-full relative">
+                            <div className="relative w-full">
                                 <Input
                                     {...register('password')}
                                     type={showPassword ? 'text' : 'password'}
@@ -125,21 +121,21 @@ const Register = () => {
                                     autoComplete="current-password"
                                 />
                                 {errors.password && (
-                                    <div className="text-red-500 lg:text-base text-sm">{errors.password.message}</div>
+                                    <div className="text-sm text-red-500">{errors.password.message}</div>
                                 )}
                                 {showPassword ? (
                                     <IoEyeOffSharp
                                         onClick={togglePasswordVisibility}
-                                        className="absolute right-3 top-1 transform translate-y-1/2 cursor-pointer text-gray-500"
+                                        className="absolute right-3 top-1 translate-y-1/2 transform cursor-pointer text-gray-500"
                                     />
                                 ) : (
                                     <IoEyeSharp
                                         onClick={togglePasswordVisibility}
-                                        className="absolute right-3 top-1 transform translate-y-1/2 cursor-pointer text-gray-500"
+                                        className="absolute right-3 top-1 translate-y-1/2 transform cursor-pointer text-gray-500"
                                     />
                                 )}
                             </div>
-                            <div className="w-full relative">
+                            <div className="relative w-full">
                                 <Input
                                     {...register('password_confirmation')}
                                     type={showPassword ? 'text' : 'password'}
@@ -151,23 +147,21 @@ const Register = () => {
                                     autoComplete="current-password"
                                 />
                                 {errors.password_confirmation && (
-                                    <div className="text-red-500 lg:text-base text-sm">
-                                        {errors.password_confirmation.message}
-                                    </div>
+                                    <div className="text-sm text-red-500">{errors.password_confirmation.message}</div>
                                 )}
                                 {showPassword ? (
                                     <IoEyeOffSharp
                                         onClick={togglePasswordVisibility}
-                                        className="absolute right-3 top-1 transform translate-y-1/2 cursor-pointer text-gray-500"
+                                        className="absolute right-3 top-1 translate-y-1/2 transform cursor-pointer text-gray-500"
                                     />
                                 ) : (
                                     <IoEyeSharp
                                         onClick={togglePasswordVisibility}
-                                        className="absolute right-3 top-1 transform translate-y-1/2 cursor-pointer text-gray-500"
+                                        className="absolute right-3 top-1 translate-y-1/2 transform cursor-pointer text-gray-500"
                                     />
                                 )}
                             </div>
-                            <div className="text-right w-full">
+                            <div className="w-full text-right">
                                 <Link to={routes.forgotPassword} className="font-medium">
                                     Quên mật khẩu?
                                 </Link>
@@ -177,10 +171,10 @@ const Register = () => {
                             </Button>
                         </form>
 
-                        <hr className="w-full my-2" />
+                        <hr className="my-2 w-full" />
 
                         <div className="w-full">
-                            <div className="flex gap-2 md:gap-5 flex-col w-full md:flex-row">
+                            <div className="flex w-full flex-col gap-2 md:flex-row md:gap-5">
                                 <Button
                                     disabled={isSubmitting}
                                     variant="outline"
@@ -188,7 +182,7 @@ const Register = () => {
                                     className="flex flex-1 gap-2 p-2"
                                 >
                                     <FcGoogle className="size-5" />
-                                    <span className="text-base lg:text-sm font-medium">Google</span>
+                                    <span className="text-base font-medium lg:text-sm">Google</span>
                                 </Button>
                                 <Button
                                     disabled={isSubmitting}
@@ -197,10 +191,10 @@ const Register = () => {
                                     className="flex flex-1 gap-2 p-2"
                                 >
                                     <FaFacebook className="size-5 text-blue-600" />
-                                    <span className="text-base lg:text-sm font-medium">Facebook</span>
+                                    <span className="text-base font-medium lg:text-sm">Facebook</span>
                                 </Button>
                             </div>
-                            <div className="text-center mt-5">
+                            <div className="mt-5 text-center">
                                 <p className="text-gray-500">
                                     Bạn đã có tài khoản?{' '}
                                     <Link to={routes.login} className="text-primary">

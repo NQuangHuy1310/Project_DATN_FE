@@ -8,6 +8,8 @@ import Login from '@/views/user/Login'
 import Profile from '@/views/user/Profile'
 import Register from '@/views/user/Register'
 import ForgotPassword from '@/views/user/ForgotPassword'
+import Notification from '@/views/user/Notification/Notification'
+import Dashboard from '@/layouts/UserLayouts/Dashboard'
 
 // Routes không cần đăng nhập
 export const publicRoutes = [
@@ -18,4 +20,7 @@ export const publicRoutes = [
 ]
 
 // Routes cần đăng nhập
-export const privateRoutes = [{ path: routes.profile, layout: ProfileLayout, element: Profile }]
+export const privateRoutes = [
+    { path: routes.profile, layout: ProfileLayout, element: Profile },
+    { path: routes.accountNotification, layout: Dashboard, element: Notification }
+]

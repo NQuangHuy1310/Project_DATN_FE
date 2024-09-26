@@ -10,7 +10,7 @@ const ExploreCourses = () => {
             <div className="mt-7">
                 <h2 className="text-2xl font-semibold">Người hướng dẫn</h2>
             </div>
-            <div className="mt-7 grid grid-cols-3 gap-5">
+            <div className="mt-7 flex flex-wrap gap-10">
                 {mockTeachers &&
                     mockTeachers.length > 0 &&
                     mockTeachers.map((item, index) => (
@@ -30,7 +30,7 @@ const ExploreCourses = () => {
             <div className="mt-7">
                 <h2 className="text-2xl font-semibold">Khóa học hàng tháng</h2>
             </div>
-            <div className="mt-7 grid grid-cols-1 gap-5 md:grid-cols-3">
+            <div className="mt-7 flex gap-10">
                 {courses &&
                     courses.length > 0 &&
                     courses.map((item, index) => (

@@ -63,22 +63,30 @@ const AccountNotifications = () => {
 
                 <div className="flex items-center gap-2.5">
                     <Input type="checkbox" id="tipsAndTricks" className="size-4 cursor-pointer" />
-                    <label htmlFor="tipsAndTricks">Mẹo và thủ thuật</label>
+                    <label className="text-sm text-darkGrey" htmlFor="tipsAndTricks">
+                        Mẹo và thủ thuật
+                    </label>
                 </div>
 
                 <div className="flex items-center gap-2.5">
                     <Input type="checkbox" id="offersAndPromotions" className="size-4 cursor-pointer" />
-                    <label htmlFor="offersAndPromotions">Ưu đãi và khuyến mãi</label>
+                    <label className="text-sm text-darkGrey" htmlFor="offersAndPromotions">
+                        Ưu đãi và khuyến mãi
+                    </label>
                 </div>
 
                 <div className="flex items-center gap-2.5">
                     <Input type="checkbox" id="researchOpportunities" className="size-4 cursor-pointer" />
-                    <label htmlFor="researchOpportunities">Cơ hội nghiên cứu</label>
+                    <label className="text-sm text-darkGrey" htmlFor="researchOpportunities">
+                        Cơ hội nghiên cứu
+                    </label>
                 </div>
 
                 <div className="flex items-center gap-2.5">
                     <Input type="checkbox" id="newsletter" className="size-4 cursor-pointer" />
-                    <label htmlFor="newsletter">Bản tin</label>
+                    <label className="text-sm text-darkGrey" htmlFor="newsletter">
+                        Bản tin
+                    </label>
                 </div>
             </div>
 

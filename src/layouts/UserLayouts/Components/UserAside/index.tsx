@@ -15,8 +15,8 @@ const UserAside = () => {
                         </div>
                     </NavLink>
                 ))}
-                <Button variant="outline" className="font-medium">
-                    Logout
+                <Button variant="destructive" size="lg" className="text-base font-medium">
+                    Đăng xuất
                 </Button>
             </div>
         </aside>

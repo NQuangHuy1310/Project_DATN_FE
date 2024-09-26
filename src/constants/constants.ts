@@ -39,7 +39,7 @@ export const sidebarList = [
     {
         title: 'Tài khoản',
         icon: FaUserCog,
-        path: routes.account
+        path: routes.accountProfile
     }
 ]
 

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import { MdKeyboardArrowDown } from 'react-icons/md'
 
-import logo from '@/assets/Union.png'
+import logo from '@/assets/Union.svg'
 import routes from '@/configs/routes'
 import { sidebarList } from '@/constants'
 

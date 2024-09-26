@@ -13,6 +13,10 @@ function UserHeader() {
     const { user } = useGetUserProfile()
 
     const getTitle = (): string => {
+        if (route.includes('/account')) {
+            return 'Tài khoản'
+        }
+
         switch (route) {
             case routes.overview:
                 return `Hi, ${user?.name}`
@@ -24,8 +28,6 @@ function UserHeader() {
                 return 'Giảng viên'
             case routes.settings:
                 return 'Cài đặt'
-            case routes.profile:
-                return 'Tài khoản'
             default:
                 return `Hi, ${user?.name}`
         }

@@ -10,7 +10,7 @@ const ProfileLayout = ({ children }: { children: React.ReactNode }) => {
                 <UserHeader />
                 <main className="mt-[80px] flex h-screen w-full items-start gap-7 bg-softGrey p-8">
                     <UserAside />
-                    <div className="">{children}</div>
+                    <div className="flex-1 rounded-lg bg-white p-7">{children}</div>
                 </main>
             </article>
         </div>

@@ -9,7 +9,8 @@ export const MessageErrors = {
     serverError: 'Đã xảy ra lỗi trên máy chủ. Vui lòng thử lại sau.',
     invalidInput: 'Dữ liệu nhập vào không hợp lệ. Vui lòng kiểm tra lại.',
     actionNotAllowed: 'Hành động này không được phép.',
-    genericError: 'Đã xảy ra một lỗi không xác định. Vui lòng thử lại sau.'
+    genericError: 'Đã xảy ra một lỗi không xác định. Vui lòng thử lại sau.',
+    maxSizeImage: 'Vui lòng tải ảnh có kích thước dưới 2MB.'
 }
 
 export const ApiMessages = {

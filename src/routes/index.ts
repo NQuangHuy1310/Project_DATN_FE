@@ -5,12 +5,19 @@ import HomeLayout from '@/layouts/AuthLayouts/HomeLayout'
 import ProfileLayout from '@/layouts/UserLayouts/ProfileLayout'
 
 import Home from '@/views/user/Home'
+
+// Authentication
 import Login from '@/views/user/Login'
-import Profile from '@/views/user/Profile'
 import Register from '@/views/user/Register'
+
+// Account
 import ForgotPassword from '@/views/user/ForgotPassword'
-import ExploreCourses from '@/views/course/ExploreCourses/ExploreCourses'
+import AccountProfile from '@/views/user/AccountProfile'
 import AccountSettings from '@/views/user/AccountSettings'
+import AccountNotifications from '@/views/user/AccountNotifications'
+
+// course
+import ExploreCourses from '@/views/course/ExploreCourses/ExploreCourses'
 
 // Routes không cần đăng nhập
 export const publicRoutes = [
@@ -22,7 +29,8 @@ export const publicRoutes = [
 
 // Routes cần đăng nhập
 export const privateRoutes = [
-    { path: routes.profile, layout: ProfileLayout, element: Profile },
+    { path: routes.profile, layout: ProfileLayout, element: AccountProfile },
     { path: routes.exploreCourses, layout: Dashboard, element: ExploreCourses },
-    { path: routes.accountSetting, layout: ProfileLayout, element: AccountSettings }
+    { path: routes.accountSetting, layout: ProfileLayout, element: AccountSettings },
+    { path: routes.accountNotification, layout: ProfileLayout, element: AccountNotifications }
 ]

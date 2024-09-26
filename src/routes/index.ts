@@ -1,7 +1,7 @@
 import routes from '@/configs/routes'
 
-import UserLayout from '@/layouts/UserLayouts'
 import HomeLayout from '@/layouts/AuthLayouts/HomeLayout'
+import ProfileLayout from '@/layouts/UserLayouts/ProfileLayout'
 
 import Home from '@/views/user/Home'
 import Login from '@/views/user/Login'
@@ -18,4 +18,4 @@ export const publicRoutes = [
 ]
 
 // Routes cần đăng nhập
-export const privateRoutes = [{ path: routes.profile, layout: UserLayout, element: Profile }]
+export const privateRoutes = [{ path: routes.profile, layout: ProfileLayout, element: Profile }]

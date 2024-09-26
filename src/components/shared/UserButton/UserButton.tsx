@@ -1,5 +1,8 @@
+import { Link } from 'react-router-dom'
 import { LuLogOut } from 'react-icons/lu'
+import { IoSettingsOutline } from 'react-icons/io5'
 
+import routes from '@/configs/routes'
 import { getImagesUrl } from '@/utils'
 import useGetUserProfile from '@/hooks/useGetUser'
 import {
@@ -28,10 +31,16 @@ const UserButton = () => {
                 <DropdownMenuLabel>Tài khoản của tôi</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuSeparator />
-                <DropdownMenuGroup>
+                <DropdownMenuGroup className="flex flex-col gap-1">
+                    <DropdownMenuItem className="cursor-pointer">
+                        <Link to={routes.profile} className="flex items-center gap-2">
+                            <IoSettingsOutline className="size-4" />
+                            <span className="text-base font-medium">Quản lý tài khoản</span>
+                        </Link>
+                    </DropdownMenuItem>
                     <DropdownMenuItem className="cursor-pointer">
                         <LuLogOut className="mr-2 size-4" />
-                        <span>Đăng xuất</span>
+                        <span className="text-base font-medium">Đăng xuất</span>
                     </DropdownMenuItem>
                 </DropdownMenuGroup>
             </DropdownMenuContent>

@@ -1,7 +1,7 @@
 import UserHeader from '@/layouts/UserLayouts/Components/UserHeader/UserHeader'
 import UserSidebar from '@/layouts/UserLayouts/Components/UserSidebar/UserSidebar'
 
-const UserLayout = ({ children }: { children: React.ReactNode }) => {
+const Dashboard = ({ children }: { children: React.ReactNode }) => {
     return (
         <div className="flex">
             <UserSidebar />
@@ -13,4 +13,4 @@ const UserLayout = ({ children }: { children: React.ReactNode }) => {
     )
 }
 
-export default UserLayout
+export default Dashboard

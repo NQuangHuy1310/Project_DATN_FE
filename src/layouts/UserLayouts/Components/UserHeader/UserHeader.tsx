@@ -24,6 +24,8 @@ function UserHeader() {
                 return 'Giảng viên'
             case routes.settings:
                 return 'Cài đặt'
+            case routes.profile:
+                return 'Tài khoản'
             default:
                 return `Hi, ${user?.name}`
         }

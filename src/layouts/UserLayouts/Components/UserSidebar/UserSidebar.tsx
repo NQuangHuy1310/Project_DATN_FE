@@ -14,25 +14,25 @@ const UserSidebar = () => {
     }
 
     return (
-        <aside className="max-w-64 w-full min-h-screen fixed bg-white border-r px-5">
+        <aside className="fixed min-h-screen w-full max-w-64 border-r bg-white px-5">
             <div className="flex flex-col gap-8 pt-6">
                 <Link to={routes.home} className="flex justify-center gap-2">
-                    <div className="w-10 h-10">
-                        <img src={logo} alt="Coursea" className="w-full h-f object-cover" />
+                    <div className="h-10 w-10">
+                        <img src={logo} alt="Coursea" className="h-f w-full object-cover" />
                     </div>
-                    <p className="text-3xl text-black font-medium">Coursea</p>
+                    <p className="text-3xl font-medium text-black">Coursea</p>
                 </Link>
                 <div className="flex flex-col gap-5">
                     {sidebarList.map((item, index) => (
                         <div key={index} className="">
                             <NavLink
                                 to={item.path}
-                                className="px-5 py-4 flex items-center gap-5 rounded-sm justify-between hover:bg-[#f5f5f7] hover:transition-all"
+                                className="flex items-center justify-between gap-5 rounded-sm px-5 py-3.5 hover:bg-[#f5f5f7] hover:transition-all"
                                 onClick={() => toggleChildren(index)}
                             >
                                 <div className="flex gap-5">
                                     {item.icon && <item.icon className="size-6 text-black" />}
-                                    <p className="text-base text-black font-semibold">{item.title}</p>
+                                    <p className="text-base font-semibold text-black">{item.title}</p>
                                 </div>
                                 {item.children && <MdKeyboardArrowDown />}
                             </NavLink>

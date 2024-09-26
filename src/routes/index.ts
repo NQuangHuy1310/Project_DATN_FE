@@ -11,6 +11,7 @@ import Login from '@/views/user/Login'
 import Register from '@/views/user/Register'
 
 // Account
+import AccountHelp from '@/views/user/AccountHelp'
 import ForgotPassword from '@/views/user/ForgotPassword'
 import AccountProfile from '@/views/user/AccountProfile'
 import AccountSettings from '@/views/user/AccountSettings'
@@ -29,8 +30,9 @@ export const publicRoutes = [
 
 // Routes cần đăng nhập
 export const privateRoutes = [
-    { path: routes.profile, layout: ProfileLayout, element: AccountProfile },
+    { path: routes.accountProfile, layout: ProfileLayout, element: AccountProfile },
     { path: routes.exploreCourses, layout: Dashboard, element: ExploreCourses },
     { path: routes.accountSetting, layout: ProfileLayout, element: AccountSettings },
-    { path: routes.accountNotification, layout: ProfileLayout, element: AccountNotifications }
+    { path: routes.accountNotification, layout: ProfileLayout, element: AccountNotifications },
+    { path: routes.accountHelp, layout: ProfileLayout, element: AccountHelp }
 ]

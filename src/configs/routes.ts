@@ -14,10 +14,11 @@ const routes = {
     exploreCourses: '/user/course/explore-courses',
 
     // Account routes
-    profile: '/account/profile',
-    accountHelp: 'account/helps',
+    account: '/account',
+    accountProfile: '/account/profile',
+    accountHelp: '/account/help',
     accountSetting: '/account/settings',
-    accountNotification: '/account/notification'
+    accountNotification: '/account/notifications'
 
     // Routes for teacher
 }

@@ -55,16 +55,16 @@ const Login = () => {
     }
 
     return (
-        <div className="flex items-center justify-center w-full h-full">
-            <div className="max-w-[450px] w-full mx-auto rounded-xl border shadow p-4 md:p-6 lg:p-10">
-                <div className="flex flex-col items-center justify-center lg:gap-5 md:gap-4 gap-3.5">
-                    <div className="flex flex-col items-start gap-1 w-full">
+        <div className="flex h-full w-full items-center justify-center">
+            <div className="mx-auto w-full max-w-[450px] rounded-xl border p-4 shadow md:p-6 lg:p-10">
+                <div className="flex flex-col items-center justify-center gap-3.5 md:gap-4 lg:gap-5">
+                    <div className="flex w-full flex-col items-start gap-1">
                         <h1 className="text-2xl font-semibold text-foreground">Đăng nhập tài khoản</h1>
-                        <p className="text-sm text-back">Sử dụng email hoặc dịch vụ khác để đăng nhập</p>
+                        <p className="text-back text-sm">Sử dụng email hoặc dịch vụ khác để đăng nhập</p>
                     </div>
                     <form
                         onSubmit={handleSubmit(onSubmit)}
-                        className="w-full flex-col flex items-center justify-center gap-4"
+                        className="flex w-full flex-col items-center justify-center gap-4"
                     >
                         <div className="w-full">
                             <Input
@@ -77,11 +77,9 @@ const Login = () => {
                                 disabled={isSubmitting}
                                 autoFocus
                             />
-                            {errors.email && (
-                                <div className="text-red-500 lg:text-base text-sm">{errors.email.message}</div>
-                            )}
+                            {errors.email && <div className="text-sm text-red-500">{errors.email.message}</div>}
                         </div>
-                        <div className="w-full relative">
+                        <div className="relative w-full">
                             <Input
                                 {...register('password')}
                                 type={showPassword ? 'text' : 'password'}
@@ -92,32 +90,27 @@ const Login = () => {
                                 disabled={isSubmitting}
                                 autoComplete="current-password"
                             />
-                            {errors.password && (
-                                <div className="text-red-500 lg:text-base text-sm">{errors.password.message}</div>
-                            )}
+                            {errors.password && <div className="text-sm text-red-500">{errors.password.message}</div>}
                             {showPassword ? (
                                 <IoEyeOffSharp
                                     onClick={togglePasswordVisibility}
-                                    className="absolute right-3 top-1 transform translate-y-1/2 cursor-pointer text-gray-500"
+                                    className="absolute right-3 top-1 translate-y-1/2 transform cursor-pointer text-gray-500"
                                 />
                             ) : (
                                 <IoEyeSharp
                                     onClick={togglePasswordVisibility}
-                                    className="absolute right-3 top-1 transform translate-y-1/2 cursor-pointer text-gray-500"
+                                    className="absolute right-3 top-1 translate-y-1/2 transform cursor-pointer text-gray-500"
                                 />
                             )}
                         </div>
-                        <div className="flex justify-between items-center w-full">
+                        <div className="flex w-full items-center justify-between">
                             <div className="flex items-center gap-1">
                                 <Input
                                     type="checkbox"
-                                    className="size-3.5 rounded-lg bg-gray-100 border-gray-300 focus:ring-1 focus:ring-blue-500"
+                                    className="size-3.5 rounded-lg border-gray-300 bg-gray-100 focus:ring-1 focus:ring-blue-500"
                                     id="agree"
                                 />
-                                <label
-                                    htmlFor="agree"
-                                    className="text-sm lg:text-base text-black/80 font-medium cursor-pointer"
-                                >
+                                <label htmlFor="agree" className="cursor-pointer text-sm font-medium text-black/80">
                                     Ghi nhớ tài khoản
                                 </label>
                             </div>
@@ -132,10 +125,10 @@ const Login = () => {
                         </Button>
                     </form>
 
-                    <hr className="w-full my-2" />
+                    <hr className="my-2 w-full" />
 
                     <div className="w-full">
-                        <div className="flex gap-2 md:gap-5 flex-col w-full md:flex-row">
+                        <div className="flex w-full flex-col gap-2 md:flex-row md:gap-5">
                             <Button
                                 disabled={isSubmitting}
                                 variant="outline"
@@ -143,7 +136,7 @@ const Login = () => {
                                 className="flex flex-1 gap-2 p-2"
                             >
                                 <FcGoogle className="size-5" />
-                                <span className="text-base lg:text-sm font-medium">Google</span>
+                                <span className="text-base font-medium lg:text-sm">Google</span>
                             </Button>
                             <Button
                                 disabled={isSubmitting}
@@ -152,10 +145,10 @@ const Login = () => {
                                 className="flex flex-1 gap-2 p-2"
                             >
                                 <FaFacebook className="size-5 text-blue-600" />
-                                <span className="text-base lg:text-sm font-medium">Facebook</span>
+                                <span className="text-base font-medium lg:text-sm">Facebook</span>
                             </Button>
                         </div>
-                        <div className="text-center mt-5">
+                        <div className="mt-5 text-center">
                             <p className="text-gray-500">
                                 Bạn chưa có tài khoản?{' '}
                                 <Link to={routes.register} className="text-primary">

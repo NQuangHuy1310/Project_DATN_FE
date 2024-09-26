@@ -7,11 +7,11 @@
         @apply border-border;
     }
     body {
-        @apply bg-background text-foreground text-base;
+        @apply bg-background text-base text-foreground;
     }
 
     ::-webkit-scrollbar {
-        width: 6px;
+        width: 5px;
         height: 6px;
         opacity: 1;
     }

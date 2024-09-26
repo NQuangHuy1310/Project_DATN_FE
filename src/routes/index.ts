@@ -1,5 +1,6 @@
 import routes from '@/configs/routes'
 
+import Dashboard from '@/layouts/UserLayouts/Dashboard'
 import HomeLayout from '@/layouts/AuthLayouts/HomeLayout'
 import ProfileLayout from '@/layouts/UserLayouts/ProfileLayout'
 
@@ -8,8 +9,13 @@ import Login from '@/views/user/Login'
 import Profile from '@/views/user/Profile'
 import Register from '@/views/user/Register'
 import ForgotPassword from '@/views/user/ForgotPassword'
+
 import Notification from '@/views/user/Notification/Notification'
 import Dashboard from '@/layouts/UserLayouts/Dashboard'
+
+import ExploreCourses from '@/views/course/ExploreCourses/ExploreCourses'
+import AccountSettings from '@/views/user/AccountSettings'
+
 
 // Routes không cần đăng nhập
 export const publicRoutes = [
@@ -22,5 +28,10 @@ export const publicRoutes = [
 // Routes cần đăng nhập
 export const privateRoutes = [
     { path: routes.profile, layout: ProfileLayout, element: Profile },
+
     { path: routes.accountNotification, layout: Dashboard, element: Notification }
+
+    { path: routes.exploreCourses, layout: Dashboard, element: ExploreCourses },
+    { path: routes.accountSetting, layout: ProfileLayout, element: AccountSettings }
+
 ]

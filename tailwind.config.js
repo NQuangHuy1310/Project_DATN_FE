@@ -51,7 +51,7 @@ export default {
                     5: 'hsl(var(--chart-5))'
                 },
                 black: '#141522',
-                darkGrey: '#9C9CA4',
+                darkGrey: '#7A7A80',
                 grey: '#DFDFDF',
                 softGrey: '#F5F5F7'
             },

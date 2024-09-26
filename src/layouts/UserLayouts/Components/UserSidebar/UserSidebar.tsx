@@ -24,24 +24,30 @@ const UserSidebar = () => {
                 </Link>
                 <div className="flex flex-col gap-5">
                     {sidebarList.map((item, index) => (
-                        <div key={index} className="">
+                        <div key={index}>
                             <NavLink
                                 to={item.path}
-                                className="flex items-center justify-between gap-5 rounded-sm px-5 py-3.5 hover:bg-[#f5f5f7] hover:transition-all"
+                                className={({ isActive }) =>
+                                    `flex items-center justify-between gap-5 rounded-sm px-5 py-3.5 ${isActive ? 'bg-softGrey text-black' : 'text-darkGrey hover:bg-softGrey hover:text-black hover:transition'}`
+                                }
                                 onClick={() => toggleChildren(index)}
                             >
                                 <div className="flex gap-5">
-                                    {item.icon && <item.icon className="size-6 text-black" />}
-                                    <p className="text-base font-semibold text-black">{item.title}</p>
+                                    {item.icon && <item.icon className="size-6" />}
+                                    <p className="text-base">{item.title}</p>
                                 </div>
                                 {item.children && <MdKeyboardArrowDown />}
                             </NavLink>
 
                             {item.children && openIndex === index && (
-                                <div className="flex flex-col gap-2">
+                                <div className="mt-4 flex flex-col gap-4">
                                     {item.children.map((child, childIndex) => (
-                                        <NavLink to={child.path} className="px-5 py-4" key={childIndex}>
-                                            <p className="text-black">{child.title}</p>
+                                        <NavLink
+                                            to={child.path}
+                                            className="px-5 py-3.5 hover:bg-softGrey hover:transition-all"
+                                            key={childIndex}
+                                        >
+                                            <p>{child.title}</p>
                                         </NavLink>
                                     ))}
                                 </div>

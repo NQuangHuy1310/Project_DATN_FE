@@ -1,10 +1,12 @@
 /* eslint-disable no-unused-vars */
+import { MdSecurity } from 'react-icons/md'
 import { LuUserCircle } from 'react-icons/lu'
 import { TbUserHexagon } from 'react-icons/tb'
 import { IoSettingsOutline } from 'react-icons/io5'
-import { FaUserCog, FaRegBell } from 'react-icons/fa'
+import { FaRegBell, FaUserCog } from 'react-icons/fa'
 import { IoMdHelpCircleOutline } from 'react-icons/io'
-import { HiOutlineTemplate, HiBookOpen } from 'react-icons/hi'
+import { HiBookOpen, HiOutlineTemplate } from 'react-icons/hi'
+import { FaRegCircleQuestion, FaRegCircleCheck } from 'react-icons/fa6'
 
 import routes from '@/configs/routes'
 
@@ -35,9 +37,9 @@ export const sidebarList = [
         path: routes.teacher
     },
     {
-        title: 'Cài đặt',
+        title: 'Tài khoản',
         icon: FaUserCog,
-        path: routes.settings
+        path: routes.account
     }
 ]
 
@@ -45,7 +47,7 @@ export const accountAside = [
     {
         title: 'Thông tin cá nhân',
         icon: LuUserCircle,
-        path: routes.profile
+        path: routes.accountProfile
     },
     {
         title: 'Cài đặt tài khoản',
@@ -61,6 +63,24 @@ export const accountAside = [
         title: 'Hỗ trợ',
         icon: IoMdHelpCircleOutline,
         path: routes.accountHelp
+    }
+]
+
+export const AccountHelps = [
+    {
+        title: 'Coursea là gì',
+        description: 'Lần đầu tiên đến đây? Khám phá cách Coursea có thể giúp bạn phát triển bản thân.',
+        icon: FaRegCircleQuestion
+    },
+    {
+        title: 'Điều khoản & Điều kiện',
+        description: 'Cập nhật chính sách bảo mật của bạn để bao gồm các điều khoản và điều kiện mới nhất.',
+        icon: MdSecurity
+    },
+    {
+        title: 'Bắt đầu',
+        description: 'Tất cả những thông tin cần thiết để bạn có thể bắt đầu hành trình học tập với Coursea.',
+        icon: FaRegCircleCheck
     }
 ]
 

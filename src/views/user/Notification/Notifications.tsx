@@ -1,9 +1,7 @@
-import NotificationMessage from "@/components/shared/NotificationMessage"
-import { notificationMessages } from "@/constants/mockData"
+import { notificationMessages } from '@/constants/mockData'
+import NotificationMessage from '@/components/shared/NotificationMessage'
 
-
-
-const Notification = () => {
+const Notifications = () => {
     return (
         <div className="w-full  flex-col gap-7 rounded-xl bg-white p-7">
             <div className="flex justify-between items-center">
@@ -11,7 +9,6 @@ const Notification = () => {
                 <span className="text-gray-500">Đánh dấu đã đọc</span>
             </div>
             <div>
-
                 {notificationMessages && notificationMessages.length > 0 && notificationMessages.map((item, index) => (
                     <div className="cursor-pointer">
                         <NotificationMessage key={index} title={item.title} description={item.description} time={item.time} isRead={item.isRead} />
@@ -23,5 +20,5 @@ const Notification = () => {
     )
 }
 
-export default Notification
+export default Notifications
 

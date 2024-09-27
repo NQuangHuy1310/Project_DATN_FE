@@ -1,6 +1,6 @@
-import { CourseLevel, TeacherStatus } from '@/constants/constants'
 import { ICourse, ITeacher } from '@/types'
-import { INotificationMessage } from '@/types/notificationmessage';
+import { CourseLevel, TeacherStatus } from '@/constants/constants'
+import { INotificationMessage } from '@/types/notificationmessage'
 
 export const courses: ICourse[] = [
     {
@@ -111,4 +111,70 @@ export const notificationMessages: INotificationMessage[] = [
         time: 1000, // 10:00 AM
         description: 'Don’t forget to join the upcoming webinar on AI and Machine Learning this Friday at 11:00 AM.'
     }
-];
+]
+export const myCourses: ICourse[] = [
+    {
+        image: 'https://i.pinimg.com/564x/ac/27/1d/ac271de883faa03617b212beeda73db3.jpg',
+        name: 'Introduction Basic Programming HTML & CSS',
+        star: 4.5,
+        level: CourseLevel.Intermediate,
+        progressLesson: 66,
+        totalLesson: 90,
+        createdBy: {
+            id: 1,
+            name: 'Nguyễn Quang Huy',
+            email: 'Huy@gmail.com',
+            avatar: 'https://images.unsplash.com/photo-1640951613773-54706e06851d?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+            is_active: true,
+            user_type: 'member'
+        }
+    },
+    {
+        image: 'https://i.pinimg.com/564x/ac/27/1d/ac271de883faa03617b212beeda73db3.jpg',
+        name: 'Introduction Basic Programming HTML & CSS',
+        star: 4.7,
+        level: CourseLevel.Beginner,
+        progressLesson: 80,
+        totalLesson: 178,
+        createdBy: {
+            id: 2,
+            name: 'Nguyễn Quang Huy',
+            email: 'Huy@gmail.com',
+            avatar: 'https://images.unsplash.com/photo-1640951613773-54706e06851d?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+            is_active: true,
+            user_type: 'member'
+        }
+    },
+    {
+        image: 'https://i.pinimg.com/564x/ac/27/1d/ac271de883faa03617b212beeda73db3.jpg',
+        name: 'Introduction Basic Programming HTML & CSS',
+        star: 4.9,
+        level: CourseLevel.Beginner,
+        progressLesson: 146,
+        totalLesson: 220,
+        createdBy: {
+            id: 3,
+            name: 'Nguyễn Quang Huy',
+            email: 'Huy@gmail.com',
+            avatar: 'https://images.unsplash.com/photo-1640951613773-54706e06851d?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+            is_active: true,
+            user_type: 'member'
+        }
+    },
+    {
+        image: 'https://i.pinimg.com/564x/ac/27/1d/ac271de883faa03617b212beeda73db3.jpg',
+        name: 'Introduction Basic Programming HTML & CSS',
+        star: 4.8,
+        level: CourseLevel.Intermediate,
+        progressLesson: 87,
+        totalLesson: 160,
+        createdBy: {
+            id: 4,
+            name: 'Nguyễn Quang Huy',
+            email: 'Huy@gmail.com',
+            avatar: 'https://images.unsplash.com/photo-1640951613773-54706e06851d?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+            is_active: true,
+            user_type: 'member'
+        }
+    }
+]

@@ -22,6 +22,10 @@ import Notification from '@/views/user/Notification/Notification'
 import CourseExplore from '@/views/user/CourseExplore'
 import CourseMyCourses from '@/views/user/CourseSearch'
 
+import MyCourse from '@/views/course/MyCourse'
+import Notifications from '@/views/user/Notification/Notifications'
+import ExploreCourses from '@/views/course/ExploreCourses/ExploreCourses'
+
 // Routes không cần đăng nhập
 export const publicRoutes = [
     { path: routes.home, layout: HomeLayout, element: Home },
@@ -39,5 +43,7 @@ export const privateRoutes = [
     { path: routes.notification, layout: Dashboard, element: Notification },
     { path: routes.exploreCourses, layout: Dashboard, element: CourseExplore },
     { path: routes.course, layout: Dashboard, element: CourseExplore },
-    { path: routes.searchCourses, layout: Dashboard, element: CourseMyCourses }
+    { path: routes.searchCourses, layout: Dashboard, element: CourseMyCourses },
+    { path: routes.notification, layout: Dashboard, element: Notifications },
+    { path: routes.myCourse, layout: Dashboard, element: MyCourse }
 ]

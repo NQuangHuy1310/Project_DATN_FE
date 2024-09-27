@@ -18,13 +18,12 @@ import AccountSettings from '@/views/user/AccountSettings'
 import AccountNotifications from '@/views/user/AccountNotifications'
 
 // course
-import Notification from '@/views/user/Notification/Notification'
+import MyCourse from '@/views/course/MyCourse'
 import CourseExplore from '@/views/user/CourseExplore'
 import CourseMyCourses from '@/views/user/CourseSearch'
 
-import MyCourse from '@/views/course/MyCourse'
+import Notification from '@/views/user/Notification'
 import Notifications from '@/views/user/Notification/Notifications'
-import ExploreCourses from '@/views/course/ExploreCourses/ExploreCourses'
 
 // Routes không cần đăng nhập
 export const publicRoutes = [

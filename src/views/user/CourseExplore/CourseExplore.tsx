@@ -3,7 +3,7 @@ import Teacher from '@/components/shared/Teacher'
 import FilterBar from '@/components/shared/FilterBar/FilterBar'
 import { courses, mockTeachers } from '@/constants/mockData'
 
-const ExploreCourses = () => {
+const CoursesExplore = () => {
     return (
         <div>
             <FilterBar placeholder="Tìm kiếm khóa học và người hướng dẫn" lever />
@@ -51,4 +51,4 @@ const ExploreCourses = () => {
     )
 }
 
-export default ExploreCourses
+export default CoursesExplore

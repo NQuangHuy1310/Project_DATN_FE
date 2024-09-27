@@ -14,6 +14,7 @@ const routes = {
     course: '/user/course',
     myCourse: '/user/course/my-course',
     exploreCourses: '/user/course/explore-courses',
+    searchCourses: '/user/course/search-courses',
 
     // Account routes
     account: '/account/',

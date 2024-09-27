@@ -9,11 +9,11 @@ const routes = {
     notification: '/notification',
 
     overview: '/user-dashboard',
-    teacher: '/user/teacher',
-    settings: 'user/settings',
-    course: '/user/course',
-    myCourse: '/user/course/my-course',
-    exploreCourses: '/user/course/explore-courses',
+    teacher: '/teacher',
+    course: '/course',
+    myCourse: '/course/my-course',
+    exploreCourses: '/course/explore-courses',
+    searchCourses: '/course/search-courses',
 
     // Account routes
     account: '/account/',

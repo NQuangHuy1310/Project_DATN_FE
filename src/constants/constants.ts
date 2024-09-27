@@ -85,9 +85,9 @@ export const AccountHelps = [
 ]
 
 export enum CourseLevel {
-    Beginner = 'Beginner',
-    Intermediate = 'Intermediate',
-    Master = 'Master'
+    Beginner = 'Sơ cấp',
+    Intermediate = 'Trung cấp',
+    Master = 'Chuyên gia'
 }
 
 export enum TeacherStatus {

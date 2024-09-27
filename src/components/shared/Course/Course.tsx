@@ -5,14 +5,24 @@ import { FaRegCirclePlay } from 'react-icons/fa6'
 import { IoTimeOutline } from 'react-icons/io5'
 
 import { ICourse } from '@/types'
-import { Avatar } from '@/components/ui/avatar'
 import { Progress } from '@/components/ui/progress'
-import { AvatarFallback, AvatarImage } from '@radix-ui/react-avatar'
 import { CourseLevel } from '@/components/shared/Course/CourseLevel'
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 
-const Course = ({ image, name, star, studentCount, totalVideo, totalTime, createdBy, level, progressLesson, totalLesson }: ICourse) => {
+const Course = ({
+    image,
+    name,
+    star,
+    studentCount,
+    totalVideo,
+    totalTime,
+    createdBy,
+    level,
+    progressLesson,
+    totalLesson
+}: ICourse) => {
     return (
-        <Link to="" className="flex max-w-[350px] cursor-text flex-col gap-5 rounded-lg bg-white p-7 shadow-md">
+        <Link to="" className="flex max-w-[354px] cursor-text flex-col gap-5 rounded-lg bg-white p-7 shadow-md">
             <div className="relative h-[160px] flex-shrink-0 cursor-pointer">
                 <img src={image} alt={name} className="h-full w-full rounded-lg object-cover" />
                 <div className="absolute bottom-2.5 left-2.5">
@@ -36,26 +46,32 @@ const Course = ({ image, name, star, studentCount, totalVideo, totalTime, create
                         <span>{star}</span>
                     </div>
                 </div>
-                {progressLesson && totalLesson ? <div className="w-full">
-                    <Progress value={(progressLesson / totalLesson) * 100} />
-                    <div className='flex justify-between my-2'>
-                        <span>{progressLesson}/{totalLesson} Bài học</span>
-                        <span>{((progressLesson / progressLesson) * 100).toFixed(0)}%</span>
+                {progressLesson && totalLesson ? (
+                    <div className="w-full">
+                        <Progress value={(progressLesson / totalLesson) * 100} />
+                        <div className="my-2 flex justify-between">
+                            <span>
+                                {progressLesson}/{totalLesson} Bài học
+                            </span>
+                            <span>{((progressLesson / totalLesson) * 100).toFixed(0)}%</span>
+                        </div>
                     </div>
-                </div> : <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1.5">
-                        <FaRegUser className="size-4 text-darkGrey" />
-                        <p className="font-medium text-black">{studentCount}</p>
+                ) : (
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-1.5">
+                            <FaRegUser className="size-4 text-darkGrey" />
+                            <p className="font-medium text-black">{studentCount}</p>
+                        </div>
+                        <div className="flex items-center gap-1.5">
+                            <FaRegCirclePlay className="size-4 text-darkGrey" />
+                            <p className="font-medium text-black">{totalVideo}</p>
+                        </div>
+                        <div className="flex items-center gap-1.5">
+                            <IoTimeOutline className="size-4 text-darkGrey" />
+                            <p className="font-medium text-black">{totalTime}</p>
+                        </div>
                     </div>
-                    <div className="flex items-center gap-1.5">
-                        <FaRegCirclePlay className="size-4 text-darkGrey" />
-                        <p className="font-medium text-black">{totalVideo}</p>
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                        <IoTimeOutline className="size-4 text-darkGrey" />
-                        <p className="font-medium text-black">{totalTime}</p>
-                    </div>
-                </div>}
+                )}
             </div>
         </Link>
     )

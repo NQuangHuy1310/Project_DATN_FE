@@ -26,14 +26,14 @@ function UserHeader() {
                 return 'Khoá học của tôi'
             case routes.teacher:
                 return 'Giảng viên'
-            case routes.settings:
-                return 'Cài đặt'
+            case routes.accountSetting:
+                return 'Cài đặt tài khoản'
             default:
                 return `Hi, ${user?.name}`
         }
     }
     return (
-        <header className="fixed left-64 right-0 z-50 flex h-20 items-center justify-between bg-white px-8 shadow-sm">
+        <header className="fixed left-64 right-0 z-50 flex h-20 items-center justify-between bg-white px-8">
             <div>
                 <h2 className="text-3xl font-medium">{getTitle()}</h2>
             </div>

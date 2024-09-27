@@ -11,16 +11,17 @@ import { Button } from '@/components/ui/button'
 import { IoFilterSharp } from 'react-icons/io5'
 import { HiOutlineTemplate } from 'react-icons/hi'
 import { IoCellularOutline, IoSearchOutline } from 'react-icons/io5'
+import { CourseLevel } from '@/constants'
 
 const FilterBar = ({ placeholder, lever }: { placeholder: string; lever?: boolean }) => {
     return (
         <div className="flex items-center justify-between">
             <div className="relative h-[50px] min-w-[500px]">
-                <Input className="h-full w-full bg-white pe-10 ps-5 !text-xs" autoFocus placeholder={placeholder} />
-                <IoSearchOutline className="absolute right-3 top-1/2 size-5 -translate-y-1/2 cursor-pointer" />
+                <Input className="h-full w-full bg-white pe-10 ps-5 text-sm" autoFocus placeholder={placeholder} />
+                <IoSearchOutline className="absolute right-4 top-1/2 size-5 -translate-y-1/2 cursor-pointer" />
             </div>
             <div className="flex h-full gap-2">
-                {lever ? (
+                {lever && (
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="outline" className="flex h-[50px] gap-2">
@@ -40,13 +41,17 @@ const FilterBar = ({ placeholder, lever }: { placeholder: string; lever?: boolea
                                     Tất cả
                                 </Button>
                                 <Button variant="outline" className="text-xs">
-                                    Người mới bắt đầu
+                                    {CourseLevel.Beginner}
+                                </Button>
+                                <Button variant="outline" className="text-xs">
+                                    {CourseLevel.Intermediate}
+                                </Button>
+                                <Button variant="outline" className="text-xs">
+                                    {CourseLevel.Master}
                                 </Button>
                             </DropdownMenuRadioGroup>
                         </DropdownMenuContent>
                     </DropdownMenu>
-                ) : (
-                    ''
                 )}
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>

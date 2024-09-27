@@ -14,7 +14,7 @@ const UserSidebar = () => {
     }
 
     return (
-        <aside className="fixed min-h-screen w-full max-w-64 border-r bg-white px-5">
+        <aside className="fixed min-h-screen w-full max-w-64 bg-white px-5">
             <div className="flex flex-col gap-8 pt-6">
                 <Link to={routes.home} className="flex justify-center gap-2">
                     <div className="h-10 w-10">

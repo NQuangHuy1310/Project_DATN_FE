@@ -4,13 +4,13 @@ import { IoIosStar } from 'react-icons/io'
 import { CiViewList } from 'react-icons/ci'
 
 import { ITeacher } from '@/types'
+import { TeacherStatus } from '@/constants'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { TeacherStatus } from '@/constants'
 
 const Teacher = ({ image, name, job, reviewStart, status, totalCourse, totalReview }: ITeacher) => {
     return (
-        <div className="flex max-w-[360px] flex-col gap-5 overflow-hidden rounded-lg bg-white p-7 shadow-md">
+        <div className="flex w-[380px] flex-col gap-6 overflow-hidden rounded-lg bg-white p-7 shadow-md">
             <div className="flex items-center justify-between gap-2">
                 <Link to="" className="flex flex-shrink-0 items-center gap-3 truncate">
                     <Avatar className="size-11">

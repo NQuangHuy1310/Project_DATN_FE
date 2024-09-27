@@ -1,4 +1,4 @@
-import { ICourse, IMyCourse, ITeacher } from '@/types'
+import { ICourse, ITeacher } from '@/types'
 import { CourseLevel, TeacherStatus } from '@/constants/constants'
 import { INotificationMessage } from '@/types/notificationmessage'
 
@@ -112,7 +112,7 @@ export const notificationMessages: INotificationMessage[] = [
         description: 'Don’t forget to join the upcoming webinar on AI and Machine Learning this Friday at 11:00 AM.'
     }
 ]
-export const myCourses: IMyCourse[] = [
+export const myCourses: ICourse[] = [
     {
         image: 'https://i.pinimg.com/564x/ac/27/1d/ac271de883faa03617b212beeda73db3.jpg',
         name: 'Introduction Basic Programming HTML & CSS',

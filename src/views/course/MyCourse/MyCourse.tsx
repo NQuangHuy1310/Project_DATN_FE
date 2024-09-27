@@ -1,5 +1,5 @@
 import { myCourses } from '@/constants/mockData'
-import MyCourse from '@/components/shared/Course/MyCourse'
+import Course from '@/components/shared/Course/Course'
 import FilterBar from '@/components/shared/FilterBar/FilterBar'
 
 
@@ -9,7 +9,7 @@ const MyCourses = () => {
             <FilterBar placeholder="Tìm kiếm khóa học và người hướng dẫn" lever />
             <div className="mt-7 flex flex-wrap  gap-10">
                 {myCourses && myCourses.length > 0 && myCourses.map((item, index) => (
-                    <MyCourse
+                    <Course
                         key={index}
                         name={item.name}
                         image={item.image}

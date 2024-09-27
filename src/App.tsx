@@ -47,15 +47,15 @@ function App() {
                                 key={index}
                                 path={route.path}
                                 element={
-                                    isLoggedIn ? (
-                                        <Layout>
-                                            <Page />
-                                        </Layout>
-                                    ) : (
-                                        <Layout>
-                                            <Login />
-                                        </Layout>
-                                    )
+                                    // isLoggedIn ? (
+                                    <Layout>
+                                        <Page />
+                                    </Layout>
+                                    // ) : (
+                                    //     <Layout>
+                                    //         <Login />
+                                    //     </Layout>
+                                    // )
                                 }
                             />
                         )

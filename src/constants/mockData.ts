@@ -1,6 +1,6 @@
 import { ICourse, ITeacher } from '@/types'
-import { CourseLevel, TeacherStatus } from '@/constants/constants'
-import { INotificationMessage } from '@/types/notificationmessage'
+import { CourseLevel, notificationTypes, TeacherStatus } from '@/constants/constants'
+import { INotificationMessage } from '@/types/notificationMessage'
 
 export const courses: ICourse[] = [
     {
@@ -70,48 +70,82 @@ export const mockTeachers: ITeacher[] = [
 ]
 export const notificationMessages: INotificationMessage[] = [
     {
-        isRead: false,
-        title: 'Welcome to our platform!',
-        time: 945, // 9:45 AM
-        description: 'We are excited to have you join our community. Explore our courses and start learning!'
+        notificationType: notificationTypes.user,
+        title: 'Tin nhắn mới từ Alice',
+        message: 'Alice đã gửi cho bạn một tin nhắn.',
+        senderBy: {
+            id: 1,
+            name: 'Alice Smith',
+            email: 'alice.smith@example.com',
+            avatar: 'https://example.com/avatars/alice.png',
+            is_active: true,
+            user_type: 'member'
+        },
+        sentAt: '8h trước',
+        isRead: false
     },
     {
-        isRead: true,
-        title: 'Your weekly progress report',
-        time: 1630, // 4:30 PM
-        description: 'Check out your progress for the past week in your enrolled courses.'
+        notificationType: notificationTypes.instructor,
+        title: 'Thông báo lớp học',
+        message: 'Lớp học của bạn sẽ bắt đầu lúc 9:00 sáng ngày mai.',
+        senderBy: {
+            id: 2,
+            name: 'Mr. Johnson',
+            email: 'mr.johnson@example.com',
+            avatar: null,
+            is_active: true,
+            user_type: 'admin'
+        },
+        sentAt: '1h Trước',
+        isRead: true
     },
     {
-        isRead: false,
-        title: 'New message from support',
-        time: 1140, // 11:40 AM
-        description: 'You have a new message from our support team. Please check your inbox for details.'
+        notificationType: notificationTypes.system,
+        title: 'Cập nhật hệ thống',
+        message: 'Hệ thống sẽ bảo trì từ 2:00 AM đến 4:00 AM.',
+        senderBy: {
+            id: 3,
+            name: 'Charlie Johnson',
+            email: 'charlie.johnson@example.com',
+            avatar: 'https://example.com/avatars/charlie.png',
+            is_active: false,
+            user_type: 'member'
+        },
+        sentAt: '4h Trước',
+        isRead: false
     },
     {
-        isRead: true,
-        title: 'Upcoming system maintenance',
-        time: 2230, // 10:30 PM
-        description: 'Our platform will undergo maintenance on Saturday from 12:00 AM to 4:00 AM UTC.'
+        notificationType: notificationTypes.user,
+        title: 'Yêu cầu kết bạn',
+        message: 'Bob muốn kết bạn với bạn.',
+        senderBy: {
+            id: 4,
+            name: 'Bob Brown',
+            email: 'bob.brown@example.com',
+            avatar: null,
+            is_active: true,
+            user_type: 'admin'
+        },
+        sentAt: '3h Trước',
+        isRead: false
     },
     {
-        isRead: false,
-        title: 'Course recommendation: Advanced React',
-        time: 810, // 8:10 AM
-        description: 'Based on your recent activity, we recommend the Advanced React course to enhance your skills.'
-    },
-    {
-        isRead: true,
-        title: 'Special offer: 50% off on new courses',
-        time: 1330, // 1:30 PM
-        description: 'For a limited time, enjoy 50% off on all new courses. Start learning today!'
-    },
-    {
-        isRead: false,
-        title: 'Reminder: Upcoming webinar on AI',
-        time: 1000, // 10:00 AM
-        description: 'Don’t forget to join the upcoming webinar on AI and Machine Learning this Friday at 11:00 AM.'
+        notificationType: notificationTypes.instructor,
+        title: 'Nộp bài tập',
+        message: 'Đừng quên nộp bài tập trước 5:00 chiều hôm nay.',
+        senderBy: {
+            id: 5,
+            name: 'Diana Prince',
+            email: 'diana.prince@example.com',
+            avatar: 'https://example.com/avatars/diana.png',
+            is_active: true,
+            user_type: 'admin'
+        },
+        sentAt: '2h Trước',
+        isRead: false
     }
 ]
+
 export const myCourses: ICourse[] = [
     {
         image: 'https://i.pinimg.com/564x/ac/27/1d/ac271de883faa03617b212beeda73db3.jpg',
@@ -149,7 +183,7 @@ export const myCourses: ICourse[] = [
         image: 'https://i.pinimg.com/564x/ac/27/1d/ac271de883faa03617b212beeda73db3.jpg',
         name: 'Introduction Basic Programming HTML & CSS',
         star: 4.9,
-        level: CourseLevel.Beginner,
+        level: CourseLevel.Master,
         progressLesson: 146,
         totalLesson: 220,
         createdBy: {

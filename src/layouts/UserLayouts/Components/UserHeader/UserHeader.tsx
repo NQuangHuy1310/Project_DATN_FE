@@ -1,6 +1,6 @@
 /* eslint-disable indent */
 import { FaRegBell } from 'react-icons/fa'
-import { useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
 import routes from '@/configs/routes'
 import useGetUserProfile from '@/hooks/useGetUser'
@@ -18,16 +18,20 @@ function UserHeader() {
         }
 
         switch (route) {
-            case routes.overview:
-                return `Hi, ${user?.name}`
-            case routes.exploreCourses:
-                return 'Khám phá khoá học'
+            case routes.dashboard:
+                return `Xin chào, ${user?.name}`
+            case routes.course:
+                return 'Khá phá khoá học'
             case routes.myCourse:
                 return 'Khoá học của tôi'
-            case routes.teacher:
-                return 'Giảng viên'
+            case routes.searchCourses:
+                return 'Tìm kiếm khoá học'
+            case routes.instructor:
+                return 'Người hướng dẫn'
             case routes.accountSetting:
                 return 'Cài đặt tài khoản'
+            case routes.notification:
+                return 'Thông báo'
             default:
                 return `Hi, ${user?.name}`
         }
@@ -38,7 +42,9 @@ function UserHeader() {
                 <h2 className="text-3xl font-medium">{getTitle()}</h2>
             </div>
             <div className="flex items-center gap-5">
-                <FaRegBell className="size-5 cursor-pointer text-black" />
+                <Link to={routes.notification}>
+                    <FaRegBell className="size-5 cursor-pointer text-black" />
+                </Link>
                 <UserButton />
             </div>
         </header>

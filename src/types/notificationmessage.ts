@@ -1,6 +1,11 @@
+import { IUser } from '@/types/auth'
+import { notificationTypes } from '@/constants'
+
 export interface INotificationMessage {
-    isRead: boolean,
-    title: string,
-    time: number,
-    description: string,
+    notificationType: notificationTypes
+    title: string
+    message: string
+    senderBy: IUser
+    sentAt: string
+    isRead: boolean
 }

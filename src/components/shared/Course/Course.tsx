@@ -5,8 +5,8 @@ import { FaRegCirclePlay } from 'react-icons/fa6'
 import { IoTimeOutline } from 'react-icons/io5'
 
 import { ICourse } from '@/types'
-import { Progress } from '@/components/ui/progress'
 import { CourseLevel } from '@/components/shared/Course/CourseLevel'
+import CourseProgress from '@/components/shared/Course/CourseProgress'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 
 const Course = ({
@@ -47,15 +47,7 @@ const Course = ({
                     </div>
                 </div>
                 {progressLesson && totalLesson ? (
-                    <div className="w-full">
-                        <Progress value={(progressLesson / totalLesson) * 100} />
-                        <div className="my-2 flex justify-between">
-                            <span>
-                                {progressLesson}/{totalLesson} Bài học
-                            </span>
-                            <span>{((progressLesson / totalLesson) * 100).toFixed(0)}%</span>
-                        </div>
-                    </div>
+                    <CourseProgress progressLesson={progressLesson} totalLesson={totalLesson} level={level} />
                 ) : (
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-1.5">

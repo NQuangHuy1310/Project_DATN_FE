@@ -1,6 +1,6 @@
 import routes from '@/configs/routes'
 
-import Dashboard from '@/layouts/UserLayouts/Dashboard'
+import DashboardLayout from '@/layouts/UserLayouts/Dashboard'
 import HomeLayout from '@/layouts/AuthLayouts/HomeLayout'
 import ProfileLayout from '@/layouts/UserLayouts/ProfileLayout'
 
@@ -18,13 +18,13 @@ import AccountSettings from '@/views/user/AccountSettings'
 import AccountNotifications from '@/views/user/AccountNotifications'
 
 // course
-import MyCourse from '@/views/course/MyCourse'
+import MyCourse from '@/views/user/MyCourse'
 import CourseExplore from '@/views/user/CourseExplore'
 import CourseMyCourses from '@/views/user/CourseSearch'
 
-import Notification from '@/views/user/Notification'
-import Notifications from '@/views/user/Notification/Notifications'
-import Mentor from '@/views/user/Mentor'
+import Dashboard from '@/views/user/Dashboard'
+import Instructor from '@/views/user/Instructors'
+import Notifications from '@/views/user/Notifications'
 
 // Routes không cần đăng nhập
 export const publicRoutes = [
@@ -36,15 +36,17 @@ export const publicRoutes = [
 
 // Routes cần đăng nhập
 export const privateRoutes = [
+    // Account
+    { path: routes.accountHelp, layout: ProfileLayout, element: AccountHelp },
     { path: routes.accountProfile, layout: ProfileLayout, element: AccountProfile },
     { path: routes.accountSetting, layout: ProfileLayout, element: AccountSettings },
     { path: routes.accountNotification, layout: ProfileLayout, element: AccountNotifications },
-    { path: routes.accountHelp, layout: ProfileLayout, element: AccountHelp },
-    { path: routes.notification, layout: Dashboard, element: Notification },
-    { path: routes.exploreCourses, layout: Dashboard, element: CourseExplore },
-    { path: routes.course, layout: Dashboard, element: CourseExplore },
-    { path: routes.searchCourses, layout: Dashboard, element: CourseMyCourses },
-    { path: routes.notification, layout: Dashboard, element: Notifications },
-    { path: routes.myCourse, layout: Dashboard, element: MyCourse },
-    { path: routes.teacher, layout: Dashboard, element: Mentor }
+
+    { path: routes.myCourse, layout: DashboardLayout, element: MyCourse },
+    { path: routes.course, layout: DashboardLayout, element: CourseExplore },
+    { path: routes.searchCourses, layout: DashboardLayout, element: CourseMyCourses },
+
+    { path: routes.dashboard, layout: DashboardLayout, element: Dashboard },
+    { path: routes.instructor, layout: DashboardLayout, element: Instructor },
+    { path: routes.notification, layout: DashboardLayout, element: Notifications }
 ]

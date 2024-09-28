@@ -28,7 +28,7 @@ const UserSidebar = () => {
                             <NavLink
                                 to={item.path}
                                 className={({ isActive }) =>
-                                    `flex items-center justify-between gap-5 rounded-sm px-5 py-3.5 ${isActive ? 'bg-softGrey text-black' : 'text-darkGrey hover:bg-softGrey hover:text-black hover:transition'}`
+                                    `flex items-center justify-between gap-5 rounded-sm px-5 py-3.5 ${isActive ? 'bg-softGrey font-medium text-black' : 'text-darkGrey hover:bg-softGrey hover:text-black hover:transition'}`
                                 }
                                 onClick={() => toggleChildren(index)}
                             >

@@ -2,11 +2,11 @@ import FilterBar from '@/components/shared/FilterBar/FilterBar'
 import Teacher from '@/components/shared/Teacher'
 import { mockTeachers } from '@/constants/mockData'
 
-const Mentor = () => {
+const Instructor = () => {
     return (
-        <div>
+        <div className="flex flex-col gap-7">
             <FilterBar placeholder="Tìm kiếm người hướng dẫn" />
-            <div className="mt-7 flex gap-10">
+            <div className="flex gap-10">
                 {mockTeachers &&
                     mockTeachers.length > 0 &&
                     mockTeachers.map((item, index) => (
@@ -26,4 +26,4 @@ const Mentor = () => {
     )
 }
 
-export default Mentor
+export default Instructor

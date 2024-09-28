@@ -1,15 +1,15 @@
+import { myCourses } from '@/constants/mockData'
 import Course from '@/components/shared/Course/Course'
 import FilterBar from '@/components/shared/FilterBar/FilterBar'
-import { courses } from '@/constants/mockData'
 
-const CourseSearch = () => {
+const MyCourses = () => {
     return (
         <div className="flex flex-col gap-7">
             <FilterBar placeholder="Tìm kiếm khóa học và người hướng dẫn" lever />
-            <div className="flex gap-10">
-                {courses &&
-                    courses.length > 0 &&
-                    courses.map((item, index) => (
+            <div className="flex flex-wrap gap-10">
+                {myCourses &&
+                    myCourses.length > 0 &&
+                    myCourses.map((item, index) => (
                         <Course
                             key={index}
                             name={item.name}
@@ -17,9 +17,8 @@ const CourseSearch = () => {
                             createdBy={item.createdBy}
                             level={item.level}
                             star={item.star}
-                            totalTime={item.totalTime}
-                            studentCount={item.studentCount}
-                            totalVideo={item.totalVideo}
+                            totalLesson={item.totalLesson}
+                            progressLesson={item.progressLesson}
                         />
                     ))}
             </div>
@@ -27,4 +26,4 @@ const CourseSearch = () => {
     )
 }
 
-export default CourseSearch
+export default MyCourses

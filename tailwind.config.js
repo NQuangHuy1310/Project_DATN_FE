@@ -53,7 +53,10 @@ export default {
                 black: '#141522',
                 darkGrey: '#7A7A80',
                 grey: '#DFDFDF',
-                softGrey: '#F5F5F7'
+                softGrey: '#F5F5F7',
+                secondaryGreen: '#25C78B',
+                secondaryYellow: '#FFBB54',
+                secondaryRed: '#DB5962'
             },
             screens: {
                 mainScreen: '1440px'

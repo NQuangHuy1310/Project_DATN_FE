@@ -14,7 +14,7 @@ export const sidebarList = [
     {
         title: 'Tổng quan',
         icon: HiOutlineTemplate,
-        path: routes.overview
+        path: routes.dashboard
     },
     {
         title: 'Khoá học',
@@ -22,19 +22,19 @@ export const sidebarList = [
         path: routes.course,
         children: [
             {
-                title: 'Khám phá khoá học',
-                path: routes.exploreCourses
-            },
-            {
                 title: 'Khoá học của tôi',
                 path: routes.myCourse
+            },
+            {
+                title: 'Tìm kiếm khoá học',
+                path: routes.searchCourses
             }
         ]
     },
     {
-        title: 'Giảng viên',
+        title: 'Người hướng dẫn',
         icon: TbUserHexagon,
-        path: routes.teacher
+        path: routes.instructor
     },
     {
         title: 'Tài khoản',
@@ -94,4 +94,10 @@ export enum TeacherStatus {
     follow = 'Theo dõi',
     followed = 'Đã theo dõi',
     unFollow = 'Huỷ theo dõi'
+}
+
+export enum notificationTypes {
+    system = 'System',
+    instructor = 'Instructor',
+    user = 'User'
 }

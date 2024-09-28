@@ -24,7 +24,7 @@ const UserButton = () => {
             <DropdownMenuTrigger asChild className="relative outline-none transition hover:opacity-75">
                 <Avatar className="size-10 cursor-pointer">
                     <AvatarImage src={getImagesUrl(user?.avatar || '')} alt={user?.name} />
-                    <AvatarFallback className="bg-slate-500/50 text-xl font-semibold">
+                    <AvatarFallback className="bg-slate-500/50 text-xl font-semibold text-white">
                         {user?.name.charAt(0).toUpperCase()}
                     </AvatarFallback>
                 </Avatar>

@@ -8,11 +8,10 @@ const routes = {
 
     notification: '/notification',
 
-    overview: '/user-dashboard',
-    teacher: '/teacher',
+    dashboard: '/dashboard',
+
     course: '/course',
     myCourse: '/course/my-course',
-    exploreCourses: '/course/explore-courses',
     searchCourses: '/course/search-courses',
 
     // Account routes
@@ -20,9 +19,10 @@ const routes = {
     accountProfile: '/account/profile',
     accountHelp: '/account/help',
     accountSetting: '/account/settings',
-    accountNotification: '/account/notifications'
+    accountNotification: '/account/notifications',
 
     // Routes for teacher
+    instructor: '/instructor'
 }
 
 export default routes

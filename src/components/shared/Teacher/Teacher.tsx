@@ -10,7 +10,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
 const Teacher = ({ image, name, job, reviewStart, status, totalCourse, totalReview }: ITeacher) => {
     return (
-        <div className="flex w-[380px] flex-col gap-6 overflow-hidden rounded-lg bg-white p-7 shadow-md">
+        <div className="flex w-[360px] flex-col gap-6 overflow-hidden rounded-lg bg-white p-7 shadow-md hover:shadow-[0px_40px_100px_0px_#0000000d] hover:transition-all">
             <div className="flex items-center justify-between gap-2">
                 <Link to="" className="flex flex-shrink-0 items-center gap-3 truncate">
                     <Avatar className="size-11">
@@ -27,17 +27,17 @@ const Teacher = ({ image, name, job, reviewStart, status, totalCourse, totalRevi
                 {status === TeacherStatus.follow && (
                     <Button variant="outline" className="flex gap-1 px-2 text-xs">
                         <LuPlus />
-                        Follow
+                        {TeacherStatus.follow}
                     </Button>
                 )}
                 {status === TeacherStatus.followed && (
                     <Button variant="default" className="px-2 text-xs">
-                        Followed
+                        {TeacherStatus.followed}
                     </Button>
                 )}
                 {status === TeacherStatus.unFollow && (
                     <Button variant="destructive" className="px-2 text-xs">
-                        Unfollow
+                        {TeacherStatus.unFollow}
                     </Button>
                 )}
             </div>

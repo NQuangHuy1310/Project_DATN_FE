@@ -56,7 +56,8 @@ export default {
                 softGrey: '#F5F5F7',
                 secondaryGreen: '#25C78B',
                 secondaryYellow: '#FFBB54',
-                secondaryRed: '#DB5962'
+                secondaryRed: '#DB5962',
+                cardHover: '#0000000d'
             },
             screens: {
                 mainScreen: '1440px'

@@ -6,7 +6,6 @@ export const MessageErrors = {
     networkError: 'Lỗi mạng. Vui lòng kiểm tra kết nối của bạn.',
     unauthorizedAccess: 'Bạn không có quyền truy cập vào tài nguyên này.',
     notFound: 'Không tìm thấy tài nguyên yêu cầu.',
-    serverError: 'Đã xảy ra lỗi trên máy chủ. Vui lòng thử lại sau.',
     invalidInput: 'Dữ liệu nhập vào không hợp lệ. Vui lòng kiểm tra lại.',
     actionNotAllowed: 'Hành động này không được phép.',
     genericError: 'Đã xảy ra một lỗi không xác định. Vui lòng thử lại sau.',
@@ -25,19 +24,19 @@ export const ApiMessages = {
         notFound: 'Không tìm thấy tài nguyên yêu cầu.',
         unauthorized: 'Bạn không có quyền truy cập vào tài nguyên này.',
         forbidden: 'Hành động này bị cấm.',
-        serverError: 'Lỗi máy chủ. Vui lòng thử lại sau.',
+        serverError: 'Đã xảy ra lỗi trên máy chủ. Vui lòng thử lại sau.',
         timeout: 'Yêu cầu đã hết thời gian chờ.',
-        networkError: 'Lỗi mạng. Vui lòng kiểm tra kết nối của bạn.'
+        networkError: 'Lỗi mạng. Vui lòng kiểm tra kết nối của bạn.',
+        sessionExpired: 'Phiên làm việc của bạn đã hết hạn. Vui lòng đăng nhập lại.'
     }
 }
 
 export const MessageConfig = {
-    loading: 'Đang tải dữ liệu, vui lòng chờ...',
+    loading: 'Đang tải dữ liệu, xin vui lòng chờ một chút...',
     noData: 'Không có dữ liệu để hiển thị.',
-    retry: 'Có lỗi xảy ra. Nhấn để thử lại.',
-    actionSuccess: 'Hành động đã thực hiện thành công.',
-    actionFailed: 'Hành động không thành công. Vui lòng thử lại.',
-    sessionExpired: 'Phiên làm việc của bạn đã hết hạn. Vui lòng đăng nhập lại.'
+    retry: 'Đã xảy ra lỗi. Nhấn vào đây để thử lại.',
+    actionSuccess: 'Hành động của bạn đã được thực hiện thành công!',
+    actionFailed: 'Rất tiếc, hành động không thành công. Xin vui lòng thử lại.'
 }
 
 export const ConfirmationMessages = {

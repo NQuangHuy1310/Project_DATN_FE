@@ -4,7 +4,7 @@ import axios, { AxiosResponse } from 'axios'
 import { authApis } from '@/apis'
 import { useUserStore } from '@/store'
 import { backendUrl } from '@/configs/baseUrl'
-import { ApiStatusCode, MessageConfig } from '@/constants'
+import { ApiMessages, ApiStatusCode, MessageConfig, MessageErrors } from '@/constants'
 import { getAccessTokenFromLocalStorage, removeAccessToken, setAccessToken } from '@/utils'
 
 const { clearUserAndProfile } = useUserStore.getState()
@@ -32,21 +32,38 @@ axiosClient.interceptors.request.use((config) => {
 
 axiosClient.interceptors.response.use(
     (response: AxiosResponse) => {
-        const { code, message, data } = response.data
+        const { message, data } = response.data
 
-        if (code === ApiStatusCode.Success || ApiStatusCode.Created) {
-            toast.success(MessageConfig.actionSuccess, {
-                description: message
-            })
+        if (response.status === ApiStatusCode.Success || ApiStatusCode.Created) {
+            if (response.status === ApiStatusCode.Success) {
+                toast.success(message, {
+                    description: MessageConfig.actionSuccess
+                })
+            }
+
+            if (response.status === ApiStatusCode.Created) {
+                toast.success(ApiMessages.success.created, {
+                    description: message
+                })
+            }
+
             return data
         }
     },
     async (error) => {
         const status = error.response?.status
 
-        toast.error(MessageConfig.actionFailed, {
-            description: error.response.data?.message
-        })
+        if (status === ApiStatusCode.UnprocessableEntity) {
+            toast.error(error.response.data?.message, {
+                description: MessageErrors.invalidInput
+            })
+        }
+
+        if (status === ApiStatusCode.InternalServerError) {
+            toast.error(ApiMessages.error.serverError)
+        }
+
+        toast.error(error.response.data?.message)
 
         if (status === 401) {
             try {
@@ -56,7 +73,8 @@ axiosClient.interceptors.response.use(
                     return axiosClient(error.config)
                 }
             } catch {
-                toast.error(MessageConfig.sessionExpired)
+                toast.error(ApiMessages.error.sessionExpired)
+                await authApis.logout()
                 clearUserAndProfile()
                 removeAccessToken()
             }

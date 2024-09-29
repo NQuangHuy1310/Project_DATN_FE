@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { privateRoutes, publicRoutes } from '@/routes'
 import { getAccessTokenFromLocalStorage } from '@/utils'
 
-import Login from '@/views/user/Login'
+import Login from '@/views/user/Auth/Login'
 import Dashboard from '@/layouts/UserLayouts/Dashboard'
 import HomeLayout from '@/layouts/AuthLayouts/HomeLayout'
 

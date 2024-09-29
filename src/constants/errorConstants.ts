@@ -10,7 +10,10 @@ export const MessageErrors = {
     invalidInput: 'Dữ liệu nhập vào không hợp lệ. Vui lòng kiểm tra lại.',
     actionNotAllowed: 'Hành động này không được phép.',
     genericError: 'Đã xảy ra một lỗi không xác định. Vui lòng thử lại sau.',
-    maxSizeImage: 'Vui lòng tải ảnh có kích thước dưới 2MB.'
+    maxSizeImage: 'Vui lòng tải ảnh có kích thước dưới 2MB.',
+    uploadFile: 'Tải file không thành công vui lòng thử lại.',
+    phoneTooShort: 'Số điện thoại quá ngắn.',
+    phoneTooLong: 'Số diện thoại quá dài.'
 }
 
 export const ApiMessages = {

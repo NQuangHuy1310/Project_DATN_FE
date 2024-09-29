@@ -23,6 +23,34 @@ export const registerSchema = z
         }
     )
 
+export const profileSchema = z.object({
+    name: z.string().min(1, MessageErrors.requiredField),
+    phone: z.string().min(10, MessageErrors.phoneTooShort).max(14, MessageErrors.phoneTooLong),
+    address: z.string().optional(),
+    bio: z.string().optional(),
+    experience: z.string().optional()
+})
+
+export const changePasswordSchema = z
+    .object({
+        current_password: z.string().min(8, MessageErrors.passwordTooShort),
+        new_password: z.string().min(8, MessageErrors.passwordTooShort),
+        new_password_confirmation: z.string()
+    })
+    .refine(
+        (values) => {
+            return values.new_password === values.new_password_confirmation
+        },
+        {
+            message: MessageErrors.passwordsDoNotMatch,
+            path: ['new_password_confirmation']
+        }
+    )
+
 export type LoginFormFields = z.infer<typeof loginSchema>
 
 export type RegisterFormFields = z.infer<typeof registerSchema>
+
+export type ProfileFormFields = z.infer<typeof profileSchema>
+
+export type ChangePasswordFields = z.infer<typeof changePasswordSchema>

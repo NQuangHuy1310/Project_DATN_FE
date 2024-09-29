@@ -1,4 +1,5 @@
-import { imageBaseUrl } from '@/apis/Uri'
+import { imageBaseUrl } from '@/configs/baseUrl'
+import { MessageErrors } from '@/constants'
 
 export const getAccessTokenFromLocalStorage = () => {
     const accessToken = localStorage.getItem('access_token') || null
@@ -16,4 +17,13 @@ export const removeAccessToken = (): void => {
 
 export const getImagesUrl = (imagePath: string): string => {
     return `${imageBaseUrl}${imagePath}`
+}
+
+export const readFileAsDataUrl = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader()
+        reader.onload = () => resolve(reader.result as string)
+        reader.onerror = () => reject(new Error(MessageErrors.uploadFile))
+        reader.readAsDataURL(file)
+    })
 }

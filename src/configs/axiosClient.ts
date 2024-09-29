@@ -3,7 +3,7 @@ import axios, { AxiosResponse } from 'axios'
 
 import { authApis } from '@/apis'
 import { useUserStore } from '@/store'
-import { backendUrl } from '@/apis/Uri'
+import { backendUrl } from '@/configs/baseUrl'
 import { ApiStatusCode, MessageConfig } from '@/constants'
 import { getAccessTokenFromLocalStorage, removeAccessToken, setAccessToken } from '@/utils'
 

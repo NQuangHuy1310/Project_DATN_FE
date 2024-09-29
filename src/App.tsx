@@ -52,9 +52,9 @@ function App() {
                                             <Page />
                                         </Layout>
                                     ) : (
-                                        <Layout>
+                                        <HomeLayout>
                                             <Login />
-                                        </Layout>
+                                        </HomeLayout>
                                     )
                                 }
                             />

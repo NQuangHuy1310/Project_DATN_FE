@@ -3,9 +3,9 @@ import { useState } from 'react'
 import useGetUserProfile from '@/hooks/useGetUser'
 
 import { Button } from '@/components/ui/button'
-import ChangePassword from '@/views/user/AccountSettings/ChangePassword'
-import ChangeUsername from '@/views/user/AccountSettings/ChangeUsername'
-import DeleteAccount from '@/views/user/AccountSettings/DeleteAccount'
+import ChangePassword from '@/views/user/Account/AccountSettings/ChangePassword'
+import ChangeUsername from '@/views/user/Account/AccountSettings/ChangeUsername'
+import DeleteAccount from '@/views/user/Account/AccountSettings/DeleteAccount'
 
 const AccountSettings = () => {
     const { user } = useGetUserProfile()

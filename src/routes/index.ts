@@ -7,20 +7,20 @@ import ProfileLayout from '@/layouts/UserLayouts/ProfileLayout'
 import Home from '@/views/user/Home'
 
 // Authentication
-import Login from '@/views/user/Login'
-import Register from '@/views/user/Register'
+import Login from '@/views/user/Auth/Login'
+import Register from '@/views/user/Auth/Register'
+import ForgotPassword from '@/views/user/Auth/ForgotPassword'
 
 // Account
-import AccountHelp from '@/views/user/AccountHelp'
-import ForgotPassword from '@/views/user/ForgotPassword'
-import AccountProfile from '@/views/user/AccountProfile'
-import AccountSettings from '@/views/user/AccountSettings'
-import AccountNotifications from '@/views/user/AccountNotifications'
+import AccountHelp from '@/views/user/Account/AccountHelp'
+import AccountProfile from '@/views/user/Account/AccountProfile'
+import AccountSettings from '@/views/user/Account/AccountSettings'
+import AccountNotifications from '@/views/user/Account/AccountNotifications'
 
 // course
-import MyCourse from '@/views/user/MyCourse'
-import CourseExplore from '@/views/user/CourseExplore'
-import CourseMyCourses from '@/views/user/CourseSearch'
+import MyCourse from '@/views/user/Courses/MyCourse'
+import CourseExplore from '@/views/user/Courses/CourseExplore'
+import CourseMyCourses from '@/views/user/Courses/CourseSearch'
 
 import Dashboard from '@/views/user/Dashboard'
 import Instructor from '@/views/user/Instructors'

@@ -55,3 +55,18 @@ export interface IResetPassword {
     new_password: string
     new_password_confirmation: string
 }
+
+export interface IUpdateProfile {
+    name: string
+    phone: string
+    address?: string
+    bio?: string
+    experience?: string
+    avatar?: File | undefined
+}
+
+export interface IChangePassword {
+    current_password: string
+    new_password: string
+    new_password_confirmation: string
+}

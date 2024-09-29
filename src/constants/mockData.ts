@@ -1,11 +1,11 @@
 import { ICourse, ITeacher } from '@/types'
-import { CourseLevel, notificationTypes, TeacherStatus } from '@/constants/constants'
-import { INotificationMessage } from '@/types/notificationMessage'
+import { CourseLevel, notificationTypes, TeacherStatus } from '@/constants'
+import { INotificationMessage } from '@/types'
 
 export const courses: ICourse[] = [
     {
         image: 'https://images.unsplash.com/photo-1545235617-9465d2a55698?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        name: 'UX Design : How To Implement Usability Testing',
+        name: 'Lập trình C++ cơ bản, nâng cao',
         star: 4.5,
         studentCount: 100,
         totalVideo: 10,
@@ -22,7 +22,7 @@ export const courses: ICourse[] = [
     },
     {
         image: 'https://images.unsplash.com/photo-1545235617-9465d2a55698?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        name: 'Animation is the Key of Successfull UI/UX Design',
+        name: 'Xây Dựng Website với ReactJS',
         star: 4.5,
         studentCount: 100,
         totalVideo: 10,
@@ -68,6 +68,7 @@ export const mockTeachers: ITeacher[] = [
         status: TeacherStatus.unFollow
     }
 ]
+
 export const notificationMessages: INotificationMessage[] = [
     {
         notificationType: notificationTypes.user,

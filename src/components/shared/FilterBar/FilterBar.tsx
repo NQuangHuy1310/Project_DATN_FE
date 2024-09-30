@@ -16,7 +16,7 @@ import { CourseLevel } from '@/constants'
 const FilterBar = ({ placeholder, lever }: { placeholder: string; lever?: boolean }) => {
     return (
         <div className="flex items-center justify-between">
-            <div className="relative h-[50px] min-w-[500px]">
+            <div className="relative h-[50px] w-1/2 lg:w-1/3">
                 <Input className="h-full w-full bg-white pe-10 ps-5 text-sm" autoFocus placeholder={placeholder} />
                 <IoSearchOutline className="absolute right-4 top-1/2 size-5 -translate-y-1/2 cursor-pointer" />
             </div>

@@ -22,7 +22,8 @@ const routes = {
     accountNotification: '/account/notifications',
 
     // Routes for teacher
-    instructor: '/instructor'
+    instructor: '/instructor',
+    instructorDetail: '/instructor/detail/:slug'
 }
 
 export default routes

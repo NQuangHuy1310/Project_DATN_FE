@@ -1,12 +1,13 @@
 import { useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
+
 import { MdKeyboardArrowDown } from 'react-icons/md'
 
 import logo from '@/assets/Union.svg'
 import routes from '@/configs/routes'
 import { sidebarList } from '@/constants'
 
-const UserSidebar = () => {
+const UserSidebar = ({ isOpen }: { isOpen: boolean }) => {
     const [openIndex, setOpenIndex] = useState<number | null>(null)
 
     const toggleChildren = (index: number) => {
@@ -14,7 +15,9 @@ const UserSidebar = () => {
     }
 
     return (
-        <aside className="fixed min-h-screen w-full max-w-64 bg-white px-5">
+        <aside
+            className={`fixed z-[999] min-h-screen w-full max-w-[75vw] bg-white px-5 transition-transform duration-500 md:max-w-[50vw] lg:fixed lg:max-w-64 ${isOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`}
+        >
             <div className="flex flex-col gap-8 pt-6">
                 <Link to={routes.home} className="flex justify-center gap-2">
                     <div className="h-10 w-10">

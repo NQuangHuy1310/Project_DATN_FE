@@ -25,6 +25,7 @@ import CourseMyCourses from '@/views/user/Courses/CourseSearch'
 import Dashboard from '@/views/user/Dashboard'
 import Instructor from '@/views/user/Instructors'
 import Notifications from '@/views/user/Notifications'
+import InstructorDetail from '@/views/user/Instructors/InstructorDetail'
 
 // Routes không cần đăng nhập
 export const publicRoutes = [
@@ -48,5 +49,6 @@ export const privateRoutes = [
 
     { path: routes.dashboard, layout: DashboardLayout, element: Dashboard },
     { path: routes.instructor, layout: DashboardLayout, element: Instructor },
+    { path: routes.instructorDetail, layout: DashboardLayout, element: InstructorDetail },
     { path: routes.notification, layout: DashboardLayout, element: Notifications }
 ]

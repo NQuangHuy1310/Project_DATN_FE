@@ -2,16 +2,16 @@ import { IoIosStar } from 'react-icons/io';
 import { MdListAlt } from 'react-icons/md';
 
 import { courses } from '@/constants/mockData';
+
 import { Button } from '@/components/ui/button';
 import Course from '@/components/shared/Course';
 import FilterBar from '@/components/shared/FilterBar/FilterBar';
 const InstructorDetail = () => {
     return (
         <div className="flex flex-col gap-5">
-
-            <div className=" flex md:flex-col flex-col-reverse gap-7 ">
-                <div className=" bg-white flex md:justify-between flex-col md:flex-row gap-7 md:gap-3 w-full p-7 rounded-lg">
-                    <div className="flex gap-5 ">
+            <div className="bg-white flex md:flex-col flex-col-reverse gap-7 p-7 rounded-lg">
+                <div className="flex md:justify-between flex-col md:flex-row gap-7 md:gap-3 w-full">
+                    <div className="flex gap-5">
                         <div className="w-14 h-14">
                             <img src="https://i.pinimg.com/564x/ac/27/1d/ac271de883faa03617b212beeda73db3.jpg" className="w-full h-full rounded-full" alt="" />
                         </div>

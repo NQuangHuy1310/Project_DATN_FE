@@ -21,6 +21,7 @@ import AccountNotifications from '@/views/user/Account/AccountNotifications'
 import MyCourse from '@/views/user/Courses/MyCourse'
 import CourseExplore from '@/views/user/Courses/CourseExplore'
 import CourseMyCourses from '@/views/user/Courses/CourseSearch'
+import CourseDetail from '@/views/user/Courses/CourseDetail'
 
 import Dashboard from '@/views/user/Dashboard'
 import Instructor from '@/views/user/Instructors'
@@ -45,6 +46,7 @@ export const privateRoutes = [
     { path: routes.myCourse, layout: DashboardLayout, element: MyCourse },
     { path: routes.course, layout: DashboardLayout, element: CourseExplore },
     { path: routes.searchCourses, layout: DashboardLayout, element: CourseMyCourses },
+    { path: routes.courseDetail, layout: DashboardLayout, element: CourseDetail },
 
     { path: routes.dashboard, layout: DashboardLayout, element: Dashboard },
     { path: routes.instructor, layout: DashboardLayout, element: Instructor },

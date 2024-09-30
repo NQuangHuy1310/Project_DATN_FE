@@ -13,6 +13,7 @@ const routes = {
     course: '/course',
     myCourse: '/course/my-course',
     searchCourses: '/course/search-courses',
+    courseDetail: '/course/:slug',
 
     // Account routes
     account: '/account/',

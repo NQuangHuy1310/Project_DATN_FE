@@ -19,11 +19,11 @@ const UserSidebar = ({ isOpen }: { isOpen: boolean }) => {
             className={`fixed z-[999] min-h-screen w-full max-w-[75vw] bg-white px-5 transition-transform duration-500 md:max-w-[50vw] lg:fixed lg:max-w-64 ${isOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`}
         >
             <div className="flex flex-col gap-8 pt-6">
-                <Link to={routes.home} className="flex justify-center gap-2">
+                <Link to={routes.home} className="flex items-center justify-center gap-2">
                     <div className="h-10 w-10">
                         <img src={logo} alt="Coursea" className="h-f w-full object-cover" />
                     </div>
-                    <p className="text-3xl font-medium text-black">Coursea</p>
+                    <h2 className="text-3xl font-medium text-black">Coursea</h2>
                 </Link>
                 <div className="flex flex-col gap-5">
                     {sidebarList.map((item, index) => (

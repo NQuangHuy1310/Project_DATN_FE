@@ -4,10 +4,10 @@
 
 @layer base {
     * {
-        @apply border-border;
+        @apply font-inter border-border;
     }
     body {
-        @apply bg-background text-base;
+        @apply bg-background text-sm text-black;
     }
 
     ::-webkit-scrollbar {

@@ -1,4 +1,4 @@
-import { ICourse, ITeacher } from '@/types'
+import { ICourse, ICourseToday, ITeacher } from '@/types'
 import { CourseLevel, notificationTypes, TeacherStatus } from '@/constants'
 import { INotificationMessage } from '@/types'
 
@@ -257,7 +257,7 @@ export const myCourses: ICourse[] = [
     }
 ]
 
-export const coursesToday: ICourse[] = [
+export const coursesToday: ICourseToday[] = [
     {
         image: 'https://i.pinimg.com/564x/ac/27/1d/ac271de883faa03617b212beeda73db3.jpg',
         name: 'Introduction to UX Design',

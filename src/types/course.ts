@@ -12,9 +12,15 @@ export interface ICourse {
     createdBy: IUser
     progressLesson?: number
     totalLesson?: number
-    module?: IModule[]
 }
-
+export interface ICourseToday {
+    image: string
+    name: string
+    star: number
+    level: CourseLevel
+    createdBy: IUser
+    module: IModule[]
+}
 export interface IModule {
     title: string
     time: number

@@ -1,4 +1,5 @@
 import Course from '@/components/shared/Course'
+import CourseToday from '@/components/shared/Course/CourseToday'
 import Teacher from '@/components/shared/Teacher'
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
 
@@ -15,8 +16,10 @@ const Dashboard = () => {
                     }}
                 >
                     <div className="flex justify-between">
-                        <h5 className="text-xl font-medium text-black">Người hướng dẫn nổi bật theo tháng</h5>
-                        <div>
+                        <h5 className="text-lg font-medium text-black md:text-xl">
+                            Người hướng dẫn nổi bật theo tháng
+                        </h5>
+                        <div className="flex w-20 gap-2 text-right">
                             <CarouselPrevious className="!translate-y-0 !shadow-none" />
                             <CarouselNext className="!translate-y-0 !shadow-none" />
                         </div>
@@ -24,7 +27,7 @@ const Dashboard = () => {
                     <div className="w-full">
                         <CarouselContent className="w-full">
                             {mockTeachers.map((item, index) => (
-                                <CarouselItem key={index} className="w-full min-w-0 basis-[367px]">
+                                <CarouselItem key={index} className="w-full min-w-0 basis-full md:basis-[367px]">
                                     <Teacher
                                         key={index}
                                         name={item.name}
@@ -48,8 +51,8 @@ const Dashboard = () => {
                     }}
                 >
                     <div className="flex justify-between">
-                        <h5 className="text-xl font-medium text-black">Khoá học nổi bật theo tháng</h5>
-                        <div className="flex gap-2">
+                        <h5 className="text-lg font-medium text-black md:text-xl">Khoá học nổi bật theo tháng</h5>
+                        <div className="flex w-20 gap-2 text-right">
                             <CarouselPrevious className="!translate-y-0 !shadow-none" />
                             <CarouselNext className="!translate-y-0 !shadow-none" />
                         </div>
@@ -57,7 +60,7 @@ const Dashboard = () => {
                     <div className="w-full">
                         <CarouselContent className="w-full">
                             {courses.map((item, index) => (
-                                <CarouselItem key={index} className="w-full min-w-0 basis-[367px]">
+                                <CarouselItem key={index} className="w-full min-w-0 basis-full md:basis-[367px]">
                                     <Course
                                         key={index}
                                         name={item.name}
@@ -93,7 +96,7 @@ const Dashboard = () => {
                         <CarouselContent className="!m-0 w-full !py-0">
                             {coursesToday.map((item, index) => (
                                 <CarouselItem key={index} className="w-full min-w-0 basis-full !p-0">
-                                    <Course
+                                    <CourseToday
                                         key={index}
                                         name={item.name}
                                         image={item.image}

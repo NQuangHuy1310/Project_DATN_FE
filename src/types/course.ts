@@ -12,4 +12,10 @@ export interface ICourse {
     createdBy: IUser
     progressLesson?: number
     totalLesson?: number
+    module?: IModule[]
+}
+
+export interface IModule {
+    title: string
+    time: number
 }

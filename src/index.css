@@ -4,7 +4,7 @@
 
 @layer base {
     * {
-        @apply font-inter border-border;
+        @apply border-border font-inter;
     }
     body {
         @apply bg-background text-sm text-black;
@@ -88,5 +88,10 @@
         -webkit-line-clamp: 2;
         overflow: hidden;
         text-overflow: ellipsis;
+    }
+    .card {
+        padding: 28px;
+        background-color: white;
+        border-radius: 12px;
     }
 }

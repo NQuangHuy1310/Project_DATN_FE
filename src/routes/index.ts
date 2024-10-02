@@ -30,10 +30,10 @@ import InstructorDetail from '@/views/user/Instructors/InstructorDetail'
 
 // Routes không cần đăng nhập
 export const publicRoutes = [
-    { path: routes.home, layout: HomeLayout, element: Home, title: 'Trang chủ' },
-    { path: routes.login, layout: HomeLayout, element: Login, title: 'Đăng nhập' },
-    { path: routes.register, layout: HomeLayout, element: Register, title: 'Đăng ký' },
-    { path: routes.forgotPassword, layout: HomeLayout, element: ForgotPassword, title: 'Quên mật khẩu' }
+    { path: routes.home, layout: HomeLayout, element: Home },
+    { path: routes.login, layout: HomeLayout, element: Login },
+    { path: routes.register, layout: HomeLayout, element: Register },
+    { path: routes.forgotPassword, layout: HomeLayout, element: ForgotPassword }
 ]
 
 // Routes cần đăng nhập
@@ -49,7 +49,7 @@ export const privateRoutes = [
     { path: routes.searchCourses, layout: DashboardLayout, element: CourseMyCourses, title: 'Tìm kiếm khóa học' },
     { path: routes.courseDetail, layout: DashboardLayout, element: CourseDetail, title: 'Chi tiết khóa học' },
 
-    { path: routes.dashboard, layout: DashboardLayout, element: Dashboard, title: 'Xin chào ' },
+    { path: routes.dashboard, layout: DashboardLayout, element: Dashboard, title: 'Xin chào ...' },
     { path: routes.instructor, layout: DashboardLayout, element: Instructor, title: 'Giảng viên' },
     { path: routes.instructorDetail, layout: DashboardLayout, element: InstructorDetail, title: 'Chi tiết giảng viên' },
     { path: routes.notification, layout: DashboardLayout, element: Notifications, title: 'Thông báo' }

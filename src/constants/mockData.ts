@@ -1,4 +1,4 @@
-import { ICourse, ITeacher } from '@/types'
+import { ICourse, ICourseToday, ITeacher } from '@/types'
 import { CourseLevel, notificationTypes, TeacherStatus } from '@/constants'
 import { INotificationMessage } from '@/types'
 
@@ -16,6 +16,40 @@ export const courses: ICourse[] = [
             name: 'Nguyễn Quang Huy',
             email: 'Huy@gmail.com',
             avatar: 'https://images.unsplash.com/photo-1640951613773-54706e06851d?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+            is_active: true,
+            user_type: 'member'
+        }
+    },
+    {
+        image: 'https://images.unsplash.com/photo-1545235617-9465d2a55698?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        name: 'Xây Dựng Website với ReactJS',
+        star: 4.5,
+        studentCount: 100,
+        totalVideo: 10,
+        totalTime: '5 giờ',
+        level: CourseLevel.Intermediate,
+        createdBy: {
+            id: 1,
+            name: 'Nguyễn Quang Huy',
+            email: 'Huy@gmail.com',
+            avatar: '',
+            is_active: true,
+            user_type: 'member'
+        }
+    },
+    {
+        image: 'https://images.unsplash.com/photo-1545235617-9465d2a55698?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        name: 'Xây Dựng Website với ReactJS',
+        star: 4.5,
+        studentCount: 100,
+        totalVideo: 10,
+        totalTime: '5 giờ',
+        level: CourseLevel.Intermediate,
+        createdBy: {
+            id: 1,
+            name: 'Nguyễn Quang Huy',
+            email: 'Huy@gmail.com',
+            avatar: '',
             is_active: true,
             user_type: 'member'
         }
@@ -57,6 +91,15 @@ export const mockTeachers: ITeacher[] = [
         reviewStart: 4.5,
         totalReview: 100,
         status: TeacherStatus.followed
+    },
+    {
+        image: 'https://images.unsplash.com/photo-1640960543409-dbe56ccc30e2?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        name: 'Nguyễn Quang Huy',
+        job: 'Backend developer',
+        totalCourse: 5,
+        reviewStart: 4.5,
+        totalReview: 100,
+        status: TeacherStatus.unFollow
     },
     {
         image: 'https://images.unsplash.com/photo-1640960543409-dbe56ccc30e2?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
@@ -203,6 +246,51 @@ export const myCourses: ICourse[] = [
         level: CourseLevel.Intermediate,
         progressLesson: 87,
         totalLesson: 160,
+        createdBy: {
+            id: 4,
+            name: 'Nguyễn Quang Huy',
+            email: 'Huy@gmail.com',
+            avatar: 'https://images.unsplash.com/photo-1640951613773-54706e06851d?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+            is_active: true,
+            user_type: 'member'
+        }
+    }
+]
+
+export const coursesToday: ICourseToday[] = [
+    {
+        image: 'https://i.pinimg.com/564x/ac/27/1d/ac271de883faa03617b212beeda73db3.jpg',
+        name: 'Introduction to UX Design',
+        star: 4.5,
+        level: CourseLevel.Beginner,
+        module: [
+            { title: 'Introduction', time: 10 },
+            { title: 'What is UX Design', time: 10 },
+            { title: 'Usability Testing', time: 10 },
+            { title: 'Create Usability Test', time: 30 },
+            { title: 'How to Implement', time: 30 }
+        ],
+        createdBy: {
+            id: 4,
+            name: 'Nguyễn Quang Huy',
+            email: 'Huy@gmail.com',
+            avatar: 'https://images.unsplash.com/photo-1640951613773-54706e06851d?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+            is_active: true,
+            user_type: 'member'
+        }
+    },
+    {
+        image: 'https://i.pinimg.com/564x/ac/27/1d/ac271de883faa03617b212beeda73db3.jpg',
+        name: 'Introduction to UX Design',
+        star: 4.5,
+        level: CourseLevel.Beginner,
+        module: [
+            { title: 'Introduction', time: 10 },
+            { title: 'What is UX Design', time: 10 },
+            { title: 'Usability Testing', time: 10 },
+            { title: 'Create Usability Test', time: 30 },
+            { title: 'How to Implement', time: 30 }
+        ],
         createdBy: {
             id: 4,
             name: 'Nguyễn Quang Huy',

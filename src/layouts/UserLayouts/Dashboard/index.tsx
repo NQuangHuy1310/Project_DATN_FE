@@ -27,10 +27,10 @@ const Dashboard = ({ children }: { children: React.ReactNode }) => {
             <UserSidebar isOpen={isSidebarOpen} />
             <article className="w-full lg:ps-64">
                 <UserHeader toggleSidebar={toggleSidebar} />
-                <main className="mt-[80px] min-h-screen w-full bg-softGrey p-7">{children}</main>
+                <main className="mt-[80px] min-h-screen w-full bg-softGrey md:p-7">{children}</main>
             </article>
             {isSidebarOpen && (
-                <div className="fixed inset-0 z-[998] bg-black bg-opacity-50" onClick={() => setIsSidebarOpen(false)} />
+                <div className="fixed inset-0 z-40 bg-black bg-opacity-50" onClick={() => setIsSidebarOpen(false)} />
             )}
         </div>
     )

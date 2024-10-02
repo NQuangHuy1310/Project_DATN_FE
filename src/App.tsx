@@ -48,7 +48,7 @@ function App() {
                                 path={route.path}
                                 element={
                                     isLoggedIn ? (
-                                        <Layout>
+                                        <Layout title={route?.title}>
                                             <Page />
                                         </Layout>
                                     ) : (

@@ -6,7 +6,7 @@ import routes from '@/configs/routes'
 import useGetUserProfile from '@/hooks/useGetUser'
 import UserButton from '@/components/shared/UserButton'
 
-function UserHeader({ toggleSidebar }: { toggleSidebar: () => void }) {
+function UserHeader({ toggleSidebar, title }: { toggleSidebar: () => void, title: string }) {
     const location = useLocation()
     const route = location.pathname
 
@@ -16,25 +16,10 @@ function UserHeader({ toggleSidebar }: { toggleSidebar: () => void }) {
         if (route.includes('/account')) {
             return 'Tài khoản'
         }
-
-        switch (route) {
-            case routes.dashboard:
-                return `Xin chào, ${user?.name}`
-            case routes.course:
-                return 'Khá phá khoá học'
-            case routes.myCourse:
-                return 'Khoá học của tôi'
-            case routes.searchCourses:
-                return 'Tìm kiếm khoá học'
-            case routes.instructor:
-                return 'Người hướng dẫn'
-            case routes.accountSetting:
-                return 'Cài đặt tài khoản'
-            case routes.notification:
-                return 'Thông báo'
-            default:
-                return `Hi, ${user?.name}`
+        if (route == routes.dashboard) {
+            return title + user?.name
         }
+        return title
     }
     return (
         <header className="fixed left-0 right-0 z-50 flex h-20 items-center justify-between bg-white px-8 lg:left-64">

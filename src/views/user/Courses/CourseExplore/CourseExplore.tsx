@@ -28,7 +28,7 @@ const CoursesExplore = () => {
             </div>
             <div className="flex flex-col gap-6">
                 <h2 className="text-2xl font-semibold text-black">Khoá học hàng tháng nổi bật</h2>
-                <div className="flex gap-10">
+                <div className="flex flex-wrap gap-10">
                     {courses &&
                         courses.length > 0 &&
                         courses.map((item, index) => (

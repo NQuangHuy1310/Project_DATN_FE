@@ -6,7 +6,7 @@ const CourseSearch = () => {
     return (
         <div className="flex flex-col gap-7">
             <FilterBar placeholder="Tìm kiếm khóa học và người hướng dẫn" lever />
-            <div className="flex gap-10">
+            <div className="flex flex-wrap gap-10">
                 {courses &&
                     courses.length > 0 &&
                     courses.map((item, index) => (

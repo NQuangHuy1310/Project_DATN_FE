@@ -8,7 +8,7 @@ import UserButton from '@/components/shared/UserButton'
 function UserHeader({ toggleSidebar, title }: { toggleSidebar: () => void, title: string }) {
 
     return (
-        <header className="fixed left-0 right-0 z-50 flex h-20 items-center justify-between bg-white px-8 lg:left-64">
+        <header className="fixed left-0 right-0 z-50 flex h-20 items-center justify-between border-b bg-white px-8 md:border-none lg:left-64">
             <FaBars className="cursor-pointer text-2xl lg:hidden" onClick={toggleSidebar} />
             <div className="hidden lg:block">
                 <h2 className="text-3xl font-medium">{title}</h2>

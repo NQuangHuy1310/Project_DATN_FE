@@ -33,7 +33,7 @@ const ProfileLayout = ({ children, title }: { children: React.ReactNode, title: 
                 </main>
             </article>
             {isSidebarOpen && (
-                <div className="fixed inset-0 z-[998] bg-black bg-opacity-50" onClick={() => setIsSidebarOpen(false)} />
+                <div className="fixed inset-0 z-40 bg-black bg-opacity-50" onClick={() => setIsSidebarOpen(false)} />
             )}
         </div>
     )

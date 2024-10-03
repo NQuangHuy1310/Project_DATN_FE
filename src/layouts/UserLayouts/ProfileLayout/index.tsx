@@ -27,7 +27,7 @@ const ProfileLayout = ({ children, title }: { children: React.ReactNode; title: 
             <UserSidebar isOpen={isSidebarOpen} />
             <article className="w-full lg:ps-64">
                 <UserHeader toggleSidebar={toggleSidebar} title={title} />
-                <main className="mt-[80px] flex min-h-screen w-full flex-wrap items-start gap-7 bg-softGrey p-8">
+                <main className="mt-[80px] flex w-full flex-wrap items-start gap-7 bg-softGrey p-8 lg:min-h-screen">
                     <UserAside />
                     <div className="card flex-1">{children}</div>
                 </main>

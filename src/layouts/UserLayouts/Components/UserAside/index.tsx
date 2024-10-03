@@ -71,8 +71,8 @@ const UserAside = () => {
                     )}
                     {isMenuVisible && (
                         <aside
-                            className={`fixed bottom-0 left-0 z-50 w-full bg-white p-5 shadow-lg transition-transform duration-500 ease-in-out ${
-                                isMenuVisible ? 'translate-y-0' : 'translate-y-full'
+                            className={`fixed bottom-0 left-0 right-0 z-50 w-full bg-white p-5 shadow-lg transition-transform duration-500 ease-linear ${
+                                isMenuVisible ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'
                             }`}
                         >
                             <div className="flex flex-col gap-4 p-5">

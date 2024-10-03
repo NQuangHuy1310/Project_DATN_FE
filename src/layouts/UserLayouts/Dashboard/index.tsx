@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import UserHeader from '@/layouts/UserLayouts/Components/UserHeader/UserHeader'
 import UserSidebar from '@/layouts/UserLayouts/Components/UserSidebar/UserSidebar'
 
-const Dashboard = ({ children }: { children: React.ReactNode }) => {
+const Dashboard = ({ children, title }: { children: React.ReactNode, title: string }) => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
     const toggleSidebar = () => {
@@ -26,6 +26,8 @@ const Dashboard = ({ children }: { children: React.ReactNode }) => {
         <div className="flex">
             <UserSidebar isOpen={isSidebarOpen} />
             <article className="w-full lg:ps-64">
+                <UserHeader toggleSidebar={toggleSidebar} title={title} />
+                <main className="mt-[80px] min-h-screen w-full bg-softGrey p-7">{children}</main>
                 <UserHeader toggleSidebar={toggleSidebar} />
                 <main className="mt-[80px] min-h-screen w-full bg-softGrey md:p-7">{children}</main>
             </article>

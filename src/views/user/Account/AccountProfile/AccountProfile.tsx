@@ -77,10 +77,10 @@ const AccountProfile = () => {
             setProfile(userProfile.profile)
 
             setValue('name', userProfile.user.name)
-            setValue('address', userProfile.profile.address)
-            setValue('phone', userProfile.profile.phone)
-            setValue('experience', userProfile.profile.experience)
-            setValue('bio', userProfile.profile.bio)
+            setValue('address', userProfile.profile?.address)
+            setValue('phone', userProfile.profile?.phone)
+            setValue('experience', userProfile.profile?.experience)
+            setValue('bio', userProfile.profile?.bio)
         }
     }, [userProfile, setUser, setProfile, setValue])
 
@@ -109,25 +109,25 @@ const AccountProfile = () => {
                 </div>
             </div>
             <form className="flex flex-col justify-start gap-7" onSubmit={handleSubmit(onSubmit)}>
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-1">
                     <label className="text-sm font-semibold">Họ và Tên</label>
                     <Input {...register('name')} type="text" placeholder="Họ và tên" disabled={isSubmitting} />
                     {errors.name && <div className="text-sm text-red-500">{errors.name.message}</div>}
                 </div>
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-1">
                     <label className="text-sm font-semibold">Địa chỉ</label>
                     <Input {...register('address')} type="text" placeholder="Địa chỉ" disabled={isSubmitting} />
                 </div>
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-1">
                     <label className="text-sm font-semibold">Số điện thoại</label>
                     <Input {...register('phone')} type="number" placeholder="Số điện thoại" disabled={isSubmitting} />
                     {errors.phone && <div className="text-sm text-red-500">{errors.phone.message}</div>}
                 </div>
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-1">
                     <label className="text-sm font-semibold">Kinh nghiệm làm việc</label>
                     <Textarea {...register('experience')} placeholder="Kinh nghiệm làm việc" />
                 </div>
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-1">
                     <label className="text-sm font-semibold">Bio</label>
                     <Textarea {...register('bio')} placeholder="Bio" />
                 </div>

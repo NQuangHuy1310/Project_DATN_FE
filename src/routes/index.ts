@@ -39,18 +39,18 @@ export const publicRoutes = [
 // Routes cần đăng nhập
 export const privateRoutes = [
     // Account
-    { path: routes.accountHelp, layout: ProfileLayout, element: AccountHelp },
-    { path: routes.accountProfile, layout: ProfileLayout, element: AccountProfile },
-    { path: routes.accountSetting, layout: ProfileLayout, element: AccountSettings },
-    { path: routes.accountNotification, layout: ProfileLayout, element: AccountNotifications },
+    { path: routes.accountHelp, layout: ProfileLayout, element: AccountHelp, title: 'Hỗ trợ' },
+    { path: routes.accountProfile, layout: ProfileLayout, element: AccountProfile, title: 'Thông tin cá nhân' },
+    { path: routes.accountSetting, layout: ProfileLayout, element: AccountSettings, title: 'Cài đặt' },
+    { path: routes.accountNotification, layout: ProfileLayout, element: AccountNotifications, title: 'Thông báo' },
 
-    { path: routes.myCourse, layout: DashboardLayout, element: MyCourse },
-    { path: routes.course, layout: DashboardLayout, element: CourseExplore },
-    { path: routes.searchCourses, layout: DashboardLayout, element: CourseMyCourses },
-    { path: routes.courseDetail, layout: DashboardLayout, element: CourseDetail },
+    { path: routes.myCourse, layout: DashboardLayout, element: MyCourse, title: 'Khóa học của tôi' },
+    { path: routes.course, layout: DashboardLayout, element: CourseExplore, title: 'Khám phá khóa học' },
+    { path: routes.searchCourses, layout: DashboardLayout, element: CourseMyCourses, title: 'Tìm kiếm khóa học' },
+    { path: routes.courseDetail, layout: DashboardLayout, element: CourseDetail, title: 'Chi tiết khóa học' },
 
-    { path: routes.dashboard, layout: DashboardLayout, element: Dashboard },
-    { path: routes.instructor, layout: DashboardLayout, element: Instructor },
-    { path: routes.instructorDetail, layout: DashboardLayout, element: InstructorDetail },
-    { path: routes.notification, layout: DashboardLayout, element: Notifications }
+    { path: routes.dashboard, layout: DashboardLayout, element: Dashboard, title: 'Xin chào ...' },
+    { path: routes.instructor, layout: DashboardLayout, element: Instructor, title: 'Giảng viên' },
+    { path: routes.instructorDetail, layout: DashboardLayout, element: InstructorDetail, title: 'Chi tiết giảng viên' },
+    { path: routes.notification, layout: DashboardLayout, element: Notifications, title: 'Thông báo' }
 ]

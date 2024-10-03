@@ -22,6 +22,11 @@ const routes = {
     accountSetting: '/account/settings',
     accountNotification: '/account/notifications',
 
+    // Post
+    post: '/new-post',
+    mePost: '/me/post',
+    meBookmark: 'me/bookmark',
+
     // Routes for teacher
     instructor: '/instructor',
     instructorDetail: '/instructor/detail/:slug'

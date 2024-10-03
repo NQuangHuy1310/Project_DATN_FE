@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-vars */
-import { MdSecurity } from 'react-icons/md'
 import { LuUserCircle } from 'react-icons/lu'
 import { TbUserHexagon } from 'react-icons/tb'
 import { IoSettingsOutline } from 'react-icons/io5'
 import { FaRegBell, FaUserCog } from 'react-icons/fa'
 import { IoMdHelpCircleOutline } from 'react-icons/io'
+import { MdSecurity, MdArticle } from 'react-icons/md'
 import { HiBookOpen, HiOutlineTemplate } from 'react-icons/hi'
 import { FaRegCircleQuestion, FaRegCircleCheck } from 'react-icons/fa6'
 
@@ -35,6 +35,21 @@ export const sidebarList = [
         title: 'Người hướng dẫn',
         icon: TbUserHexagon,
         path: routes.instructor
+    },
+    {
+        title: 'Bài viết',
+        icon: MdArticle,
+        path: routes.post,
+        children: [
+            {
+                title: 'Bài viết của tôi',
+                path: routes.mePost
+            },
+            {
+                title: 'Bài viết đã lưu',
+                path: routes.meBookmark
+            }
+        ]
     },
     {
         title: 'Tài khoản',

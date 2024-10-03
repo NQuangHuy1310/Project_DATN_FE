@@ -28,7 +28,7 @@ const AccountProfile = () => {
     } = useForm<ProfileFormFields>({ resolver: zodResolver(profileSchema) })
 
     const { data: userProfile } = useProfile()
-    const { user } = useGetUserProfile()
+    const { user, profile } = useGetUserProfile()
     const setUser = useUserStore((state) => state.setUser)
     const setProfile = useUserStore((state) => state.setProfile)
 
@@ -76,13 +76,13 @@ const AccountProfile = () => {
             setUser(userProfile.user)
             setProfile(userProfile.profile)
 
-            setValue('name', userProfile.user.name)
-            setValue('address', userProfile.profile?.address)
-            setValue('phone', userProfile.profile?.phone)
-            setValue('experience', userProfile.profile?.experience)
-            setValue('bio', userProfile.profile?.bio)
+            setValue('name', userProfile.user.name ?? user?.name)
+            setValue('address', userProfile.profile?.address ?? profile?.address)
+            setValue('phone', userProfile.profile?.phone ?? profile?.phone)
+            setValue('experience', userProfile.profile?.experience ?? profile?.experience)
+            setValue('bio', userProfile.profile?.bio ?? profile?.bio)
         }
-    }, [userProfile, setUser, setProfile, setValue])
+    }, [userProfile, setUser, setProfile, setValue, user, profile])
 
     return (
         <div className="flex max-w-[500px] flex-col justify-start gap-7">

@@ -8,7 +8,7 @@ const CourseToday = ({ image, name, createdBy, level, module }: ICourseToday) =>
     return (
         <Link
             to=""
-            className="flex w-full max-w-[360px] cursor-text flex-col gap-4 rounded-lg bg-white p-7 hover:shadow-[0px_40px_100px_0px_#0000000d] hover:transition-all"
+            className="flex w-full max-w-full cursor-text flex-col gap-4 rounded-lg bg-white p-7 hover:shadow-[0px_40px_100px_0px_#0000000d] hover:transition-all lg:max-w-[360px]"
         >
             <div className="relative h-[160px] flex-shrink-0 cursor-pointer">
                 <img src={image} alt={name} className="h-full w-full rounded-lg object-cover" />

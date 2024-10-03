@@ -15,12 +15,12 @@ import { CourseLevel } from '@/constants'
 
 const FilterBar = ({ placeholder, lever }: { placeholder: string; lever?: boolean }) => {
     return (
-        <div className="flex items-center justify-between">
-            <div className="relative h-[50px] w-1/2 lg:w-1/3">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="relative h-[50px] w-full lg:w-1/3">
                 <Input className="h-full w-full bg-white pe-10 ps-5 text-sm" autoFocus placeholder={placeholder} />
                 <IoSearchOutline className="absolute right-4 top-1/2 size-5 -translate-y-1/2 cursor-pointer" />
             </div>
-            <div className="flex h-full gap-2">
+            <div className="flex h-full gap-2 overflow-x-auto whitespace-nowrap">
                 {lever && (
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -78,7 +78,7 @@ const FilterBar = ({ placeholder, lever }: { placeholder: string; lever?: boolea
                     </DropdownMenuContent>
                 </DropdownMenu>
                 <Select>
-                    <SelectTrigger className="inline-flex h-[50px] items-center justify-center gap-2 whitespace-nowrap rounded-md border border-input bg-background px-4 py-2 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50">
+                    <SelectTrigger className="inline-flex h-[50px] w-full items-center justify-center gap-2 whitespace-nowrap rounded-md border border-input bg-background px-4 py-2 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50">
                         <IoFilterSharp className="size-4" />
                         <SelectValue placeholder="Sắp xếp" />
                     </SelectTrigger>

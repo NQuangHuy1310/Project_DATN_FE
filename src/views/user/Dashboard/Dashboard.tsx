@@ -104,6 +104,9 @@ const Dashboard = () => {
                                         level={item.level}
                                         star={item.star}
                                         module={item.module}
+                                        studentCount={item.studentCount}
+                                        totalTime={item.totalTime}
+                                        totalVideo={item.totalVideo}
                                     />
                                 </CarouselItem>
                             ))}

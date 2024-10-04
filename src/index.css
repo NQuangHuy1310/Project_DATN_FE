@@ -94,4 +94,12 @@
         background-color: white;
         border-radius: 12px;
     }
+    .scrollbar-hide {
+        -ms-overflow-style: none; /* IE và Edge */
+        scrollbar-width: none; /* Firefox */
+    }
+
+    .scrollbar-hide::-webkit-scrollbar {
+        display: none; /* Chrome, Safari, Opera */
+    }
 }

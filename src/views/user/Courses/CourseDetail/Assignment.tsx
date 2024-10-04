@@ -5,13 +5,15 @@ import { Button } from '@/components/ui/button'
 const Assignment = () => {
     return (
         <div className="flex flex-col gap-7">
-            <div className="flex w-full max-w-[690px] flex-col gap-5">
-                <h6 className="text-lg font-medium text-black">1.Make a simple animation from figma prototype</h6>
-                <p className="text-sm">
+            <div className="flex w-full flex-col gap-5">
+                <h6 className="text-base font-medium text-black md:text-lg">
+                    1.Make a simple animation from figma prototype
+                </h6>
+                <p className="text-xs md:text-sm">
                     Let’s return to design thinking. Over time designers have built up their own body of approaches to
                     solving classes of problems.
                 </p>
-                <div className="flex items-center justify-between">
+                <div className="flex flex-wrap items-center justify-between gap-y-5">
                     <div className="flex items-center gap-5">
                         <div className="flex cursor-pointer items-center gap-6">
                             <FaRegCalendarCheck className="size-5 text-black" />
@@ -26,13 +28,15 @@ const Assignment = () => {
                     </div>
                 </div>
             </div>
-            <div className="flex w-full max-w-[690px] flex-col gap-5">
-                <h6 className="text-lg font-medium text-black">1.Make a simple animation from figma prototype</h6>
-                <p className="text-sm">
+            <div className="flex w-full flex-col gap-5">
+                <h6 className="text-base font-medium text-black md:text-lg">
+                    1.Make a simple animation from figma prototype
+                </h6>
+                <p className="text-xs md:text-sm">
                     Let’s return to design thinking. Over time designers have built up their own body of approaches to
                     solving classes of problems.
                 </p>
-                <div className="flex items-center justify-between">
+                <div className="flex flex-wrap items-center justify-between gap-y-5">
                     <div className="flex items-center gap-5">
                         <div className="flex cursor-pointer items-center gap-6">
                             <FaRegCalendarCheck className="size-5 text-black" />

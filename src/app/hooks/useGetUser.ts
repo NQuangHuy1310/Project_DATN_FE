@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useUserStore } from '@/store'
+import { useUserStore } from '@/app/store'
 
 const useGetUserProfile = () => {
     const user = useUserStore((state) => state.user)

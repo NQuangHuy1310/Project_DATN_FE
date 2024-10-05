@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
-import { authApis } from '@/apis'
 import routes from '@/configs/routes'
+import { authApis } from '@/app/services'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import OTPDialog from '@/components/shared/OTPDialog'
@@ -52,16 +52,16 @@ const ForgotPassword = () => {
     return (
         <>
             <OTPDialog open={open} setOpen={setOpen} onSubmit={handleOtpSubmit} resendOtp={handleResendOtp} />
-            <div className="flex items-center justify-center w-full h-full">
-                <div className="max-w-[450px] w-full mx-auto rounded-xl border shadow p-4 md:p-6 lg:p-10">
-                    <div className="flex flex-col items-center justify-center lg:gap-5 md:gap-4 gap-3.5">
-                        <div className="flex flex-col items-start gap-1 w-full">
+            <div className="flex h-full w-full items-center justify-center">
+                <div className="mx-auto w-full max-w-[450px] rounded-xl border p-4 shadow md:p-6 lg:p-10">
+                    <div className="flex flex-col items-center justify-center gap-3.5 md:gap-4 lg:gap-5">
+                        <div className="flex w-full flex-col items-start gap-1">
                             <h1 className="text-2xl font-semibold text-foreground">Quên mật khẩu</h1>
-                            <p className="text-sm text-back">Nhập email của bạn để nhận mã xác nhận</p>
+                            <p className="text-back text-sm">Nhập email của bạn để nhận mã xác nhận</p>
                         </div>
                         <form
                             onSubmit={handleSubmit(onSubmit)}
-                            className="w-full flex-col flex items-center justify-center gap-4"
+                            className="flex w-full flex-col items-center justify-center gap-4"
                         >
                             <div className="w-full">
                                 <Input
@@ -74,7 +74,7 @@ const ForgotPassword = () => {
                                     disabled={isSubmitting}
                                 />
                                 {errors.email && (
-                                    <div className="text-red-500 lg:text-base text-sm">{errors.email.message}</div>
+                                    <div className="text-sm text-red-500 lg:text-base">{errors.email.message}</div>
                                 )}
                             </div>
 
@@ -84,7 +84,7 @@ const ForgotPassword = () => {
                         </form>
 
                         <div className="w-full">
-                            <div className="text-center mt-5">
+                            <div className="mt-5 text-center">
                                 <p className="text-gray-500">
                                     Bạn đã có tài khoản?{' '}
                                     <Link to={routes.login} className="text-primary">

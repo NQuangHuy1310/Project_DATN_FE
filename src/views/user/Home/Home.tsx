@@ -1,4 +1,4 @@
-import useGetUserProfile from '@/hooks/useGetUser'
+import useGetUserProfile from '@/app/hooks/useGetUser'
 
 const Home = () => {
     const { user, profile } = useGetUserProfile()

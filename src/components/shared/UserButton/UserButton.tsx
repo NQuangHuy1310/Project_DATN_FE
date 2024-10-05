@@ -5,7 +5,7 @@ import { IoSettingsOutline } from 'react-icons/io5'
 
 import routes from '@/configs/routes'
 import { getImagesUrl } from '@/utils'
-import useGetUserProfile from '@/hooks/useGetUser'
+import useGetUserProfile from '@/app/hooks/useGetUser'
 import {
     DropdownMenu,
     DropdownMenuContent,

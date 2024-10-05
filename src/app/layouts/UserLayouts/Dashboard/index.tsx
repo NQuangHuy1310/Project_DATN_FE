@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 
-import InstructorHeader from '@/layouts/InstructorLayouts/Components/InstructorHeader/InstructorHeader'
-import InstructorSidebar from '@/layouts/InstructorLayouts/Components/InstructorSidebar/InstructorSidebar'
+import UserHeader from '@/app/layouts/UserLayouts/Components/UserHeader/UserHeader'
+import UserSidebar from '@/app/layouts/UserLayouts/Components/UserSidebar/UserSidebar'
 
-const InstructorDashboard = ({ children, title }: { children: React.ReactNode; title: string }) => {
+const Dashboard = ({ children, title }: { children: React.ReactNode; title: string }) => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
     const toggleSidebar = () => {
@@ -24,9 +24,9 @@ const InstructorDashboard = ({ children, title }: { children: React.ReactNode; t
 
     return (
         <div className="flex">
-            <InstructorSidebar isOpen={isSidebarOpen} />
+            <UserSidebar isOpen={isSidebarOpen} />
             <article className="w-full lg:ps-64">
-                <InstructorHeader toggleSidebar={toggleSidebar} title={title} />
+                <UserHeader toggleSidebar={toggleSidebar} title={title} />
                 <main className="mt-[80px] min-h-screen w-full bg-softGrey p-7">{children}</main>
             </article>
             {isSidebarOpen && (
@@ -36,4 +36,4 @@ const InstructorDashboard = ({ children, title }: { children: React.ReactNode; t
     )
 }
 
-export default InstructorDashboard
+export default Dashboard

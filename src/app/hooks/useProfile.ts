@@ -1,5 +1,6 @@
-import { userApis } from '@/apis'
 import { IUserProfile } from '@/types'
+import { userApis } from '@/app/services'
+
 import { useQuery, UseQueryOptions } from '@tanstack/react-query'
 
 export const useProfile = (options?: Omit<UseQueryOptions<IUserProfile>, 'queryKey' | 'queryFn'>) => {

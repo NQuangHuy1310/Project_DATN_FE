@@ -1,11 +1,11 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
-import { privateRoutes, publicRoutes } from '@/routes'
 import { getAccessTokenFromLocalStorage } from '@/utils'
+import { privateRoutes, publicRoutes } from '@/constants'
 
 import Login from '@/views/user/Auth/Login'
-import Dashboard from '@/layouts/UserLayouts/Dashboard'
-import HomeLayout from '@/layouts/AuthLayouts/HomeLayout'
+import Dashboard from '@/app/layouts/UserLayouts/Dashboard'
+import HomeLayout from '@/app/layouts/AuthLayouts/HomeLayout'
 
 function App() {
     const isLoggedIn = getAccessTokenFromLocalStorage()

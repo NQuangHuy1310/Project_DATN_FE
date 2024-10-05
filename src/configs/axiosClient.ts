@@ -1,8 +1,8 @@
 import { toast } from 'sonner'
 import axios, { AxiosResponse } from 'axios'
 
-import { authApis } from '@/apis'
-import { useUserStore } from '@/store'
+import { authApis } from '@/app/services'
+import { useUserStore } from '@/app/store'
 import { backendUrl } from '@/configs/baseUrl'
 import { ApiMessages, ApiStatusCode, MessageConfig, MessageErrors } from '@/constants'
 import { getAccessTokenFromLocalStorage, removeAccessToken, setAccessToken } from '@/utils'

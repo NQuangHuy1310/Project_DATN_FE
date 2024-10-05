@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios'
 
-import { authUri } from '@/apis/Uri'
+import { authUri } from '@/app/services/Uri'
 import axiosClient from '@/configs/axiosClient'
 import {
     ILoginData,

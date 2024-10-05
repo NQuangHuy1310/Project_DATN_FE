@@ -23,10 +23,14 @@ import CourseExplore from '@/views/user/Courses/CourseExplore'
 import CourseMyCourses from '@/views/user/Courses/CourseSearch'
 import CourseDetail from '@/views/user/Courses/CourseDetail'
 
-import Dashboard from '@/views/user/Dashboard'
+import UserDashboard from '@/views/user/Dashboard'
 import Instructor from '@/views/user/Instructors'
 import Notifications from '@/views/user/Notifications'
 import InstructorDetail from '@/views/user/Instructors/InstructorDetail'
+import InstructorDashboardLayout from '@/layouts/InstructorLayouts/InstructorDashboard'
+
+// Instructor
+import InstructorDashboard from '@/views/instructor/Dashboard'
 
 // Routes không cần đăng nhập
 export const publicRoutes = [
@@ -38,19 +42,22 @@ export const publicRoutes = [
 
 // Routes cần đăng nhập
 export const privateRoutes = [
-    // Account
+    // User dashboard
     { path: routes.accountHelp, layout: ProfileLayout, element: AccountHelp, title: 'Hỗ trợ' },
     { path: routes.accountProfile, layout: ProfileLayout, element: AccountProfile, title: 'Thông tin cá nhân' },
-    { path: routes.accountSetting, layout: ProfileLayout, element: AccountSettings, title: 'Cài đặt' },
-    { path: routes.accountNotification, layout: ProfileLayout, element: AccountNotifications, title: 'Thông báo' },
+    { path: routes.accountSettings, layout: ProfileLayout, element: AccountSettings, title: 'Cài đặt' },
+    { path: routes.accountNotifications, layout: ProfileLayout, element: AccountNotifications, title: 'Thông báo' },
 
-    { path: routes.myCourse, layout: DashboardLayout, element: MyCourse, title: 'Khóa học của tôi' },
-    { path: routes.course, layout: DashboardLayout, element: CourseExplore, title: 'Khám phá khóa học' },
-    { path: routes.searchCourses, layout: DashboardLayout, element: CourseMyCourses, title: 'Tìm kiếm khóa học' },
-    { path: routes.courseDetail, layout: DashboardLayout, element: CourseDetail, title: 'Chi tiết khóa học' },
+    { path: routes.myCourses, layout: DashboardLayout, element: MyCourse, title: 'Khoá học của tôi' },
+    { path: routes.course, layout: DashboardLayout, element: CourseExplore, title: 'Khám phá khoá học' },
+    { path: routes.searchCourses, layout: DashboardLayout, element: CourseMyCourses, title: 'Tìm kiếm khoá học' },
+    { path: routes.courseDetail, layout: DashboardLayout, element: CourseDetail, title: 'Chi tiết ...' },
 
-    { path: routes.dashboard, layout: DashboardLayout, element: Dashboard, title: 'Xin chào ...' },
+    { path: routes.userDashboard, layout: DashboardLayout, element: UserDashboard, title: 'Xin chào ...' },
     { path: routes.instructor, layout: DashboardLayout, element: Instructor, title: 'Giảng viên' },
-    { path: routes.instructorDetail, layout: DashboardLayout, element: InstructorDetail, title: 'Chi tiết giảng viên' },
-    { path: routes.notification, layout: DashboardLayout, element: Notifications, title: 'Thông báo' }
+    { path: routes.instructorDetail, layout: DashboardLayout, element: InstructorDetail, title: 'Người hướng dẫn...' },
+    { path: routes.notification, layout: DashboardLayout, element: Notifications, title: 'Thông báo' },
+
+    // Instructor Dashboard
+    { path: routes.instructorDashboard, layout: InstructorDashboardLayout, element: InstructorDashboard }
 ]

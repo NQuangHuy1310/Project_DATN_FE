@@ -1,35 +1,53 @@
 const routes = {
     home: '/',
 
-    // Routes for user
+    // User authentication routes
     login: '/login',
     register: '/register',
     forgotPassword: '/forgot-password',
 
-    notification: '/notification',
+    notification: '/notifications',
 
-    dashboard: '/dashboard',
+    // User dashboard routes
+    userDashboard: '/user/dashboard',
 
-    course: '/course',
-    myCourse: '/course/my-course',
-    searchCourses: '/course/search-courses',
-    courseDetail: '/course/:slug',
+    // Course management routes
+    course: '/courses',
+    myCourses: '/courses/my',
+    searchCourses: '/courses/search',
+    courseDetail: '/courses/:slug',
 
-    // Account routes
-    account: '/account/',
+    // Instructor routes
+    instructor: '/instructors',
+    instructorDetail: '/instructors/:slug',
+
+    // Account management routes
+    account: '/account',
     accountProfile: '/account/profile',
     accountHelp: '/account/help',
-    accountSetting: '/account/settings',
-    accountNotification: '/account/notifications',
+    accountSettings: '/account/settings',
+    accountNotifications: '/account/notifications',
 
-    // Post
-    post: '/new-post',
-    mePost: '/me/post',
-    meBookmark: 'me/bookmark',
+    // Post management routes
+    newPost: '/posts/new',
+    myPosts: '/posts/me',
+    myBookmarks: '/posts/me/bookmarks',
 
-    // Routes for teacher
-    instructor: '/instructor',
-    instructorDetail: '/instructor/detail/:slug'
+    // Instructor dashboard
+    instructorDashboard: '/instructor/dashboard',
+
+    // Course instructor routes
+    instructorCourses: '/instructor/courses',
+    createCourse: '/instructor/courses/new',
+
+    // Instructor communication
+    instructorQa: '/instructor/communication/qa',
+    instructorMessage: '/instructor/communication/message',
+    instructorAssignments: '/instructor/communication/assignments',
+    instructorAnnouncements: '/instructor/communication/announcements/',
+
+    // Instructor performance
+    instructorPerformance: '/instructor/performance'
 }
 
 export default routes

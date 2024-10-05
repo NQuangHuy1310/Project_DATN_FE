@@ -1,13 +1,13 @@
 import { Link } from 'react-router-dom'
+import { FaRegUser } from 'react-icons/fa'
+import { IoTimeOutline } from 'react-icons/io5'
+import { FaRegCirclePlay } from 'react-icons/fa6'
 
+import routes from '@/configs/routes'
 import { ICourseToday } from '@/types'
+import { Button } from '@/components/ui/button'
 import { CourseLevel } from '@/components/shared/Course/CourseLevel'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Button } from '@/components/ui/button'
-import routes from '@/configs/routes'
-import { FaRegUser } from 'react-icons/fa'
-import { FaRegCirclePlay } from 'react-icons/fa6'
-import { IoTimeOutline } from 'react-icons/io5'
 
 const CourseToday = ({
     image,
@@ -21,7 +21,7 @@ const CourseToday = ({
     page
 }: ICourseToday) => {
     return (
-        <div className="xl2:p-7 card flex w-full max-w-full cursor-text flex-col gap-4 p-4 hover:shadow-[0px_40px_100px_0px_#0000000d] hover:transition-all lg:max-w-[360px] xl:max-w-[400px] 2xl:max-w-[500px]">
+        <div className="card flex w-full max-w-full cursor-text flex-col gap-4 p-4 hover:shadow-[0px_40px_100px_0px_#0000000d] hover:transition-all lg:max-w-[360px] xl:max-w-[400px] xl:p-7 2xl:max-w-[400px]">
             {page !== routes.courseDetail && (
                 <div className="relative h-[160px] flex-shrink-0 cursor-pointer">
                     <img src={image} alt={name} className="h-full w-full rounded-lg object-cover" />
@@ -40,7 +40,7 @@ const CourseToday = ({
                                 {createdBy.name.charAt(0)}
                             </AvatarFallback>
                         </Avatar>
-                        <p className={`xl2:text-base w-fit text-sm`}>{createdBy.name}</p>
+                        <p className="xl2:text-base w-fit text-sm">{createdBy.name}</p>
                     </Link>
                 </div>
                 <div className="flex items-center justify-between">

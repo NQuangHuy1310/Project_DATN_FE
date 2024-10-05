@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import routes from '@/configs/routes'
 import UserButton from '@/components/shared/UserButton'
 
-function UserHeader({ toggleSidebar, title }: { toggleSidebar: () => void; title: string }) {
+function InstructorHeader({ toggleSidebar, title }: { toggleSidebar: () => void; title: string }) {
     return (
         <header className="fixed left-0 right-0 z-40 flex h-20 items-center justify-between border-b bg-white px-8 md:border-none lg:left-64">
             <FaBars className="cursor-pointer text-2xl text-darkGrey lg:hidden" onClick={toggleSidebar} />
@@ -21,4 +21,4 @@ function UserHeader({ toggleSidebar, title }: { toggleSidebar: () => void; title
     )
 }
 
-export default UserHeader
+export default InstructorHeader

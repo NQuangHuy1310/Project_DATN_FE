@@ -34,7 +34,7 @@ const CourseDetail = () => {
                 </Link>
                 <div className="h-[300px] md:h-[400px] lg:h-[500px]">
                     <iframe
-                        src={`https://www.youtube.com/embed/R6plN3FvzFY`}
+                        src="https://www.youtube.com/embed/R6plN3FvzFY"
                         title="YouTube video player"
                         className="h-full w-full rounded-lg"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -126,7 +126,7 @@ const CourseDetail = () => {
                 </div>
             </div>
             <div className="xl2:col-span-3 col-span-12 w-full lg:col-span-4">
-                <div className={`hidden w-full flex-shrink-0 transition-transform duration-500 lg:block`}>
+                <div className="hidden w-full flex-shrink-0 transition-transform duration-500 lg:block">
                     <CourseToday page={routes.courseDetail} {...coursesToday[0]} />
                 </div>
                 <div className="card flex w-full flex-col gap-4 lg:hidden">

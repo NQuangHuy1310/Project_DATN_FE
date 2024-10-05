@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
 
-import UserHeader from '@/layouts/UserLayouts/Components/UserHeader/UserHeader'
-import UserSidebar from '@/layouts/UserLayouts/Components/UserSidebar/UserSidebar'
+import UserAside from '@/app/layouts/UserLayouts/Components/UserAside'
+import UserHeader from '@/app/layouts/UserLayouts/Components/UserHeader/UserHeader'
+import UserSidebar from '@/app/layouts/UserLayouts/Components/UserSidebar/UserSidebar'
 
-const Dashboard = ({ children, title }: { children: React.ReactNode; title: string }) => {
+const ProfileLayout = ({ children, title }: { children: React.ReactNode; title: string }) => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
     const toggleSidebar = () => {
@@ -21,13 +22,15 @@ const Dashboard = ({ children, title }: { children: React.ReactNode; title: stri
             document.removeEventListener('mousedown', handleClickOutside)
         }
     }, [isSidebarOpen])
-
     return (
         <div className="flex">
             <UserSidebar isOpen={isSidebarOpen} />
             <article className="w-full lg:ps-64">
                 <UserHeader toggleSidebar={toggleSidebar} title={title} />
-                <main className="mt-[80px] min-h-screen w-full bg-softGrey p-7">{children}</main>
+                <main className="mt-[80px] flex w-full flex-wrap items-start gap-7 bg-softGrey p-8 lg:min-h-screen">
+                    <UserAside />
+                    <div className="card flex-1">{children}</div>
+                </main>
             </article>
             {isSidebarOpen && (
                 <div className="fixed inset-0 z-40 bg-black bg-opacity-50" onClick={() => setIsSidebarOpen(false)} />
@@ -36,4 +39,4 @@ const Dashboard = ({ children, title }: { children: React.ReactNode; title: stri
     )
 }
 
-export default Dashboard
+export default ProfileLayout

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import useGetUserProfile from '@/hooks/useGetUser'
+import useGetUserProfile from '@/app/hooks/useGetUser'
 
 import { Button } from '@/components/ui/button'
 import ChangePassword from '@/views/user/Account/AccountSettings/ChangePassword'

@@ -1,6 +1,6 @@
 import axiosClient from '@/configs/axiosClient'
 
-import { userUri } from '@/apis/Uri'
+import { userUri } from '@/app/services/Uri'
 import { IChangePassword, IResponse, IUpdateProfile, IUserProfile } from '@/types'
 
 export const userApis = {

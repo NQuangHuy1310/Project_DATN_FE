@@ -1,8 +1,9 @@
 import routes from '@/configs/routes'
 
-import DashboardLayout from '@/layouts/UserLayouts/Dashboard'
-import HomeLayout from '@/layouts/AuthLayouts/HomeLayout'
-import ProfileLayout from '@/layouts/UserLayouts/ProfileLayout'
+import HomeLayout from '@/app/layouts/AuthLayouts/HomeLayout'
+import ProfileLayout from '@/app/layouts/UserLayouts/ProfileLayout'
+import UserDashboardLayout from '@/app/layouts/UserLayouts/Dashboard'
+import InstructorDashboardLayout from '@/app/layouts/InstructorLayouts/InstructorDashboard'
 
 import Home from '@/views/user/Home'
 
@@ -27,7 +28,6 @@ import UserDashboard from '@/views/user/Dashboard'
 import Instructor from '@/views/user/Instructors'
 import Notifications from '@/views/user/Notifications'
 import InstructorDetail from '@/views/user/Instructors/InstructorDetail'
-import InstructorDashboardLayout from '@/layouts/InstructorLayouts/InstructorDashboard'
 
 // Instructor
 import InstructorDashboard from '@/views/instructor/Dashboard'
@@ -48,15 +48,15 @@ export const privateRoutes = [
     { path: routes.accountSettings, layout: ProfileLayout, element: AccountSettings, title: 'Cài đặt' },
     { path: routes.accountNotifications, layout: ProfileLayout, element: AccountNotifications, title: 'Thông báo' },
 
-    { path: routes.myCourses, layout: DashboardLayout, element: MyCourse, title: 'Khoá học của tôi' },
-    { path: routes.course, layout: DashboardLayout, element: CourseExplore, title: 'Khám phá khoá học' },
-    { path: routes.searchCourses, layout: DashboardLayout, element: CourseMyCourses, title: 'Tìm kiếm khoá học' },
-    { path: routes.courseDetail, layout: DashboardLayout, element: CourseDetail, title: 'Chi tiết ...' },
+    { path: routes.myCourses, layout: UserDashboardLayout, element: MyCourse, title: 'Khoá học của tôi' },
+    { path: routes.course, layout: UserDashboardLayout, element: CourseExplore, title: 'Khám phá khoá học' },
+    { path: routes.searchCourses, layout: UserDashboardLayout, element: CourseMyCourses, title: 'Tìm kiếm khoá học' },
+    { path: routes.courseDetail, layout: UserDashboardLayout, element: CourseDetail, title: 'Chi tiết ...' },
 
-    { path: routes.userDashboard, layout: DashboardLayout, element: UserDashboard, title: 'Xin chào ...' },
-    { path: routes.instructor, layout: DashboardLayout, element: Instructor, title: 'Giảng viên' },
-    { path: routes.instructorDetail, layout: DashboardLayout, element: InstructorDetail, title: 'Người hướng dẫn...' },
-    { path: routes.notification, layout: DashboardLayout, element: Notifications, title: 'Thông báo' },
+    { path: routes.userDashboard, layout: UserDashboardLayout, element: UserDashboard, title: 'Xin chào ...' },
+    { path: routes.instructor, layout: UserDashboardLayout, element: Instructor, title: 'Giảng viên' },
+    { path: routes.instructorDetail, layout: UserDashboardLayout, element: InstructorDetail, title: 'Người hướng dẫn' },
+    { path: routes.notification, layout: UserDashboardLayout, element: Notifications, title: 'Thông báo' },
 
     // Instructor Dashboard
     { path: routes.instructorDashboard, layout: InstructorDashboardLayout, element: InstructorDashboard }

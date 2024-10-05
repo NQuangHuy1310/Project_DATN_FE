@@ -1,23 +1,27 @@
-import { IoIosStar } from 'react-icons/io';
-import { MdListAlt } from 'react-icons/md';
+import { IoIosStar } from 'react-icons/io'
+import { MdListAlt } from 'react-icons/md'
 
-import { courses } from '@/constants/mockData';
+import { courses } from '@/constants/mockData'
 
-import { Button } from '@/components/ui/button';
-import Course from '@/components/shared/Course';
-import FilterBar from '@/components/shared/FilterBar/FilterBar';
+import { Button } from '@/components/ui/button'
+import Course from '@/components/shared/Course'
+import FilterBar from '@/components/shared/FilterBar/FilterBar'
 const InstructorDetail = () => {
     return (
         <div className="flex flex-col gap-5">
-            <div className="bg-white flex md:flex-col flex-col-reverse gap-7 p-7 rounded-lg">
-                <div className="flex md:justify-between flex-col md:flex-row gap-7 md:gap-3 w-full">
+            <div className="flex flex-col-reverse gap-7 rounded-lg bg-white p-7 md:flex-col">
+                <div className="flex w-full flex-col gap-7 md:flex-row md:justify-between md:gap-3">
                     <div className="flex gap-5">
-                        <div className="w-14 h-14">
-                            <img src="https://i.pinimg.com/564x/ac/27/1d/ac271de883faa03617b212beeda73db3.jpg" className="w-full h-full rounded-full" alt="" />
+                        <div className="h-14 w-14">
+                            <img
+                                src="https://i.pinimg.com/564x/ac/27/1d/ac271de883faa03617b212beeda73db3.jpg"
+                                className="h-full w-full rounded-full"
+                                alt=""
+                            />
                         </div>
                         <div className="flex-col">
-                            <h3 className="font-semibold text-xl">Emerson Levin</h3>
-                            <span className="text-darkGrey text-sm">UI UX</span>
+                            <h3 className="text-xl font-semibold">Emerson Levin</h3>
+                            <span className="text-sm text-darkGrey">UI UX</span>
                         </div>
                     </div>
                     <div className="flex items-center gap-2">
@@ -29,13 +33,15 @@ const InstructorDetail = () => {
                         <span>4,5 (1200 đánh giá)</span>
                     </div>
 
-                    <div className="flex items-center justify-center bg-secondaryYellow md:bg-white rounded-lg md:rounded-none md:justify-start">
-                        <Button variant="ghost" className="w-full md:text-primary py-3">+ Theo dõi</Button>
+                    <div className="flex items-center justify-center rounded-lg bg-secondaryYellow md:justify-start md:rounded-none md:bg-white">
+                        <Button variant="ghost" className="w-full py-3 md:text-primary">
+                            + Theo dõi
+                        </Button>
                     </div>
                 </div>
                 <FilterBar placeholder="Tìm kiếm người hướng dẫn" lever />
             </div>
-            <div className="flex flex-wrap md:justify-start justify-center gap-5">
+            <div className="flex flex-wrap justify-center gap-5 md:justify-start">
                 {courses &&
                     courses.length > 0 &&
                     courses.map((item, index) => (
@@ -52,7 +58,6 @@ const InstructorDetail = () => {
                         />
                     ))}
             </div>
-
         </div>
     )
 }

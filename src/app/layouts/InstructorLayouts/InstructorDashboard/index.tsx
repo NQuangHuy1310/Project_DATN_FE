@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react'
 
-import UserAside from '@/layouts/UserLayouts/Components/UserAside'
-import UserHeader from '@/layouts/UserLayouts/Components/UserHeader/UserHeader'
-import UserSidebar from '@/layouts/UserLayouts/Components/UserSidebar/UserSidebar'
+import InstructorHeader from '@/app/layouts/InstructorLayouts/Components/InstructorHeader/InstructorHeader'
+import InstructorSidebar from '@/app/layouts/InstructorLayouts/Components/InstructorSidebar/InstructorSidebar'
 
-const ProfileLayout = ({ children, title }: { children: React.ReactNode; title: string }) => {
+const InstructorDashboard = ({ children, title }: { children: React.ReactNode; title: string }) => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
     const toggleSidebar = () => {
@@ -22,15 +21,13 @@ const ProfileLayout = ({ children, title }: { children: React.ReactNode; title: 
             document.removeEventListener('mousedown', handleClickOutside)
         }
     }, [isSidebarOpen])
+
     return (
         <div className="flex">
-            <UserSidebar isOpen={isSidebarOpen} />
+            <InstructorSidebar isOpen={isSidebarOpen} />
             <article className="w-full lg:ps-64">
-                <UserHeader toggleSidebar={toggleSidebar} title={title} />
-                <main className="mt-[80px] flex w-full flex-wrap items-start gap-7 bg-softGrey p-8 lg:min-h-screen">
-                    <UserAside />
-                    <div className="card flex-1">{children}</div>
-                </main>
+                <InstructorHeader toggleSidebar={toggleSidebar} title={title} />
+                <main className="mt-[80px] min-h-screen w-full bg-softGrey p-7">{children}</main>
             </article>
             {isSidebarOpen && (
                 <div className="fixed inset-0 z-40 bg-black bg-opacity-50" onClick={() => setIsSidebarOpen(false)} />
@@ -39,4 +36,4 @@ const ProfileLayout = ({ children, title }: { children: React.ReactNode; title: 
     )
 }
 
-export default ProfileLayout
+export default InstructorDashboard

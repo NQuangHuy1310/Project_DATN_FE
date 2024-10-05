@@ -4,17 +4,17 @@ import { useEffect, useRef, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
-import { useProfile } from '@/hooks/useProfile'
-import useGetUserProfile from '@/hooks/useGetUser'
-import { useUserStore } from '@/store'
+import useGetUserProfile from '@/app/hooks/useGetUser'
+import { userApis } from '@/app/services'
+import { useUserStore } from '@/app/store'
 import { MessageErrors } from '@/constants'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
+import { useProfile } from '@/app/hooks/useProfile'
 import { getImagesUrl, readFileAsDataUrl } from '@/utils'
 import { ProfileFormFields, profileSchema } from '@/validations'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { userApis } from '@/apis'
 
 const maxSizeInMB = 2
 const maxSizeInBytes = maxSizeInMB * 1024 * 1024

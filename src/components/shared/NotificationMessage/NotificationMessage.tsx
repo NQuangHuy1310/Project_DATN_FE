@@ -2,7 +2,7 @@ import { FaBookAtlas } from 'react-icons/fa6'
 import { IoSettingsOutline } from 'react-icons/io5'
 
 import { notificationTypes } from '@/constants'
-import { INotificationMessage } from '@/types/notificationMessage'
+import { INotificationMessage } from '@/types'
 
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import { getImagesUrl } from '@/utils'

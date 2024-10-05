@@ -60,7 +60,8 @@ export default {
                 cardHover: '#0000000d'
             },
             screens: {
-                mainScreen: '1440px'
+                mainScreen: '1440px',
+                xl2: '1300px'
             },
             fontFamily: {
                 inter: ['Inter', 'sans-serif']

@@ -270,6 +270,9 @@ export const coursesToday: ICourseToday[] = [
             { title: 'Create Usability Test', time: 30 },
             { title: 'How to Implement', time: 30 }
         ],
+        studentCount: 100,
+        totalVideo: 10,
+        totalTime: '5 giờ',
         createdBy: {
             id: 4,
             name: 'Nguyễn Quang Huy',
@@ -283,6 +286,9 @@ export const coursesToday: ICourseToday[] = [
         image: 'https://i.pinimg.com/564x/ac/27/1d/ac271de883faa03617b212beeda73db3.jpg',
         name: 'Introduction to UX Design',
         star: 4.5,
+        studentCount: 100,
+        totalVideo: 10,
+        totalTime: '5 giờ',
         level: CourseLevel.Beginner,
         module: [
             { title: 'Introduction', time: 10 },

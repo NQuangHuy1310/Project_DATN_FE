@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 const Reviews = () => {
     return (
         <div className="flex flex-col gap-7">
-            <div className="flex w-full max-w-[650px] flex-col gap-2.5">
+            <div className="flex w-full flex-col gap-2.5">
                 <h4 className="text-base font-medium">Jason Smith</h4>
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">

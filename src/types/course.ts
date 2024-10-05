@@ -13,13 +13,9 @@ export interface ICourse {
     progressLesson?: number
     totalLesson?: number
 }
-export interface ICourseToday {
-    image: string
-    name: string
-    star: number
-    level: CourseLevel
-    createdBy: IUser
+export interface ICourseToday extends ICourse {
     module: IModule[]
+    page?: string
 }
 export interface IModule {
     title: string

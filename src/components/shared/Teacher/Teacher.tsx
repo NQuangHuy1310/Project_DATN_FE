@@ -11,32 +11,32 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 const Teacher = ({ image, name, job, reviewStart, status, totalCourse, totalReview }: ITeacher) => {
     return (
         <div className="flex w-full flex-col gap-6 overflow-hidden rounded-lg bg-white p-5 shadow-md hover:shadow-[0px_40px_100px_0px_#0000000d] hover:transition-all md:w-[360px] md:p-7">
-            <div className="flex items-center justify-between gap-2">
+            <div className="flex flex-wrap items-center justify-between gap-y-4">
                 <Link to="" className="flex flex-shrink-0 items-center gap-3 truncate">
-                    <Avatar className="size-9 md:size-11">
+                    <Avatar className="size-7 md:size-9">
                         <AvatarImage src={image} alt={name} />
                         <AvatarFallback className="flex size-11 items-center justify-center bg-slate-500/50 font-semibold">
                             {name.charAt(0).toUpperCase()}
                         </AvatarFallback>
                     </Avatar>
                     <div className="flex flex-col">
-                        <h4 className="text-sm font-semibold md:text-base">{name}</h4>
+                        <h4 className="text-sm font-semibold md:text-sm">{name}</h4>
                         <p className="text-xs text-darkGrey">{job}</p>
                     </div>
                 </Link>
                 {status === TeacherStatus.follow && (
-                    <Button variant="outline" className="flex gap-1 px-2 text-xs">
+                    <Button variant="outline" className="flex w-full gap-1 px-2 text-xs sm:w-auto">
                         <LuPlus />
                         {TeacherStatus.follow}
                     </Button>
                 )}
                 {status === TeacherStatus.followed && (
-                    <Button variant="default" className="px-2 text-xs">
+                    <Button variant="default" className="w-full px-2 text-xs sm:w-auto">
                         {TeacherStatus.followed}
                     </Button>
                 )}
                 {status === TeacherStatus.unFollow && (
-                    <Button variant="destructive" className="px-2 text-xs">
+                    <Button variant="destructive" className="w-full px-2 text-xs sm:w-auto">
                         {TeacherStatus.unFollow}
                     </Button>
                 )}
@@ -44,11 +44,11 @@ const Teacher = ({ image, name, job, reviewStart, status, totalCourse, totalRevi
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-1">
                     <CiViewList className="size-4 text-darkGrey md:size-5" />
-                    <p className="text-sm font-medium md:text-base">{totalCourse} Khoá học</p>
+                    <p className="text-xs font-medium md:text-sm">{totalCourse} Khoá học</p>
                 </div>
                 <div className="flex items-center gap-1">
                     <IoIosStar className="size-4 text-primary md:size-5" />
-                    <p className="text-sm font-medium md:text-base">
+                    <p className="text-xs font-medium md:text-sm">
                         {reviewStart} ({totalReview} Review)
                     </p>
                 </div>

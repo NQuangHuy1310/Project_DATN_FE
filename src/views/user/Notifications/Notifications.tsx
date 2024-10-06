@@ -3,7 +3,7 @@ import NotificationMessage from '@/components/shared/NotificationMessage'
 
 const Notifications = () => {
     return (
-        <div className="w-full rounded-lg bg-white p-7">
+        <div className="card w-full">
             <div className="flex flex-col gap-7">
                 <div className="flex items-center justify-between">
                     <h4 className="text-lg font-bold">Thông báo</h4>

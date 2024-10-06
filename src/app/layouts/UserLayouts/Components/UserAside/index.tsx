@@ -100,7 +100,7 @@ const UserAside = () => {
                     )}
                 </>
             ) : (
-                <aside className="flex w-full max-w-full flex-shrink-0 flex-col gap-7 rounded-2xl bg-white p-7 lg:max-w-[350px]">
+                <aside className="card flex w-full max-w-full flex-shrink-0 flex-col gap-7 lg:max-w-[350px]">
                     <h3 className="text-xl font-bold">Cập nhật và quản lý tài khoản</h3>
                     <div className="flex flex-col gap-7">
                         {accountAside.map((item, index) => (
@@ -124,7 +124,7 @@ const UserAside = () => {
             )}
 
             <Dialog open={open} onOpenChange={setOpen}>
-                <DialogContent className="flex flex-col items-center gap-5 p-7 text-center sm:max-w-[425px]">
+                <DialogContent className="flex flex-col items-center gap-5 p-4 text-center sm:max-w-[425px]">
                     <div className="flex size-12 items-center justify-center rounded-full bg-destructive">
                         <MdError className="size-6 text-white" />
                     </div>

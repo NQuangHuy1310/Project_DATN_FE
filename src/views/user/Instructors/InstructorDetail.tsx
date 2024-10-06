@@ -9,7 +9,7 @@ import FilterBar from '@/components/shared/FilterBar/FilterBar'
 const InstructorDetail = () => {
     return (
         <div className="flex flex-col gap-5">
-            <div className="flex flex-col-reverse gap-7 rounded-lg bg-white p-7 md:flex-col">
+            <div className="flex flex-col-reverse gap-7 card md:flex-col">
                 <div className="flex w-full flex-col gap-7 md:flex-row md:justify-between md:gap-3">
                     <div className="flex gap-5">
                         <div className="h-14 w-14">

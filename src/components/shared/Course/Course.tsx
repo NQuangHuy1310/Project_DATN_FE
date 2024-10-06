@@ -25,7 +25,7 @@ const Course = ({
     return (
         <Link
             to=""
-            className="flex w-full cursor-text flex-col gap-4 rounded-lg bg-white p-7 shadow-md hover:shadow-[0px_40px_100px_0px_#0000000d] hover:transition-all md:w-[360px]"
+            className="flex w-full cursor-text flex-col gap-4 card shadow-md hover:shadow-[0px_40px_100px_0px_#0000000d] hover:transition-all md:w-[360px]"
         >
             <div className="relative h-[160px] flex-shrink-0 cursor-pointer">
                 <img src={image} alt={name} className="h-full w-full rounded-lg object-cover" />

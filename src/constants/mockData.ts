@@ -1,4 +1,4 @@
-import { ICourse, ICourseToday, ITeacher } from '@/types'
+import { ICourse, ICourseToday, IModule, ITeacher } from '@/types'
 import { CourseLevel, notificationTypes, TeacherStatus } from '@/constants'
 import { INotificationMessage } from '@/types'
 
@@ -264,11 +264,56 @@ export const coursesToday: ICourseToday[] = [
         star: 4.5,
         level: CourseLevel.Beginner,
         module: [
-            { title: 'Introduction', time: 10 },
-            { title: 'What is UX Design', time: 10 },
-            { title: 'Usability Testing', time: 10 },
-            { title: 'Create Usability Test', time: 30 },
-            { title: 'How to Implement', time: 30 }
+            {
+                title: 'Introduction',
+                lessons: [
+                    { title: 'Bài học 1.1', time: 9.25, type: 'video' },
+                    { title: 'Bài học 1.2', time: 8.25, type: 'docs' },
+                    { title: 'Bài học 1.3', time: 7.25, type: 'docs' },
+                    { title: 'Bài học 1.4', time: 6.25, type: 'quiz' }
+                ],
+                time: 10
+            },
+            {
+                title: 'What is UX Design',
+                lessons: [
+                    { title: 'Bài học 1.1', time: 9.25, type: 'video' },
+                    { title: 'Bài học 1.2', time: 8.25, type: 'docs' },
+                    { title: 'Bài học 1.3', time: 7.25, type: 'docs' },
+                    { title: 'Bài học 1.4', time: 6.25, type: 'quiz' }
+                ],
+                time: 10
+            },
+            {
+                title: 'Usability Testing',
+                lessons: [
+                    { title: 'Bài học 1.1', time: 9.25, type: 'video' },
+                    { title: 'Bài học 1.2', time: 8.25, type: 'docs' },
+                    { title: 'Bài học 1.3', time: 7.25, type: 'docs' },
+                    { title: 'Bài học 1.4', time: 6.25, type: 'quiz' }
+                ],
+                time: 10
+            },
+            {
+                title: 'Create Usability Test',
+                lessons: [
+                    { title: 'Bài học 1.1', time: 9.25, type: 'video' },
+                    { title: 'Bài học 1.2', time: 8.25, type: 'docs' },
+                    { title: 'Bài học 1.3', time: 7.25, type: 'docs' },
+                    { title: 'Bài học 1.4', time: 6.25, type: 'quiz' }
+                ],
+                time: 30
+            },
+            {
+                title: 'How to Implement',
+                lessons: [
+                    { title: 'Bài học 1.1', time: 9.25, type: 'video' },
+                    { title: 'Bài học 1.2', time: 8.25, type: 'docs' },
+                    { title: 'Bài học 1.3', time: 7.25, type: 'docs' },
+                    { title: 'Bài học 1.4', time: 6.25, type: 'quiz' }
+                ],
+                time: 30
+            }
         ],
         studentCount: 100,
         totalVideo: 10,
@@ -291,11 +336,56 @@ export const coursesToday: ICourseToday[] = [
         totalTime: '5 giờ',
         level: CourseLevel.Beginner,
         module: [
-            { title: 'Introduction', time: 10 },
-            { title: 'What is UX Design', time: 10 },
-            { title: 'Usability Testing', time: 10 },
-            { title: 'Create Usability Test', time: 30 },
-            { title: 'How to Implement', time: 30 }
+            {
+                title: 'Introduction',
+                lessons: [
+                    { title: 'Bài học 1.1', time: 9.25, type: 'video' },
+                    { title: 'Bài học 1.2', time: 8.25, type: 'docs' },
+                    { title: 'Bài học 1.3', time: 7.25, type: 'docs' },
+                    { title: 'Bài học 1.4', time: 6.25, type: 'quiz' }
+                ],
+                time: 10
+            },
+            {
+                title: 'What is UX Design',
+                lessons: [
+                    { title: 'Bài học 1.1', time: 9.25, type: 'video' },
+                    { title: 'Bài học 1.2', time: 8.25, type: 'docs' },
+                    { title: 'Bài học 1.3', time: 7.25, type: 'docs' },
+                    { title: 'Bài học 1.4', time: 6.25, type: 'quiz' }
+                ],
+                time: 10
+            },
+            {
+                title: 'Usability Testing',
+                lessons: [
+                    { title: 'Bài học 1.1', time: 9.25, type: 'video' },
+                    { title: 'Bài học 1.2', time: 8.25, type: 'docs' },
+                    { title: 'Bài học 1.3', time: 7.25, type: 'docs' },
+                    { title: 'Bài học 1.4', time: 6.25, type: 'quiz' }
+                ],
+                time: 10
+            },
+            {
+                title: 'Create Usability Test',
+                lessons: [
+                    { title: 'Bài học 1.1', time: 9.25, type: 'video' },
+                    { title: 'Bài học 1.2', time: 8.25, type: 'docs' },
+                    { title: 'Bài học 1.3', time: 7.25, type: 'docs' },
+                    { title: 'Bài học 1.4', time: 6.25, type: 'quiz' }
+                ],
+                time: 30
+            },
+            {
+                title: 'How to Implement',
+                lessons: [
+                    { title: 'Bài học 1.1', time: 9.25, type: 'video' },
+                    { title: 'Bài học 1.2', time: 8.25, type: 'docs' },
+                    { title: 'Bài học 1.3', time: 7.25, type: 'docs' },
+                    { title: 'Bài học 1.4', time: 6.25, type: 'quiz' }
+                ],
+                time: 30
+            }
         ],
         createdBy: {
             id: 4,
@@ -305,5 +395,38 @@ export const coursesToday: ICourseToday[] = [
             is_active: true,
             user_type: 'member'
         }
+    }
+]
+export const courseLeaning: IModule[] = [
+    {
+        title: 'Bài học 1',
+        lessons: [
+            { title: 'Bài học 1.1', time: 9.25, type: 'video' },
+            { title: 'Bài học 1.2', time: 8.25, type: 'docs' },
+            { title: 'Bài học 1.3', time: 7.25, type: 'docs' },
+            { title: 'Bài học 1.4', time: 6.25, type: 'quiz' }
+        ],
+        time: 31
+    },
+    {
+        title: 'Bài học 2',
+        lessons: [
+            { title: 'Bài học 2.1', time: 8.25, type: 'video' },
+            { title: 'Bài học 2.2', time: 8.25, type: 'docs' },
+            { title: 'Bài học 2.3', time: 9.25, type: 'video' },
+            { title: 'Bài học 2.4', time: 15.25, type: 'quiz' },
+            { title: 'Bài học 2.5', time: 15.25, type: 'quiz' }
+        ],
+        time: 56.25
+    },
+    {
+        title: 'Bài học 3',
+        lessons: [
+            { title: 'Bài học 3.1', time: 8.25, type: 'video' },
+            { title: 'Bài học 3.2', time: 8.25, type: 'docs' },
+            { title: 'Bài học 3.3', time: 9.25, type: 'video' },
+            { title: 'Bài học 3.4', time: 15.25, type: 'quiz' }
+        ],
+        time: 41
     }
 ]

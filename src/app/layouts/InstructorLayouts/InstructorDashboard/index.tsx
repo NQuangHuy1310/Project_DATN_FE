@@ -27,7 +27,7 @@ const InstructorDashboard = ({ children, title }: { children: React.ReactNode; t
             <InstructorSidebar isOpen={isSidebarOpen} />
             <article className="w-full lg:ps-64">
                 <InstructorHeader toggleSidebar={toggleSidebar} title={title} />
-                <main className="mt-[80px] min-h-screen w-full bg-softGrey p-7">{children}</main>
+                <main className="mt-[80px] min-h-screen w-full bg-softGrey p-4">{children}</main>
             </article>
             {isSidebarOpen && (
                 <div className="fixed inset-0 z-40 bg-black bg-opacity-50" onClick={() => setIsSidebarOpen(false)} />

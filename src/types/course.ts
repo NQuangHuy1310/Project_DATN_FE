@@ -17,7 +17,14 @@ export interface ICourseToday extends ICourse {
     module: IModule[]
     page?: string
 }
+
+export interface ILesson {
+    title: string
+    time: number
+    type: 'video' | 'docs' | 'quiz'
+}
 export interface IModule {
     title: string
     time: number
+    lessons: ILesson[]
 }

@@ -16,6 +16,7 @@ const routes = {
     myCourses: '/courses/my',
     searchCourses: '/courses/search',
     courseDetail: '/courses/:slug',
+    courseLeaning: '/leaning/:slug',
 
     // Instructor routes
     instructor: '/instructors',

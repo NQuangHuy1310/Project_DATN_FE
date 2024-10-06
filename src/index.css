@@ -90,9 +90,9 @@
         text-overflow: ellipsis;
     }
     .card {
-        padding: 28px;
+        padding: 16px;
         background-color: white;
-        border-radius: 12px;
+        border-radius: 8px;
     }
     .scrollbar-hide {
         -ms-overflow-style: none; /* IE và Edge */

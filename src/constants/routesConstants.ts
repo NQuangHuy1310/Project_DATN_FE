@@ -1,6 +1,7 @@
 import routes from '@/configs/routes'
 
 import HomeLayout from '@/app/layouts/AuthLayouts/HomeLayout'
+import CourseLayout from '@/app/layouts/CourseLayouts'
 import ProfileLayout from '@/app/layouts/UserLayouts/ProfileLayout'
 import UserDashboardLayout from '@/app/layouts/UserLayouts/Dashboard'
 import InstructorDashboardLayout from '@/app/layouts/InstructorLayouts/InstructorDashboard'
@@ -23,6 +24,7 @@ import MyCourse from '@/views/user/Courses/MyCourse'
 import CourseExplore from '@/views/user/Courses/CourseExplore'
 import CourseMyCourses from '@/views/user/Courses/CourseSearch'
 import CourseDetail from '@/views/user/Courses/CourseDetail'
+import CourseLearning from '@/views/user/Courses/CourseLeaning'
 
 import UserDashboard from '@/views/user/Dashboard'
 import Instructor from '@/views/user/Instructors'
@@ -52,6 +54,7 @@ export const privateRoutes = [
     { path: routes.course, layout: UserDashboardLayout, element: CourseExplore, title: 'Khám phá khoá học' },
     { path: routes.searchCourses, layout: UserDashboardLayout, element: CourseMyCourses, title: 'Tìm kiếm khoá học' },
     { path: routes.courseDetail, layout: UserDashboardLayout, element: CourseDetail, title: 'Chi tiết ...' },
+    { path: routes.courseLeaning, layout: CourseLayout, element: CourseLearning },
 
     { path: routes.userDashboard, layout: UserDashboardLayout, element: UserDashboard, title: 'Xin chào ...' },
     { path: routes.instructor, layout: UserDashboardLayout, element: Instructor, title: 'Giảng viên' },

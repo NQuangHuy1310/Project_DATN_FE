@@ -3,9 +3,9 @@ import { BsPlayBtn } from 'react-icons/bs'
 import { LuUserCircle } from 'react-icons/lu'
 import { TbUserHexagon } from 'react-icons/tb'
 import { FaRegBell, FaUserCog } from 'react-icons/fa'
-import { IoMdHelpCircleOutline } from 'react-icons/io'
 import { MdSecurity, MdArticle } from 'react-icons/md'
 import { HiBookOpen, HiOutlineTemplate } from 'react-icons/hi'
+import { IoMdHelpCircleOutline, IoMdHome } from 'react-icons/io'
 import { IoSettingsOutline, IoChatboxEllipsesOutline } from 'react-icons/io5'
 import { FaRegCircleQuestion, FaRegCircleCheck, FaChartSimple } from 'react-icons/fa6'
 
@@ -97,6 +97,14 @@ export const accountAside = [
         title: 'Hỗ trợ',
         icon: IoMdHelpCircleOutline,
         path: routes.accountHelp
+    }
+]
+
+export const homeSidebar = [
+    {
+        title: 'Trang chủ',
+        icon: IoMdHome,
+        path: routes.home
     }
 ]
 

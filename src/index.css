@@ -102,4 +102,8 @@
     .scrollbar-hide::-webkit-scrollbar {
         display: none; /* Chrome, Safari, Opera */
     }
+
+    .footer-text {
+        @apply text-white hover:underline hover:transition-all;
+    }
 }

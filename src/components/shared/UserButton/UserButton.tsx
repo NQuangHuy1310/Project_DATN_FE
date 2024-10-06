@@ -23,7 +23,7 @@ const UserButton = () => {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild className="relative outline-none transition hover:opacity-75">
-                <Avatar className="size-10 cursor-pointer">
+                <Avatar className="size-8 cursor-pointer">
                     <AvatarImage className="object-cover" src={getImagesUrl(user?.avatar || '')} alt={user?.name} />
                     <AvatarFallback className="bg-slate-500/50 text-xl font-semibold text-white">
                         {user?.name.charAt(0).toUpperCase()}
@@ -33,15 +33,15 @@ const UserButton = () => {
             <DropdownMenuContent align="end" className="w-52">
                 <DropdownMenuGroup className="flex flex-col gap-1.5 p-2">
                     <DropdownMenuItem className="cursor-pointer">
-                        {location.pathname === routes.instructorDashboard ? (
-                            <Link to={routes.userDashboard} className="flex items-center gap-2">
-                                <TbUserHexagon className="size-4" />
-                                <span className="text-base font-medium">Học viên</span>
-                            </Link>
-                        ) : (
+                        {location.pathname.includes(routes.userDashboard) ? (
                             <Link to={routes.instructorDashboard} className="flex items-center gap-2">
                                 <TbUserHexagon className="size-4" />
                                 <span className="text-base font-medium">Người hướng dẫn</span>
+                            </Link>
+                        ) : (
+                            <Link to={routes.userDashboard} className="flex items-center gap-2">
+                                <TbUserHexagon className="size-4" />
+                                <span className="text-base font-medium">Học viên</span>
                             </Link>
                         )}
                     </DropdownMenuItem>

@@ -25,7 +25,7 @@ const Dashboard = () => {
                         </div>
                     </div>
                     <div className="w-full">
-                        <CarouselContent className="w-full">
+                        <CarouselContent className="w-full gap-4">
                             {mockTeachers.map((item, index) => (
                                 <CarouselItem key={index} className="w-full min-w-0 basis-full md:basis-[367px]">
                                     <Teacher
@@ -58,7 +58,7 @@ const Dashboard = () => {
                         </div>
                     </div>
                     <div className="w-full">
-                        <CarouselContent className="w-full">
+                        <CarouselContent className="w-full gap-4">
                             {courses.map((item, index) => (
                                 <CarouselItem key={index} className="w-full min-w-0 basis-full md:basis-[367px]">
                                     <Course
@@ -92,7 +92,7 @@ const Dashboard = () => {
                             <CarouselNext className="!translate-y-0 !shadow-none" />
                         </div>
                     </div>
-                    <div className="w-full">
+                    <div className="w-full gap-0">
                         <CarouselContent className="!m-0 w-full !py-0">
                             {coursesToday.map((item, index) => (
                                 <CarouselItem key={index} className="w-full min-w-0 basis-full !p-0">

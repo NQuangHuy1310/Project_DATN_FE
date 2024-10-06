@@ -15,6 +15,7 @@ import { useProfile } from '@/app/hooks/useProfile'
 import { getImagesUrl, readFileAsDataUrl } from '@/utils'
 import { ProfileFormFields, profileSchema } from '@/validations'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import Loading from '@/components/Common/Loading/Loading'
 
 const maxSizeInMB = 2
 const maxSizeInBytes = maxSizeInMB * 1024 * 1024
@@ -27,7 +28,7 @@ const AccountProfile = () => {
         formState: { isSubmitting, errors }
     } = useForm<ProfileFormFields>({ resolver: zodResolver(profileSchema) })
 
-    const { data: userProfile } = useProfile()
+    const { data: userProfile, isLoading } = useProfile()
     const { user, profile } = useGetUserProfile()
     const setUser = useUserStore((state) => state.setUser)
     const setProfile = useUserStore((state) => state.setProfile)
@@ -83,6 +84,10 @@ const AccountProfile = () => {
             setValue('bio', userProfile.profile?.bio ?? profile?.bio)
         }
     }, [userProfile, setUser, setProfile, setValue, user, profile])
+
+    if (isLoading) {
+        return <Loading />
+    }
 
     return (
         <div className="flex max-w-[500px] flex-col justify-start gap-7">

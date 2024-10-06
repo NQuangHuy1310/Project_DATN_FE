@@ -53,7 +53,7 @@ export default {
                 black: '#141522',
                 darkGrey: '#7A7A80',
                 grey: '#DFDFDF',
-                softGrey: '#F5F5F7',
+                softGrey: '#e8ebed',
                 secondaryGreen: '#25C78B',
                 secondaryYellow: '#FFBB54',
                 secondaryRed: '#DB5962',
@@ -62,6 +62,10 @@ export default {
             screens: {
                 mainScreen: '1440px',
                 xl2: '1300px'
+            },
+            spacing: {
+                headerHight: '66px',
+                sidebarWidth: '96px'
             },
             fontFamily: {
                 inter: ['Inter', 'sans-serif']

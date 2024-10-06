@@ -51,8 +51,8 @@ const CourseLearning = () => {
     return (
         <div>
             {/* Header Leaning */}
-            <header className="fixed z-50 flex h-14 w-full items-center justify-between bg-black px-4 py-2 text-white">
-                <div className="flex items-center gap-4">
+            <header className="fixed z-50 flex h-14 w-full items-center justify-between bg-white px-4 py-2 text-black">
+                {/* <div className="flex items-center gap-4">
                     <HiChevronLeft className="size-8 text-white" />
                     <div className="hidden md:block">
                         <img
@@ -63,7 +63,8 @@ const CourseLearning = () => {
                     <div>
                         <h2 className="md:text-md text-sm font-semibold lg:text-lg">Kiến thức nhập môn IT</h2>
                     </div>
-                </div>
+                </div> */}
+                <div className=""></div>
                 <div className="flex items-center gap-5">
                     <div className="flex items-center gap-2">
                         <span className="block rounded-full border p-1 text-xs md:p-1.5 md:text-sm">0%</span>
@@ -84,17 +85,6 @@ const CourseLearning = () => {
                                 delectus qui culpa exercitationem nam officia praesentium dolorem inventore.
                                 Dignissimos, dolore illo magni iste quidem quam sunt exercitationem ipsa debitis
                                 recusandae repellat, necessitatibus voluptatem doloremque explicabo tempore perferendis
-                                temporibus labore voluptatibus sit illum quas quisquam perspiciatis consequatur itaque?
-                                Sit? Totam neque atque minima ipsa adipisci possimus aperiam quia dolores mollitia
-                                dolorum optio qui voluptate, voluptates voluptatem inventore error quidem quae quibusdam
-                                saepe unde ullam? Quod, nam culpa. Reprehenderit, beatae? Rem, molestiae quo? Atque
-                                obcaecati doloribus est et aperiam provident quod eligendi nihil ipsam, laudantium
-                                libero maiores, voluptate deleniti perspiciatis mollitia non voluptas accusamus sapiente
-                                laborum, rem ratione consectetur quis! Libero natus officiis cum cumque aut. Animi rem
-                                omnis doloremque quam nulla placeat consequatur illum perferendis odio laboriosam, quo
-                                cupiditate sed, porro expedita provident dignissimos vitae ipsa neque odit illo. Dolores
-                                suscipit quis totam non aperiam, expedita qui nam nemo harum? Laudantium ipsum incidunt
-                                minus numquam est ducimus optio nesciunt accusantium eligendi veritatis, consequuntur
                             </SheetDescription>
                         </SheetContent>
                     </Sheet>
@@ -141,7 +131,7 @@ const CourseLearning = () => {
                                 </SheetTrigger>
                                 <SheetContent
                                     side="bottom"
-                                    className={`z-[999] w-full overflow-y-auto border bg-white py-3 transition-all duration-500 ease-in-out`}
+                                    className="z-[999] w-full overflow-y-auto border bg-white py-3 transition-all duration-500 ease-in-out"
                                 >
                                     <div className="mx-auto max-h-screen max-w-6xl overflow-y-auto px-12">
                                         <div className="flex items-center gap-2 py-2">

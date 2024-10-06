@@ -35,7 +35,7 @@ function App() {
                     })}
 
                     {privateRoutes?.map((route, index) => {
-                        let Layout: React.ComponentType<any> = Dashboard
+                        let Layout: React.ComponentType<any> = Dashboard || null
                         if (route.layout) {
                             Layout = route.layout as React.ComponentType<any>
                         }

@@ -11,7 +11,7 @@ const CourseCard = () => {
                     className="h-full w-full object-cover"
                 />
             </div>
-            <Link to="" className="group relative flex flex-1 items-center gap-20">
+            <Link to="" className="group relative flex h-[120px] w-full flex-1 items-center gap-20">
                 <div className="flex flex-shrink-0 flex-col gap-10">
                     <h4 className="text-xl font-semibold">Javascript cơ bản</h4>
                     <div className="flex items-center gap-4">

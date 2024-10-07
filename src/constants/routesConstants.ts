@@ -1,7 +1,7 @@
 import routes from '@/configs/routes'
 
 import HomeLayout from '@/app/layouts/AuthLayouts/HomeLayout'
-import CourseLayout from '@/app/layouts/CourseLayouts'
+import CourseLayout from '@/app/layouts/AuthLayouts/CourseLayouts'
 import ProfileLayout from '@/app/layouts/UserLayouts/ProfileLayout'
 import UserDashboardLayout from '@/app/layouts/UserLayouts/Dashboard'
 import InstructorDashboardLayout from '@/app/layouts/InstructorLayouts/InstructorDashboard'
@@ -33,6 +33,7 @@ import InstructorDetail from '@/views/user/Instructors/InstructorDetail'
 
 // Instructor
 import InstructorDashboard from '@/views/instructor/Dashboard'
+import CreateCourse from '@/views/instructor/Course/CreateCourse'
 
 // Routes không cần đăng nhập
 export const publicRoutes = [
@@ -62,5 +63,6 @@ export const privateRoutes = [
     { path: routes.notification, layout: UserDashboardLayout, element: Notifications, title: 'Thông báo' },
 
     // Instructor Dashboard
-    { path: routes.instructorDashboard, layout: InstructorDashboardLayout, element: InstructorDashboard }
+    { path: routes.instructorDashboard, layout: InstructorDashboardLayout, element: InstructorDashboard },
+    { path: routes.createCourse, layout: InstructorDashboardLayout, element: CreateCourse }
 ]

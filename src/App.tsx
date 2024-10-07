@@ -6,6 +6,7 @@ import { privateRoutes, publicRoutes } from '@/constants'
 import Login from '@/views/user/Auth/Login'
 import Dashboard from '@/app/layouts/UserLayouts/Dashboard'
 import HomeLayout from '@/app/layouts/AuthLayouts/HomeLayout'
+import NotFound from '@/views/user/NotFound'
 
 function App() {
     const isLoggedIn = getAccessTokenFromLocalStorage()
@@ -60,6 +61,7 @@ function App() {
                             />
                         )
                     })}
+                    <Route path="*" element={<NotFound />} />
                 </Routes>
             </div>
         </Router>

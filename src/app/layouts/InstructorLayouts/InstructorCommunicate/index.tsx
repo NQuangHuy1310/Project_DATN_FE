@@ -6,9 +6,13 @@ import InstructorAside from '@/app/layouts/InstructorLayouts/Components/Instruct
 
 const InstructorCommunicate = ({ children, title }: { children: React.ReactNode; title: string }) => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+    const [sidebar, setSidebar] = useState<boolean>(false)
 
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen)
+    }
+    const handleSidebar = () => {
+        setSidebar(!sidebar)
     }
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -25,9 +29,9 @@ const InstructorCommunicate = ({ children, title }: { children: React.ReactNode;
 
     return (
         <div className="flex">
-            <InstructorSidebar isOpen={isSidebarOpen} />
-            <article className="w-full lg:ps-64">
-                <InstructorHeader toggleSidebar={toggleSidebar} title={title} />
+            <InstructorSidebar isOpen={isSidebarOpen} isSidebar={sidebar} handleSidebar={handleSidebar} />
+            <article className={`w-full ${sidebar ? 'lg:ps-64' : 'lg:ps-24'}`}>
+                <InstructorHeader isSidebar={sidebar} toggleSidebar={toggleSidebar} title={title} />
                 <main className="mt-[80px] flex w-full flex-wrap items-start gap-4 bg-softGrey p-4 lg:min-h-[89vh] lg:flex-nowrap">
                     <InstructorAside />
                     <div className="card w-full">{children}</div>

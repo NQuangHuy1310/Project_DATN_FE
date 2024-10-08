@@ -1,5 +1,6 @@
 import { imageBaseUrl } from '@/configs/baseUrl'
 import { MessageErrors } from '@/constants'
+import { placeholders } from '@/constants/placeholders'
 
 export const getAccessTokenFromLocalStorage = () => {
     const accessToken = localStorage.getItem('access_token') || null
@@ -26,4 +27,10 @@ export const readFileAsDataUrl = (file: File): Promise<string> => {
         reader.onerror = () => reject(new Error(MessageErrors.uploadFile))
         reader.readAsDataURL(file)
     })
+}
+
+export const getInputCoursePlaceholder = (type: 'goals' | 'conditions' | 'audiences') => {
+    const typePlaceholders = placeholders[type]
+    const randomIndex = Math.floor(Math.random() * typePlaceholders.length)
+    return typePlaceholders[randomIndex]
 }

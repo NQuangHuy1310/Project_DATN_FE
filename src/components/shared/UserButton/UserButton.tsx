@@ -32,19 +32,21 @@ const UserButton = () => {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-52">
                 <DropdownMenuGroup className="flex flex-col gap-1.5 p-2">
-                    <DropdownMenuItem className="cursor-pointer">
-                        {location.pathname.includes(routes.userDashboard) ? (
+                    {location.pathname.includes(routes.userDashboard) ? (
+                        <DropdownMenuItem className="cursor-pointer">
                             <Link to={routes.instructorDashboard} className="flex items-center gap-2">
                                 <TbUserHexagon className="size-4" />
                                 <span className="text-base font-medium">Người hướng dẫn</span>
                             </Link>
-                        ) : (
+                        </DropdownMenuItem>
+                    ) : (
+                        <DropdownMenuItem className="cursor-pointer">
                             <Link to={routes.userDashboard} className="flex items-center gap-2">
                                 <TbUserHexagon className="size-4" />
                                 <span className="text-base font-medium">Học viên</span>
                             </Link>
-                        )}
-                    </DropdownMenuItem>
+                        </DropdownMenuItem>
+                    )}
                     <DropdownMenuItem className="cursor-pointer">
                         <Link to={routes.accountProfile} className="flex items-center gap-2">
                             <IoSettingsOutline className="size-4" />

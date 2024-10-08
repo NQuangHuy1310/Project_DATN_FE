@@ -1,6 +1,7 @@
 import { ICourse, ICourseToday, IModule, ITeacher } from '@/types'
 import { CourseLevel, notificationTypes, TeacherStatus } from '@/constants'
 import { INotificationMessage } from '@/types'
+import { IAccoutMessage, IMessage } from '@/types/communicate'
 
 export const courses: ICourse[] = [
     {
@@ -428,5 +429,165 @@ export const courseLeaning: IModule[] = [
             { title: 'Bài học 3.4', time: 15.25, type: 'quiz' }
         ],
         time: 41
+    }
+]
+
+export const messages: IMessage[] = [
+    {
+        user: {
+            name: 'Emerson Levin',
+            is_active: true,
+            user_type: 'member',
+            avatar: 'https://images.unsplash.com/photo-1640951613773-54706e06851d?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+        },
+        text: 'Morning Emerson, I have a question about the course.',
+        time: 'Today 11:52',
+        fromUser: true
+    },
+    {
+        user: {
+            name: 'Jakob Calzoni',
+            is_active: true,
+            user_type: 'member',
+            avatar: 'https://images.unsplash.com/photo-1640951613773-54706e06851d?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+        },
+        text: 'Yes sure, Any problem to implement the course?',
+        time: 'Today 11:52',
+        fromUser: false
+    },
+    {
+        user: {
+            name: 'Emerson Levin',
+            is_active: true,
+            user_type: 'member',
+            avatar: 'https://images.unsplash.com/photo-1640951613773-54706e06851d?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+        },
+        text: 'Nam libero tempore, cum soluta nobis...',
+        time: 'Today 11:55',
+        fromUser: true
+    }
+]
+
+export const accountMessages: IAccoutMessage[] = [
+    {
+        user: {
+            name: 'John Doe',
+            avatar: 'https://randomuser.me/api/portraits/men/1.jpg',
+            is_active: true
+        },
+        time: 5,
+        message: 'Hello, how are you?',
+        is_Read: false
+    },
+    {
+        user: {
+            name: 'Jane Smith',
+            avatar: 'https://randomuser.me/api/portraits/women/2.jpg',
+            is_active: true
+        },
+        time: 10,
+        message: 'Did you finish the report?',
+        is_Read: true
+    },
+    {
+        user: {
+            name: 'Alice Johnson',
+            avatar: 'https://randomuser.me/api/portraits/women/3.jpg',
+            is_active: true
+        },
+        time: 25,
+        message: "Let's meet for lunch tomorrow.",
+        is_Read: false
+    },
+    {
+        user: {
+            name: 'Bob Brown',
+            avatar: 'https://randomuser.me/api/portraits/men/4.jpg',
+            is_active: true
+        },
+        time: 35,
+        message: 'Can you send me the file?',
+        is_Read: true
+    },
+    {
+        user: {
+            name: 'Charlie Black',
+            avatar: 'https://randomuser.me/api/portraits/men/5.jpg',
+            is_active: true
+        },
+        time: 50,
+        message: "Don't forget the meeting at 3 PM.",
+        is_Read: false
+    },
+    {
+        user: {
+            name: 'Diana White',
+            avatar: 'https://randomuser.me/api/portraits/women/6.jpg',
+            is_active: true
+        },
+        time: 85,
+        message: 'Great job on the presentation!',
+        is_Read: true
+    },
+    {
+        user: {
+            name: 'Edward Green',
+            avatar: 'https://randomuser.me/api/portraits/men/7.jpg',
+            is_active: true
+        },
+        time: 90,
+        message: 'Could you clarify the last point?',
+        is_Read: false
+    },
+    {
+        user: {
+            name: 'Fiona Blue',
+            avatar: 'https://randomuser.me/api/portraits/women/8.jpg',
+            is_active: true
+        },
+        time: 120,
+        message: "Let's catch up next week.",
+        is_Read: true
+    },
+    {
+        user: {
+            name: 'George Grey',
+            avatar: 'https://randomuser.me/api/portraits/men/9.jpg',
+            is_active: true
+        },
+        time: 150,
+        message: 'I have sent you the calendar invite.',
+        is_Read: false
+    },
+    {
+        user: {
+            name: 'Hannah Yellow',
+            avatar: 'https://randomuser.me/api/portraits/women/10.jpg',
+            is_active: true
+        },
+        time: 240,
+        message: 'Looking forward to our meeting!',
+        is_Read: true
+    },
+    {
+        user: {
+            name: 'Jane Smith',
+            avatar: 'https://randomuser.me/api/portraits/women/2.jpg',
+            is_active: true
+        },
+        time: 10,
+        message: 'Did you finish the report?',
+        is_Read: true
+    },
+
+    {
+        user: {
+            name: 'Jane Smith',
+            avatar: 'https://randomuser.me/api/portraits/women/2.jpg',
+            is_active: true
+        },
+        time: 10,
+        message: 'Did you finish the report?',
+        is_Read: true
     }
 ]

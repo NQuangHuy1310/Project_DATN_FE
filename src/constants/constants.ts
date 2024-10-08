@@ -1,12 +1,14 @@
 /* eslint-disable no-unused-vars */
 import { BsPlayBtn } from 'react-icons/bs'
 import { LuUserCircle } from 'react-icons/lu'
-import { TbUserHexagon } from 'react-icons/tb'
+import { TbMessageDots, TbUserHexagon } from 'react-icons/tb'
 import { FaRegBell, FaUserCog } from 'react-icons/fa'
 import { MdSecurity, MdArticle } from 'react-icons/md'
 import { HiBookOpen, HiOutlineTemplate } from 'react-icons/hi'
 import { IoMdHelpCircleOutline, IoMdHome } from 'react-icons/io'
 import { IoSettingsOutline, IoChatboxEllipsesOutline } from 'react-icons/io5'
+import { AiOutlineQuestionCircle } from 'react-icons/ai'
+import { BiBook } from 'react-icons/bi'
 import { FaRegCircleQuestion, FaRegCircleCheck, FaChartSimple } from 'react-icons/fa6'
 
 import routes from '@/configs/routes'
@@ -97,6 +99,29 @@ export const accountAside = [
         title: 'Hỗ trợ',
         icon: IoMdHelpCircleOutline,
         path: routes.accountHelp
+    }
+]
+
+export const instructorAside = [
+    {
+        title: 'Hỏi đáp',
+        icon: AiOutlineQuestionCircle,
+        path: routes.instructorQa
+    },
+    {
+        title: 'Tin nhắn',
+        icon: TbMessageDots,
+        path: routes.instructorMessage
+    },
+    {
+        title: 'Bài tập',
+        icon: BiBook,
+        path: routes.instructorAssignments
+    },
+    {
+        title: 'Thông báo',
+        icon: FaRegBell,
+        path: routes.instructorAnnouncements
     }
 ]
 

@@ -33,6 +33,11 @@ import InstructorDetail from '@/views/user/Instructors/InstructorDetail'
 
 // Instructor
 import InstructorDashboard from '@/views/instructor/Dashboard'
+import InstructorCommunicate from '@/app/layouts/InstructorLayouts/InstructorCommunicate'
+import CommunicateQa from '@/views/instructor/Communicate/CommunicateQa'
+import CommunicateMessage from '@/views/instructor/Communicate/CommunicateMessage'
+import CommunicateAnnoucement from '@/views/instructor/Communicate/CommunicateAnnoucement'
+import CommunicateAssiment from '@/views/instructor/Communicate/CommunicateAssiment'
 
 // Routes không cần đăng nhập
 export const publicRoutes = [
@@ -62,5 +67,20 @@ export const privateRoutes = [
     { path: routes.notification, layout: UserDashboardLayout, element: Notifications, title: 'Thông báo' },
 
     // Instructor Dashboard
-    { path: routes.instructorDashboard, layout: InstructorDashboardLayout, element: InstructorDashboard }
+    { path: routes.instructorDashboard, layout: InstructorDashboardLayout, element: InstructorDashboard },
+
+    { path: routes.instructorQa, layout: InstructorCommunicate, element: CommunicateQa, title: 'Hỏi đáp' },
+    { path: routes.instructorMessage, layout: InstructorCommunicate, element: CommunicateMessage, title: 'Tin nhắn' },
+    {
+        path: routes.instructorAnnouncements,
+        layout: InstructorCommunicate,
+        element: CommunicateAnnoucement,
+        title: 'Thông báo'
+    },
+    {
+        path: routes.instructorAssignments,
+        layout: InstructorCommunicate,
+        element: CommunicateAssiment,
+        title: 'Bài tập'
+    }
 ]

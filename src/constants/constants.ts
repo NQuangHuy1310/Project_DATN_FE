@@ -2,16 +2,18 @@
 import { BsPlayBtn } from 'react-icons/bs'
 import { LuUserCircle } from 'react-icons/lu'
 import { TbMessageDots, TbUserHexagon } from 'react-icons/tb'
-import { FaRegBell, FaUserCog } from 'react-icons/fa'
+import { FaAddressBook, FaRegBell, FaUserCog } from 'react-icons/fa'
 import { MdSecurity, MdArticle } from 'react-icons/md'
 import { HiBookOpen, HiOutlineTemplate } from 'react-icons/hi'
 import { IoMdHelpCircleOutline, IoMdHome } from 'react-icons/io'
 import { IoSettingsOutline, IoChatboxEllipsesOutline } from 'react-icons/io5'
 import { AiOutlineQuestionCircle } from 'react-icons/ai'
 import { BiBook } from 'react-icons/bi'
-import { FaRegCircleQuestion, FaRegCircleCheck, FaChartSimple } from 'react-icons/fa6'
+import { PiArticleMediumLight } from 'react-icons/pi'
+import { FaRegCircleQuestion, FaRegCircleCheck, FaChartSimple, FaBookAtlas } from 'react-icons/fa6'
 
 import routes from '@/configs/routes'
+import { RiBloggerLine } from 'react-icons/ri'
 
 export const sidebarList = [
     {
@@ -26,10 +28,12 @@ export const sidebarList = [
         children: [
             {
                 title: 'Khoá học của tôi',
+                icon: FaAddressBook,
                 path: routes.myCourses
             },
             {
                 title: 'Tìm kiếm khoá học',
+                icon: FaBookAtlas,
                 path: routes.searchCourses
             }
         ]
@@ -46,10 +50,12 @@ export const sidebarList = [
         children: [
             {
                 title: 'Bài viết của tôi',
+                icon: RiBloggerLine,
                 path: routes.myPosts
             },
             {
                 title: 'Bài viết đã lưu',
+                icon: PiArticleMediumLight,
                 path: routes.myBookmarks
             }
         ]

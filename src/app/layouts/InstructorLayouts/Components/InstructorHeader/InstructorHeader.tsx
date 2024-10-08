@@ -4,9 +4,19 @@ import { Link } from 'react-router-dom'
 import routes from '@/configs/routes'
 import UserButton from '@/components/shared/UserButton'
 
-function InstructorHeader({ toggleSidebar, title }: { toggleSidebar: () => void; title: string }) {
+function InstructorHeader({
+    isSidebar,
+    toggleSidebar,
+    title
+}: {
+    isSidebar: boolean
+    toggleSidebar: () => void
+    title: string
+}) {
     return (
-        <header className="fixed left-0 right-0 z-40 flex h-20 items-center justify-between border-b bg-white px-8 md:border-none lg:left-64">
+        <header
+            className={`fixed left-0 right-0 z-40 flex h-[78px] items-center justify-between border-b bg-white px-8 md:border-none ${isSidebar ? 'lg:left-64' : 'lg:left-24'} `}
+        >
             <FaBars className="cursor-pointer text-2xl text-darkGrey lg:hidden" onClick={toggleSidebar} />
             <div className="hidden lg:block">
                 <h2 className="text-3xl font-medium">{title}</h2>

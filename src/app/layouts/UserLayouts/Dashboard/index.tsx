@@ -5,9 +5,13 @@ import UserSidebar from '@/app/layouts/UserLayouts/Components/UserSidebar/UserSi
 
 const Dashboard = ({ children, title }: { children: React.ReactNode; title: string }) => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+    const [sidebar, setSidebar] = useState<boolean>(false)
 
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen)
+    }
+    const handleSidebar = () => {
+        setSidebar(!sidebar)
     }
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -24,9 +28,9 @@ const Dashboard = ({ children, title }: { children: React.ReactNode; title: stri
 
     return (
         <div className="flex">
-            <UserSidebar isOpen={isSidebarOpen} />
-            <article className="w-full lg:ps-64">
-                <UserHeader toggleSidebar={toggleSidebar} title={title} />
+            <UserSidebar isOpen={isSidebarOpen} isSidebar={sidebar} handleSidebar={handleSidebar} />
+            <article className={`w-full ${sidebar ? 'lg:ps-64' : 'lg:ps-24'}`}>
+                <UserHeader isSidebar={sidebar} toggleSidebar={toggleSidebar} title={title} />
                 <main className="mt-[80px] min-h-screen w-full bg-softGrey p-4">{children}</main>
             </article>
             {isSidebarOpen && (

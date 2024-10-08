@@ -5,9 +5,13 @@ import InstructorSidebar from '@/app/layouts/InstructorLayouts/Components/Instru
 
 const InstructorDashboard = ({ children, title }: { children: React.ReactNode; title: string }) => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+    const [sidebar, setSidebar] = useState<boolean>(false)
 
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen)
+    }
+    const handleSidebar = () => {
+        setSidebar(!sidebar)
     }
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -24,9 +28,9 @@ const InstructorDashboard = ({ children, title }: { children: React.ReactNode; t
 
     return (
         <div className="flex">
-            <InstructorSidebar isOpen={isSidebarOpen} />
-            <article className="w-full lg:ps-64">
-                <InstructorHeader toggleSidebar={toggleSidebar} title={title} />
+            <InstructorSidebar isOpen={isSidebarOpen} isSidebar={sidebar} handleSidebar={handleSidebar} />
+            <article className={`w-full ${sidebar ? 'lg:ps-64' : 'lg:ps-24'}`}>
+                <InstructorHeader isSidebar={sidebar} toggleSidebar={toggleSidebar} title={title} />
                 <main className="mt-[80px] min-h-screen w-full bg-softGrey p-4">
                     <div className="">{children}</div>
                 </main>

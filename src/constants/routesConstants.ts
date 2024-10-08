@@ -43,7 +43,6 @@ import NewPost from '@/views/user/Posts/NewPosts'
 
 import CreateCourse from '@/views/instructor/Course/CreateCourse'
 
-
 // Routes không cần đăng nhập
 export const publicRoutes = [
     { path: routes.home, layout: HomeLayout, element: Home },
@@ -88,7 +87,7 @@ export const privateRoutes = [
         layout: InstructorCommunicate,
         element: CommunicateAssiment,
         title: 'Bài tập'
-    }
-  
+    },
+
     { path: routes.createCourse, layout: InstructorDashboardLayout, element: CreateCourse }
 ]

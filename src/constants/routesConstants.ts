@@ -33,6 +33,7 @@ import InstructorDetail from '@/views/user/Instructors/InstructorDetail'
 
 // Instructor
 import InstructorDashboard from '@/views/instructor/Dashboard'
+import NewPost from '@/views/user/Posts/NewPosts'
 
 // Routes không cần đăng nhập
 export const publicRoutes = [
@@ -60,6 +61,7 @@ export const privateRoutes = [
     { path: routes.instructor, layout: UserDashboardLayout, element: Instructor, title: 'Giảng viên' },
     { path: routes.instructorDetail, layout: UserDashboardLayout, element: InstructorDetail, title: 'Người hướng dẫn' },
     { path: routes.notification, layout: UserDashboardLayout, element: Notifications, title: 'Thông báo' },
+    { path: routes.newPost, layout: UserDashboardLayout, element: NewPost, title: 'Tạo bài viết' },
 
     // Instructor Dashboard
     { path: routes.instructorDashboard, layout: InstructorDashboardLayout, element: InstructorDashboard }

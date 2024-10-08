@@ -5,6 +5,7 @@ import { readFileAsDataUrl } from '@/utils'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { LiaTimesSolid } from 'react-icons/lia';
+
 const Publish = () => {
     const [tags, setTags] = useState<string[]>([]);
     const [inputValue, setInputValue] = useState<string>('');
@@ -35,6 +36,7 @@ const Publish = () => {
     const handleRemoveTag = (indexToRemove: number) => {
         setTags(tags.filter((_, index) => index !== indexToRemove));
     };
+
     return (
         <div>
             <DialogTrigger asChild>
@@ -45,8 +47,11 @@ const Publish = () => {
                     <div className='flex flex-col gap-5'>
                         <DialogTitle>Xuất bản</DialogTitle>
                         <div className="flex gap-10">
+
+                            {/* Preview Ảnh */}
                             <div className="flex items-center justify-center text-center px-3 border-2 border-dashed w-full rounded-lg bg-softGrey">
                                 <label htmlFor="file-upload" className="cursor-pointer w-full h-[250px] flex flex-col items-center justify-center">
+
                                     {imagePreview ? (
                                         <img src={imagePreview} alt="Preview" className="w-full h-[250px] object-cover" />
                                     ) : (<div className='bg-softGrey'>
@@ -57,10 +62,14 @@ const Publish = () => {
                                         <span className="text-red-500">
                                             Kéo thả ảnh vào đây, hoặc bấm để chọn ảnh
                                         </span>
-                                    </div>)}
+                                    </div>
+                                    )}
+
                                 </label>
                                 <Input id="file-upload" type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
                             </div>
+
+                            {/* Từ khóa và bài viết */}
                             <div className='flex flex-col gap-5 w-full'>
                                 <div className='flex flex-col gap-1'>
                                     <label htmlFor="tags" className="block font-medium text-darkGrey">

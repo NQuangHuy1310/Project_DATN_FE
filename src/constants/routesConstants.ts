@@ -1,7 +1,7 @@
 import routes from '@/configs/routes'
 
 import HomeLayout from '@/app/layouts/AuthLayouts/HomeLayout'
-import CourseLayout from '@/app/layouts/CourseLayouts'
+import CourseLayout from '@/app/layouts/AuthLayouts/CourseLayouts'
 import ProfileLayout from '@/app/layouts/UserLayouts/ProfileLayout'
 import UserDashboardLayout from '@/app/layouts/UserLayouts/Dashboard'
 import InstructorDashboardLayout from '@/app/layouts/InstructorLayouts/InstructorDashboard'
@@ -33,7 +33,11 @@ import InstructorDetail from '@/views/user/Instructors/InstructorDetail'
 
 // Instructor
 import InstructorDashboard from '@/views/instructor/Dashboard'
+
 import NewPost from '@/views/user/Posts/NewPosts'
+
+import CreateCourse from '@/views/instructor/Course/CreateCourse'
+
 
 // Routes không cần đăng nhập
 export const publicRoutes = [
@@ -64,5 +68,6 @@ export const privateRoutes = [
     { path: routes.newPost, layout: UserDashboardLayout, element: NewPost, title: 'Tạo bài viết' },
 
     // Instructor Dashboard
-    { path: routes.instructorDashboard, layout: InstructorDashboardLayout, element: InstructorDashboard }
+    { path: routes.instructorDashboard, layout: InstructorDashboardLayout, element: InstructorDashboard },
+    { path: routes.createCourse, layout: InstructorDashboardLayout, element: CreateCourse }
 ]

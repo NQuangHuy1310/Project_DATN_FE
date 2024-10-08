@@ -32,7 +32,7 @@ const InstructorCommunicate = ({ children, title }: { children: React.ReactNode;
             <InstructorSidebar isOpen={isSidebarOpen} isSidebar={sidebar} handleSidebar={handleSidebar} />
             <article className={`w-full ${sidebar ? 'lg:ps-64' : 'lg:ps-24'}`}>
                 <InstructorHeader isSidebar={sidebar} toggleSidebar={toggleSidebar} title={title} />
-                <main className="mt-[80px] flex w-full flex-wrap items-start gap-4 bg-softGrey p-4 lg:min-h-[89vh] lg:flex-nowrap">
+                <main className="mt-headerHight flex w-full flex-wrap items-start gap-4 bg-softGrey p-4 lg:min-h-[89vh] lg:flex-nowrap">
                     <InstructorAside />
                     <div className="card w-full">{children}</div>
                 </main>

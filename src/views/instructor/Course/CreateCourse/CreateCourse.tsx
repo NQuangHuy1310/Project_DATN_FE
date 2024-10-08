@@ -16,7 +16,7 @@ const CreateCourse = () => {
 
     return (
         <div className="flex gap-5">
-            <div className="card flex h-fit w-[300px] flex-shrink-0 flex-col gap-4">
+            <div className="card flex h-fit w-[300px] flex-shrink-0 flex-col gap-4 border-[1px] border-softGrey shadow-md">
                 {options.map((option) => (
                     <div
                         key={option.key}
@@ -29,7 +29,7 @@ const CreateCourse = () => {
                 ))}
                 <Button>Gửi đi để xem xét</Button>
             </div>
-            <div className="card flex-1 rounded-lg shadow-lg">
+            <div className="card flex-1 rounded-lg border-[1px] border-softGrey shadow-md">
                 {selectedKey ? (
                     options.find((option) => option.key === selectedKey)?.component
                 ) : (

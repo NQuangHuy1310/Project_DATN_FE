@@ -89,5 +89,5 @@ export const privateRoutes = [
         title: 'Bài tập'
     },
 
-    { path: routes.createCourse, layout: InstructorDashboardLayout, element: CreateCourse }
+    { path: routes.createCourse, layout: InstructorDashboardLayout, element: CreateCourse, title: 'Tạo mới khoá học' }
 ]

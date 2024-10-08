@@ -1,11 +1,11 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, NavLink } from 'react-router-dom'
-// import { MdKeyboardArrowDown } from 'react-icons/md'
+
+import { HiChevronLeft, HiChevronRight } from 'react-icons/hi'
 
 import logo from '@/assets/Union.svg'
 import routes from '@/configs/routes'
 import { sidebarListInstructor } from '@/constants'
-import { HiChevronLeft, HiChevronRight } from 'react-icons/hi'
 
 const InstructorSidebar = ({
     isOpen,
@@ -17,10 +17,22 @@ const InstructorSidebar = ({
     handleSidebar: () => void
 }) => {
     const [openIndex, setOpenIndex] = useState<number | null>(null)
+    const [isSmallScreen, setIsSmallScreen] = useState<boolean>(false)
 
     const toggleChildren = (index: number) => {
         setOpenIndex(openIndex === index ? null : index)
     }
+
+    useEffect(() => {
+        const checkScreenSize = () => {
+            setIsSmallScreen(window.innerWidth < 1024)
+        }
+        checkScreenSize()
+        window.addEventListener('resize', checkScreenSize)
+        return () => {
+            window.removeEventListener('resize', checkScreenSize)
+        }
+    }, [])
 
     return (
         <aside
@@ -31,7 +43,7 @@ const InstructorSidebar = ({
                     <div className="h-10 w-10">
                         <img src={logo} alt="Coursea" className="h-f w-full object-cover" />
                     </div>
-                    {isSidebar && <h2 className="text-3xl font-medium text-black">Coursea</h2>}
+                    {(isSidebar || isSmallScreen) && <h2 className="text-3xl font-medium text-black">Coursea</h2>}
                 </Link>
                 <div className="flex flex-col gap-5">
                     {sidebarListInstructor.map((item, index) => (
@@ -45,30 +57,17 @@ const InstructorSidebar = ({
                             >
                                 <div className="flex gap-5">
                                     {item.icon && <item.icon className="size-6" />}
-                                    {isSidebar && <p className="whitespace-nowrap text-base">{item.title}</p>}
+                                    {(isSidebar || isSmallScreen) && (
+                                        <p className="whitespace-nowrap text-base">{item.title}</p>
+                                    )}
                                 </div>
-                                {/* {item && item?.children && <MdKeyboardArrowDown />} */}
                             </NavLink>
-                            {/*
-                            {item.children && openIndex === index && (
-                                <div className="mt-4 flex flex-col gap-4">
-                                    {item.children.map((child, childIndex) => (
-                                        <NavLink
-                                            to={child.path}
-                                            className="px-5 py-3.5 hover:bg-softGrey hover:transition-all"
-                                            key={childIndex}
-                                        >
-                                            <p>{child.title}</p>
-                                        </NavLink>
-                                    ))}
-                                </div>
-                            )} */}
                         </div>
                     ))}
                 </div>
                 <div
                     onClick={handleSidebar}
-                    className="absolute -right-7 top-[50vh] cursor-pointer rounded-md bg-white"
+                    className="absolute -right-7 top-[50vh] hidden cursor-pointer rounded-md bg-white lg:block"
                 >
                     {isSidebar ? <HiChevronLeft className="size-8" /> : <HiChevronRight className="size-8" />}
                 </div>

@@ -12,7 +12,8 @@ export const MessageErrors = {
     maxSizeImage: 'Vui lòng tải ảnh có kích thước dưới 2MB.',
     uploadFile: 'Tải file không thành công vui lòng thử lại.',
     phoneTooShort: 'Số điện thoại quá ngắn.',
-    phoneTooLong: 'Số diện thoại quá dài.'
+    phoneTooLong: 'Số diện thoại quá dài.',
+    descriptionTooShort: 'Nội dung quá ngắn, độ dài tối thiểu là 200 từ.'
 }
 
 export const ApiMessages = {

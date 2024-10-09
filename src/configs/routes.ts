@@ -39,7 +39,7 @@ const routes = {
 
     // Course instructor routes
     instructorCourses: '/instructor/courses',
-    createCourse: '/instructor/courses/new',
+    createCourse: '/instructor/courses/:id/manage/goals',
 
     // Instructor communication
     instructorQa: '/instructor/communication/qa',

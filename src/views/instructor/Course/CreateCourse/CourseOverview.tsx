@@ -103,6 +103,7 @@ const CourseOverview = memo(() => {
                         type="text"
                         maxLength={60}
                         placeholder="Chèn tiêu đề khoá học"
+                        className="max-w-[80%]"
                         {...register('name')}
                     />{' '}
                     {errors.name ? (
@@ -122,7 +123,7 @@ const CourseOverview = memo(() => {
                         value={getValues('description')}
                         onChange={handleChangeContent}
                         placeholder="Chèn mô tả khoá học"
-                        style={{ height: '100%' }}
+                        style={{ height: '100%', width: '80%' }}
                     />
                     {errors.description ? (
                         <div className="text-sm text-red-500">{errors.description.message}</div>

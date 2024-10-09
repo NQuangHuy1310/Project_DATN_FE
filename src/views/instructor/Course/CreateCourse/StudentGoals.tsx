@@ -87,7 +87,7 @@ const StudentGoals = memo(() => {
                     </Button>
                 </div>
             </div>
-            <div className="mt-4 flex w-[80%] flex-col gap-7">
+            <div className="mt-4 flex flex-col gap-7">
                 <p className="text-sm leading-6 text-black">
                     Các mô tả sau sẻ hiển thị công khai trên Trang tổng quan khoá học của bạn và sẽ tác động trực tiếp
                     đến thành tích khoá học, đồng thời giúp học viên quyết định xem khoá học đó có phù hợp với họ hay
@@ -112,7 +112,7 @@ const StudentGoals = memo(() => {
                                     value={input.value}
                                     onChange={(e) => handleChange(e.target.value, index, 'goals')}
                                     type="text"
-                                    className="pr-[50px]"
+                                    className="max-w-[80%] pr-[50px]"
                                 />
                                 {!!input.value && (
                                     <Button
@@ -159,7 +159,7 @@ const StudentGoals = memo(() => {
                                     value={input.value}
                                     onChange={(e) => handleChange(e.target.value, index, 'conditions')}
                                     type="text"
-                                    className="pr-[50px]"
+                                    className="max-w-[80%] pr-[50px]"
                                 />
                                 {!!input.value && (
                                     <Button
@@ -204,7 +204,7 @@ const StudentGoals = memo(() => {
                                     value={input.value}
                                     onChange={(e) => handleChange(e.target.value, index, 'audiences')}
                                     type="text"
-                                    className="pr-[50px]"
+                                    className="max-w-[80%] pr-[50px]"
                                 />
                                 {!!input.value && (
                                     <Button

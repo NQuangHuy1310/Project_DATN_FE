@@ -157,6 +157,25 @@ export const AccountHelps = [
     }
 ]
 
+export const lessonOptions = [
+    {
+        name: 'Video bài giảng',
+        type: 'video'
+    },
+    {
+        name: 'Tài liệu',
+        type: 'document'
+    },
+    {
+        name: 'Bài tập trắc nghiệm',
+        type: 'quizzes'
+    },
+    {
+        name: 'Bài tập coding',
+        type: 'coding'
+    }
+]
+
 export enum CourseLevel {
     Beginner = 'Sơ cấp',
     Intermediate = 'Trung cấp',

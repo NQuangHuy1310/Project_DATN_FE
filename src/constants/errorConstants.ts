@@ -10,6 +10,7 @@ export const MessageErrors = {
     actionNotAllowed: 'Hành động này không được phép.',
     genericError: 'Đã xảy ra một lỗi không xác định. Vui lòng thử lại sau.',
     maxSizeImage: 'Vui lòng tải ảnh có kích thước dưới 2MB.',
+    maxSizeVideo: 'Vui lòng tải video có kích thước dưới 2BG.',
     uploadFile: 'Tải file không thành công vui lòng thử lại.',
     phoneTooShort: 'Số điện thoại quá ngắn.',
     phoneTooLong: 'Số diện thoại quá dài.',

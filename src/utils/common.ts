@@ -1,6 +1,13 @@
 import { imageBaseUrl } from '@/configs/baseUrl'
 import { MessageErrors } from '@/constants'
 import { placeholders } from '@/constants/placeholders'
+import { toast } from 'sonner'
+
+const maxImageSizeInMB = 2
+const maxImageSizeInBytes = maxImageSizeInMB * 1024 * 1024
+
+const maxVideoSizeInGB = 2
+const maxVideoSizeInBytes = maxVideoSizeInGB * 1024 * 1024 * 1024
 
 export const getAccessTokenFromLocalStorage = () => {
     const accessToken = localStorage.getItem('access_token') || null
@@ -33,4 +40,25 @@ export const getInputCoursePlaceholder = (type: 'goals' | 'conditions' | 'audien
     const typePlaceholders = placeholders[type]
     const randomIndex = Math.floor(Math.random() * typePlaceholders.length)
     return typePlaceholders[randomIndex]
+}
+
+export const validateFileSize = (file: File, fileType: 'image' | 'video'): boolean => {
+    let maxSize
+
+    if (fileType === 'image') {
+        maxSize = maxImageSizeInBytes
+    } else {
+        maxSize = maxVideoSizeInBytes
+    }
+
+    if (file.size > maxSize) {
+        if (fileType === 'image') {
+            toast.error(MessageErrors.maxSizeImage)
+        } else {
+            toast.error(MessageErrors.maxSizeVideo)
+        }
+        return false
+    }
+
+    return true
 }

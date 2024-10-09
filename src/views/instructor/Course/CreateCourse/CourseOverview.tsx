@@ -1,19 +1,16 @@
 import { toast } from 'sonner'
+import ReactQuill from 'react-quill'
 import { memo, useRef, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
-import { readFileAsDataUrl } from '@/utils'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import placeholder from '@/assets/placeholder.jpg'
-import { Textarea } from '@/components/ui/textarea'
 import { CourseLevel, MessageErrors } from '@/constants'
+import { readFileAsDataUrl, validateFileSize } from '@/utils'
 import { courseOverview, courseOverviewSchema } from '@/validations'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-
-const maxSizeInMB = 2
-const maxSizeInBytes = maxSizeInMB * 1024 * 1024
 
 const CourseOverview = memo(() => {
     const {
@@ -41,14 +38,13 @@ const CourseOverview = memo(() => {
         setValue(type, value)
     }
 
+    const handleChangeContent = (value: string) => {
+        setValue('description', value)
+    }
+
     const handleUploadImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]
-        if (file) {
-            if (file.size > maxSizeInBytes) {
-                toast.error(MessageErrors.maxSizeImage)
-                return
-            }
-
+        if (file && validateFileSize(file, 'image')) {
             try {
                 setCourseImageFile(file)
                 const imageUrl = await readFileAsDataUrl(file)
@@ -62,7 +58,7 @@ const CourseOverview = memo(() => {
 
     const handleUploadVideo = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]
-        if (file) {
+        if (file && validateFileSize(file, 'video')) {
             try {
                 setCourseVideoFile(file)
                 const videoUrl = await readFileAsDataUrl(file)
@@ -120,13 +116,13 @@ const CourseOverview = memo(() => {
                 </div>
 
                 {/* Mô tả khoá học */}
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-2 border-none">
                     <h5 className="text-base font-bold">Mô tả khoá học</h5>
-                    <Textarea
+                    <ReactQuill
+                        value={getValues('description')}
+                        onChange={handleChangeContent}
                         placeholder="Chèn mô tả khoá học"
-                        minLength={200}
-                        {...register('description')}
-                        className="min-h-[300px]"
+                        style={{ height: '100%' }}
                     />
                     {errors.description ? (
                         <div className="text-sm text-red-500">{errors.description.message}</div>
@@ -208,14 +204,14 @@ const CourseOverview = memo(() => {
                             <div className="flex h-[44px] items-center">
                                 <Input
                                     type="file"
-                                    className="flex h-full cursor-pointer items-start justify-center"
+                                    className="flex h-full cursor-pointer items-start justify-center rounded-e-none"
                                     placeholder="Tải lên hình ảnh"
                                     ref={courseImage}
                                     onChange={(e) => handleUploadImage(e)}
                                 />
                                 <Button
                                     variant="outline"
-                                    className="h-full"
+                                    className="h-full rounded-s-none"
                                     onClick={() => handleButtonClick(courseImage)}
                                     type="button"
                                 >
@@ -250,11 +246,12 @@ const CourseOverview = memo(() => {
                                     ref={courseVideo}
                                     placeholder="Tải lên hình ảnh"
                                     onChange={(e) => handleUploadVideo(e)}
-                                    className="flex h-full cursor-pointer items-start justify-center"
+                                    className="flex h-full cursor-pointer items-start justify-center rounded-e-none"
                                 />
                                 <Button
+                                    type="button"
                                     variant="outline"
-                                    className="h-full"
+                                    className="h-full rounded-s-none"
                                     onClick={() => handleButtonClick(courseVideo)}
                                 >
                                     Tải video lên

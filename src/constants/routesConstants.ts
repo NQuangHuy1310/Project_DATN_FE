@@ -42,6 +42,7 @@ import CommunicateAssiment from '@/views/instructor/Communicate/CommunicateAssim
 import NewPost from '@/views/user/Posts/NewPosts'
 
 import CreateCourse from '@/views/instructor/Course/CreateCourse'
+import Posts from '@/views/user/Posts/Post'
 
 // Routes không cần đăng nhập
 export const publicRoutes = [
@@ -70,6 +71,7 @@ export const privateRoutes = [
     { path: routes.instructorDetail, layout: UserDashboardLayout, element: InstructorDetail, title: 'Người hướng dẫn' },
     { path: routes.notification, layout: UserDashboardLayout, element: Notifications, title: 'Thông báo' },
     { path: routes.newPost, layout: UserDashboardLayout, element: NewPost, title: 'Tạo bài viết' },
+    { path: routes.posts, layout: UserDashboardLayout, element: Posts, title: 'Bài viết' },
 
     // Instructor Dashboard
     { path: routes.instructorDashboard, layout: InstructorDashboardLayout, element: InstructorDashboard },

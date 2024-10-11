@@ -7,13 +7,13 @@ import routes from '@/configs/routes'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import UserButton from '@/components/shared/UserButton'
-import { getAccessTokenFromLocalStorage } from '@/utils'
+import { getAccessTokenFromLocalStorage } from '@/lib'
 
 const Header = () => {
     const isLogged = getAccessTokenFromLocalStorage()
 
     return (
-        <header className="h-headerHight fixed left-0 right-0 top-0 z-50 border-b-[1px] shadow-sm">
+        <header className="fixed left-0 right-0 top-0 z-50 h-headerHight border-b-[1px] shadow-sm">
             <div className="mx-auto flex h-full items-center justify-between gap-2 px-4 md:px-6 lg:px-8">
                 <Link to={routes.home} className="flex items-center gap-3">
                     <div className="h-[38px] w-[38px]">

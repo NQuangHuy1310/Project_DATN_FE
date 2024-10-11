@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
-import { getAccessTokenFromLocalStorage } from '@/utils'
+import { getAccessTokenFromLocalStorage } from '@/lib'
 import { privateRoutes, publicRoutes } from '@/constants'
 
 import Login from '@/views/user/Auth/Login'

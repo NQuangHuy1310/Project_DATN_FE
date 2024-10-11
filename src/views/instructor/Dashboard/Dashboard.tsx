@@ -4,8 +4,8 @@ import { IoSearchSharp } from 'react-icons/io5'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
-import { useGetCategories } from '@/app/hooks/useCategory'
-import { useCreateCourse } from '@/app/hooks/useInstructor'
+import { useGetCategories } from '@/app/hooks/categories'
+import { useCreateCourse } from '@/app/hooks/instructors/useInstructor'
 
 import routes from '@/configs/routes'
 import { Input } from '@/components/ui/input'

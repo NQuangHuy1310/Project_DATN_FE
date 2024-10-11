@@ -1,5 +1,5 @@
+import { userApis } from '@/app/services/accounts'
 import { IUserProfile } from '@/types'
-import { userApis } from '@/app/services'
 
 import { useQuery, UseQueryOptions } from '@tanstack/react-query'
 

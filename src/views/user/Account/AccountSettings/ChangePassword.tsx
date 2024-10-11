@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
-import { userApis } from '@/app/services'
+import { userApis } from '@/app/services/accounts'
 import routes from '@/configs/routes'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'

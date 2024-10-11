@@ -1,4 +1,4 @@
-import { categoriesUri } from '@/app/services/Uri/categories'
+import { categoriesUri } from '@/app/services/Uri/categories/categories'
 import axiosClient from '@/configs/axiosClient'
 import { ICategory } from '@/types/category'
 

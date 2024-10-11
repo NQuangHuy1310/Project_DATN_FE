@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
 import routes from '@/configs/routes'
-import { authApis } from '@/app/services'
+import { authApis } from '@/app/services/accounts'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import OTPDialog from '@/components/shared/OTPDialog'

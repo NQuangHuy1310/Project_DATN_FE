@@ -1,4 +1,4 @@
-import useGetUserProfile from '@/app/hooks/useGetUser'
+import useGetUserProfile from '@/app/hooks/accounts/useGetUser'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'

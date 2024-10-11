@@ -1,6 +1,5 @@
 import { AxiosResponse } from 'axios'
 
-import { authUri } from '@/app/services/Uri'
 import axiosClient from '@/configs/axiosClient'
 import {
     ILoginData,
@@ -12,6 +11,7 @@ import {
     IResetPassword,
     IRefreshToken
 } from '@/types'
+import { authUri } from '@/app/services/Uri/accounts'
 
 export const authApis = {
     login: async (authData: ILoginData): Promise<IUserProfile> => {

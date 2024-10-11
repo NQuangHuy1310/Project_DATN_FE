@@ -1,8 +1,15 @@
-import BlogItem from './PostItem'
-import { ItemPost } from '@/constants/mockData'
+
 import FilterBar from '@/components/shared/FilterBar/FilterBar'
 
+import PostItem from './PostItem'
+import Loading from '@/components/Common/Loading/Loading'
+import { usePost } from '@/app/hooks/usePost'
+
 const Posts = () => {
+    const { data, isLoading } = usePost()
+    if (isLoading) {
+        return <Loading />
+    }
     return (
         <div className="flex flex-col gap-7 rounded-md bg-white p-7">
             <div className="flex flex-col gap-5">
@@ -10,18 +17,17 @@ const Posts = () => {
                 <FilterBar placeholder="Tìm kiếm bài viết" />
             </div>
             <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-3">
-                {ItemPost &&
-                    ItemPost.length > 0 &&
-                    ItemPost.map((item, index) => (
-                        <BlogItem
+                {data &&
+                    data.length > 0 &&
+                    data.map((item, index: number) => (
+                        <PostItem
                             key={index}
+                            id={item.id}
                             title={item.title}
                             description={item.description}
                             thumbnail={item.thumbnail}
                             slug={item.slug}
-                            author={item.author}
                             tags={item.tags}
-                            read_time={item.read_time}
                         />
                     ))}
             </div>

@@ -1,11 +1,11 @@
-import { IUser } from './auth'
-
 export interface IPosts {
+    id: number
     title: string
     slug: string
     description: string
     thumbnail: string
-    read_time: string
-    author: IUser
-    tags?: string[]
+    tags: IPostTag[]
+}
+export interface IPostTag {
+    name: string
 }

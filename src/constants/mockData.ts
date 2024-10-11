@@ -3,6 +3,7 @@ import { CourseLevel, notificationTypes, TeacherStatus } from '@/constants'
 import { INotificationMessage } from '@/types'
 import { IAccoutMessage, IMessage } from '@/types/communicate'
 
+
 export const courses: ICourse[] = [
     {
         image: 'https://images.unsplash.com/photo-1545235617-9465d2a55698?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
@@ -591,70 +592,4 @@ export const accountMessages: IAccoutMessage[] = [
         is_Read: true
     }
 ]
-export const ItemPost: IPosts[] = [
-    {
-        title: 'Understanding React Hooks',
-        slug: 'understanding-react-hooks',
-        description: 'A comprehensive guide to understanding and using React Hooks in modern web development.',
-        thumbnail: 'https://media-cdn-v2.laodong.vn/storage/newsportal/2023/8/26/1233821/Giai-Nhi-1--Nang-Tre.jpg',
-        read_time: '5 phút đọc',
-        author: {
-            name: 'John Doe',
-            avatar: 'https://example.com/avatars/john-doe.png'
-        },
-        tags: ['React', 'JavaScript', 'Frontend']
-    },
-    {
-        title: 'Mastering TypeScript',
-        slug: 'mastering-typescript',
-        description: 'Learn the essentials and advanced concepts of TypeScript for robust and type-safe applications.',
-        thumbnail: 'https://d1hjkbq40fs2x4.cloudfront.net/2016-01-31/files/1045.jpg',
-        read_time: '7 phút đọc',
-        author: {
-            name: 'Jane Smith',
-            avatar: 'https://example.com/avatars/jane-smith.png'
-        },
-        tags: ['TypeScript', 'JavaScript', 'Programming']
-    },
-    {
-        title: 'The Power of Node.js',
-        slug: 'the-power-of-nodejs',
-        description:
-            'Discover how Node.js powers modern web applications with its non-blocking I/O and event-driven architecture.',
-        thumbnail: 'https://img.pikbest.com/origin/09/19/03/61zpIkbEsTGjk.jpg!w700wp',
-        read_time: '6 phút đọc',
-        author: {
-            name: 'Michael Johnson',
-            avatar: 'https://example.com/avatars/michael-johnson.png'
-        },
-        tags: ['Node.js', 'Backend', 'JavaScript']
-    },
-    {
-        title: 'CSS Grid Layout: A New Era of Web Design',
-        slug: 'css-grid-layout',
-        description:
-            'Explore how CSS Grid Layout revolutionizes web design with flexible and complex grid-based layouts.',
-        thumbnail:
-            'https://vcdn1-dulich.vnecdn.net/2021/07/16/1-1626437591.jpg?w=460&h=0&q=100&dpr=2&fit=crop&s=i2M2IgCcw574LT-bXFY92g',
-        read_time: '4 phút đọc',
-        author: {
-            name: 'Emily Davis',
-            avatar: 'https://www.ruaanhgiare.vn/wp-content/uploads/2023/06/anh-ngau.jpg'
-        },
-        tags: ['CSS', 'Web Design', 'Frontend']
-    },
-    {
-        title: 'Exploring GraphQL: A Query Language for APIs',
-        slug: 'exploring-graphql',
-        description:
-            'An in-depth look at GraphQL, a powerful query language for APIs that enables precise data fetching.',
-        thumbnail:
-            'https://images2.thanhnien.vn/528068263637045248/2024/1/25/e093e9cfc9027d6a142358d24d2ee350-65a11ac2af785880-17061562929701875684912.jpg',
-        read_time: '8 phút đọc',
-        author: {
-            name: 'Robert Brown',
-            avatar: 'https://example.com/avatars/robert-brown.png'
-        },
-        tags: ['GraphQL', 'APIs', 'Backend']
-    }
-]
+

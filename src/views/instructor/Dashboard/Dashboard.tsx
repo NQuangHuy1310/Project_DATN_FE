@@ -1,6 +1,13 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { IoSearchSharp } from 'react-icons/io5'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { SubmitHandler, useForm } from 'react-hook-form'
 
+import { useGetCategories } from '@/app/hooks/useCategory'
+import { useCreateCourse } from '@/app/hooks/useInstructor'
+
+import routes from '@/configs/routes'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import CourseCard from '@/components/shared/CourseCard'
@@ -13,11 +20,7 @@ import {
     DialogHeader,
     DialogTitle
 } from '@/components/ui/dialog'
-import { SubmitHandler, useForm } from 'react-hook-form'
 import { createNewCourse, createNewCourseSchema } from '@/validations'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Link } from 'react-router-dom'
-import routes from '@/configs/routes'
 
 const Dashboard = () => {
     const {
@@ -25,21 +28,39 @@ const Dashboard = () => {
         handleSubmit,
         setValue,
         formState: { isSubmitting, errors }
-    } = useForm<createNewCourse>({ resolver: zodResolver(createNewCourseSchema) })
+    } = useForm<createNewCourse>({
+        resolver: zodResolver(createNewCourseSchema)
+    })
 
+    const navigate = useNavigate()
+    const createNewCourse = useCreateCourse()
+    const { data: categories } = useGetCategories()
     const [openDialog, setOpenDialog] = useState(false)
-    const [selectedCategory, setSelectedCategory] = useState<string>('')
+    const [selectedCategory, setSelectedCategory] = useState<string | undefined>()
 
     const handleCategoryChange = (value: string) => {
         setSelectedCategory(value)
         setValue('id_category', value)
     }
 
-    const handleSubmitForm: SubmitHandler<createNewCourse> = async (data) => {}
+    const handleSubmitForm: SubmitHandler<createNewCourse> = async (formData) => {
+        const response = await createNewCourse.mutateAsync(formData)
+        const courseId = response.id
+        const goalsUrl = routes.createCourse.replace(':id', courseId.toString())
+        navigate(goalsUrl)
+    }
+
+    // function render
+    const renderCategories = () =>
+        categories?.map((item) => (
+            <SelectItem key={item.id} value={item.id.toString()}>
+                {item.name}
+            </SelectItem>
+        ))
 
     return (
         <>
-            <div className="flex flex-col gap-7">
+            <div className="card flex flex-col gap-7 bg-white">
                 <h3 className="text-3xl font-semibold">Khoá học</h3>
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-5">
@@ -68,16 +89,11 @@ const Dashboard = () => {
                             </SelectContent>
                         </Select>
                     </div>
-
-                    <div className="">
-                        <Button size="lg" onClick={() => setOpenDialog(!openDialog)}>
-                            Tạo khoá học mới
-                        </Button>
-                    </div>
+                    <Button size="lg" onClick={() => setOpenDialog(true)}>
+                        Tạo khoá học mới
+                    </Button>
                 </div>
-                <div className="">
-                    <CourseCard />
-                </div>
+                <CourseCard />
             </div>
 
             {/* Dialog add course */}
@@ -105,6 +121,7 @@ const Dashboard = () => {
                                 />
                                 {errors.name && <div className="text-sm text-secondaryRed">{errors.name.message}</div>}
                             </div>
+
                             <div className="flex flex-col gap-1">
                                 <label className="text-sm text-muted-foreground">Danh mục cho khoá học</label>
                                 <Select
@@ -112,14 +129,11 @@ const Dashboard = () => {
                                     onValueChange={handleCategoryChange}
                                     name="id_category"
                                 >
-                                    <SelectTrigger className="flex justify-start">
+                                    <SelectTrigger className="flex justify-between">
                                         <SelectValue placeholder="Danh mục khoá học" />
                                     </SelectTrigger>
                                     <SelectContent side="bottom" align="end">
-                                        <SelectGroup>
-                                            <SelectItem value="new">Mới nhất</SelectItem>
-                                            <SelectItem value="old">Cũ nhất</SelectItem>
-                                        </SelectGroup>
+                                        <SelectGroup>{renderCategories()}</SelectGroup>
                                     </SelectContent>
                                 </Select>
                                 {errors.id_category && (
@@ -136,11 +150,9 @@ const Dashboard = () => {
                             >
                                 Huỷ
                             </Button>
-                            <Link to={routes.createCourse}>
-                                <Button type="submit" disabled={isSubmitting}>
-                                    Tiếp tục tạo khoá học
-                                </Button>
-                            </Link>
+                            <Button type="submit" disabled={isSubmitting}>
+                                Tiếp tục tạo khoá học
+                            </Button>
                         </DialogFooter>
                     </form>
                 </DialogContent>

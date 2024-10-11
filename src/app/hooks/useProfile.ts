@@ -7,9 +7,6 @@ export const useProfile = (options?: Omit<UseQueryOptions<IUserProfile>, 'queryK
     return useQuery<IUserProfile>({
         ...options,
         queryKey: ['profile'],
-        queryFn: userApis.getProfile,
-        refetchOnWindowFocus: false,
-        refetchOnMount: false,
-        retry: 1
+        queryFn: userApis.getProfile
     })
 }

@@ -5,7 +5,7 @@ import { notificationTypes } from '@/constants'
 import { INotificationMessage } from '@/types'
 
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
-import { getImagesUrl } from '@/utils'
+import { getImagesUrl } from '@/lib'
 
 const NotificationMessage = ({ title, message, notificationType, isRead, senderBy, sentAt }: INotificationMessage) => {
     return (

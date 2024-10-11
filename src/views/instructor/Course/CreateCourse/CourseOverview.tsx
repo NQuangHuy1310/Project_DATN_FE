@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import placeholder from '@/assets/placeholder.jpg'
 import { CourseLevel, MessageErrors } from '@/constants'
-import { readFileAsDataUrl, validateFileSize } from '@/utils'
+import { readFileAsDataUrl, validateFileSize } from '@/lib'
 import { courseOverview, courseOverviewSchema } from '@/validations'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 

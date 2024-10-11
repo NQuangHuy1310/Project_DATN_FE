@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 import { Input } from '@/components/ui/input'
-import useGetUserProfile from '@/app/hooks/useGetUser'
+import useGetUserProfile from '@/app/hooks/accounts/useGetUser'
 
 const AccountNotifications = () => {
     const { user } = useGetUserProfile()

@@ -4,8 +4,8 @@ import { TbUserHexagon } from 'react-icons/tb'
 import { IoSettingsOutline } from 'react-icons/io5'
 
 import routes from '@/configs/routes'
-import { getImagesUrl } from '@/utils'
-import useGetUserProfile from '@/app/hooks/useGetUser'
+import { getImagesUrl } from '@/lib'
+import useGetUserProfile from '@/app/hooks/accounts/useGetUser'
 import {
     DropdownMenu,
     DropdownMenuContent,

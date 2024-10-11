@@ -1,9 +1,8 @@
-
 import FilterBar from '@/components/shared/FilterBar/FilterBar'
 
 import PostItem from './PostItem'
 import Loading from '@/components/Common/Loading/Loading'
-import { usePost } from '@/app/hooks/usePost'
+import { usePost } from '@/app/hooks/posts'
 
 const Posts = () => {
     const { data, isLoading } = usePost()

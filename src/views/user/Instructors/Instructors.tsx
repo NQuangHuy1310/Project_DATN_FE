@@ -1,7 +1,7 @@
 import Teacher from '@/components/shared/Teacher'
 import FilterBar from '@/components/shared/FilterBar/FilterBar'
-import { useInstructor } from '@/app/hooks/useInstructor'
 import Loading from '@/components/Common/Loading/Loading'
+import { useInstructor } from '@/app/hooks/instructors/useInstructorClient'
 
 const Instructor = () => {
     const { data, isLoading } = useInstructor()
@@ -9,7 +9,7 @@ const Instructor = () => {
     if (isLoading) {
         return <Loading />
     }
-    console.log(data)
+
     return (
         <div className="flex flex-col gap-7">
             <FilterBar placeholder="Tìm kiếm người hướng dẫn" />

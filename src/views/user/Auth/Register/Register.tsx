@@ -1,20 +1,20 @@
-import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { FcGoogle } from 'react-icons/fc'
-import { FaFacebook } from 'react-icons/fa'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
+import { FaFacebook } from 'react-icons/fa'
+import { FcGoogle } from 'react-icons/fc'
 import { IoEyeOffSharp, IoEyeSharp } from 'react-icons/io5'
+import { Link, useNavigate } from 'react-router-dom'
 
-import { authApis } from '@/app/services'
-import routes from '@/configs/routes'
+import { authApis } from '@/app/services/accounts'
 import { useUserStore } from '@/app/store'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
 import OTPDialog from '@/components/shared/OTPDialog'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import routes from '@/configs/routes'
 
+import { setAccessToken } from '@/lib'
 import { RegisterFormFields, registerSchema } from '@/validations'
-import { setAccessToken } from '@/utils'
 
 const Register = () => {
     const {

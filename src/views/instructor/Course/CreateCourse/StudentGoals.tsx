@@ -4,7 +4,7 @@ import { FiTrash } from 'react-icons/fi'
 
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { getInputCoursePlaceholder } from '@/utils'
+import { getInputCoursePlaceholder } from '@/lib'
 
 const StudentGoals = memo(() => {
     const [inputs, setInputs] = useState({

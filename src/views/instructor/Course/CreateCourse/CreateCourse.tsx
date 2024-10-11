@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button'
 import CourseOverview from '@/views/instructor/Course/CreateCourse/CourseOverview'
 import Curriculum from '@/views/instructor/Course/CreateCourse/Curriculum'
 import StudentGoals from '@/views/instructor/Course/CreateCourse/StudentGoals'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FaCheckCircle } from 'react-icons/fa'
 
 const CreateCourse = () => {
@@ -13,6 +13,17 @@ const CreateCourse = () => {
         { key: 'curriculum', label: 'Chương trình giảng dạy', component: <Curriculum /> },
         { key: 'courseOverview', label: 'Tổng quan khoá học', component: <CourseOverview /> }
     ]
+
+    useEffect(() => {
+        const handleBeforeUnLoad = (event: BeforeUnloadEvent) => {
+            event.preventDefault()
+        }
+        window.addEventListener('beforeunload', handleBeforeUnLoad)
+
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnLoad)
+        }
+    }, [])
 
     return (
         <div className="flex gap-5">

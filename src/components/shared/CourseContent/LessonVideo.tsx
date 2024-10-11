@@ -49,7 +49,7 @@ const LessonVideo = memo(() => {
                 <label className="text-xs text-muted-foreground">
                     Bạn cần nhập nội dung cho bài giảng bằng cách tải lên video hoặc dùng video trên youtube
                 </label>
-                <TabsList className="grid w-full grid-cols-2">
+                <TabsList className="grid w-[450px] grid-cols-2">
                     <TabsTrigger value="video">Nội dung</TabsTrigger>
                     <TabsTrigger value="description">Mô tả</TabsTrigger>
                 </TabsList>
@@ -57,7 +57,7 @@ const LessonVideo = memo(() => {
                     {/* Handle video */}
                     <TabsContent value="video" className="flex flex-col gap-4">
                         <Select value={selectedVideoType} onValueChange={setSelectedVideoType}>
-                            <SelectTrigger className="flex w-[250px] items-center justify-between">
+                            <SelectTrigger className="flex w-[450px] items-center justify-between">
                                 <SelectValue placeholder="Chọn kiểu video" />
                             </SelectTrigger>
                             <SelectContent>
@@ -74,7 +74,7 @@ const LessonVideo = memo(() => {
                             <div className="flex flex-col gap-2">
                                 <h5 className="text-base font-bold">Tải lên video cho khoá học</h5>
                                 <div className="flex flex-col-reverse items-start gap-4">
-                                    <div className="h-[300px] w-[450px] flex-shrink-0 overflow-hidden rounded-md border-[1px]">
+                                    <div className="h-[300px] w-[500px] flex-shrink-0 overflow-hidden rounded-md border-[1px]">
                                         {courseVideoPath ? (
                                             <video
                                                 src={courseVideoPath}
@@ -118,13 +118,16 @@ const LessonVideo = memo(() => {
 
                         {selectedVideoType === 'video' && (
                             <div className="flex flex-col gap-4">
-                                <div className="w-[400px]">
-                                    <Input
-                                        placeholder="Nhập mã code video từ Youtube"
-                                        onChange={(e) => setVideoUrl(e.target.value)}
-                                    />
+                                <div className="space-y-2">
+                                    <h5 className="text-base font-bold">Gắn link video youtube</h5>
+                                    <div className="w-[450px]">
+                                        <Input
+                                            placeholder="Nhập mã code video từ Youtube"
+                                            onChange={(e) => setVideoUrl(e.target.value)}
+                                        />
+                                    </div>
                                 </div>
-                                <div className="h-[300px] w-[450px]">
+                                <div className="h-[300px] w-[500px]">
                                     <iframe
                                         src={`https://www.youtube.com/embed/${videoUrl}`}
                                         title="YouTube video player"

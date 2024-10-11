@@ -8,20 +8,23 @@ import { TeacherStatus } from '@/constants'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
-const Teacher = ({ image, name, job, reviewStart, status, totalCourse, totalReview }: ITeacher) => {
+const Teacher = ({ user_name, user_avatar, average_rating, total_courses, total_ratings, status }: ITeacher) => {
     return (
-        <div className="flex w-full flex-col gap-6 overflow-hidden rounded-lg bg-white p-5 shadow-md hover:shadow-[0px_40px_100px_0px_#0000000d] hover:transition-all md:w-[360px] md:p-7">
+        <Link
+            to={''}
+            className="flex w-full flex-col gap-6 overflow-hidden rounded-lg bg-white p-5 shadow-md hover:shadow-[0px_40px_100px_0px_#0000000d] hover:transition-all md:w-[360px] md:p-7"
+        >
             <div className="flex flex-wrap items-center justify-between gap-y-4">
                 <Link to="" className="flex flex-shrink-0 items-center gap-3 truncate">
                     <Avatar className="size-7 md:size-9">
-                        <AvatarImage src={image} alt={name} />
-                        <AvatarFallback className="flex size-11 items-center justify-center bg-slate-500/50 font-semibold">
-                            {name.charAt(0).toUpperCase()}
+                        <AvatarImage src={user_avatar} alt={user_avatar} />
+                        <AvatarFallback className="flex items-center justify-center bg-slate-500/50 font-semibold">
+                            {user_name?.charAt(0).toUpperCase()}
                         </AvatarFallback>
                     </Avatar>
                     <div className="flex flex-col">
-                        <h4 className="text-sm font-semibold md:text-sm">{name}</h4>
-                        <p className="text-xs text-darkGrey">{job}</p>
+                        <h4 className="text-sm font-semibold md:text-sm">{user_name}</h4>
+                        {/* <p className="text-xs text-darkGrey">{job}</p> */}
                     </div>
                 </Link>
                 {status === TeacherStatus.follow && (
@@ -44,16 +47,16 @@ const Teacher = ({ image, name, job, reviewStart, status, totalCourse, totalRevi
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-1">
                     <CiViewList className="size-4 text-darkGrey md:size-5" />
-                    <p className="text-xs font-medium md:text-sm">{totalCourse} Khoá học</p>
+                    <p className="text-xs font-medium md:text-sm">{total_courses} Khoá học</p>
                 </div>
                 <div className="flex items-center gap-1">
                     <IoIosStar className="size-4 text-primary md:size-5" />
                     <p className="text-xs font-medium md:text-sm">
-                        {reviewStart} ({totalReview} Review)
+                        {average_rating} ({total_ratings} Review)
                     </p>
                 </div>
             </div>
-        </div>
+        </Link>
     )
 }
 

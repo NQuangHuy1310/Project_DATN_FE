@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
 import { getAccessTokenFromLocalStorage } from '@/utils'
@@ -9,7 +10,12 @@ import HomeLayout from '@/app/layouts/AuthLayouts/HomeLayout'
 import NotFound from '@/views/user/NotFound'
 
 function App() {
-    const isLoggedIn = getAccessTokenFromLocalStorage()
+    const [isLogin, setIsLogin] = useState(false)
+
+    useEffect(() => {
+        const isLoggedIn = getAccessTokenFromLocalStorage()
+        if (isLoggedIn) setIsLogin(!!isLoggedIn)
+    }, [])
 
     return (
         <Router>
@@ -48,7 +54,7 @@ function App() {
                                 key={index}
                                 path={route.path}
                                 element={
-                                    isLoggedIn ? (
+                                    isLogin ? (
                                         <Layout title={route?.title}>
                                             <Page />
                                         </Layout>

@@ -8,7 +8,7 @@ export const createNewCourseSchema = z.object({
 
 export const courseOverviewSchema = z.object({
     name: z.string().min(1, MessageErrors.requiredField).max(60),
-    description: z.string().min(200, MessageErrors.descriptionTooShort),
+    description: z.string({ message: MessageErrors.requiredField }).min(200, MessageErrors.descriptionTooShort),
     level: z.string({ message: MessageErrors.requiredField }),
     id_category: z.string({ message: MessageErrors.requiredField }),
     sub_id_category: z.string({ message: MessageErrors.requiredField })

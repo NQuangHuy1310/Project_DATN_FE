@@ -3,6 +3,7 @@ import { CourseLevel, notificationTypes, TeacherStatus } from '@/constants'
 import { INotificationMessage } from '@/types'
 import { IAccoutMessage, IMessage } from '@/types/communicate'
 
+
 export const courses: ICourse[] = [
     {
         image: 'https://images.unsplash.com/photo-1545235617-9465d2a55698?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
@@ -591,3 +592,4 @@ export const accountMessages: IAccoutMessage[] = [
         is_Read: true
     }
 ]
+

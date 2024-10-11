@@ -30,6 +30,7 @@ const routes = {
     accountNotifications: '/account/notifications',
 
     // Post management routes
+    posts: '/posts',
     newPost: '/posts/new',
     myPosts: '/posts/me',
     myBookmarks: '/posts/me/bookmarks',

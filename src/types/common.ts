@@ -12,3 +12,13 @@ export interface IAccountAside {
     icon: IconType
     path?: string
 }
+
+export interface ICourseCategory {
+    id: number
+    name: string
+    slug: string
+    image?: string | null
+    description?: string | null
+    parent_id?: number | null
+    is_active: number
+}

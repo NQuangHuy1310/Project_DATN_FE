@@ -1,15 +1,20 @@
+import { useMutation, useQuery, UseQueryOptions } from '@tanstack/react-query'
+
 import { intructorApi } from '@/app/services'
 import { ITeacher } from '@/types'
-
-import { useQuery, UseQueryOptions } from '@tanstack/react-query'
+import { ICreateCourseData } from '@/types/instructor'
+import { instructorApi } from '@/app/services/instructor/instructor'
 
 export const useInstructor = (options?: Omit<UseQueryOptions<ITeacher[]>, 'queryKey' | 'queryFn'>) => {
     return useQuery<ITeacher[]>({
         ...options,
         queryKey: ['instructor'],
-        queryFn: intructorApi.getAllInstructor,
-        refetchOnWindowFocus: false,
-        refetchOnMount: false,
-        retry: 1
+        queryFn: intructorApi.getAllInstructor
+    })
+}
+
+export const useCreateCourse = () => {
+    return useMutation({
+        mutationFn: (data: ICreateCourseData) => instructorApi.createCourse(data)
     })
 }

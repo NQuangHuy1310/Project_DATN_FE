@@ -35,12 +35,6 @@ axiosClient.interceptors.response.use(
         const { message, data } = response.data
 
         if (response.status === ApiStatusCode.Success || ApiStatusCode.Created) {
-            if (response.status === ApiStatusCode.Success) {
-                toast.success(message, {
-                    description: MessageConfig.actionSuccess
-                })
-            }
-
             if (response.status === ApiStatusCode.Created) {
                 toast.success(ApiMessages.success.created, {
                     description: message

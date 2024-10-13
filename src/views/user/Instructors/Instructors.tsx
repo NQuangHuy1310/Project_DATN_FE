@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import Teacher from '@/components/shared/Teacher'
 import Loading from '@/components/Common/Loading/Loading'
 import FilterBar from '@/components/shared/FilterBar/FilterBar'
+import NoContent from '@/components/shared/NoContent/NoContent'
 import { getVisiblePages } from '@/lib'
 import {
     Pagination,
@@ -47,11 +48,16 @@ const Instructor = () => {
         return <Loading />
     }
 
+    if (!data) {
+        return <NoContent />
+    }
+
     return (
         <div className="flex flex-col gap-7">
             <FilterBar placeholder="Tìm kiếm người hướng dẫn" />
             <div className="flex flex-wrap gap-10">
-                {data?.teachers &&
+                {data ? (
+                    data?.teachers &&
                     data.teachers.map((item, index) => (
                         <Teacher
                             user_id={item.user_id}
@@ -62,7 +68,10 @@ const Instructor = () => {
                             total_ratings={item.total_ratings}
                             total_courses={item.total_courses}
                         />
-                    ))}
+                    ))
+                ) : (
+                    <></>
+                )}
             </div>
 
             {totalPages > 1 && (

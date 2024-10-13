@@ -1,13 +1,14 @@
 import { IoIosStar } from 'react-icons/io'
 import { MdListAlt } from 'react-icons/md'
 
-import { Button } from '@/components/ui/button'
 import Course from '@/components/shared/Course'
-import FilterBar from '@/components/shared/FilterBar/FilterBar'
-import { useInstructorById } from '@/app/hooks/instructors/useInstructorClient'
 import Loading from '@/components/Common/Loading/Loading'
+import FilterBar from '@/components/shared/FilterBar/FilterBar'
+import NoContent from '@/components/shared/NoContent/NoContent'
+import { Button } from '@/components/ui/button'
 import { getUrlParams } from '@/components/Common/GetUrlParam/getUrlParams'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { useInstructorById } from '@/app/hooks/instructors/useInstructorClient'
 
 const InstructorDetail = () => {
     const id = getUrlParams('id')
@@ -15,6 +16,10 @@ const InstructorDetail = () => {
     const { data, isLoading } = useInstructorById(instructorId)
 
     if (isLoading) return <Loading />
+
+    if (!data) {
+        return <NoContent />
+    }
 
     return (
         <div className="flex flex-col gap-5">

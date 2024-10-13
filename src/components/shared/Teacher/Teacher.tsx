@@ -7,11 +7,21 @@ import { ITeacher } from '@/types'
 import { TeacherStatus } from '@/constants'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import routes from '@/configs/routes'
 
-const Teacher = ({ user_name, user_avatar, average_rating, total_courses, total_ratings, status }: ITeacher) => {
+const Teacher = ({
+    user_name,
+    user_avatar,
+    average_rating,
+    total_courses,
+    total_ratings,
+    status,
+    user_id
+}: ITeacher) => {
+    const detailInstructorUrl = routes.instructorDetail.replace(':id', user_id.toString())
     return (
         <Link
-            to={''}
+            to={`${detailInstructorUrl}`}
             className="flex w-full flex-col gap-6 overflow-hidden rounded-lg bg-white p-5 shadow-md hover:shadow-[0px_40px_100px_0px_#0000000d] hover:transition-all md:w-[360px] md:p-7"
         >
             <div className="flex flex-wrap items-center justify-between gap-y-4">

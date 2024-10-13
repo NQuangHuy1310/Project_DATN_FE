@@ -20,7 +20,7 @@ const routes = {
 
     // Instructor routes
     instructor: '/instructors',
-    instructorDetail: '/instructors/:slug',
+    instructorDetail: '/instructors/:id',
 
     // Account management routes
     account: '/account',

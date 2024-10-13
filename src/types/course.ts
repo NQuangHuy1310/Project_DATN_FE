@@ -2,11 +2,12 @@ import { IUser } from '@/types/auth'
 import { CourseLevel } from '@/constants'
 
 export interface ICourse {
-    image: string
-    name: string
-    star: number
+    course_id: number
+    course_thumbnail: string
+    course_name: string
+    average_rating: number
     level: CourseLevel
-    studentCount?: number
+    total_student?: number
     totalVideo?: number
     totalTime?: string
     createdBy: IUser

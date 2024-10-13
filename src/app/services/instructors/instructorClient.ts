@@ -1,10 +1,13 @@
 import axiosClient from '@/configs/axiosClient'
 
-import { ITeacher } from '@/types'
+import { ITeacherAll, ITeacherDetail } from '@/types'
 import { instructorClientUri } from '@/app/services/Uri/instructors'
 
 export const instructorClientApi = {
-    getAllInstructor: async (): Promise<ITeacher[]> => {
-        return axiosClient.get(instructorClientUri.ALL_INSTRUCTOR)
+    getAllInstructor: async (page: number, perPage?: number): Promise<ITeacherAll> => {
+        return axiosClient.get(instructorClientUri.ALL_INSTRUCTOR(page, perPage))
+    },
+    getInstructorById: async (instructorId: number): Promise<ITeacherDetail> => {
+        return axiosClient.get(instructorClientUri.DETAIL_INSTRUCTOR(instructorId))
     }
 }

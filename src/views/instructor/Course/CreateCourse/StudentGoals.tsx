@@ -1,12 +1,17 @@
 import { memo, useState } from 'react'
 import { FaPlus } from 'react-icons/fa6'
 import { FiTrash } from 'react-icons/fi'
+import { useParams } from 'react-router-dom'
 
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { getInputCoursePlaceholder } from '@/lib'
+import { useTargetCourse } from '@/app/hooks/instructors/useInstructor'
 
 const StudentGoals = memo(() => {
+    const { id } = useParams()
+    const { mutateAsync: createTargetCourse, isPending } = useTargetCourse()
+
     const [inputs, setInputs] = useState({
         goals: Array.from({ length: 4 }, () => ({
             placeholder: getInputCoursePlaceholder('goals'),
@@ -50,16 +55,25 @@ const StudentGoals = memo(() => {
         })
     }
 
-    const handleSave = () => {
+    const handleSave = async () => {
         const { goals, conditions, audiences } = inputs
 
         const result = {
-            goals: goals.map((item) => item.value || ''),
-            conditions: conditions.map((item) => item.value || ''),
-            audiences: audiences.map((item) => item.value || '')
+            goals: goals.map((item, index) => ({
+                goal: item.value || '',
+                position: index + 1 || 0
+            })),
+            requirements: conditions.map((item, index) => ({
+                requirement: item.value || '',
+                position: index + 1 || 0
+            })),
+            audiences: audiences.map((item, index) => ({
+                audience: item.value || '',
+                position: index + 1 || 0
+            }))
         }
 
-        // call api here
+        await createTargetCourse([id!, result])
         return result
     }
 
@@ -79,10 +93,10 @@ const StudentGoals = memo(() => {
             <div className="flex items-center justify-between border-b-2 border-gray-300 pb-5">
                 <h4 className="text-2xl font-semibold capitalize">Mục tiêu học viên</h4>
                 <div className="flex gap-3">
-                    <Button size="default" variant="destructive" onClick={() => handleReset()}>
+                    <Button size="default" variant="destructive" onClick={() => handleReset()} disabled={isPending}>
                         Nhập lại
                     </Button>
-                    <Button size="default" onClick={() => handleSave()} disabled={isAnyFieldEmpty()}>
+                    <Button size="default" onClick={() => handleSave()} disabled={isAnyFieldEmpty() || isPending}>
                         Lưu thông tin
                     </Button>
                 </div>

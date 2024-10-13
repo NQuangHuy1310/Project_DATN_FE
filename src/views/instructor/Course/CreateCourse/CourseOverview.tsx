@@ -1,5 +1,6 @@
 import { toast } from 'sonner'
 import ReactQuill from 'react-quill'
+import { useParams } from 'react-router-dom'
 import { memo, useRef, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
@@ -11,6 +12,9 @@ import { CourseLevel, MessageErrors } from '@/constants'
 import { readFileAsDataUrl, validateFileSize } from '@/lib'
 import { courseOverview, courseOverviewSchema } from '@/validations'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { useGetCategories } from '@/app/hooks/categories'
+import { useOverviewCourse } from '@/app/hooks/instructors/useInstructor'
+import { IOverviewCourseData } from '@/types/instructor'
 
 const CourseOverview = memo(() => {
     const {
@@ -18,15 +22,20 @@ const CourseOverview = memo(() => {
         handleSubmit,
         getValues,
         setValue,
-        formState: { isSubmitting, errors }
+        formState: { errors }
     } = useForm<courseOverview>({ resolver: zodResolver(courseOverviewSchema) })
 
-    const [courseImageFile, setCourseImageFile] = useState<File | undefined>(undefined)
+    const { id } = useParams()
+    const { data: categories } = useGetCategories()
+    const { mutateAsync: createOverviewCourse, isPending } = useOverviewCourse()
+
+    const [courseImageFile, setCourseImageFile] = useState<File>()
     const [courseImagePath, setCourseImagePath] = useState<string | undefined>(placeholder)
-    const [courseVideoFile, setCourseVideoFile] = useState<File | undefined>(undefined)
+    const [courseVideoFile, setCourseVideoFile] = useState<File>()
     const [courseVideoPath, setCourseVideoPath] = useState<string | undefined>(undefined)
     const courseImage = useRef<HTMLInputElement | null>(null)
     const courseVideo = useRef<HTMLInputElement | null>(null)
+    const quillRef = useRef<ReactQuill>(null)
 
     const handleButtonClick = (inputRef: React.RefObject<HTMLInputElement>) => {
         if (inputRef.current) {
@@ -34,7 +43,7 @@ const CourseOverview = memo(() => {
         }
     }
 
-    const handleChangeSelect = (value: string, type: 'level' | 'id_category' | 'sub_id_category') => {
+    const handleChangeSelect = (value: string, type: 'level' | 'id_category') => {
         setValue(type, value)
     }
 
@@ -71,7 +80,15 @@ const CourseOverview = memo(() => {
     }
 
     const handleSubmitForm: SubmitHandler<courseOverview> = async (data) => {
-        console.log(data, courseImageFile, courseVideoFile)
+        if (data && courseImageFile && courseVideoFile) {
+            const payload: IOverviewCourseData = {
+                ...data,
+                thumbnail: courseImageFile,
+                trailer: courseVideoFile
+            }
+
+            await createOverviewCourse([id!, payload])
+        }
     }
 
     return (
@@ -79,10 +96,10 @@ const CourseOverview = memo(() => {
             <div className="flex items-center justify-between border-b-2 border-gray-300 pb-5">
                 <h4 className="text-2xl font-semibold capitalize">Tổng quan khóa học</h4>
                 <div className="flex gap-3">
-                    <Button size="default" variant="destructive" disabled={isSubmitting}>
+                    <Button size="default" variant="destructive" disabled={isPending}>
                         Nhập lại
                     </Button>
-                    <Button type="submit" size="default" disabled={isSubmitting}>
+                    <Button type="submit" size="default" disabled={isPending}>
                         Lưu thông tin
                     </Button>
                 </div>
@@ -120,6 +137,7 @@ const CourseOverview = memo(() => {
                 <div className="flex flex-col gap-2 border-none">
                     <h5 className="text-base font-bold">Mô tả khoá học</h5>
                     <ReactQuill
+                        ref={quillRef}
                         value={getValues('description')}
                         onChange={handleChangeContent}
                         placeholder="Chèn mô tả khoá học"
@@ -136,58 +154,90 @@ const CourseOverview = memo(() => {
                 <div className="flex flex-col gap-2">
                     <h5 className="text-base font-bold">Thông tin cơ bản</h5>
                     <div className="flex items-center gap-5">
-                        <Select
-                            onValueChange={(value) => handleChangeSelect(value, 'level')}
-                            value={getValues('level')}
-                            name="level"
-                        >
-                            <SelectTrigger className="flex w-[290px] items-center justify-between">
-                                <SelectValue placeholder="-- Chọn trình độ --" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectGroup>
-                                    <SelectItem value={CourseLevel.Beginner}>{CourseLevel.Beginner}</SelectItem>
-                                    <SelectItem value={CourseLevel.Intermediate}>{CourseLevel.Intermediate}</SelectItem>
-                                    <SelectItem value={CourseLevel.Master}>{CourseLevel.Master}</SelectItem>
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select>
+                        <div className="flex flex-col gap-1">
+                            <Select
+                                onValueChange={(value) => handleChangeSelect(value, 'level')}
+                                value={getValues('level')}
+                                name="level"
+                            >
+                                <SelectTrigger className="flex w-[290px] items-center justify-between">
+                                    <SelectValue placeholder="-- Chọn trình độ --" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectGroup>
+                                        <SelectItem value={CourseLevel.Beginner}>{CourseLevel.Beginner}</SelectItem>
+                                        <SelectItem value={CourseLevel.Intermediate}>
+                                            {CourseLevel.Intermediate}
+                                        </SelectItem>
+                                        <SelectItem value={CourseLevel.Master}>{CourseLevel.Master}</SelectItem>
+                                    </SelectGroup>
+                                </SelectContent>
+                            </Select>
+                            {errors.level && <div className="text-sm text-red-500">{errors.level.message}</div>}
+                        </div>
 
-                        <Select
-                            onValueChange={(value) => handleChangeSelect(value, 'id_category')}
-                            value={getValues('id_category')}
-                            name="id_category"
-                        >
-                            <SelectTrigger className="flex w-[290px] items-center justify-between">
-                                <SelectValue placeholder="-- Chọn thể loại --" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectGroup>
-                                    <SelectItem value="CNTT">CNTT & Phần mềm</SelectItem>
-                                    <SelectItem value="design">Thiết kế</SelectItem>
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select>
-
-                        <Select
-                            onValueChange={(value) => handleChangeSelect(value, 'sub_id_category')}
-                            value={getValues('sub_id_category')}
-                            name="sub_id_category"
-                        >
-                            <SelectTrigger className="flex w-[290px] items-center justify-between">
-                                <SelectValue placeholder="-- Chọn thể loại con --" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectGroup>
-                                    <SelectItem value="1">CNTT - 1</SelectItem>
-                                    <SelectItem value="2">CNTT - 2</SelectItem>
-                                    <SelectItem value="3">CNTT - 3</SelectItem>
-                                    <SelectItem value="4">CNTT - 4</SelectItem>
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select>
+                        <div className="flex flex-col gap-1">
+                            <Select
+                                onValueChange={(value) => handleChangeSelect(value, 'id_category')}
+                                value={getValues('id_category')}
+                                name="id_category"
+                            >
+                                <SelectTrigger className="flex w-[290px] items-center justify-between">
+                                    <SelectValue placeholder="-- Chọn thể loại --" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectContent side="bottom" align="end">
+                                        <SelectGroup>
+                                            {categories?.map((item) => (
+                                                <SelectItem key={item.id} value={item.id.toString()}>
+                                                    {item.name}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectGroup>
+                                    </SelectContent>
+                                </SelectContent>
+                            </Select>
+                            {errors.id_category && (
+                                <div className="text-sm text-red-500">{errors.id_category.message}</div>
+                            )}
+                        </div>
                     </div>
                 </div>
+
+                {/* Giá khoá học */}
+                {/* <div className="flex flex-col gap-2">
+                    <h5 className="text-base font-bold">Giá khoá học</h5>
+                    <div className="flex items-center gap-5">
+                        <div className="flex h-[60px] w-[350px] flex-col gap-1">
+                            <Input placeholder="Giá khoá học" className="h-full" {...register('price')} />
+                            {errors.price ? (
+                                <div className="text-sm text-red-500">{errors.price.message}</div>
+                            ) : (
+                                <span className="text-xs text-darkGrey">
+                                    Nếu bạn để giá khoá học là 0 thì đây là khoá học miễn phí
+                                </span>
+                            )}
+                        </div>
+                        <div className="flex h-[60px] w-[350px] flex-col gap-1">
+                            <Input placeholder="Giá khuyến mãi" className="h-full" {...register('price_sale')} />
+
+                            <span className="text-xs text-darkGrey">Giá khuyến mãi của khoá học</span>
+                        </div>
+                    </div>
+                </div> */}
+
+                {/* <div className="flex items-center gap-5">
+                    <h5 className="text-base font-bold">Trạng thái khoá học</h5>
+                    <div className="flex items-center gap-5">
+                        <Switch
+                            id="airplane-mode"
+                            {...register('is_active')}
+                            checked={getValues('is_active')}
+                            onChange={(e) => setValue('is_active', (e.target as HTMLInputElement).checked)}
+                        />
+                        <label htmlFor="airplane-mode"></label>
+                    </div>
+                </div> */}
 
                 {/* Hình ảnh khoá học */}
                 <div className="flex flex-col gap-2">

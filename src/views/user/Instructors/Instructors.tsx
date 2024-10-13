@@ -56,8 +56,7 @@ const Instructor = () => {
         <div className="flex flex-col gap-7">
             <FilterBar placeholder="Tìm kiếm người hướng dẫn" />
             <div className="flex flex-wrap gap-10">
-                {data ? (
-                    data?.teachers &&
+                {data?.teachers &&
                     data.teachers.map((item, index) => (
                         <Teacher
                             user_id={item.user_id}
@@ -68,10 +67,7 @@ const Instructor = () => {
                             total_ratings={item.total_ratings}
                             total_courses={item.total_courses}
                         />
-                    ))
-                ) : (
-                    <></>
-                )}
+                    ))}
             </div>
 
             {totalPages > 1 && (

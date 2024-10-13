@@ -15,7 +15,7 @@ function App() {
     useEffect(() => {
         const isLoggedIn = getAccessTokenFromLocalStorage()
         if (isLoggedIn) setIsLogin(!!isLoggedIn)
-    }, [])
+    }, [isLogin])
 
     return (
         <Router>

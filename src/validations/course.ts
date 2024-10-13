@@ -11,7 +11,10 @@ export const courseOverviewSchema = z.object({
     description: z.string({ message: MessageErrors.requiredField }).min(200, MessageErrors.descriptionTooShort),
     level: z.string({ message: MessageErrors.requiredField }),
     id_category: z.string({ message: MessageErrors.requiredField }),
-    sub_id_category: z.string({ message: MessageErrors.requiredField })
+    // price: z.number().min(0),
+    // price_sale: z.number().min(0),
+    tags: z.array(z.string()).optional()
+    // is_active: z.boolean().optional()
 })
 
 export type createNewCourse = z.infer<typeof createNewCourseSchema>

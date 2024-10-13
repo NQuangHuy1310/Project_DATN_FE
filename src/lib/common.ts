@@ -62,3 +62,12 @@ export const validateFileSize = (file: File, fileType: 'image' | 'video'): boole
 
     return true
 }
+
+export const getVisiblePages = (totalPages: number, currentPage: number, maxPages: number) => {
+    const startPage = Math.max(1, currentPage - Math.floor(maxPages / 2))
+    const endPage = Math.min(totalPages, startPage + maxPages - 1)
+
+    const displayPage = Math.max(1, endPage - maxPages + 1)
+
+    return Array.from({ length: endPage - displayPage + 1 }, (_, index) => displayPage + index)
+}

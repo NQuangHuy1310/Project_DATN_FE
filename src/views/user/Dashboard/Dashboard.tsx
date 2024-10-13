@@ -26,7 +26,7 @@ const Dashboard = () => {
                     </div>
                     <div className="w-full">
                         <CarouselContent className="w-full gap-4">
-                            {mockTeachers.map((item, index) => (
+                            {/* {mockTeachers.map((item, index) => (
                                 <CarouselItem key={index} className="w-full min-w-0 basis-full md:basis-[367px]">
                                     <Teacher
                                         key={index}
@@ -39,7 +39,7 @@ const Dashboard = () => {
                                         totalReview={item.totalReview}
                                     />
                                 </CarouselItem>
-                            ))}
+                            ))} */}
                         </CarouselContent>
                     </div>
                 </Carousel>

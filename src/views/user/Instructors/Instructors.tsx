@@ -1,10 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense, lazy } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
-import Teacher from '@/components/shared/Teacher'
-import Loading from '@/components/Common/Loading/Loading'
-import FilterBar from '@/components/shared/FilterBar/FilterBar'
-import NoContent from '@/components/shared/NoContent/NoContent'
 import { getVisiblePages } from '@/lib'
 import {
     Pagination,
@@ -16,6 +12,11 @@ import {
 } from '@/components/ui/pagination'
 
 import { useInstructor } from '@/app/hooks/instructors/useInstructorClient'
+
+const Teacher = lazy(() => import('@/components/shared/Teacher'))
+const Loading = lazy(() => import('@/components/Common/Loading/Loading'))
+const FilterBar = lazy(() => import('@/components/shared/FilterBar/FilterBar'))
+const NoContent = lazy(() => import('@/components/shared/NoContent/NoContent'))
 
 const Instructor = () => {
     const navigate = useNavigate()
@@ -42,77 +43,92 @@ const Instructor = () => {
     }
 
     const totalPages = data?.total_pages || 1
-    const visiblePages = getVisiblePages(totalPages, page, 3)
+    const visiblePages = getVisiblePages(totalPages, page, 5)
 
     if (isLoading) {
-        return <Loading />
-    }
-
-    if (!data) {
-        return <NoContent />
+        return (
+            <Suspense fallback={<div>Loading...</div>}>
+                <Loading />
+            </Suspense>
+        )
     }
 
     return (
         <div className="flex flex-col gap-7">
-            <FilterBar placeholder="Tìm kiếm người hướng dẫn" />
-            <div className="flex flex-wrap gap-10">
-                {data?.teachers &&
-                    data.teachers.map((item, index) => (
-                        <Teacher
-                            user_id={item.user_id}
-                            key={index}
-                            user_name={item.user_name}
-                            user_avatar={item.user_avatar}
-                            average_rating={item.average_rating}
-                            total_ratings={item.total_ratings}
-                            total_courses={item.total_courses}
-                        />
-                    ))}
-            </div>
+            <Suspense fallback={<div>Loading Filter...</div>}>
+                <FilterBar placeholder="Tìm kiếm người hướng dẫn" />
+            </Suspense>
 
-            {totalPages > 1 && (
-                <div className="mt-4 flex justify-center">
-                    <Pagination>
-                        <PaginationContent>
-                            <PaginationItem>
-                                <PaginationPrevious
-                                    onClick={() => handlePageChange(page - 1)}
-                                    className={page === 1 ? 'border' : 'cursor-pointer border bg-darkGrey/90'}
-                                />
-                            </PaginationItem>
+            {data ? (
+                <>
+                    <div className="flex flex-wrap gap-10">
+                        <Suspense fallback={<div>Loading teachers</div>}>
+                            {data?.teachers &&
+                                data.teachers.map((item, index) => (
+                                    <Teacher
+                                        key={index}
+                                        user_id={item.user_id}
+                                        user_name={item.user_name}
+                                        user_avatar={item.user_avatar}
+                                        average_rating={item.average_rating}
+                                        total_ratings={item.total_ratings}
+                                        total_courses={item.total_courses}
+                                    />
+                                ))}
+                        </Suspense>
+                    </div>
 
-                            {visiblePages[0] > 1 && (
-                                <PaginationItem>
-                                    <span className="px-2">...</span>
-                                </PaginationItem>
-                            )}
+                    {totalPages > 1 && (
+                        <div className="mt-4 flex justify-center">
+                            <Pagination>
+                                <PaginationContent>
+                                    <PaginationItem>
+                                        <PaginationPrevious
+                                            onClick={() => handlePageChange(page - 1)}
+                                            className={page === 1 ? 'border' : 'cursor-pointer border bg-darkGrey/90'}
+                                        />
+                                    </PaginationItem>
 
-                            {visiblePages.map((pageNumber: number) => (
-                                <PaginationItem key={pageNumber} className="cursor-pointer">
-                                    <PaginationLink
-                                        isActive={page === pageNumber}
-                                        onClick={() => handlePageChange(pageNumber)}
-                                    >
-                                        {pageNumber}
-                                    </PaginationLink>
-                                </PaginationItem>
-                            ))}
+                                    {visiblePages[0] > 1 && (
+                                        <PaginationItem>
+                                            <span className="px-2">...</span>
+                                        </PaginationItem>
+                                    )}
 
-                            {visiblePages[visiblePages.length - 1] < totalPages && (
-                                <PaginationItem>
-                                    <span className="px-2">...</span>
-                                </PaginationItem>
-                            )}
+                                    {visiblePages.map((pageNumber: number) => (
+                                        <PaginationItem key={pageNumber} className="cursor-pointer">
+                                            <PaginationLink
+                                                isActive={page === pageNumber}
+                                                onClick={() => handlePageChange(pageNumber)}
+                                            >
+                                                {pageNumber}
+                                            </PaginationLink>
+                                        </PaginationItem>
+                                    ))}
 
-                            <PaginationItem>
-                                <PaginationNext
-                                    onClick={() => handlePageChange(page + 1)}
-                                    className={page === totalPages ? 'border' : 'cursor-pointer border bg-darkGrey/90'}
-                                />
-                            </PaginationItem>
-                        </PaginationContent>
-                    </Pagination>
-                </div>
+                                    {visiblePages[visiblePages.length - 1] < totalPages && (
+                                        <PaginationItem>
+                                            <span className="px-2">...</span>
+                                        </PaginationItem>
+                                    )}
+
+                                    <PaginationItem>
+                                        <PaginationNext
+                                            onClick={() => handlePageChange(page + 1)}
+                                            className={
+                                                page === totalPages ? 'border' : 'cursor-pointer border bg-darkGrey/90'
+                                            }
+                                        />
+                                    </PaginationItem>
+                                </PaginationContent>
+                            </Pagination>
+                        </div>
+                    )}
+                </>
+            ) : (
+                <Suspense fallback={<div>Loading dữ liệu...</div>}>
+                    <NoContent />
+                </Suspense>
             )}
         </div>
     )

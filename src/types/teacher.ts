@@ -5,7 +5,7 @@ export interface ITeacher {
     user_avatar: string
     user_name: string
     total_courses: number
-    average_rating: string
+    average_rating: number
     total_ratings: number
     status?: TeacherStatus
 }

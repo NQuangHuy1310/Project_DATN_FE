@@ -5,11 +5,13 @@ import { IAccoutMessage, IMessage } from '@/types/communicate'
 
 export const courses: ICourse[] = [
     {
-        image: 'https://images.unsplash.com/photo-1545235617-9465d2a55698?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        name: 'Lập trình C++ cơ bản, nâng cao',
-        star: 4.5,
-        studentCount: 100,
+        course_id: 1,
+        course_thumbnail:
+            'https://images.unsplash.com/photo-1545235617-9465d2a55698?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        course_name: 'Lập trình C++ cơ bản, nâng cao',
+        total_student: 100,
         totalVideo: 10,
+        average_rating: 4,
         totalTime: '5 giờ',
         level: CourseLevel.Beginner,
         createdBy: {
@@ -22,10 +24,12 @@ export const courses: ICourse[] = [
         }
     },
     {
-        image: 'https://images.unsplash.com/photo-1545235617-9465d2a55698?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        name: 'Xây Dựng Website với ReactJS',
-        star: 4.5,
-        studentCount: 100,
+        course_id: 2,
+        course_thumbnail:
+            'https://images.unsplash.com/photo-1545235617-9465d2a55698?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        course_name: 'Xây Dựng Website với ReactJS',
+        total_student: 100,
+        average_rating: 3.5,
         totalVideo: 10,
         totalTime: '5 giờ',
         level: CourseLevel.Intermediate,
@@ -39,10 +43,12 @@ export const courses: ICourse[] = [
         }
     },
     {
-        image: 'https://images.unsplash.com/photo-1545235617-9465d2a55698?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        name: 'Xây Dựng Website với ReactJS',
-        star: 4.5,
-        studentCount: 100,
+        course_id: 3,
+        course_thumbnail:
+            'https://images.unsplash.com/photo-1545235617-9465d2a55698?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        course_name: 'Xây Dựng Website với ReactJS',
+        total_student: 100,
+        average_rating: 4.5,
         totalVideo: 10,
         totalTime: '5 giờ',
         level: CourseLevel.Intermediate,
@@ -56,10 +62,12 @@ export const courses: ICourse[] = [
         }
     },
     {
-        image: 'https://images.unsplash.com/photo-1545235617-9465d2a55698?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        name: 'Xây Dựng Website với ReactJS',
-        star: 4.5,
-        studentCount: 100,
+        course_id: 4,
+        course_thumbnail:
+            'https://images.unsplash.com/photo-1545235617-9465d2a55698?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        course_name: 'Xây Dựng Website với ReactJS',
+        total_student: 100,
+        average_rating: 5,
         totalVideo: 10,
         totalTime: '5 giờ',
         level: CourseLevel.Intermediate,
@@ -76,39 +84,43 @@ export const courses: ICourse[] = [
 
 export const mockTeachers: ITeacher[] = [
     {
-        image: 'https://images.unsplash.com/photo-1640960543409-dbe56ccc30e2?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        name: 'Nguyễn Quang Huy',
-        job: 'UI UX . Design',
-        totalCourse: 5,
-        reviewStart: 4.5,
-        totalReview: 100,
+        user_id: 1,
+        user_avatar:
+            'https://images.unsplash.com/photo-1640960543409-dbe56ccc30e2?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        user_name: 'Nguyễn Quang Huy',
+        total_courses: 5,
+        average_rating: 4.5,
+        total_ratings: 100,
         status: TeacherStatus.follow
     },
     {
-        image: 'https://images.unsplash.com/photo-1640960543409-dbe56ccc30e2?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        name: 'Nguyễn Quang Huy',
-        job: 'Web developer',
-        totalCourse: 5,
-        reviewStart: 4.5,
-        totalReview: 100,
+        user_id: 2,
+        user_avatar:
+            'https://images.unsplash.com/photo-1640960543409-dbe56ccc30e2?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        user_name: 'Nguyễn Quang Huy',
+        total_courses: 5,
+        average_rating: 4.5,
+        total_ratings: 100,
         status: TeacherStatus.followed
     },
     {
-        image: 'https://images.unsplash.com/photo-1640960543409-dbe56ccc30e2?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        name: 'Nguyễn Quang Huy',
-        job: 'Backend developer',
-        totalCourse: 5,
-        reviewStart: 4.5,
-        totalReview: 100,
+        user_id: 3,
+        user_avatar:
+            'https://images.unsplash.com/photo-1640960543409-dbe56ccc30e2?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        user_name: 'Nguyễn Quang Huy',
+        total_courses: 5,
+        average_rating: 4.5,
+        total_ratings: 100,
         status: TeacherStatus.unFollow
     },
     {
-        image: 'https://images.unsplash.com/photo-1640960543409-dbe56ccc30e2?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        name: 'Nguyễn Quang Huy',
-        job: 'Backend developer',
-        totalCourse: 5,
-        reviewStart: 4.5,
-        totalReview: 100,
+        user_id: 4,
+        user_avatar:
+            'https://images.unsplash.com/photo-1640960543409-dbe56ccc30e2?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        user_name: 'Nguyễn Quang Huy',
+        total_courses: 5,
+        average_rating: 4.5,
+        total_ratings: 100,
         status: TeacherStatus.unFollow
     }
 ]
@@ -193,9 +205,10 @@ export const notificationMessages: INotificationMessage[] = [
 
 export const myCourses: ICourse[] = [
     {
-        image: 'https://i.pinimg.com/564x/ac/27/1d/ac271de883faa03617b212beeda73db3.jpg',
-        name: 'Introduction Basic Programming HTML & CSS',
-        star: 4.5,
+        course_id: 1,
+        course_thumbnail: 'https://i.pinimg.com/564x/ac/27/1d/ac271de883faa03617b212beeda73db3.jpg',
+        course_name: 'Introduction Basic Programming HTML & CSS',
+        average_rating: 4.5,
         level: CourseLevel.Intermediate,
         progressLesson: 66,
         totalLesson: 90,
@@ -209,9 +222,10 @@ export const myCourses: ICourse[] = [
         }
     },
     {
-        image: 'https://i.pinimg.com/564x/ac/27/1d/ac271de883faa03617b212beeda73db3.jpg',
-        name: 'Introduction Basic Programming HTML & CSS',
-        star: 4.7,
+        course_id: 2,
+        course_thumbnail: 'https://i.pinimg.com/564x/ac/27/1d/ac271de883faa03617b212beeda73db3.jpg',
+        course_name: 'Introduction Basic Programming HTML & CSS',
+        average_rating: 4.7,
         level: CourseLevel.Beginner,
         progressLesson: 80,
         totalLesson: 178,
@@ -225,9 +239,10 @@ export const myCourses: ICourse[] = [
         }
     },
     {
-        image: 'https://i.pinimg.com/564x/ac/27/1d/ac271de883faa03617b212beeda73db3.jpg',
-        name: 'Introduction Basic Programming HTML & CSS',
-        star: 4.9,
+        course_id: 3,
+        course_thumbnail: 'https://i.pinimg.com/564x/ac/27/1d/ac271de883faa03617b212beeda73db3.jpg',
+        course_name: 'Introduction Basic Programming HTML & CSS',
+        average_rating: 4.9,
         level: CourseLevel.Master,
         progressLesson: 146,
         totalLesson: 220,
@@ -241,9 +256,10 @@ export const myCourses: ICourse[] = [
         }
     },
     {
-        image: 'https://i.pinimg.com/564x/ac/27/1d/ac271de883faa03617b212beeda73db3.jpg',
-        name: 'Introduction Basic Programming HTML & CSS',
-        star: 4.8,
+        course_id: 4,
+        course_thumbnail: 'https://i.pinimg.com/564x/ac/27/1d/ac271de883faa03617b212beeda73db3.jpg',
+        course_name: 'Introduction Basic Programming HTML & CSS',
+        average_rating: 4.8,
         level: CourseLevel.Intermediate,
         progressLesson: 87,
         totalLesson: 160,
@@ -260,9 +276,10 @@ export const myCourses: ICourse[] = [
 
 export const coursesToday: ICourseToday[] = [
     {
-        image: 'https://i.pinimg.com/564x/ac/27/1d/ac271de883faa03617b212beeda73db3.jpg',
-        name: 'Introduction to UX Design',
-        star: 4.5,
+        course_id: 1,
+        course_thumbnail: 'https://i.pinimg.com/564x/ac/27/1d/ac271de883faa03617b212beeda73db3.jpg',
+        course_name: 'Introduction to UX Design',
+        average_rating: 4.5,
         level: CourseLevel.Beginner,
         module: [
             {
@@ -316,7 +333,7 @@ export const coursesToday: ICourseToday[] = [
                 time: 30
             }
         ],
-        studentCount: 100,
+        total_student: 100,
         totalVideo: 10,
         totalTime: '5 giờ',
         createdBy: {
@@ -329,12 +346,10 @@ export const coursesToday: ICourseToday[] = [
         }
     },
     {
-        image: 'https://i.pinimg.com/564x/ac/27/1d/ac271de883faa03617b212beeda73db3.jpg',
-        name: 'Introduction to UX Design',
-        star: 4.5,
-        studentCount: 100,
-        totalVideo: 10,
-        totalTime: '5 giờ',
+        course_id: 1,
+        course_thumbnail: 'https://i.pinimg.com/564x/ac/27/1d/ac271de883faa03617b212beeda73db3.jpg',
+        course_name: 'Introduction to UX Design',
+        average_rating: 4.5,
         level: CourseLevel.Beginner,
         module: [
             {
@@ -388,6 +403,9 @@ export const coursesToday: ICourseToday[] = [
                 time: 30
             }
         ],
+        total_student: 100,
+        totalVideo: 10,
+        totalTime: '5 giờ',
         createdBy: {
             id: 4,
             name: 'Nguyễn Quang Huy',

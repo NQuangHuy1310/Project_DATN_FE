@@ -12,13 +12,14 @@ const CourseSearch = () => {
                     courses.map((item, index) => (
                         <Course
                             key={index}
-                            name={item.name}
-                            image={item.image}
+                            course_id={item.course_id}
+                            course_name={item.course_name}
+                            course_thumbnail={item.course_thumbnail}
                             createdBy={item.createdBy}
                             level={item.level}
-                            star={item.star}
+                            average_rating={item.average_rating}
                             totalTime={item.totalTime}
-                            studentCount={item.studentCount}
+                            total_student={item.total_student}
                             totalVideo={item.totalVideo}
                         />
                     ))}

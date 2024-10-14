@@ -1,24 +1,37 @@
+import { Suspense, lazy } from 'react'
 import { IoIosStar } from 'react-icons/io'
 import { MdListAlt } from 'react-icons/md'
 
-import Course from '@/components/shared/Course'
-import Loading from '@/components/Common/Loading/Loading'
-import FilterBar from '@/components/shared/FilterBar/FilterBar'
-import NoContent from '@/components/shared/NoContent/NoContent'
-import { Button } from '@/components/ui/button'
 import { getUrlParams } from '@/components/Common/GetUrlParam/getUrlParams'
+import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { useInstructorById } from '@/app/hooks/instructors/useInstructorClient'
+
+// Lazy load các component
+const Course = lazy(() => import('@/components/shared/Course'))
+const Loading = lazy(() => import('@/components/Common/Loading/Loading'))
+const FilterBar = lazy(() => import('@/components/shared/FilterBar/FilterBar'))
+const NoContent = lazy(() => import('@/components/shared/NoContent/NoContent'))
 
 const InstructorDetail = () => {
     const id = getUrlParams('id')
     const instructorId = id ? parseInt(id, 10) : NaN
     const { data, isLoading } = useInstructorById(instructorId)
 
-    if (isLoading) return <Loading />
+    if (isLoading) {
+        return (
+            <Suspense fallback={<div>Loading...</div>}>
+                <Loading />
+            </Suspense>
+        )
+    }
 
     if (!data) {
-        return <NoContent />
+        return (
+            <Suspense fallback={<div>Loading No Content...</div>}>
+                <NoContent />
+            </Suspense>
+        )
     }
 
     return (
@@ -55,25 +68,35 @@ const InstructorDetail = () => {
                         </Button>
                     </div>
                 </div>
-                <FilterBar placeholder="Tìm kiếm người hướng dẫn" lever />
+
+                <Suspense fallback={<div>Loading Filter Bar...</div>}>
+                    <FilterBar placeholder="Tìm kiếm người hướng dẫn" lever />
+                </Suspense>
             </div>
+
             <div className="flex flex-wrap justify-center gap-5 md:justify-start">
-                {data?.dataCourses &&
-                    data?.dataCourses.length > 0 &&
-                    data?.dataCourses.map((item, index) => (
-                        <Course
-                            key={index}
-                            course_id={item.course_id}
-                            course_name={item.course_name}
-                            course_thumbnail={item.course_thumbnail}
-                            createdBy={item.createdBy}
-                            level={item.level}
-                            average_rating={item.average_rating}
-                            totalTime={item.totalTime}
-                            total_student={item.total_student}
-                            totalVideo={item.totalVideo}
-                        />
-                    ))}
+                <Suspense fallback={<div>Loading Courses...</div>}>
+                    {data?.dataCourses ? (
+                        data.dataCourses.map((item, index) => (
+                            <Course
+                                key={index}
+                                course_id={item.course_id}
+                                course_name={item.course_name}
+                                course_thumbnail={item.course_thumbnail}
+                                createdBy={item.createdBy}
+                                level={item.level}
+                                average_rating={item.average_rating}
+                                totalTime={item.totalTime}
+                                total_student={item.total_student}
+                                totalVideo={item.totalVideo}
+                            />
+                        ))
+                    ) : (
+                        <Suspense fallback={<div>Loading No Content...</div>}>
+                            <NoContent />
+                        </Suspense>
+                    )}
+                </Suspense>
             </div>
         </div>
     )

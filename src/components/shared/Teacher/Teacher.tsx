@@ -18,7 +18,7 @@ const Teacher = ({
     status,
     user_id
 }: ITeacher) => {
-    const detailInstructorUrl = routes.instructorDetail.replace(':id', user_id.toString())
+    const detailInstructorUrl = user_id ? routes.instructorDetail.replace(':id', user_id.toString()) : ''
     return (
         <Link
             to={`${detailInstructorUrl}`}

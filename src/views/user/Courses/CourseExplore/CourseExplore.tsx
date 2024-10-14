@@ -15,13 +15,12 @@ const CoursesExplore = () => {
                         mockTeachers.map((item, index) => (
                             <Teacher
                                 key={index}
-                                name={item.name}
-                                image={item.image}
-                                job={item.job}
-                                reviewStart={item.reviewStart}
-                                totalCourse={item.totalCourse}
-                                totalReview={item.totalCourse}
-                                status={item.status}
+                                user_id={item.user_id}
+                                user_name={item.user_name}
+                                user_avatar={item.user_avatar}
+                                average_rating={item.average_rating}
+                                total_ratings={item.total_ratings}
+                                total_courses={item.total_courses}
                             />
                         ))}
                 </div>
@@ -34,13 +33,14 @@ const CoursesExplore = () => {
                         courses.map((item, index) => (
                             <Course
                                 key={index}
-                                name={item.name}
-                                image={item.image}
+                                course_id={item.course_id}
+                                course_name={item.course_name}
+                                course_thumbnail={item.course_thumbnail}
                                 createdBy={item.createdBy}
                                 level={item.level}
-                                star={item.star}
+                                average_rating={item.average_rating}
                                 totalTime={item.totalTime}
-                                studentCount={item.studentCount}
+                                total_student={item.total_student}
                                 totalVideo={item.totalVideo}
                             />
                         ))}

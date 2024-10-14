@@ -26,20 +26,20 @@ const Dashboard = () => {
                     </div>
                     <div className="w-full">
                         <CarouselContent className="w-full gap-4">
-                            {/* {mockTeachers.map((item, index) => (
+                            {mockTeachers.map((item, index) => (
                                 <CarouselItem key={index} className="w-full min-w-0 basis-full md:basis-[367px]">
                                     <Teacher
                                         key={index}
-                                        name={item.name}
-                                        image={item.image}
-                                        job={item.job}
-                                        reviewStart={item.reviewStart}
+                                        user_id={item.user_id}
+                                        user_name={item.user_name}
+                                        user_avatar={item.user_avatar}
+                                        average_rating={item.average_rating}
                                         status={item.status}
-                                        totalCourse={item.totalCourse}
-                                        totalReview={item.totalReview}
+                                        total_courses={item.total_courses}
+                                        total_ratings={item.total_ratings}
                                     />
                                 </CarouselItem>
-                            ))} */}
+                            ))}
                         </CarouselContent>
                     </div>
                 </Carousel>
@@ -63,13 +63,14 @@ const Dashboard = () => {
                                 <CarouselItem key={index} className="w-full min-w-0 basis-full md:basis-[367px]">
                                     <Course
                                         key={index}
-                                        name={item.name}
-                                        image={item.image}
+                                        course_id={item.course_id}
+                                        course_name={item.course_name}
+                                        course_thumbnail={item.course_thumbnail}
                                         createdBy={item.createdBy}
                                         level={item.level}
-                                        star={item.star}
+                                        average_rating={item.average_rating}
                                         totalTime={item.totalTime}
-                                        studentCount={item.studentCount}
+                                        total_student={item.total_student}
                                         totalVideo={item.totalVideo}
                                     />
                                 </CarouselItem>
@@ -98,13 +99,14 @@ const Dashboard = () => {
                                 <CarouselItem key={index} className="w-full min-w-0 basis-full !p-0">
                                     <CourseToday
                                         key={index}
-                                        name={item.name}
-                                        image={item.image}
+                                        course_id={item.course_id}
+                                        course_name={item.course_name}
+                                        course_thumbnail={item.course_thumbnail}
                                         createdBy={item.createdBy}
                                         level={item.level}
-                                        star={item.star}
                                         module={item.module}
-                                        studentCount={item.studentCount}
+                                        average_rating={item.average_rating}
+                                        total_student={item.total_student}
                                         totalTime={item.totalTime}
                                         totalVideo={item.totalVideo}
                                     />

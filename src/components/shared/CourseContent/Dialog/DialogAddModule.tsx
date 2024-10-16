@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from 'react'
+import { Dispatch, SetStateAction, useEffect } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
@@ -12,14 +12,16 @@ import { Button } from '@/components/ui/button'
 interface DialogAddModuleProps {
     id: string
     openDialog: boolean
+    selectedData: { name: string; description: string } | undefined
     setOpenDialog: Dispatch<SetStateAction<boolean>>
 }
 
-const DialogAddModule = ({ id, openDialog, setOpenDialog }: DialogAddModuleProps) => {
+const DialogAddModule = ({ id, openDialog, setOpenDialog, selectedData }: DialogAddModuleProps) => {
     const {
         register,
         handleSubmit,
         reset,
+        setValue,
         formState: { isSubmitting, errors }
     } = useForm<courseModule>({
         resolver: zodResolver(courseModuleSchema)
@@ -27,15 +29,28 @@ const DialogAddModule = ({ id, openDialog, setOpenDialog }: DialogAddModuleProps
 
     const { mutateAsync: createModule } = useCreateModule()
 
+    useEffect(() => {
+        if (openDialog && selectedData) {
+            setValue('title', selectedData.name)
+            setValue('description', selectedData.description)
+        } else {
+            reset()
+        }
+    }, [openDialog, setValue, reset, selectedData])
+
     const handleSubmitForm: SubmitHandler<courseModule> = async (data) => {
-        await createModule([id, data])
-        reset()
-        setOpenDialog(false)
+        if (selectedData) {
+            // handle update
+        } else {
+            await createModule([id, data])
+            reset()
+            setOpenDialog(false)
+        }
     }
 
     return (
         <Dialog open={openDialog} onOpenChange={setOpenDialog}>
-            <DialogContent className="sm:max-w-[650px]">
+            <DialogContent className="sm:max-w-[650px]" aria-describedby={undefined}>
                 <form onSubmit={handleSubmit(handleSubmitForm)}>
                     <DialogHeader>
                         <DialogTitle>Tạo chương mới</DialogTitle>
@@ -48,6 +63,7 @@ const DialogAddModule = ({ id, openDialog, setOpenDialog }: DialogAddModuleProps
                                 autoFocus
                                 type="text"
                                 placeholder="Nội dung tiêu đề"
+                                className="h-[45px]"
                                 {...register('title')}
                             />
                             {errors.title && <div className="text-sm text-secondaryRed">{errors.title.message}</div>}

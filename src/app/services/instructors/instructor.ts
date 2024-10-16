@@ -5,6 +5,7 @@ import {
     ICreateCourse,
     ICreateCourseData,
     ILessonDocData,
+    ILessonVideoData,
     IModule,
     IModuleData,
     IOverviewCourseData,
@@ -51,5 +52,14 @@ export const instructorApi = {
     },
     deleteLessonDoc: async (lessonId: number): Promise<any> => {
         return axiosClient.delete(instructorUri.DELETE_LESSON_DOC(lessonId))
+    },
+
+    // Api create lesson type video
+    createLessonVideo: async (moduleId: number, lessonData: ILessonVideoData): Promise<any> => {
+        return axiosClient.post(instructorUri.CREATE_LESSON_VIDEO(moduleId), lessonData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
     }
 }

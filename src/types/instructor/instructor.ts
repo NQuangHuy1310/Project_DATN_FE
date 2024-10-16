@@ -104,3 +104,12 @@ export interface ILessonDocData {
     title: string
     content: string
 }
+
+export interface ILessonVideoData {
+    title: string
+    description: string
+    check: 'url' | 'upload' | undefined
+    video?: File
+    video_youtube_id?: string
+    duration: number
+}

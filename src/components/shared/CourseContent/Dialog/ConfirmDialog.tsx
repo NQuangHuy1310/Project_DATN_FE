@@ -8,27 +8,36 @@ import {
     AlertDialogHeader,
     AlertDialogTitle
 } from '@/components/ui/alert-dialog'
+import { Dispatch, SetStateAction } from 'react'
+
+interface ConfirmDialogProps {
+    title: string
+    isPending: boolean
+    description: string
+    confirmDialog: boolean
+    setConfirmDialog: Dispatch<SetStateAction<boolean>>
+    handleDeleteModule: () => void
+}
 
 const ConfirmDialog = ({
+    title,
     isPending,
+    description,
     confirmDialog,
+    setConfirmDialog,
     handleDeleteModule
-}: {
-    isPending: boolean
-    confirmDialog: boolean
-    handleDeleteModule: () => void
-}) => {
+}: ConfirmDialogProps) => {
     return (
-        <AlertDialog open={confirmDialog}>
+        <AlertDialog open={confirmDialog} onOpenChange={setConfirmDialog}>
             <AlertDialogContent>
                 <AlertDialogHeader>
-                    <AlertDialogTitle>Xoá nhận xoá chương</AlertDialogTitle>
-                    <AlertDialogDescription>
-                        Bạn sắp xóa một chương trình giảng dạy. Bạn có chắc chắn muốn tiếp tục không?
-                    </AlertDialogDescription>
+                    <AlertDialogTitle>{title}</AlertDialogTitle>
+                    <AlertDialogDescription>{description}</AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                    <AlertDialogCancel disabled={isPending}>Huỷ</AlertDialogCancel>
+                    <AlertDialogCancel disabled={isPending} onClick={() => setConfirmDialog(false)}>
+                        Huỷ
+                    </AlertDialogCancel>
                     <AlertDialogAction onClick={handleDeleteModule} disabled={isPending}>
                         Xoá
                     </AlertDialogAction>

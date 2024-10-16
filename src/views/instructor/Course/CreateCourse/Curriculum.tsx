@@ -12,6 +12,12 @@ const Curriculum = memo(() => {
     const { id } = useParams()
     const { data: moduleData, isLoading } = useGetModule(id!)
     const [openDialog, setOpenDialog] = useState(false)
+    const [selectedItem, setSelectedItem] = useState<{ name: string; description: string }>()
+
+    const handleChangeModule = (value: { name: string; description: string }) => {
+        setOpenDialog(true)
+        setSelectedItem(value)
+    }
 
     if (isLoading) {
         return <Loading />
@@ -27,14 +33,24 @@ const Curriculum = memo(() => {
                 {moduleData &&
                     moduleData.modules &&
                     moduleData.modules.map((item) => (
-                        <CourseContent key={item.id} name={item.title} id={item.id} lessons={item.lessons} />
+                        <CourseContent
+                            id={item.id}
+                            key={item.id}
+                            name={item.title}
+                            lessons={item.lessons}
+                            description={item.description}
+                            handleSelectedItem={handleChangeModule}
+                        />
                     ))}
 
                 <div>
                     <Button
                         className="flex items-center gap-1 text-muted-foreground"
                         variant="outline"
-                        onClick={() => setOpenDialog(true)}
+                        onClick={() => {
+                            setOpenDialog(true)
+                            setSelectedItem(undefined)
+                        }}
                     >
                         <FiPlus className="size-4 text-muted-foreground" /> Thêm chương
                     </Button>
@@ -42,7 +58,12 @@ const Curriculum = memo(() => {
             </div>
 
             {/* Dialog add module */}
-            <DialogAddModule id={id!} openDialog={openDialog} setOpenDialog={setOpenDialog} />
+            <DialogAddModule
+                id={id!}
+                openDialog={openDialog}
+                setOpenDialog={setOpenDialog}
+                selectedData={selectedItem}
+            />
         </div>
     )
 })

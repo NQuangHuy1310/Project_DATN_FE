@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState } from 'react'
 import { FiPlus } from 'react-icons/fi'
 import { FaBars, FaPen, FaRegTrashAlt } from 'react-icons/fa'
@@ -9,7 +10,19 @@ import LessonItem from '@/components/shared/CourseContent/LessonItem'
 import LessonOptions from '@/components/shared/CourseContent/LessonOptions'
 import ConfirmDialog from '@/components/shared/CourseContent/Dialog/ConfirmDialog'
 
-const CourseContent = ({ name, id, lessons }: { name: string; id: number; lessons: ILesson[] }) => {
+const CourseContent = ({
+    name,
+    id,
+    lessons,
+    handleSelectedItem,
+    description
+}: {
+    name: string
+    id: number
+    lessons: ILesson[]
+    description: string
+    handleSelectedItem: (item: { name: string; description: string }) => void
+}) => {
     const { mutateAsync: deleteModule, isPending } = useDeleteModule()
 
     const [confirmDialog, setConfirmDialog] = useState(false)
@@ -28,7 +41,10 @@ const CourseContent = ({ name, id, lessons }: { name: string; id: number; lesson
                         <div className="flex items-center gap-4">
                             <h5 className="text-base font-semibold">Tên chương: {name}</h5>
                             <div className="hidden gap-4 group-hover:flex">
-                                <FaPen className="size-4 cursor-pointer" />
+                                <div className="" onClick={() => handleSelectedItem({ name, description })}>
+                                    <FaPen className="size-4 cursor-pointer" />
+                                </div>
+
                                 <FaRegTrashAlt
                                     className="size-4 cursor-pointer hover:text-black"
                                     onClick={() => setConfirmDialog(true)}
@@ -65,9 +81,12 @@ const CourseContent = ({ name, id, lessons }: { name: string; id: number; lesson
 
             {/* Confirm dialog */}
             <ConfirmDialog
-                confirmDialog={confirmDialog}
-                handleDeleteModule={handleDeleteModule}
                 isPending={isPending}
+                confirmDialog={confirmDialog}
+                setConfirmDialog={setConfirmDialog}
+                handleDeleteModule={handleDeleteModule}
+                title="Xoá chương trong khoá học"
+                description="Bạn sắp xóa một chương trình giảng dạy. Bạn có chắc chắn muốn tiếp tục không?"
             />
         </>
     )

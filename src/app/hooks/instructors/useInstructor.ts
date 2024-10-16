@@ -1,7 +1,15 @@
 import { toast } from 'sonner'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient, UseQueryOptions } from '@tanstack/react-query'
 
-import { ICreateCourseData, IOverviewCourseData, ITargetCourse } from '@/types/instructor'
+import {
+    ICreateCourseData,
+    ILessonDocData,
+    IModule,
+    IModuleData,
+    IModules,
+    IOverviewCourseData,
+    ITargetCourse
+} from '@/types/instructor'
 import { instructorApi } from '@/app/services/instructors'
 
 export const useCreateCourse = () => {
@@ -31,3 +39,54 @@ export const useOverviewCourse = () => {
         }
     })
 }
+
+export const useCreateModule = () => {
+    const queryClient = useQueryClient()
+
+    return useMutation<IModule, Error, [string, IModuleData]>({
+        mutationFn: async ([courseId, courseData]) => {
+            return instructorApi.createModule(courseId, courseData)
+        },
+        onSuccess() {
+            queryClient.invalidateQueries({ queryKey: ['modules'] })
+        }
+    })
+}
+
+export const useGetModule = (id: string, options?: Omit<UseQueryOptions<IModules>, 'queryKey' | 'queryFn'>) => {
+    return useQuery({
+        ...options,
+        queryKey: ['modules', id],
+        queryFn: () => instructorApi.getModule(id)
+    })
+}
+
+export const useDeleteModule = () => {
+    const queryClient = useQueryClient()
+
+    return useMutation({
+        mutationFn: async (moduleId: string) => {
+            return instructorApi.deleteModule(moduleId)
+        },
+        onSuccess() {
+            queryClient.invalidateQueries({ queryKey: ['modules'] })
+        }
+    })
+}
+
+export const useCreateLessonDoc = () => {
+    const queryClient = useQueryClient()
+
+    return useMutation<any, Error, [number, ILessonDocData]>({
+        mutationFn: async ([lessonId, lessonData]) => {
+            return instructorApi.createLessonDoc(lessonId, lessonData)
+        },
+        onSuccess() {
+            queryClient.invalidateQueries({ queryKey: ['modules'] })
+        }
+    })
+}
+
+export const useUpdateLessonDoc = () => {}
+
+export const useDeleteLessonDoc = () => {}

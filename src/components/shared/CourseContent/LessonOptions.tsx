@@ -11,7 +11,7 @@ import { lessonOptions } from '@/constants'
 
 type lessonTypes = 'video' | 'document' | 'quizzes' | 'coding'
 
-const LessonOptions = ({ handleClose }: { handleClose: (value: boolean) => void }) => {
+const LessonOptions = ({ handleClose, moduleId }: { handleClose: (value: boolean) => void; moduleId: number }) => {
     const [isShowLesson, setIsShowLesson] = useState(false)
     const [lessonType, setLessonType] = useState<lessonTypes | undefined>(undefined)
 
@@ -38,10 +38,13 @@ const LessonOptions = ({ handleClose }: { handleClose: (value: boolean) => void 
                     <IoClose className="size-5 cursor-pointer" />
                 </div>
             </div>
+
             {isShowLesson && (
                 <>
                     {lessonType === 'video' && <LessonVideo />}
-                    {lessonType === 'document' && <LessonDocument />}
+                    {lessonType === 'document' && (
+                        <LessonDocument moduleId={moduleId} handleHiddenLesson={setIsShowLesson} />
+                    )}
                     {lessonType === 'quizzes' && <LessonQuizzes />}
                     {lessonType === 'coding' && <LessonCoding />}
                 </>

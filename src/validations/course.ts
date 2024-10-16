@@ -17,6 +17,20 @@ export const courseOverviewSchema = z.object({
     // is_active: z.boolean().optional()
 })
 
+export const courseModuleSchema = z.object({
+    title: z.string().min(1, MessageErrors.requiredField),
+    description: z.string().min(1, MessageErrors.requiredField)
+})
+
+export const lessonDocSchema = z.object({
+    title: z.string().min(1, MessageErrors.requiredField),
+    content: z.string({ message: MessageErrors.requiredField })
+})
+
 export type createNewCourse = z.infer<typeof createNewCourseSchema>
 
 export type courseOverview = z.infer<typeof courseOverviewSchema>
+
+export type courseModule = z.infer<typeof courseModuleSchema>
+
+export type lessonDoc = z.infer<typeof lessonDocSchema>

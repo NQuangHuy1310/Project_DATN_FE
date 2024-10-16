@@ -119,14 +119,14 @@ const StudentGoals = memo(() => {
                     </div>
                     <div className="flex flex-col gap-3">
                         {inputs.goals.map((input, index) => (
-                            <div className="group relative" key={index}>
+                            <div className="group relative max-w-[80%]" key={index}>
                                 <Input
                                     placeholder={input.placeholder}
                                     maxLength={160}
                                     value={input.value}
                                     onChange={(e) => handleChange(e.target.value, index, 'goals')}
                                     type="text"
-                                    className="max-w-[80%] pr-[50px]"
+                                    className="w-full pr-[50px]"
                                 />
                                 {!!input.value && (
                                     <Button
@@ -166,14 +166,14 @@ const StudentGoals = memo(() => {
                     </div>
                     <div className="flex flex-col gap-3">
                         {inputs.conditions.map((input, index) => (
-                            <div className="group relative" key={index}>
+                            <div className="group relative max-w-[80%]" key={index}>
                                 <Input
                                     placeholder={input.placeholder}
                                     maxLength={160}
                                     value={input.value}
                                     onChange={(e) => handleChange(e.target.value, index, 'conditions')}
                                     type="text"
-                                    className="max-w-[80%] pr-[50px]"
+                                    className="w-full pr-[50px]"
                                 />
                                 {!!input.value && (
                                     <Button
@@ -211,14 +211,14 @@ const StudentGoals = memo(() => {
                     </div>
                     <div className="flex flex-col gap-3">
                         {inputs.audiences.map((input, index) => (
-                            <div className="group relative" key={index}>
+                            <div className="group relative max-w-[80%]" key={index}>
                                 <Input
                                     placeholder={input.placeholder}
                                     maxLength={160}
                                     value={input.value}
                                     onChange={(e) => handleChange(e.target.value, index, 'audiences')}
                                     type="text"
-                                    className="max-w-[80%] pr-[50px]"
+                                    className="w-full pr-[50px]"
                                 />
                                 {!!input.value && (
                                     <Button

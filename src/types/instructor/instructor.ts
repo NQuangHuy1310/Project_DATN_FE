@@ -38,7 +38,30 @@ export interface IOverviewCourse {
     updated_at: string
 }
 
-// Request
+export interface ILesson {
+    id: number
+    id_module: number
+    title: string
+    description: string
+    content_type: 'document' | 'video'
+    position: number
+    is_active: number
+}
+
+export interface IModule {
+    id: number
+    id_course: number
+    position: number
+    title: string
+    description: string
+    lessons: ILesson[]
+}
+
+export interface IModules {
+    modules: IModule[]
+}
+
+// ----------------------------- Request
 export interface ICreateCourseData {
     name: string
     id_category: string
@@ -70,4 +93,14 @@ export interface IOverviewCourseData {
     price_sale?: number
     is_active?: number
     tags?: string[]
+}
+
+export interface IModuleData {
+    title: string
+    description: string
+}
+
+export interface ILessonDocData {
+    title: string
+    content: string
 }

@@ -29,6 +29,9 @@ const routes = {
     accountSettings: '/account/settings',
     accountNotifications: '/account/notifications',
 
+    // wallet
+    wallet: '/wallet',
+
     // Post management routes
     posts: '/posts',
     newPost: '/posts/new',

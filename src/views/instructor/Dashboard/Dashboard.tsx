@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
 import { useGetCategories } from '@/app/hooks/categories'
-import { useCreateCourse } from '@/app/hooks/instructors/useInstructor'
+import { useCreateCourse, useGetCourses } from '@/app/hooks/instructors/useInstructor'
 
 import routes from '@/configs/routes'
 import { Input } from '@/components/ui/input'
@@ -21,6 +21,7 @@ import {
     DialogTitle
 } from '@/components/ui/dialog'
 import { createNewCourse, createNewCourseSchema } from '@/validations'
+import Loading from '@/components/Common/Loading/Loading'
 
 const Dashboard = () => {
     const {
@@ -35,6 +36,7 @@ const Dashboard = () => {
     const navigate = useNavigate()
     const createNewCourse = useCreateCourse()
     const { data: categories } = useGetCategories()
+    const { data: courseData, isLoading } = useGetCourses()
     const [openDialog, setOpenDialog] = useState(false)
     const [selectedCategory, setSelectedCategory] = useState<string | undefined>()
 
@@ -57,6 +59,10 @@ const Dashboard = () => {
                 {item.name}
             </SelectItem>
         ))
+
+    if (isLoading) {
+        return <Loading />
+    }
 
     return (
         <>
@@ -93,7 +99,7 @@ const Dashboard = () => {
                         Tạo khoá học mới
                     </Button>
                 </div>
-                <CourseCard />
+                {courseData?.data.map((item) => <CourseCard key={item.id} {...item} />)}
             </div>
 
             {/* Dialog add course */}

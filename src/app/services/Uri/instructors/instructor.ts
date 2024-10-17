@@ -2,6 +2,8 @@ const INSTRUCTOR_URL = 'teacher/manage/'
 
 export const instructorUri = {
     CREATE_COURSE: 'teacher/course',
+    GET_COURSES: 'teacher/course',
+    SUBMIT_COURSE: (courseID: string) => `${INSTRUCTOR_URL}${courseID}/submit`,
     TARGET_COURSE: (courseId: string) => `${INSTRUCTOR_URL}${courseId}/target-student`,
     OVERVIEW_COURSE: (courseId: string) => `${INSTRUCTOR_URL}${courseId}/overview`,
 

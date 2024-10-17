@@ -1,7 +1,7 @@
 import { toast } from 'sonner'
 import ReactQuill from 'react-quill'
 import { useParams } from 'react-router-dom'
-import { memo, useRef, useState } from 'react'
+import { memo, useEffect, useRef, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
@@ -9,12 +9,13 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import placeholder from '@/assets/placeholder.jpg'
 import { CourseLevel, MessageErrors } from '@/constants'
-import { readFileAsDataUrl, validateFileSize } from '@/lib'
+import { getImagesUrl, readFileAsDataUrl, validateFileSize } from '@/lib'
 import { courseOverview, courseOverviewSchema } from '@/validations'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useGetCategories } from '@/app/hooks/categories'
-import { useOverviewCourse } from '@/app/hooks/instructors/useInstructor'
+import { useGetOverviewCourse, useOverviewCourse } from '@/app/hooks/instructors/useInstructor'
 import { IOverviewCourseData } from '@/types/instructor'
+import Loading from '@/components/Common/Loading/Loading'
 
 const CourseOverview = memo(() => {
     const {
@@ -27,6 +28,7 @@ const CourseOverview = memo(() => {
 
     const { id } = useParams()
     const { data: categories } = useGetCategories()
+    const { data, isPending: loadingOverviewCourse } = useGetOverviewCourse(id!)
     const { mutateAsync: createOverviewCourse, isPending } = useOverviewCourse()
 
     const [courseImageFile, setCourseImageFile] = useState<File>()
@@ -84,11 +86,30 @@ const CourseOverview = memo(() => {
             const payload: IOverviewCourseData = {
                 ...data,
                 thumbnail: courseImageFile,
-                trailer: courseVideoFile
+                trailer: courseVideoFile,
+                _method: 'PUT'
             }
 
             await createOverviewCourse([id!, payload])
         }
+    }
+
+    useEffect(() => {
+        if (data) {
+            const imagePath = getImagesUrl(data?.thumbnail ?? '')
+            const videoPath = getImagesUrl(data?.trailer ?? '')
+
+            setValue('name', data.name)
+            setValue('description', data.description ?? '')
+            setValue('level', data.level)
+            setValue('id_category', data.category.id.toString())
+            setCourseImagePath(imagePath)
+            setCourseVideoPath(videoPath)
+        }
+    }, [data, setValue])
+
+    if (loadingOverviewCourse) {
+        return <Loading />
     }
 
     return (

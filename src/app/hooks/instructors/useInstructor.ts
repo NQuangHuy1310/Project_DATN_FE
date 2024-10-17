@@ -2,12 +2,14 @@ import { toast } from 'sonner'
 import { useMutation, useQuery, useQueryClient, UseQueryOptions } from '@tanstack/react-query'
 
 import {
+    ICourses,
     ICreateCourseData,
     ILessonDocData,
     ILessonVideoData,
     IModule,
     IModuleData,
     IModules,
+    IOverviewCourse,
     IOverviewCourseData,
     ITargetCourse
 } from '@/types/instructor'
@@ -19,23 +21,68 @@ export const useCreateCourse = () => {
     })
 }
 
+export const useGetCourses = (options?: Omit<UseQueryOptions<ICourses>, 'queryKey' | 'queryFn'>) => {
+    return useQuery({
+        ...options,
+        queryKey: ['instructorCourse'],
+        queryFn: instructorApi.getCourses
+    })
+}
+
+export const useSubmitCourse = () => {
+    return useMutation({
+        mutationFn: async (courseID: string) => {
+            return instructorApi.submitCourse(courseID)
+        },
+        onSuccess() {
+            toast.success('Bạn đã gửi thông tin khoá học đi thành công!')
+        }
+    })
+}
+
 export const useTargetCourse = () => {
+    const queryClient = useQueryClient()
     return useMutation<ITargetCourse, Error, [string, ITargetCourse]>({
         mutationFn: async ([courseId, courseData]) => {
             return instructorApi.targetCourse(courseId, courseData)
         },
         onSuccess() {
+            queryClient.invalidateQueries({ queryKey: ['targetCourse'] })
             toast.success('Cập nhật thông tin khoá học thành công thành công!')
         }
     })
 }
 
+export const useGetTargetCourse = (
+    id: string,
+    options?: Omit<UseQueryOptions<ITargetCourse>, 'queryKey' | 'queryFn'>
+) => {
+    return useQuery({
+        ...options,
+        queryKey: ['targetCourse', id],
+        queryFn: () => instructorApi.getTargetCourse(id)
+    })
+}
+
+export const useGetOverviewCourse = (
+    id: string,
+    options?: Omit<UseQueryOptions<IOverviewCourse>, 'queryKey' | 'queryFn'>
+) => {
+    return useQuery({
+        ...options,
+        queryKey: ['overviewCourse', id],
+        queryFn: () => instructorApi.getOverviewCourse(id)
+    })
+}
+
 export const useOverviewCourse = () => {
+    const queryClient = useQueryClient()
     return useMutation<IOverviewCourseData, Error, [string, IOverviewCourseData]>({
         mutationFn: async ([courseId, courseData]) => {
             return instructorApi.courseOverview(courseId, courseData)
         },
         onSuccess() {
+            queryClient.invalidateQueries({ queryKey: ['overviewCourse'] })
             toast.success('Cập nhật thông tin khoá học thành công!')
         }
     })

@@ -2,6 +2,7 @@ import axiosClient from '@/configs/axiosClient'
 
 import { instructorUri } from '@/app/services/Uri/instructors'
 import {
+    ICourses,
     ICreateCourse,
     ICreateCourseData,
     ILessonDocData,
@@ -16,17 +17,25 @@ export const instructorApi = {
     createCourse: async (courseData: ICreateCourseData): Promise<ICreateCourse> => {
         return axiosClient.post(instructorUri.CREATE_COURSE, courseData)
     },
+    getCourses: async (): Promise<ICourses> => {
+        return axiosClient.get(instructorUri.GET_COURSES)
+    },
+    submitCourse: async (courseID: string): Promise<any> => {
+        return axiosClient.post(instructorUri.SUBMIT_COURSE(courseID), {})
+    },
+
     targetCourse: async (courseId: string, courseData: ITargetCourse): Promise<ITargetCourse> => {
-        return axiosClient.put(instructorUri.TARGET_COURSE(courseId), courseData, {
-            method: 'PUT'
-        })
+        return axiosClient.post(instructorUri.TARGET_COURSE(courseId), courseData)
     },
     courseOverview: async (courseId: string, courseData: IOverviewCourseData): Promise<any> => {
-        return axiosClient.put(instructorUri.OVERVIEW_COURSE(courseId), courseData, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        })
+        return axiosClient.post(instructorUri.OVERVIEW_COURSE(courseId), courseData)
+    },
+
+    getTargetCourse: async (courseId: string): Promise<any> => {
+        return axiosClient.get(instructorUri.TARGET_COURSE(courseId))
+    },
+    getOverviewCourse: async (courseId: string): Promise<any> => {
+        return axiosClient.get(instructorUri.OVERVIEW_COURSE(courseId))
     },
 
     // Api module
@@ -56,10 +65,6 @@ export const instructorApi = {
 
     // Api create lesson type video
     createLessonVideo: async (moduleId: number, lessonData: ILessonVideoData): Promise<any> => {
-        return axiosClient.post(instructorUri.CREATE_LESSON_VIDEO(moduleId), lessonData, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        })
+        return axiosClient.post(instructorUri.CREATE_LESSON_VIDEO(moduleId), lessonData)
     }
 }

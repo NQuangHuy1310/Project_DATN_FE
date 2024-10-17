@@ -103,8 +103,14 @@ const Dashboard = () => {
                 {courseData && courseData?.data.length > 0 ? (
                     courseData?.data.map((item) => <CourseCard key={item.id} {...item} />)
                 ) : (
-                    <div className="flex items-start justify-center">
+                    <div className="flex flex-col items-center justify-center gap-2">
                         <img src={noContent} alt="" />
+                        <p className="text-base font-medium text-muted-foreground">
+                            Bạn chưa có khoá học nào, hãy tạo khoá học ngay.
+                        </p>
+                        <Button size="lg" onClick={() => setOpenDialog(true)}>
+                            Tạo khoá học mới
+                        </Button>
                     </div>
                 )}
             </div>

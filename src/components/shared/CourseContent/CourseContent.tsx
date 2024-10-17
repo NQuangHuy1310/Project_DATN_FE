@@ -66,7 +66,7 @@ const CourseContent = ({ name, id, lessons, handleSelectedItem, description }: C
                     {lessons &&
                         lessons.length > 0 &&
                         lessons.map((item) => {
-                            return <LessonItem key={item.id} {...item} />
+                            return <LessonItem key={item.id} lesson={item} moduleId={id} />
                         })}
 
                     {/* Hiển thị LessonOptions nếu đang thêm mới */}

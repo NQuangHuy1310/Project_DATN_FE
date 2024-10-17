@@ -1,26 +1,27 @@
 import { toast } from 'sonner'
 import ReactQuill from 'react-quill'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { Dispatch, SetStateAction, useRef, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { MessageErrors } from '@/constants'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import placeholder from '@/assets/placeholder.jpg'
-import { ILessonVideoData } from '@/types/instructor'
-import { readFileAsDataUrl, validateFileSize } from '@/lib'
+import { ILessonDetail, ILessonVideoData } from '@/types/instructor'
+import { getImagesUrl, readFileAsDataUrl, validateFileSize } from '@/lib'
 import { lessonVideo, lessonVideoSchema } from '@/validations'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useCreateLessonVideo } from '@/app/hooks/instructors'
 
-const LessonVideo = ({
-    moduleId,
-    handleHiddenLesson
-}: {
+interface LessonVideoProps {
     moduleId: number
-    handleHiddenLesson: Dispatch<SetStateAction<boolean>>
-}) => {
+    lessonData: ILessonDetail
+    setIsEditLesson?: Dispatch<SetStateAction<boolean>>
+    handleHiddenLesson?: Dispatch<SetStateAction<boolean>>
+}
+
+const LessonVideo = ({ moduleId, handleHiddenLesson, lessonData, setIsEditLesson }: LessonVideoProps) => {
     const {
         reset,
         register,
@@ -73,7 +74,6 @@ const LessonVideo = ({
 
         const payload: ILessonVideoData = {
             ...data,
-            duration: 0,
             check: undefined,
             video_youtube_id: videoUrl || '',
             video: courseVideoFile || undefined
@@ -91,9 +91,32 @@ const LessonVideo = ({
         }
 
         await createLessonVideo([moduleId, payload])
-        handleHiddenLesson(false)
+        handleHiddenLesson?.(false)
         reset()
     }
+
+    const handleClose = () => {
+        if (lessonData) setIsEditLesson?.(false)
+        else handleHiddenLesson?.(false)
+    }
+
+    useEffect(() => {
+        if (lessonData) {
+            setValue('title', lessonData.lesson_title)
+            setValue('description', lessonData.lesson_description ?? '', {
+                shouldValidate: true
+            })
+            if (lessonData?.lesson_detail?.type === 'upload') {
+                const videoUrl = getImagesUrl(lessonData.lesson_detail?.url ?? '')
+                setSelectedVideoType(lessonData?.lesson_detail?.type ?? '')
+                setCourseVideoPath(videoUrl)
+            } else {
+                // handle
+                setSelectedVideoType(lessonData?.lesson_detail?.type ?? '')
+                setVideoUrl(lessonData.lesson_detail?.video_youtube_id ?? '')
+            }
+        }
+    }, [lessonData, setValue])
 
     return (
         <div className="space-y-2 rounded-lg bg-white p-4">
@@ -139,7 +162,7 @@ const LessonVideo = ({
                             <SelectContent>
                                 <SelectGroup>
                                     <SelectItem value="upload">Tải lên video</SelectItem>
-                                    <SelectItem value="video">Nhúng video từ youtube</SelectItem>
+                                    <SelectItem value="url">Nhúng video từ youtube</SelectItem>
                                 </SelectGroup>
                             </SelectContent>
                         </Select>
@@ -190,7 +213,7 @@ const LessonVideo = ({
                             </div>
                         )}
 
-                        {selectedVideoType === 'video' && (
+                        {selectedVideoType === 'url' && (
                             <div className="flex flex-col gap-4">
                                 <div className="space-y-2">
                                     <h5 className="text-base font-bold">Gắn link video youtube</h5>
@@ -198,6 +221,7 @@ const LessonVideo = ({
                                         <Input
                                             placeholder="Nhập mã code video từ Youtube"
                                             onChange={(e) => setVideoUrl(e.target.value)}
+                                            value={videoUrl}
                                             className="w-[500px]"
                                         />
                                     </div>
@@ -217,11 +241,11 @@ const LessonVideo = ({
                 </div>
 
                 <div className="space-x-4 text-end">
-                    <Button variant="destructive" disabled={isSubmitting}>
+                    <Button variant="destructive" disabled={isSubmitting} type="button" onClick={handleClose}>
                         Huỷ
                     </Button>
                     <Button type="submit" disabled={isSubmitting}>
-                        Thêm bài giảng
+                        {lessonData ? 'Lưu bài học' : ' Thêm bài giảng'}
                     </Button>
                 </div>
             </form>

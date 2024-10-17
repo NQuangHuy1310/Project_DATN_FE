@@ -107,13 +107,15 @@ const CourseOverview = memo(({ setIsDataComplete }: { setIsDataComplete: () => v
 
     useEffect(() => {
         if (data) {
-            const imagePath = getImagesUrl(data?.thumbnail ?? '')
-            const videoPath = getImagesUrl(data?.trailer ?? '')
+            const imagePath = data?.thumbnail ? getImagesUrl(data?.thumbnail ?? '') : placeholder
+            const videoPath = data?.trailer ? getImagesUrl(data?.trailer ?? '') : undefined
 
             setValue('name', data.name)
             setValue('description', data.description ?? '')
-            setValue('level', data.level)
-            setValue('id_category', data.category.id.toString())
+            setValue('level', data.level ?? '')
+            setValue('id_category', data.category.id.toString(), {
+                shouldValidate: true
+            })
             setCourseImagePath(imagePath)
             setCourseVideoPath(videoPath)
         }

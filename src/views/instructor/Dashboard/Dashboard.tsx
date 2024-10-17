@@ -7,6 +7,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { useGetCategories } from '@/app/hooks/categories'
 import { useCreateCourse, useGetCourses } from '@/app/hooks/instructors/useInstructor'
 
+import noContent from '@/assets/no-content.jpg'
 import routes from '@/configs/routes'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -99,7 +100,13 @@ const Dashboard = () => {
                         Tạo khoá học mới
                     </Button>
                 </div>
-                {courseData?.data.map((item) => <CourseCard key={item.id} {...item} />)}
+                {courseData && courseData?.data.length > 0 ? (
+                    courseData?.data.map((item) => <CourseCard key={item.id} {...item} />)
+                ) : (
+                    <div className="flex items-start justify-center">
+                        <img src={noContent} alt="" />
+                    </div>
+                )}
             </div>
 
             {/* Dialog add course */}

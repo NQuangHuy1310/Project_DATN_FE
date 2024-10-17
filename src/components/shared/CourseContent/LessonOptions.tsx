@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import { FiPlus } from 'react-icons/fi'
 import { IoClose } from 'react-icons/io5'
+
 import { Button } from '@/components/ui/button'
 import LessonVideo from '@/components/shared/CourseContent/LessonVideo'
 import LessonCoding from '@/components/shared/CourseContent/LessonCoding'

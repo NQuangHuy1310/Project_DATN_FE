@@ -15,17 +15,10 @@ import {
 } from '@/types/instructor'
 import { instructorApi } from '@/app/services/instructors'
 
+// Mutation
 export const useCreateCourse = () => {
     return useMutation({
         mutationFn: (data: ICreateCourseData) => instructorApi.createCourse(data)
-    })
-}
-
-export const useGetCourses = (options?: Omit<UseQueryOptions<ICourses>, 'queryKey' | 'queryFn'>) => {
-    return useQuery({
-        ...options,
-        queryKey: ['instructorCourse'],
-        queryFn: instructorApi.getCourses
     })
 }
 
@@ -50,28 +43,6 @@ export const useTargetCourse = () => {
             queryClient.invalidateQueries({ queryKey: ['targetCourse'] })
             toast.success('Cập nhật thông tin khoá học thành công thành công!')
         }
-    })
-}
-
-export const useGetTargetCourse = (
-    id: string,
-    options?: Omit<UseQueryOptions<ITargetCourse>, 'queryKey' | 'queryFn'>
-) => {
-    return useQuery({
-        ...options,
-        queryKey: ['targetCourse', id],
-        queryFn: () => instructorApi.getTargetCourse(id)
-    })
-}
-
-export const useGetOverviewCourse = (
-    id: string,
-    options?: Omit<UseQueryOptions<IOverviewCourse>, 'queryKey' | 'queryFn'>
-) => {
-    return useQuery({
-        ...options,
-        queryKey: ['overviewCourse', id],
-        queryFn: () => instructorApi.getOverviewCourse(id)
     })
 }
 
@@ -101,20 +72,25 @@ export const useCreateModule = () => {
     })
 }
 
-export const useGetModule = (id: string, options?: Omit<UseQueryOptions<IModules>, 'queryKey' | 'queryFn'>) => {
-    return useQuery({
-        ...options,
-        queryKey: ['modules', id],
-        queryFn: () => instructorApi.getModule(id)
-    })
-}
-
 export const useDeleteModule = () => {
     const queryClient = useQueryClient()
 
     return useMutation({
         mutationFn: async (moduleId: string) => {
             return instructorApi.deleteModule(moduleId)
+        },
+        onSuccess() {
+            queryClient.invalidateQueries({ queryKey: ['modules'] })
+        }
+    })
+}
+
+export const useUpdateModule = () => {
+    const queryClient = useQueryClient()
+
+    return useMutation<IModule, Error, [string, IModuleData]>({
+        mutationFn: async ([moduleId, moduleData]) => {
+            return instructorApi.updateModule(moduleId, moduleData)
         },
         onSuccess() {
             queryClient.invalidateQueries({ queryKey: ['modules'] })
@@ -135,8 +111,6 @@ export const useCreateLessonDoc = () => {
     })
 }
 
-export const useUpdateLessonDoc = () => {}
-
 export const useDeleteLessonDoc = () => {
     const queryClient = useQueryClient()
 
@@ -150,6 +124,7 @@ export const useDeleteLessonDoc = () => {
     })
 }
 
+// Queries
 export const useCreateLessonVideo = () => {
     const queryClient = useQueryClient()
 
@@ -162,3 +137,43 @@ export const useCreateLessonVideo = () => {
         }
     })
 }
+
+export const useGetCourses = (options?: Omit<UseQueryOptions<ICourses>, 'queryKey' | 'queryFn'>) => {
+    return useQuery({
+        ...options,
+        queryKey: ['instructorCourse'],
+        queryFn: instructorApi.getCourses
+    })
+}
+
+export const useGetTargetCourse = (
+    id: string,
+    options?: Omit<UseQueryOptions<ITargetCourse>, 'queryKey' | 'queryFn'>
+) => {
+    return useQuery({
+        ...options,
+        queryKey: ['targetCourse', id],
+        queryFn: () => instructorApi.getTargetCourse(id)
+    })
+}
+
+export const useGetOverviewCourse = (
+    id: string,
+    options?: Omit<UseQueryOptions<IOverviewCourse>, 'queryKey' | 'queryFn'>
+) => {
+    return useQuery({
+        ...options,
+        queryKey: ['overviewCourse', id],
+        queryFn: () => instructorApi.getOverviewCourse(id)
+    })
+}
+
+export const useGetModule = (id: string, options?: Omit<UseQueryOptions<IModules>, 'queryKey' | 'queryFn'>) => {
+    return useQuery({
+        ...options,
+        queryKey: ['modules', id],
+        queryFn: () => instructorApi.getModule(id)
+    })
+}
+
+export const useUpdateLessonDoc = () => {}

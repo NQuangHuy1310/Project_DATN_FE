@@ -18,7 +18,7 @@ const CourseCard = ({ name, id, status, thumbnail }: ICourseItem) => {
                 />
             </div>
             <Link to={courseLink} className="group relative flex h-[120px] w-full flex-1 items-center gap-20">
-                <div className="flex flex-shrink-0 flex-col gap-10">
+                <div className="flex w-[300px] flex-shrink-0 flex-col gap-10">
                     <h4 className="text-xl font-semibold">{name}</h4>
                     <div className="flex items-center gap-4">
                         <p className="text-sm font-medium">

@@ -1,4 +1,4 @@
-import { memo, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
 import { FiPlus } from 'react-icons/fi'
 import { useParams } from 'react-router-dom'
 
@@ -8,16 +8,24 @@ import Loading from '@/components/Common/Loading/Loading'
 import CourseContent from '@/components/shared/CourseContent'
 import DialogAddModule from '@/components/shared/CourseContent/Dialog/DialogAddModule'
 
-const Curriculum = memo(() => {
+const Curriculum = memo(({ setIsDataComplete }: { setIsDataComplete: () => void }) => {
     const { id } = useParams()
     const { data: moduleData, isLoading } = useGetModule(id!)
     const [openDialog, setOpenDialog] = useState(false)
-    const [selectedItem, setSelectedItem] = useState<{ name: string; description: string }>()
+    const [isComplete, setIsComplete] = useState(false)
+    const [selectedItem, setSelectedItem] = useState<{ name: string; description: string; id: string }>()
 
-    const handleChangeModule = (value: { name: string; description: string }) => {
+    const handleChangeModule = (value: { name: string; description: string; id: string }) => {
         setOpenDialog(true)
         setSelectedItem(value)
     }
+
+    useEffect(() => {
+        if (moduleData && moduleData.modules.length >= 5 && !isComplete) {
+            setIsDataComplete()
+            setIsComplete(true)
+        }
+    }, [setIsDataComplete, moduleData, isComplete])
 
     if (isLoading) {
         return <Loading />

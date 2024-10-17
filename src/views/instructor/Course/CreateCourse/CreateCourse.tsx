@@ -1,18 +1,45 @@
+import { useEffect, useState, useCallback } from 'react'
+import { FaCheckCircle } from 'react-icons/fa'
+
 import { Button } from '@/components/ui/button'
 import CourseOverview from '@/views/instructor/Course/CreateCourse/CourseOverview'
 import Curriculum from '@/views/instructor/Course/CreateCourse/Curriculum'
 import StudentGoals from '@/views/instructor/Course/CreateCourse/StudentGoals'
-import { useEffect, useState } from 'react'
-import { FaCheckCircle } from 'react-icons/fa'
+
+// Định nghĩa kiểu cho các khóa
+type OptionKey = 'studentGoals' | 'curriculum' | 'courseOverview'
 
 const CreateCourse = () => {
+    const [isDataComplete, setIsDataComplete] = useState<Record<OptionKey, boolean>>({
+        studentGoals: false,
+        curriculum: false,
+        courseOverview: false
+    })
+
+    const handleSetDataComplete = useCallback((key: OptionKey) => {
+        setIsDataComplete((prev) => ({ ...prev, [key]: true }))
+    }, [])
+
     const options = [
-        { key: 'studentGoals', label: 'Mục tiêu học viên', component: <StudentGoals /> },
-        { key: 'curriculum', label: 'Chương trình giảng dạy', component: <Curriculum /> },
-        { key: 'courseOverview', label: 'Tổng quan khoá học', component: <CourseOverview /> }
+        {
+            key: 'studentGoals' as OptionKey,
+            label: 'Mục tiêu học viên',
+            component: <StudentGoals setIsDataComplete={() => handleSetDataComplete('studentGoals')} />
+        },
+        {
+            key: 'curriculum' as OptionKey,
+            label: 'Chương trình giảng dạy',
+            component: <Curriculum setIsDataComplete={() => handleSetDataComplete('curriculum')} />
+        },
+        {
+            key: 'courseOverview' as OptionKey,
+            label: 'Tổng quan khoá học',
+            component: <CourseOverview setIsDataComplete={() => handleSetDataComplete('courseOverview')} />
+        }
     ]
 
-    const [selectedKey, setSelectedKey] = useState<string>(options[0].key)
+    const isAllComplete = Object.values(isDataComplete).every(Boolean)
+    const [selectedKey, setSelectedKey] = useState<OptionKey>(options[0].key)
 
     useEffect(() => {
         const handleBeforeUnload = (event: BeforeUnloadEvent) => {
@@ -35,10 +62,10 @@ const CreateCourse = () => {
                         onClick={() => setSelectedKey(option.key)}
                     >
                         <p className="w-2/3 flex-shrink-0 text-sm font-medium">{option.label}</p>
-                        <FaCheckCircle className="size-4 flex-1 text-primary" />
+                        {isDataComplete[option.key] && <FaCheckCircle className="size-4 flex-1 text-primary" />}
                     </div>
                 ))}
-                <Button>Gửi đi để xem xét</Button>
+                <Button disabled={!isAllComplete}>Gửi đi để xem xét</Button>
             </div>
             <div className="card flex-1 rounded-lg border-[1px] border-softGrey shadow-md">
                 {options.find((option) => option.key === selectedKey)?.component}

@@ -17,7 +17,7 @@ import { useGetOverviewCourse, useOverviewCourse } from '@/app/hooks/instructors
 import { IOverviewCourseData } from '@/types/instructor'
 import Loading from '@/components/Common/Loading/Loading'
 
-const CourseOverview = memo(() => {
+const CourseOverview = memo(({ setIsDataComplete }: { setIsDataComplete: () => void }) => {
     const {
         register,
         handleSubmit,
@@ -46,7 +46,9 @@ const CourseOverview = memo(() => {
     }
 
     const handleChangeSelect = (value: string, type: 'level' | 'id_category') => {
-        setValue(type, value)
+        setValue(type, value, {
+            shouldValidate: true
+        })
     }
 
     const handleChangeContent = (value: string) => {
@@ -82,7 +84,7 @@ const CourseOverview = memo(() => {
     }
 
     const handleSubmitForm: SubmitHandler<courseOverview> = async (data) => {
-        if (data && courseImageFile && courseVideoFile) {
+        if (courseImageFile && courseVideoFile) {
             const payload: IOverviewCourseData = {
                 ...data,
                 thumbnail: courseImageFile,
@@ -91,6 +93,15 @@ const CourseOverview = memo(() => {
             }
 
             await createOverviewCourse([id!, payload])
+            setIsDataComplete()
+        } else {
+            const payload: IOverviewCourseData = {
+                ...data,
+                _method: 'PUT'
+            }
+
+            await createOverviewCourse([id!, payload])
+            setIsDataComplete()
         }
     }
 
@@ -177,8 +188,8 @@ const CourseOverview = memo(() => {
                     <div className="flex items-center gap-5">
                         <div className="flex flex-col gap-1">
                             <Select
-                                onValueChange={(value) => handleChangeSelect(value, 'level')}
                                 value={getValues('level')}
+                                onValueChange={(value) => handleChangeSelect(value, 'level')}
                                 name="level"
                             >
                                 <SelectTrigger className="flex w-[290px] items-center justify-between">

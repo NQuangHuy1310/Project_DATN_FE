@@ -10,19 +10,15 @@ import LessonItem from '@/components/shared/CourseContent/LessonItem'
 import LessonOptions from '@/components/shared/CourseContent/LessonOptions'
 import ConfirmDialog from '@/components/shared/CourseContent/Dialog/ConfirmDialog'
 
-const CourseContent = ({
-    name,
-    id,
-    lessons,
-    handleSelectedItem,
-    description
-}: {
+interface CourseContentProps {
     name: string
     id: number
     lessons: ILesson[]
     description: string
-    handleSelectedItem: (item: { name: string; description: string }) => void
-}) => {
+    handleSelectedItem: (item: { name: string; description: string; id: string }) => void
+}
+
+const CourseContent = ({ name, id, lessons, handleSelectedItem, description }: CourseContentProps) => {
     const { mutateAsync: deleteModule, isPending } = useDeleteModule()
 
     const [confirmDialog, setConfirmDialog] = useState(false)
@@ -41,7 +37,16 @@ const CourseContent = ({
                         <div className="flex items-center gap-4">
                             <h5 className="text-base font-semibold">Tên chương: {name}</h5>
                             <div className="hidden gap-4 group-hover:flex">
-                                <div className="" onClick={() => handleSelectedItem({ name, description })}>
+                                <div
+                                    className=""
+                                    onClick={() =>
+                                        handleSelectedItem({
+                                            name: name,
+                                            description: description,
+                                            id: id.toString()
+                                        })
+                                    }
+                                >
                                     <FaPen className="size-4 cursor-pointer" />
                                 </div>
 
@@ -58,7 +63,11 @@ const CourseContent = ({
                     </div>
 
                     {/* Hiển thị LessonItem */}
-                    {lessons && lessons.length > 0 && lessons.map((item) => <LessonItem key={item.id} {...item} />)}
+                    {lessons &&
+                        lessons.length > 0 &&
+                        lessons.map((item) => {
+                            return <LessonItem key={item.id} {...item} />
+                        })}
 
                     {/* Hiển thị LessonOptions nếu đang thêm mới */}
                     {isAddNew && <LessonOptions handleClose={setIsAddNew} moduleId={id} />}

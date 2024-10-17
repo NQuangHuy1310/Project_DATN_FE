@@ -10,32 +10,35 @@ export interface ICreateCourse {
     category: ICourseCategory
 }
 
-export interface IOverviewCourse {
-    admin_comments: string | null
-    code: string
-    created_at: string
-    description: string | null
-    duration: number | null
+export interface ICourseItem {
     id: number
-    id_category: number
-    id_user: number
-    is_active: boolean
-    is_free: boolean
-    is_trending: boolean
-    learned: string | null
-    level: string | null
     name: string
-    price: number | null
-    price_sale: number | null
-    slug: string
-    sort_description: string | null
-    status: string
-    submited_at: string | null
-    tags: string[]
     thumbnail: string | null
-    total_student: number
-    trailer: string | null
-    updated_at: string
+    status: 'draft' | 'pending' | 'approved' | 'rejected'
+}
+
+export interface ICourses {
+    data: ICourseItem[]
+    current_page: number
+    per_page: number
+    total: number
+}
+
+export interface IOverviewCourse {
+    name: string
+    sort_description: string
+    description: string
+    level: string
+    category: {
+        id: number
+        name: string
+    }
+    thumbnail: string
+    trailer: string
+    price: number
+    price_sale: number
+    is_active: number
+    tags: string[]
 }
 
 export interface ILesson {
@@ -93,6 +96,7 @@ export interface IOverviewCourseData {
     price_sale?: number
     is_active?: number
     tags?: string[]
+    _method?: 'PUT'
 }
 
 export interface IModuleData {

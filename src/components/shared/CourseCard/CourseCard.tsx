@@ -1,21 +1,32 @@
 import { Progress } from '@/components/ui/progress'
+import routes from '@/configs/routes'
+import { getImagesUrl } from '@/lib'
+import { ICourseItem } from '@/types/instructor'
 import { Link } from 'react-router-dom'
 
-const CourseCard = () => {
+const CourseCard = ({ name, id, status, thumbnail }: ICourseItem) => {
+    const thumbnailImage = getImagesUrl(thumbnail ?? '')
+    const courseLink = routes.createCourse.replace(':id', id.toString())
+
     return (
-        <div className="flex max-w-[1200px] items-center gap-4 rounded-md border-[1px]">
+        <div className="flex max-w-[1200px] items-center gap-4 overflow-hidden rounded-md border-[1px]">
             <div className="h-[120px] w-[120px] flex-shrink-0">
                 <img
-                    src="https://s.udemycdn.com/course/200_H/placeholder.jpg"
-                    alt=""
+                    src={thumbnail ? thumbnailImage : 'https://s.udemycdn.com/course/200_H/placeholder.jpg'}
+                    alt={name}
                     className="h-full w-full object-cover"
                 />
             </div>
-            <Link to="" className="group relative flex h-[120px] w-full flex-1 items-center gap-20">
+            <Link to={courseLink} className="group relative flex h-[120px] w-full flex-1 items-center gap-20">
                 <div className="flex flex-shrink-0 flex-col gap-10">
-                    <h4 className="text-xl font-semibold">Javascript cơ bản</h4>
+                    <h4 className="text-xl font-semibold">{name}</h4>
                     <div className="flex items-center gap-4">
-                        <p className="text-sm font-medium">Bản nháp</p>
+                        <p className="text-sm font-medium">
+                            {status === 'draft' && 'Bản nháp'}
+                            {status === 'approved' && 'Thành công'}
+                            {status === 'pending' && 'Chờ xác nhận'}
+                            {status === 'rejected' && 'Bị từ chối'}
+                        </p>
                         <p className="text-sm text-darkGrey">Công khai</p>
                     </div>
                 </div>

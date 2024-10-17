@@ -1,4 +1,4 @@
-import { memo, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
 import { FaPlus } from 'react-icons/fa6'
 import { FiTrash } from 'react-icons/fi'
 import { useParams } from 'react-router-dom'
@@ -6,11 +6,13 @@ import { useParams } from 'react-router-dom'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { getInputCoursePlaceholder } from '@/lib'
-import { useTargetCourse } from '@/app/hooks/instructors/useInstructor'
+import { useGetTargetCourse, useTargetCourse } from '@/app/hooks/instructors/useInstructor'
+import Loading from '@/components/Common/Loading/Loading'
 
 const StudentGoals = memo(() => {
     const { id } = useParams()
     const { mutateAsync: createTargetCourse, isPending } = useTargetCourse()
+    const { data, isPending: loadingTargetCourse } = useGetTargetCourse(id!)
 
     const [inputs, setInputs] = useState({
         goals: Array.from({ length: 4 }, () => ({
@@ -60,17 +62,18 @@ const StudentGoals = memo(() => {
 
         const result = {
             goals: goals.map((item, index) => ({
-                goal: item.value || '',
-                position: index + 1 || 0
+                goal: item.value,
+                position: index + 1
             })),
             requirements: conditions.map((item, index) => ({
-                requirement: item.value || '',
-                position: index + 1 || 0
+                requirement: item.value,
+                position: index + 1
             })),
             audiences: audiences.map((item, index) => ({
-                audience: item.value || '',
-                position: index + 1 || 0
-            }))
+                audience: item.value,
+                position: index + 1
+            })),
+            _method: 'PUT'
         }
 
         await createTargetCourse([id!, result])
@@ -86,6 +89,42 @@ const StudentGoals = memo(() => {
             conditions: [{ placeholder: getInputCoursePlaceholder('conditions'), value: '' }],
             audiences: [{ placeholder: getInputCoursePlaceholder('audiences'), value: '' }]
         })
+    }
+
+    useEffect(() => {
+        if (data) {
+            const updatedGoals = data.goals.map((item, index: number) => ({
+                placeholder: getInputCoursePlaceholder('goals'),
+                value: item.goal,
+                position: index + 1
+            }))
+            const updatedConditions = data.requirements.map((item, index: number) => ({
+                placeholder: getInputCoursePlaceholder('conditions'),
+                value: item.requirement,
+                position: index + 1
+            }))
+            const updatedAudiences = data.audiences.map((item, index: number) => ({
+                placeholder: getInputCoursePlaceholder('audiences'),
+                value: item.audience,
+                position: index + 1
+            }))
+
+            setInputs({
+                goals: updatedGoals,
+                conditions:
+                    updatedConditions.length > 0
+                        ? updatedConditions
+                        : [{ placeholder: getInputCoursePlaceholder('conditions'), value: '' }],
+                audiences:
+                    updatedAudiences.length > 0
+                        ? updatedAudiences
+                        : [{ placeholder: getInputCoursePlaceholder('audiences'), value: '' }]
+            })
+        }
+    }, [data])
+
+    if (loadingTargetCourse) {
+        return <Loading />
     }
 
     return (

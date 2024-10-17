@@ -1,15 +1,16 @@
 /* eslint-disable no-unused-vars */
+import { BiBook } from 'react-icons/bi'
 import { BsPlayBtn } from 'react-icons/bs'
 import { LuUserCircle } from 'react-icons/lu'
-import { TbMessageDots, TbUserHexagon } from 'react-icons/tb'
-import { FaAddressBook, FaRegBell, FaUserCog } from 'react-icons/fa'
+import { IoWalletSharp } from 'react-icons/io5'
+import { PiArticleMediumLight } from 'react-icons/pi'
 import { MdSecurity, MdArticle } from 'react-icons/md'
+import { AiOutlineQuestionCircle } from 'react-icons/ai'
+import { TbMessageDots, TbUserHexagon } from 'react-icons/tb'
 import { HiBookOpen, HiOutlineTemplate } from 'react-icons/hi'
 import { IoMdHelpCircleOutline, IoMdHome } from 'react-icons/io'
+import { FaAddressBook, FaRegBell, FaUserCog } from 'react-icons/fa'
 import { IoSettingsOutline, IoChatboxEllipsesOutline } from 'react-icons/io5'
-import { AiOutlineQuestionCircle } from 'react-icons/ai'
-import { BiBook } from 'react-icons/bi'
-import { PiArticleMediumLight } from 'react-icons/pi'
 import { FaRegCircleQuestion, FaRegCircleCheck, FaChartSimple, FaBookAtlas } from 'react-icons/fa6'
 
 import routes from '@/configs/routes'
@@ -59,6 +60,11 @@ export const sidebarList = [
                 path: routes.myBookmarks
             }
         ]
+    },
+    {
+        title: 'Ví',
+        icon: IoWalletSharp,
+        path: routes.wallet
     },
     {
         title: 'Tài khoản',

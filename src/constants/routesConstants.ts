@@ -43,6 +43,7 @@ import NewPost from '@/views/user/Posts/NewPosts'
 
 import CreateCourse from '@/views/instructor/Course/CreateCourse'
 import Posts from '@/views/user/Posts/Post'
+import Transaction from '@/views/user/wallet/transaction'
 
 // Routes không cần đăng nhập
 export const publicRoutes = [
@@ -72,6 +73,9 @@ export const privateRoutes = [
     { path: routes.notification, layout: UserDashboardLayout, element: Notifications, title: 'Thông báo' },
     { path: routes.newPost, layout: UserDashboardLayout, element: NewPost, title: 'Tạo bài viết' },
     { path: routes.posts, layout: UserDashboardLayout, element: Posts, title: 'Bài viết' },
+
+    // wallet
+    { path: routes.wallet, layout: UserDashboardLayout, element: Transaction, title: 'Nạp tiền vào tài khoản' },
 
     // Instructor Dashboard
     { path: routes.instructorDashboard, layout: InstructorDashboardLayout, element: InstructorDashboard },

@@ -43,7 +43,7 @@ export const instructorApi = {
         return axiosClient.post(instructorUri.CREATE_MODULE(courseId), moduleData)
     },
     updateModule: async (moduleId: string, moduleData: IModuleData): Promise<any> => {
-        return axiosClient.put(instructorUri.UPDATE_MODULE(moduleId), moduleData)
+        return axiosClient.post(instructorUri.UPDATE_MODULE(moduleId), moduleData)
     },
     deleteModule: async (moduleId: string): Promise<any> => {
         return axiosClient.delete(instructorUri.DELETE_MODULE(moduleId))
@@ -57,7 +57,7 @@ export const instructorApi = {
         return axiosClient.post(instructorUri.CREATE_LESSON_DOC(moduleId), lessonData)
     },
     updateLessonDoc: async (lessonId: number, lessonData: ILessonDocData): Promise<any> => {
-        return axiosClient.put(instructorUri.UPDATE_LESSON_DOC(lessonId), lessonData)
+        return axiosClient.post(instructorUri.UPDATE_LESSON_DOC(lessonId), lessonData)
     },
     deleteLessonDoc: async (lessonId: number): Promise<any> => {
         return axiosClient.delete(instructorUri.DELETE_LESSON_DOC(lessonId))

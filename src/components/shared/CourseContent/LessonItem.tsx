@@ -17,6 +17,8 @@ const LessonItem = ({ title, content_type, id }: ILesson) => {
         if (content_type === 'document') {
             await deleteLessonDoc(id)
             setIsOpenDialog(false)
+        } else if (content_type === 'video') {
+            // handle delete
         }
     }
 

@@ -88,8 +88,8 @@ export interface ITargetCourse {
 export interface IOverviewCourseData {
     name: string
     description: string | null
-    thumbnail: File
-    trailer: File
+    thumbnail?: File
+    trailer?: File
     level: string
     id_category: string
     price?: number

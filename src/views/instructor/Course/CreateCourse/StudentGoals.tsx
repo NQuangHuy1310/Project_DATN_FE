@@ -9,7 +9,7 @@ import { getInputCoursePlaceholder } from '@/lib'
 import { useGetTargetCourse, useTargetCourse } from '@/app/hooks/instructors/useInstructor'
 import Loading from '@/components/Common/Loading/Loading'
 
-const StudentGoals = memo(() => {
+const StudentGoals = memo(({ setIsDataComplete }: { setIsDataComplete: () => void }) => {
     const { id } = useParams()
     const { mutateAsync: createTargetCourse, isPending } = useTargetCourse()
     const { data, isPending: loadingTargetCourse } = useGetTargetCourse(id!)
@@ -77,6 +77,7 @@ const StudentGoals = memo(() => {
         }
 
         await createTargetCourse([id!, result])
+        setIsDataComplete()
         return result
     }
 

@@ -6,13 +6,13 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { courseModule, courseModuleSchema } from '@/validations'
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { useCreateModule } from '@/app/hooks/instructors'
+import { useCreateModule, useUpdateModule } from '@/app/hooks/instructors'
 import { Button } from '@/components/ui/button'
 
 interface DialogAddModuleProps {
     id: string
     openDialog: boolean
-    selectedData: { name: string; description: string } | undefined
+    selectedData: { name: string; description: string; id: string } | undefined
     setOpenDialog: Dispatch<SetStateAction<boolean>>
 }
 
@@ -28,6 +28,7 @@ const DialogAddModule = ({ id, openDialog, setOpenDialog, selectedData }: Dialog
     })
 
     const { mutateAsync: createModule } = useCreateModule()
+    const { mutateAsync: updateModule } = useUpdateModule()
 
     useEffect(() => {
         if (openDialog && selectedData) {
@@ -40,7 +41,13 @@ const DialogAddModule = ({ id, openDialog, setOpenDialog, selectedData }: Dialog
 
     const handleSubmitForm: SubmitHandler<courseModule> = async (data) => {
         if (selectedData) {
-            // handle update
+            const payload = {
+                ...data,
+                _method: 'PUT'
+            }
+            await updateModule([selectedData.id, payload])
+            reset()
+            setOpenDialog(false)
         } else {
             await createModule([id, data])
             reset()
@@ -53,7 +60,7 @@ const DialogAddModule = ({ id, openDialog, setOpenDialog, selectedData }: Dialog
             <DialogContent className="sm:max-w-[650px]" aria-describedby={undefined}>
                 <form onSubmit={handleSubmit(handleSubmitForm)}>
                     <DialogHeader>
-                        <DialogTitle>Tạo chương mới</DialogTitle>
+                        <DialogTitle>{selectedData ? 'Sửa thông tin chương' : 'Tạo chương mới'}</DialogTitle>
                     </DialogHeader>
                     <div className="grid gap-4 py-4">
                         <div className="flex flex-col gap-1">
@@ -89,7 +96,7 @@ const DialogAddModule = ({ id, openDialog, setOpenDialog, selectedData }: Dialog
                             Huỷ
                         </Button>
                         <Button type="submit" disabled={isSubmitting}>
-                            Tạo mới
+                            {selectedData ? 'Lưu thông tin' : 'Tạo mới'}
                         </Button>
                     </DialogFooter>
                 </form>

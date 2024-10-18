@@ -60,6 +60,23 @@ export interface IModule {
     lessons: ILesson[]
 }
 
+export interface ILessonDetail {
+    lesson_title: string
+    lesson_description: string | null
+    lesson_thumbnail: string | null
+    type_lesson: 'document' | 'video'
+    lesson_detail: {
+        id: number
+        title: string | null
+        type?: 'upload' | 'url'
+        url?: string
+        video_youtube_id?: string
+        duration?: number | null
+        content?: string
+        description?: string | null
+    }
+}
+
 export interface IModules {
     modules: IModule[]
 }
@@ -92,8 +109,8 @@ export interface IOverviewCourseData {
     trailer?: File
     level: string
     id_category: string
-    price?: number
-    price_sale?: number
+    price?: string
+    price_sale?: string
     is_active?: number
     tags?: string[]
     _method?: 'PUT'
@@ -107,6 +124,7 @@ export interface IModuleData {
 export interface ILessonDocData {
     title: string
     content: string
+    _method?: string
 }
 
 export interface ILessonVideoData {
@@ -115,5 +133,5 @@ export interface ILessonVideoData {
     check: 'url' | 'upload' | undefined
     video?: File
     video_youtube_id?: string
-    duration: number
+    duration?: number
 }

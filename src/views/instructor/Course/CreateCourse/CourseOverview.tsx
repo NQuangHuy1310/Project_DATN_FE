@@ -107,13 +107,17 @@ const CourseOverview = memo(({ setIsDataComplete }: { setIsDataComplete: () => v
 
     useEffect(() => {
         if (data) {
-            const imagePath = getImagesUrl(data?.thumbnail ?? '')
-            const videoPath = getImagesUrl(data?.trailer ?? '')
+            const imagePath = data?.thumbnail ? getImagesUrl(data?.thumbnail ?? '') : placeholder
+            const videoPath = data?.trailer ? getImagesUrl(data?.trailer ?? '') : undefined
 
             setValue('name', data.name)
             setValue('description', data.description ?? '')
-            setValue('level', data.level)
-            setValue('id_category', data.category.id.toString())
+            setValue('level', data.level ?? '')
+            setValue('id_category', data.category.id.toString(), {
+                shouldValidate: true
+            })
+            setValue('price', data.price.toString())
+            setValue('price_sale', data.price_sale.toString())
             setCourseImagePath(imagePath)
             setCourseVideoPath(videoPath)
         }
@@ -237,11 +241,11 @@ const CourseOverview = memo(({ setIsDataComplete }: { setIsDataComplete: () => v
                 </div>
 
                 {/* Giá khoá học */}
-                {/* <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-2">
                     <h5 className="text-base font-bold">Giá khoá học</h5>
                     <div className="flex items-center gap-5">
                         <div className="flex h-[60px] w-[350px] flex-col gap-1">
-                            <Input placeholder="Giá khoá học" className="h-full" {...register('price')} />
+                            <Input placeholder="Giá khoá học" className="h-full" {...register('price')} type="number" />
                             {errors.price ? (
                                 <div className="text-sm text-red-500">{errors.price.message}</div>
                             ) : (
@@ -256,20 +260,7 @@ const CourseOverview = memo(({ setIsDataComplete }: { setIsDataComplete: () => v
                             <span className="text-xs text-darkGrey">Giá khuyến mãi của khoá học</span>
                         </div>
                     </div>
-                </div> */}
-
-                {/* <div className="flex items-center gap-5">
-                    <h5 className="text-base font-bold">Trạng thái khoá học</h5>
-                    <div className="flex items-center gap-5">
-                        <Switch
-                            id="airplane-mode"
-                            {...register('is_active')}
-                            checked={getValues('is_active')}
-                            onChange={(e) => setValue('is_active', (e.target as HTMLInputElement).checked)}
-                        />
-                        <label htmlFor="airplane-mode"></label>
-                    </div>
-                </div> */}
+                </div>
 
                 {/* Hình ảnh khoá học */}
                 <div className="flex flex-col gap-2">

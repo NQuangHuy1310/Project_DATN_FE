@@ -4,6 +4,7 @@ import { useMutation, useQuery, useQueryClient, UseQueryOptions } from '@tanstac
 import {
     ICourses,
     ICreateCourseData,
+    ILessonDetail,
     ILessonDocData,
     ILessonVideoData,
     IModule,
@@ -111,6 +112,19 @@ export const useCreateLessonDoc = () => {
     })
 }
 
+export const useUpdateLessonDoc = () => {
+    const queryClient = useQueryClient()
+
+    return useMutation<any, Error, [number, ILessonDocData]>({
+        mutationFn: async ([lessonId, lessonData]) => {
+            return instructorApi.updateLessonDoc(lessonId, lessonData)
+        },
+        onSuccess() {
+            queryClient.invalidateQueries({ queryKey: ['modules'] })
+        }
+    })
+}
+
 export const useDeleteLessonDoc = () => {
     const queryClient = useQueryClient()
 
@@ -176,4 +190,13 @@ export const useGetModule = (id: string, options?: Omit<UseQueryOptions<IModules
     })
 }
 
-export const useUpdateLessonDoc = () => {}
+export const useGetLessonDetail = (
+    id: number,
+    options?: Omit<UseQueryOptions<ILessonDetail>, 'queryKey' | 'queryFn'>
+) => {
+    return useQuery({
+        ...options,
+        queryKey: ['lesson', id],
+        queryFn: () => instructorApi.getLessonDetail(id)
+    })
+}

@@ -93,7 +93,7 @@ const StudentGoals = memo(({ setIsDataComplete }: { setIsDataComplete: () => voi
     }
 
     useEffect(() => {
-        if (data) {
+        if (data && data.goals.length > 0 && data.audiences.length > 0 && data.requirements.length > 0) {
             const updatedGoals = data.goals.map((item, index: number) => ({
                 placeholder: getInputCoursePlaceholder('goals'),
                 value: item.goal,
@@ -121,8 +121,10 @@ const StudentGoals = memo(({ setIsDataComplete }: { setIsDataComplete: () => voi
                         ? updatedAudiences
                         : [{ placeholder: getInputCoursePlaceholder('audiences'), value: '' }]
             })
+        } else {
+            handleReset()
         }
-    }, [data])
+    }, [data, setIsDataComplete])
 
     if (loadingTargetCourse) {
         return <Loading />

@@ -5,6 +5,7 @@ import {
     ICourses,
     ICreateCourse,
     ICreateCourseData,
+    ILessonDetail,
     ILessonDocData,
     ILessonVideoData,
     IModule,
@@ -50,6 +51,10 @@ export const instructorApi = {
     },
     getModule: async (courseId: string): Promise<any> => {
         return axiosClient.get(instructorUri.GET_MODULE(courseId))
+    },
+
+    getLessonDetail: async (lessonId: number): Promise<ILessonDetail> => {
+        return axiosClient.get(instructorUri.GET_LESSON_DETAIL(lessonId))
     },
 
     // Api create lesson type doc

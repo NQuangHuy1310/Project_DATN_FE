@@ -2,7 +2,7 @@ import { ICourse, ICourseToday, IModule, ITeacher } from '@/types'
 import { CourseLevel, notificationTypes, TeacherStatus } from '@/constants'
 import { INotificationMessage } from '@/types'
 import { IAccoutMessage, IMessage } from '@/types/communicate'
-import { IRecharge } from '@/types/recharge'
+import { IRecharge } from '@/types/transaction'
 
 export const courses: ICourse[] = [
     {
@@ -610,7 +610,7 @@ export const accountMessages: IAccoutMessage[] = [
         is_Read: true
     }
 ]
-export const recharge: IRecharge[] = [
+export const transaction: IRecharge[] = [
     {
         cent: 50,
         cash: 50000

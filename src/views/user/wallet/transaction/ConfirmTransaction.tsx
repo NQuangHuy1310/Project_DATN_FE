@@ -10,10 +10,10 @@ import {
 } from '@/components/ui/dialog'
 import { TbCoinFilled } from 'react-icons/tb'
 
-interface IConfirmRecharge {
+interface IConfirmTransaction {
     totalAmount: number
 }
-const ConfirmRecharge = ({ totalAmount }: IConfirmRecharge) => {
+const ConfirmTransaction = ({ totalAmount }: IConfirmTransaction) => {
     return (
         <Dialog>
             <DialogTrigger asChild>
@@ -41,7 +41,7 @@ const ConfirmRecharge = ({ totalAmount }: IConfirmRecharge) => {
                     <span className="font-bold">Phương thức thanh toán</span>
                     <div className="flex justify-between items-center rounded-md border-2 px-3 py-2">
                         <div className="flex items-center gap-5">
-                            <input type="radio" name="recharge" />
+                            <input type="radio" name="transaction" />
                             <span className="font-semibold">VNPAY</span>
                         </div>
                         <img
@@ -52,7 +52,7 @@ const ConfirmRecharge = ({ totalAmount }: IConfirmRecharge) => {
                     </div>
                     <div className="flex justify-between items-center rounded-md border-2 px-3 py-2">
                         <div className="flex items-center gap-5">
-                            <input type="radio" name="recharge" />
+                            <input type="radio" name="transaction" />
                             <span className="font-semibold">ZaloPay</span>
                         </div>
                         <img
@@ -63,7 +63,7 @@ const ConfirmRecharge = ({ totalAmount }: IConfirmRecharge) => {
                     </div>
                     <div className="flex justify-between items-center rounded-md border-2 px-3 py-2">
                         <div className="flex items-center gap-5">
-                            <input type="radio" name="recharge" />
+                            <input type="radio" name="transaction" />
                             <span className="font-semibold">MoMo</span>
                         </div>
                         <img
@@ -85,4 +85,4 @@ const ConfirmRecharge = ({ totalAmount }: IConfirmRecharge) => {
     )
 }
 
-export default ConfirmRecharge
+export default ConfirmTransaction

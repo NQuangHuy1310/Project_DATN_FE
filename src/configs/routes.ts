@@ -31,6 +31,7 @@ const routes = {
 
     // wallet
     wallet: '/wallet',
+    transaction: '/transaction',
 
     // Post management routes
     posts: '/posts',
@@ -38,8 +39,6 @@ const routes = {
     myPosts: '/posts/me',
     myBookmarks: '/posts/me/bookmarks',
 
-    // Recharge routes
-    recharge: '/recharge',
     // Instructor dashboard
     instructorDashboard: '/instructor/dashboard',
 

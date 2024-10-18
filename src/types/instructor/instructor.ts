@@ -109,8 +109,8 @@ export interface IOverviewCourseData {
     trailer?: File
     level: string
     id_category: string
-    price?: number
-    price_sale?: number
+    price?: string
+    price_sale?: string
     is_active?: number
     tags?: string[]
     _method?: 'PUT'

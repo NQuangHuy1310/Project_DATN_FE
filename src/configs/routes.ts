@@ -31,6 +31,7 @@ const routes = {
 
     // wallet
     wallet: '/wallet',
+    transaction: '/transaction',
 
     // Post management routes
     posts: '/posts',

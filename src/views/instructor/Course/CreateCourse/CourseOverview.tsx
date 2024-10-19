@@ -113,11 +113,9 @@ const CourseOverview = memo(({ setIsDataComplete }: { setIsDataComplete: () => v
             setValue('name', data.name)
             setValue('description', data.description ?? '')
             setValue('level', data.level ?? '')
-            setValue('id_category', data.category.id.toString(), {
-                shouldValidate: true
-            })
-            setValue('price', data.price.toString())
-            setValue('price_sale', data.price_sale.toString())
+            setValue('id_category', data.category.id.toString())
+            setValue('price', data.price ? data.price.toString() : '')
+            setValue('price_sale', data.price_sale ? data.price_sale.toString() : '')
             setCourseImagePath(imagePath)
             setCourseVideoPath(videoPath)
         }

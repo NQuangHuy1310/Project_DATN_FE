@@ -73,9 +73,9 @@ export const instructorApi = {
         return axiosClient.post(instructorUri.CREATE_LESSON_VIDEO(moduleId), lessonData)
     },
     updateLessonVideo: async (lessonId: number, lessonData: ILessonVideoData): Promise<any> => {
-        return axiosClient.post(instructorUri.CREATE_LESSON_VIDEO(lessonId), lessonData)
+        return axiosClient.post(instructorUri.UPDATE_LESSON_VIDEO(lessonId), lessonData)
     },
-    deleteLessonVideo: async (lessonId: number, lessonData: ILessonVideoData): Promise<any> => {
-        return axiosClient.post(instructorUri.CREATE_LESSON_VIDEO(lessonId), lessonData)
+    deleteLessonVideo: async (lessonId: number): Promise<any> => {
+        return axiosClient.delete(instructorUri.DELETE_LESSON_DOC(lessonId))
     }
 }

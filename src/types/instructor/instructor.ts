@@ -135,4 +135,5 @@ export interface ILessonVideoData {
     video?: File
     video_youtube_id?: string
     duration?: number
+    _method?: string
 }

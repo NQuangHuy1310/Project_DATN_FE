@@ -2,7 +2,7 @@ import { Suspense, lazy } from 'react'
 import { IoIosStar } from 'react-icons/io'
 import { MdListAlt } from 'react-icons/md'
 
-import { getUrlParams } from '@/components/Common/GetUrlParam/getUrlParams'
+import { useGetIdParams } from '@/app/hooks/common/useCustomParams'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { useInstructorById } from '@/app/hooks/instructors/useInstructorClient'
@@ -14,9 +14,8 @@ const FilterBar = lazy(() => import('@/components/shared/FilterBar/FilterBar'))
 const NoContent = lazy(() => import('@/components/shared/NoContent/NoContent'))
 
 const InstructorDetail = () => {
-    const id = getUrlParams('id')
-    const instructorId = id ? parseInt(id, 10) : NaN
-    const { data, isLoading } = useInstructorById(instructorId)
+    const instructorId = useGetIdParams('id')
+    const { data, isLoading } = useInstructorById(instructorId!)
 
     if (isLoading) {
         return (

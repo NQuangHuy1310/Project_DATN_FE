@@ -29,3 +29,79 @@ export interface IModule {
     time: number
     lessons: ILesson[]
 }
+
+export interface ILessonAbleLeaning {
+    id: number
+    title: string | null
+    lesson_title: string
+    description: string | null
+    created_at: string
+    updated_at: string
+    content?: string
+    type?: 'upload' | 'url'
+    url?: string
+    video_youtube_id?: string | null
+    duration?: number
+}
+
+export interface ILessonLeaning {
+    id: number
+    id_module: number
+    title: string
+    thumbnail: string | null
+    description: string | null
+    content_type: 'document' | 'video' | 'quiz'
+    lessonable_type: string
+    duration: number | null
+    lessonable_id: number
+    position: number
+    is_active: number
+    created_at: string
+    updated_at: string
+    is_completed: number
+    last_time_video: number
+    lessonable?: ILessonAbleLeaning
+}
+
+export interface IModuleLeaning {
+    id: number
+    id_course: number
+    title: string
+    description: string
+    position: number
+    created_at: string
+    updated_at: string
+    lessons: ILessonLeaning[]
+}
+
+export interface NextLessonLeaning {
+    id: number
+    id_module: number
+    title: string
+    thumbnail: string | null
+    description: string | null
+    content_type: 'document' | 'video' | 'quiz'
+    lessonable_type: string
+    lessonable_id: number
+    position: number
+    is_active: number
+    created_at: string
+    updated_at: string
+    is_completed: number
+    last_time_video: number
+    lessonable: ILessonAbleLeaning
+}
+
+export interface CourseData {
+    progress_percent: number
+    total_lessons: number
+    completed_lessons: number
+    modules: IModuleLeaning[]
+    next_lesson: NextLessonLeaning
+}
+
+export interface ILessonProCess {
+    is_completed: 0 | 1
+    last_time_video: number | null
+    _method?: string
+}

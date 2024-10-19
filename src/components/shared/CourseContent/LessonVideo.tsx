@@ -16,8 +16,8 @@ import { useCreateLessonVideo, useUpdateLessonVideo } from '@/app/hooks/instruct
 
 interface LessonVideoProps {
     moduleId: number
-    lessonData: ILessonDetail
-    courseId: number
+    lessonData?: ILessonDetail
+    courseId?: number
     setIsEditLesson?: Dispatch<SetStateAction<boolean>>
     handleHiddenLesson?: Dispatch<SetStateAction<boolean>>
 }
@@ -91,10 +91,10 @@ const LessonVideo = ({ moduleId, handleHiddenLesson, lessonData, setIsEditLesson
         }
 
         if (lessonData) {
-            await createLessonVideo([moduleId, payload])
+            await updateLessonVideo([courseId!, payload])
             setIsEditLesson?.(false)
         } else {
-            await updateLessonVideo([courseId!, payload])
+            await createLessonVideo([moduleId!, payload])
             handleHiddenLesson?.(false)
         }
         reset()

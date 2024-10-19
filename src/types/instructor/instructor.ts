@@ -61,11 +61,12 @@ export interface IModule {
 }
 
 export interface ILessonDetail {
-    lesson_title: string
+    title: string
     lesson_description: string | null
+    description: string | null
     lesson_thumbnail: string | null
     type_lesson: 'document' | 'video'
-    lesson_detail: {
+    lessonable: {
         id: number
         title: string | null
         type?: 'upload' | 'url'

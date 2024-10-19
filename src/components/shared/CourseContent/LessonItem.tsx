@@ -7,7 +7,7 @@ import { FaPen, FaRegTrashAlt } from 'react-icons/fa'
 import { ILesson } from '@/types/instructor'
 import { Button } from '@/components/ui/button'
 import ConfirmDialog from '@/components/shared/CourseContent/Dialog/ConfirmDialog'
-import { useDeleteLessonDoc, useGetLessonDetail } from '@/app/hooks/instructors'
+import { useDeleteLessonDoc, useDeleteLessonVideo, useGetLessonDetail } from '@/app/hooks/instructors'
 import LessonDocument from '@/components/shared/CourseContent/LessonDocument'
 import LessonVideo from '@/components/shared/CourseContent/LessonVideo'
 
@@ -20,6 +20,7 @@ const LessonItem = ({ lesson, moduleId }: LessonItemProps) => {
     const { id, content_type, title } = lesson
     const { data } = useGetLessonDetail(id)
     const { mutateAsync: deleteLessonDoc, isPending } = useDeleteLessonDoc()
+    const { mutateAsync: deleteLessonVideo } = useDeleteLessonVideo()
     const [isOpenDialog, setIsOpenDialog] = useState(false)
     const [isEditLessonDoc, setIsEditLesson] = useState(false)
     const [isEditLessonVideo, setIsEditLessonVideo] = useState(false)
@@ -27,10 +28,10 @@ const LessonItem = ({ lesson, moduleId }: LessonItemProps) => {
     const handleDeleteLesson = async () => {
         if (content_type === 'document') {
             await deleteLessonDoc(id)
-            setIsOpenDialog(false)
         } else if (content_type === 'video') {
-            // handle delete
+            await deleteLessonVideo(id)
         }
+        setIsOpenDialog(false)
     }
 
     return (
@@ -78,7 +79,12 @@ const LessonItem = ({ lesson, moduleId }: LessonItemProps) => {
 
             {/* Handle edit lesson video */}
             {isEditLessonVideo && (
-                <LessonVideo moduleId={moduleId} lessonData={data!} setIsEditLesson={setIsEditLessonVideo} />
+                <LessonVideo
+                    moduleId={moduleId}
+                    lessonData={data!}
+                    courseId={id}
+                    setIsEditLesson={setIsEditLessonVideo}
+                />
             )}
 
             {/* Confirm dialog */}

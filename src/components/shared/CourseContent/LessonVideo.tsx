@@ -12,16 +12,17 @@ import { ILessonDetail, ILessonVideoData } from '@/types/instructor'
 import { getImagesUrl, readFileAsDataUrl, validateFileSize } from '@/lib'
 import { lessonVideo, lessonVideoSchema } from '@/validations'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { useCreateLessonVideo } from '@/app/hooks/instructors'
+import { useCreateLessonVideo, useUpdateLessonVideo } from '@/app/hooks/instructors'
 
 interface LessonVideoProps {
     moduleId: number
     lessonData: ILessonDetail
+    courseId: number
     setIsEditLesson?: Dispatch<SetStateAction<boolean>>
     handleHiddenLesson?: Dispatch<SetStateAction<boolean>>
 }
 
-const LessonVideo = ({ moduleId, handleHiddenLesson, lessonData, setIsEditLesson }: LessonVideoProps) => {
+const LessonVideo = ({ moduleId, handleHiddenLesson, lessonData, setIsEditLesson, courseId }: LessonVideoProps) => {
     const {
         reset,
         register,
@@ -34,6 +35,7 @@ const LessonVideo = ({ moduleId, handleHiddenLesson, lessonData, setIsEditLesson
     })
 
     const { mutateAsync: createLessonVideo } = useCreateLessonVideo()
+    const { mutateAsync: updateLessonVideo } = useUpdateLessonVideo()
 
     const [selectedVideoType, setSelectedVideoType] = useState<string>('')
     const [courseVideoFile, setCourseVideoFile] = useState<File | undefined>(undefined)
@@ -74,9 +76,7 @@ const LessonVideo = ({ moduleId, handleHiddenLesson, lessonData, setIsEditLesson
 
         const payload: ILessonVideoData = {
             ...data,
-            check: undefined,
-            video_youtube_id: videoUrl || '',
-            video: courseVideoFile || undefined
+            check: undefined
         }
 
         if (videoUrl) {
@@ -87,11 +87,16 @@ const LessonVideo = ({ moduleId, handleHiddenLesson, lessonData, setIsEditLesson
         if (courseVideoFile) {
             payload.check = 'upload'
             payload.video = courseVideoFile
-            payload.video_youtube_id = undefined
+            payload.duration = 0
         }
 
-        await createLessonVideo([moduleId, payload])
-        handleHiddenLesson?.(false)
+        if (lessonData) {
+            await createLessonVideo([moduleId, payload])
+            setIsEditLesson?.(false)
+        } else {
+            await updateLessonVideo([courseId!, payload])
+            handleHiddenLesson?.(false)
+        }
         reset()
     }
 
@@ -102,18 +107,15 @@ const LessonVideo = ({ moduleId, handleHiddenLesson, lessonData, setIsEditLesson
 
     useEffect(() => {
         if (lessonData) {
-            setValue('title', lessonData.lesson_title)
-            setValue('description', lessonData.lesson_description ?? '', {
-                shouldValidate: true
-            })
-            if (lessonData?.lesson_detail?.type === 'upload') {
-                const videoUrl = getImagesUrl(lessonData.lesson_detail?.url ?? '')
-                setSelectedVideoType(lessonData?.lesson_detail?.type ?? '')
+            setValue('title', lessonData.title)
+            setValue('description', lessonData.description!)
+            if (lessonData?.lessonable?.type === 'upload') {
+                const videoUrl = getImagesUrl(lessonData.lessonable?.url ?? '')
+                setSelectedVideoType(lessonData?.lessonable?.type ?? '')
                 setCourseVideoPath(videoUrl)
             } else {
-                // handle
-                setSelectedVideoType(lessonData?.lesson_detail?.type ?? '')
-                setVideoUrl(lessonData.lesson_detail?.video_youtube_id ?? '')
+                setSelectedVideoType(lessonData?.lessonable?.type ?? '')
+                setVideoUrl(lessonData.lessonable?.video_youtube_id ?? '')
             }
         }
     }, [lessonData, setValue])

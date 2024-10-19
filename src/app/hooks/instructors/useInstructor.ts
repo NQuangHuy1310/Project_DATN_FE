@@ -138,6 +138,32 @@ export const useDeleteLessonDoc = () => {
     })
 }
 
+export const useUpdateLessonVideo = () => {
+    const queryClient = useQueryClient()
+
+    return useMutation<any, Error, [number, ILessonVideoData]>({
+        mutationFn: async ([lessonId, lessonData]) => {
+            return instructorApi.updateLessonVideo(lessonId, lessonData)
+        },
+        onSuccess() {
+            queryClient.invalidateQueries({ queryKey: ['module'] })
+        }
+    })
+}
+
+export const useDeleteLessonVideo = () => {
+    const queryClient = useQueryClient()
+
+    return useMutation({
+        mutationFn: async (lessonId: number) => {
+            return instructorApi.deleteLessonDoc(lessonId)
+        },
+        onSuccess() {
+            queryClient.invalidateQueries({ queryKey: ['modules'] })
+        }
+    })
+}
+
 // Queries
 export const useCreateLessonVideo = () => {
     const queryClient = useQueryClient()

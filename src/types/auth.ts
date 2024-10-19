@@ -63,6 +63,7 @@ export interface IUpdateProfile {
     bio?: string
     experience?: string
     avatar?: File | undefined
+    _method?: string
 }
 
 export interface IChangePassword {

@@ -91,6 +91,7 @@ const LessonVideo = ({ moduleId, handleHiddenLesson, lessonData, setIsEditLesson
         }
 
         if (lessonData) {
+            payload._method = 'PUT'
             await updateLessonVideo([courseId!, payload])
             setIsEditLesson?.(false)
         } else {

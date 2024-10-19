@@ -146,7 +146,7 @@ export const useUpdateLessonVideo = () => {
             return instructorApi.updateLessonVideo(lessonId, lessonData)
         },
         onSuccess() {
-            queryClient.invalidateQueries({ queryKey: ['module'] })
+            queryClient.invalidateQueries({ queryKey: ['modules'] })
         }
     })
 }
@@ -156,7 +156,7 @@ export const useDeleteLessonVideo = () => {
 
     return useMutation({
         mutationFn: async (lessonId: number) => {
-            return instructorApi.deleteLessonDoc(lessonId)
+            return instructorApi.deleteLessonVideo(lessonId)
         },
         onSuccess() {
             queryClient.invalidateQueries({ queryKey: ['modules'] })

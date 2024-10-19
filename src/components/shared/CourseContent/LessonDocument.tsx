@@ -38,7 +38,7 @@ const LessonDocument = ({
     })
     const { mutateAsync: createLessonDoc } = useCreateLessonDoc()
     const { mutateAsync: updateLessonDoc } = useUpdateLessonDoc()
-    const quillRef = useRef<ReactQuill>(null)
+    const quillRef = useRef<ReactQuill | null>(null)
 
     const handleChangeValue = (value: string) => {
         setValue('content', value)
@@ -67,13 +67,12 @@ const LessonDocument = ({
 
     useEffect(() => {
         if (lessonData) {
-            const contentData = lessonData.lesson_detail?.content ? lessonData.lesson_detail?.content : ''
-            setValue('title', lessonData?.lesson_title)
-            setValue('content', contentData, {
-                shouldValidate: true
-            })
+            reset()
+            const contentData = lessonData.lessonable.content
+            setValue('title', lessonData!.title)
+            setValue('content', contentData!)
         }
-    }, [lessonData, setValue])
+    }, [lessonData, setValue, reset])
 
     return (
         <>

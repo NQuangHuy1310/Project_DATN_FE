@@ -71,5 +71,11 @@ export const instructorApi = {
     // Api create lesson type video
     createLessonVideo: async (moduleId: number, lessonData: ILessonVideoData): Promise<any> => {
         return axiosClient.post(instructorUri.CREATE_LESSON_VIDEO(moduleId), lessonData)
+    },
+    updateLessonVideo: async (lessonId: number, lessonData: ILessonVideoData): Promise<any> => {
+        return axiosClient.post(instructorUri.CREATE_LESSON_VIDEO(lessonId), lessonData)
+    },
+    deleteLessonVideo: async (lessonId: number, lessonData: ILessonVideoData): Promise<any> => {
+        return axiosClient.post(instructorUri.CREATE_LESSON_VIDEO(lessonId), lessonData)
     }
 }

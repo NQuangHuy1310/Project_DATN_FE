@@ -27,7 +27,7 @@ createRoot(document.getElementById('root')!).render(
                     classNames: {
                         title: 'text-sm text-white',
                         description: 'text-xs',
-                        error: 'bg-red-400',
+                        error: 'bg-red-400 text-white',
                         success: 'bg-primary text-white',
                         warning: 'text-yellow-400',
                         info: 'bg-blue-400'

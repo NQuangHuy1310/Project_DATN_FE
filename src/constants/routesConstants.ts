@@ -32,6 +32,7 @@ import Notifications from '@/views/user/Notifications'
 import InstructorDetail from '@/views/user/Instructors/InstructorDetail'
 
 // Instructor
+import CreateCourse from '@/views/instructor/Course/CreateCourse'
 import InstructorDashboard from '@/views/instructor/Dashboard'
 import InstructorCommunicate from '@/app/layouts/InstructorLayouts/InstructorCommunicate'
 import CommunicateQa from '@/views/instructor/Communicate/CommunicateQa'
@@ -39,12 +40,13 @@ import CommunicateMessage from '@/views/instructor/Communicate/CommunicateMessag
 import CommunicateAnnoucement from '@/views/instructor/Communicate/CommunicateAnnoucement'
 import CommunicateAssiment from '@/views/instructor/Communicate/CommunicateAssiment'
 
+// Post
+import Posts from '@/views/user/Posts/Posts'
+import MyPosts from '@/views/user/Posts/MyPosts'
 import NewPost from '@/views/user/Posts/NewPosts'
+import MyBookmarks from '@/views/user/Posts/MyBookmarks'
 
-import CreateCourse from '@/views/instructor/Course/CreateCourse'
-import Posts from '@/views/user/Posts/Post'
-
-import Transaction from '@/views/user/wallet/Transaction'
+import Transaction from '@/views/user/wallet/transaction'
 
 // Routes không cần đăng nhập
 export const publicRoutes = [
@@ -73,7 +75,9 @@ export const privateRoutes = [
     { path: routes.instructorDetail, layout: UserDashboardLayout, element: InstructorDetail, title: 'Người hướng dẫn' },
     { path: routes.notification, layout: UserDashboardLayout, element: Notifications, title: 'Thông báo' },
     { path: routes.newPost, layout: UserDashboardLayout, element: NewPost, title: 'Tạo bài viết' },
-    { path: routes.posts, layout: UserDashboardLayout, element: Posts, title: 'Bài viết' },
+    { path: routes.posts, layout: UserDashboardLayout, element: Posts, title: 'Danh sách bài viết' },
+    { path: routes.myPosts, layout: UserDashboardLayout, element: MyPosts, title: 'Bài viết của tôi' },
+    { path: routes.myBookmarks, layout: UserDashboardLayout, element: MyBookmarks, title: 'Bài viết đã lưu' },
 
     // wallet
     { path: routes.wallet, layout: UserDashboardLayout, element: Transaction, title: 'Nạp tiền vào tài khoản' },

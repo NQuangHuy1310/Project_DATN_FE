@@ -20,5 +20,9 @@ export const instructorUri = {
 
     CREATE_LESSON_VIDEO: (moduleID: number) => `${INSTRUCTOR_URL}lesson/upload-video/${moduleID}`,
     UPDATE_LESSON_VIDEO: (lessonID: number) => `${INSTRUCTOR_URL}lesson/update-lesson-video/${lessonID}`,
-    DELETE_LESSON_VIDEO: (lessonID: number) => `${INSTRUCTOR_URL}lesson/delete-lesson-video/${lessonID}`
+    DELETE_LESSON_VIDEO: (lessonID: number) => `${INSTRUCTOR_URL}lesson/delete-lesson-video/${lessonID}`,
+
+    CREATE_LESSON_QUIZ: (moduleID: number) => `${INSTRUCTOR_URL}`,
+    UPDATE_LESSON_QUIZ: (lessonID: number) => `${INSTRUCTOR_URL}`,
+    DELETE_LESSON_QUIZ: (lessonID: number) => `${INSTRUCTOR_URL}`
 }

@@ -1,18 +1,39 @@
-import useFormatTime from '@/app/hooks/common/useFomatTime'
+import { Dispatch, SetStateAction, useState } from 'react'
+
+import ReactQuill from 'react-quill'
+
 import { Button } from '@/components/ui/button'
+import useFormatTime from '@/app/hooks/common/useFomatTime'
+import { ILessonLeaning } from '@/types/course/course'
+import { useAddNoteLesson } from '@/app/hooks/courses/useNote'
 import { Sheet, SheetClose, SheetContent, SheetTitle } from '@/components/ui/sheet'
-import { Textarea } from '@/components/ui/textarea'
-import React from 'react'
 
 const AddNote = ({
+    lessonData,
     open,
     isOpen,
-    currentVideoTime
+    currentVideoTime,
+    setCheckNote
 }: {
+    lessonData: ILessonLeaning
     open: boolean
     isOpen: (open: boolean) => void
     currentVideoTime: number
+    setCheckNote: Dispatch<SetStateAction<boolean>>
 }) => {
+    const [content, setContent] = useState<string>()
+    const { mutateAsync: noteLessonAdd } = useAddNoteLesson()
+    const submitNote = async () => {
+        await noteLessonAdd([
+            lessonData.id,
+            {
+                content: content!,
+                duration: currentVideoTime
+            }
+        ])
+        setCheckNote(true)
+        isOpen(false)
+    }
     return (
         <Sheet open={open} onOpenChange={() => isOpen(false)}>
             <SheetContent
@@ -25,23 +46,16 @@ const AddNote = ({
                         <Button className="h-7">{useFormatTime(currentVideoTime)}</Button>
                     </div>
                     <div className="py-2">
-                        <Textarea
-                            name=""
-                            id=""
-                            className="min-h-25 block w-full overflow-hidden rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
-                            onInput={(e: React.FormEvent<HTMLTextAreaElement>) => {
-                                const target = e.target as HTMLTextAreaElement
-                                target.style.height = 'auto'
-                                target.style.height = `${target.scrollHeight}px`
-                            }}
-                        />
+                        <ReactQuill onChange={setContent} placeholder="Nhập ghi chú" />
                         <div className="mt-5 flex justify-end gap-2">
                             <SheetClose>
                                 <Button className="uppercase" variant="secondary">
                                     Hủy bỏ
                                 </Button>
                             </SheetClose>
-                            <Button className="uppercase">Tạo ghi chú</Button>
+                            <Button className="uppercase" disabled={!content} onClick={submitNote}>
+                                Tạo ghi chú
+                            </Button>
                         </div>
                     </div>
                 </div>

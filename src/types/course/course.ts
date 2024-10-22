@@ -105,3 +105,4 @@ export interface ILessonProCess {
     last_time_video: number | null
     _method?: string
 }
+

@@ -1,10 +1,20 @@
 export interface IPosts {
-    id: number
-    title: string
-    slug: string
+    allow_comments: number
+    avatar: string
+    categories: { id: number; name: string; slug: string }[]
+    content: string
     description: string
+    id: number
+    is_banned: number
+    published_at: string
+    slug: string
+    status: string
+    tags: { id: number; name: string; slug: string }[]
     thumbnail: string
-    tags: IPostTag[]
+    title: string
+    user_id: number
+    username: string
+    views: number
 }
 export interface IPostTag {
     name: string

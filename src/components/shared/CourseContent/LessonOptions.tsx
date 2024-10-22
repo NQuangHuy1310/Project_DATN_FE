@@ -46,7 +46,9 @@ const LessonOptions = ({ handleClose, moduleId }: { handleClose: (value: boolean
                     {lessonType === 'document' && (
                         <LessonDocument moduleId={moduleId} handleHiddenLesson={setIsShowLesson} />
                     )}
-                    {lessonType === 'quizzes' && <LessonQuizzes />}
+                    {lessonType === 'quizzes' && (
+                        <LessonQuizzes moduleId={moduleId} handleHiddenLesson={setIsShowLesson} />
+                    )}
                     {lessonType === 'coding' && <LessonCoding />}
                 </>
             )}

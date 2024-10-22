@@ -14,7 +14,9 @@ export const MessageErrors = {
     uploadFile: 'Tải file không thành công vui lòng thử lại.',
     phoneTooShort: 'Số điện thoại quá ngắn.',
     phoneTooLong: 'Số diện thoại quá dài.',
-    descriptionTooShort: 'Nội dung quá ngắn, độ dài tối thiểu là 200 từ.'
+    descriptionTooShort: 'Nội dung quá ngắn, độ dài tối thiểu là 200 từ.',
+    limitAnswers: 'Bạn chỉ có thể thêm tối đa 5 đáp án cho câu hỏi.',
+    minAnswers: 'Bạn cần giữ lại ít nhất 2 câu trả lời.'
 }
 
 export const ApiMessages = {

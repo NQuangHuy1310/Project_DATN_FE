@@ -1,5 +1,5 @@
 // import { Link } from 'react-router-dom'
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 
 // import {
 //     Breadcrumb,
@@ -9,14 +9,18 @@ import { ChangeEvent, useState } from 'react'
 //     BreadcrumbPage,
 //     BreadcrumbSeparator
 // } from '@/components/ui/breadcrumb'
+import { toast } from 'sonner'
 import { getImagesUrl } from '@/lib'
-import { Input } from '@/components/ui/input'
 import { IoIosWarning } from 'react-icons/io'
 import { TbCoinFilled } from 'react-icons/tb'
-import ConfirmTransaction from './ConfirmTransaction'
 import { transaction } from '@/constants/mockData'
-import { Button } from '@/components/ui/button'
+import ConfirmTransaction from './ConfirmTransaction'
 import useGetUserProfile from '@/app/hooks/accounts/useGetUser'
+import { useTransactionById } from '@/app/hooks/transactions/transaction'
+
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import Loading from '@/components/Common/Loading/Loading'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
 const Transaction = () => {
@@ -24,6 +28,9 @@ const Transaction = () => {
     const [inputValue, setInputValue] = useState<string>('')
 
     const { user } = useGetUserProfile()
+
+    const { data: transactionData, isLoading } = useTransactionById(user?.id || 0)
+    const balance = Math.floor(transactionData?.balance ?? 0)
 
     const handleSelect = (cash: number) => {
         setTotalAmount(cash)
@@ -36,6 +43,19 @@ const Transaction = () => {
         setTotalAmount(numericValue)
         setInputValue(value)
     }
+
+    useEffect(() => {
+        const queryParams = new URLSearchParams(window.location.search)
+        const statusFromURL = queryParams.get('status')
+        if (statusFromURL === 'success') {
+            toast.success('Bạn đã nạp tiền thành công')
+        } else if (statusFromURL === 'error') {
+            toast.error('Nạp tiền thất bại! Vui lòng thử lại')
+        }
+    }, [])
+
+
+    if (isLoading) return <Loading />
 
     return (
         <div>
@@ -75,7 +95,7 @@ const Transaction = () => {
                                     <div className="flex items-center gap-1 font-medium">
                                         <span>Số dư:</span>
                                         <TbCoinFilled className="size-4 text-yellow-500" />
-                                        <span>500</span>
+                                        <span>{balance}</span>
                                     </div>
                                 </div>
                             </div>
@@ -165,8 +185,8 @@ const Transaction = () => {
                                             Tổng : <b>{totalAmount.toLocaleString('vi-VN')} VNĐ</b>
                                         </span>
                                         <div>
-                                            {totalAmount > 0 ? (
-                                                <ConfirmTransaction totalAmount={totalAmount} />
+                                            {totalAmount > 0 && user ? (
+                                                <ConfirmTransaction totalAmount={totalAmount} user={user} />
                                             ) : (
                                                 <Button disabled>Nạp tiền</Button>
                                             )}

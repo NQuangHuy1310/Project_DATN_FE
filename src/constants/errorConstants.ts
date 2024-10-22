@@ -16,7 +16,9 @@ export const MessageErrors = {
     phoneTooLong: 'Số diện thoại quá dài.',
     descriptionTooShort: 'Nội dung quá ngắn, độ dài tối thiểu là 200 từ.',
     limitAnswers: 'Bạn chỉ có thể thêm tối đa 5 đáp án cho câu hỏi.',
-    minAnswers: 'Bạn cần giữ lại ít nhất 2 câu trả lời.'
+    minAnswers: 'Bạn cần giữ lại ít nhất 2 câu trả lời.',
+    invalidValue: 'Giá trị không hợp lệ.',
+    invalidDate: 'Ngày không hợp lệ. Ngày phải là ngày hiện tại hoặc trong quá khứ.'
 }
 
 export const ApiMessages = {

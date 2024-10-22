@@ -46,7 +46,7 @@ export interface ILesson {
     id_module: number
     title: string
     description: string
-    content_type: 'document' | 'video'
+    content_type: 'document' | 'video' | 'quiz'
     position: number
     is_active: number
 }

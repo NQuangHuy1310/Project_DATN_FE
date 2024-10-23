@@ -19,22 +19,22 @@ const Posts = () => {
                 <h1 className="text-2xl font-bold">Bài viết nổi bật</h1>
                 <FilterBar placeholder="Tìm kiếm bài viết" isShowFilter={false} />
             </div>
-            <div className="">
-                {data ? (
+            <div className="flex w-full flex-wrap items-start gap-10">
+                {data && data.length > 0 ? (
                     data.map((item, index) => (
                         <Post
                             key={index}
                             avatar={item.avatar}
                             image={item.thumbnail}
-                            category={item.categories[0].name}
+                            category={item.categories[0]?.name}
                             userName={item.username}
                             title={item.title}
                         />
                     ))
                 ) : (
                     <div className="flex flex-col items-center justify-center">
-                        <img src={noContent} alt="" />
-                        <p className="text-base font-medium text-muted-foreground">Chưa có bài biết nào</p>
+                        <img src={noContent} alt="No content" />
+                        <p className="text-base font-medium text-muted-foreground">Chưa có bài viết nào</p>
                     </div>
                 )}
             </div>

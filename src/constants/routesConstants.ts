@@ -46,9 +46,9 @@ import MyPosts from '@/views/user/Posts/MyPosts'
 import NewPost from '@/views/user/Posts/NewPosts'
 import MyBookmarks from '@/views/user/Posts/MyBookmarks'
 
-import Transaction from '@/views/user/wallet/Transaction'
+import Transaction from '@/views/user/wallet/transaction'
 import Payment from '@/views/user/Payment/Payment'
-
+import PostDetail from '@/views/user/Posts/PostDetail'
 
 // Routes không cần đăng nhập
 export const publicRoutes = [
@@ -76,11 +76,13 @@ export const privateRoutes = [
     { path: routes.instructor, layout: UserDashboardLayout, element: Instructor, title: 'Giảng viên' },
     { path: routes.instructorDetail, layout: UserDashboardLayout, element: InstructorDetail, title: 'Người hướng dẫn' },
     { path: routes.notification, layout: UserDashboardLayout, element: Notifications, title: 'Thông báo' },
-    { path: routes.newPost, layout: UserDashboardLayout, element: NewPost, title: 'Tạo bài viết' },
 
+    { path: routes.newPost, layout: UserDashboardLayout, element: NewPost, title: 'Tạo bài viết' },
+    { path: routes.editPost, layout: UserDashboardLayout, element: NewPost, title: 'Chỉnh sửa bài viết' },
     { path: routes.posts, layout: UserDashboardLayout, element: Posts, title: 'Danh sách bài viết' },
     { path: routes.myPosts, layout: UserDashboardLayout, element: MyPosts, title: 'Bài viết của tôi' },
     { path: routes.myBookmarks, layout: UserDashboardLayout, element: MyBookmarks, title: 'Bài viết đã lưu' },
+    { path: routes.postsDetail, layout: UserDashboardLayout, element: PostDetail },
 
     // wallet
     { path: routes.wallet, layout: UserDashboardLayout, element: Transaction, title: 'Nạp tiền vào tài khoản' },

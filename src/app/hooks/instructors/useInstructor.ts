@@ -40,6 +40,7 @@ export const useSubmitCourse = () => {
 
 export const useTargetCourse = () => {
     const queryClient = useQueryClient()
+
     return useMutation<ITargetCourse, Error, [string, ITargetCourse]>({
         mutationFn: async ([courseId, courseData]) => {
             return instructorApi.targetCourse(courseId, courseData)
@@ -53,6 +54,7 @@ export const useTargetCourse = () => {
 
 export const useOverviewCourse = () => {
     const queryClient = useQueryClient()
+
     return useMutation<IOverviewCourseData, Error, [string, IOverviewCourseData]>({
         mutationFn: async ([courseId, courseData]) => {
             return instructorApi.courseOverview(courseId, courseData)
@@ -242,7 +244,6 @@ export const useDeleteQuestion = () => {
     })
 }
 
-// Queries
 export const useCreateLessonVideo = () => {
     const queryClient = useQueryClient()
 
@@ -256,6 +257,7 @@ export const useCreateLessonVideo = () => {
     })
 }
 
+// Queries
 export const useGetCourses = (options?: Omit<UseQueryOptions<ICourses>, 'queryKey' | 'queryFn'>) => {
     return useQuery({
         ...options,

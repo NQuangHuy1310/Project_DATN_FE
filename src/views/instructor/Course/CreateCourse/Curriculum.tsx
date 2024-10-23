@@ -46,6 +46,7 @@ const Curriculum = memo(({ setIsDataComplete }: { setIsDataComplete: () => void 
                             key={item.id}
                             name={item.title}
                             lessons={item.lessons}
+                            quiz={item.quiz}
                             description={item.description}
                             handleSelectedItem={handleChangeModule}
                         />

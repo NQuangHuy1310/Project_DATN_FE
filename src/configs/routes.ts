@@ -38,7 +38,9 @@ const routes = {
 
     // Post management routes
     posts: '/posts',
-    newPost: '/posts/new',
+    postsDetail: '/posts/:slug',
+    newPost: '/posts/new/',
+    editPost: '/posts/:slug/edit',
     myPosts: '/posts/me',
     myBookmarks: '/posts/bookmarks/me',
 

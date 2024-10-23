@@ -1,7 +1,7 @@
 import { toast } from 'sonner'
 import { format } from 'date-fns'
 import ReactQuill from 'react-quill'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import 'react-quill/dist/quill.snow.css'
 import { LiaTimesSolid } from 'react-icons/lia'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -16,7 +16,7 @@ import { Button } from '@/components/ui/button'
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
 import { Calendar } from '@/components/ui/calendar'
-import { readFileAsDataUrl, validateFileSize } from '@/lib'
+import { getImagesUrl, readFileAsDataUrl, validateFileSize } from '@/lib'
 import { createPost, createPostSchema } from '@/validations'
 import { formats, modules } from '@/constants/quillConstants'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -24,7 +24,10 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { cn } from '@/lib/utils'
 import { CalendarIcon } from '@radix-ui/react-icons'
-import { useCreatePost } from '@/app/hooks/posts'
+import { useCreatePost, useGetPost, useUpdatePost } from '@/app/hooks/posts'
+import { useNavigate, useParams } from 'react-router-dom'
+import routes from '@/configs/routes'
+import Loading from '@/components/Common/Loading/Loading'
 
 const NewPost = () => {
     const {
@@ -32,13 +35,17 @@ const NewPost = () => {
         handleSubmit,
         setValue,
         getValues,
-        formState: { errors }
+        formState: { errors, isSubmitting }
     } = useForm<createPost>({
         resolver: zodResolver(createPostSchema)
     })
 
+    const { slug } = useParams()
+    const navigate = useNavigate()
     const { data: categories } = useGetCategories()
     const { mutateAsync: createNewPost } = useCreatePost()
+    const { mutateAsync: updatedPost } = useUpdatePost()
+    const { data: postData, isLoading } = useGetPost(slug!)
 
     const [date, setDate] = useState<Date>()
     const [tags, setTags] = useState<string[]>([])
@@ -103,18 +110,52 @@ const NewPost = () => {
     }
 
     const handleSubmitForm: SubmitHandler<createPost> = async (data) => {
-        const payload = {
-            ...data,
-            thumbnail: blogImageFile!,
-            published_at: date || new Date(),
-            allow_comments: isAllowComment ? 1 : 0,
-            tags: tags,
-            is_active: 1,
-            categories: data.categories.split(',').map((category) => category.trim()),
-            status: selectedStatus as 'published' | 'private',
-            slug: data.title
+        if (postData) {
+            const payload = {
+                ...data,
+                thumbnail: blogImageFile!,
+                allow_comments: isAllowComment ? 1 : 0,
+                tags: tags,
+                is_active: 1,
+                categories: data.categories.split(',').map((category) => category.trim()),
+                status: selectedStatus as 'published' | 'private',
+                _method: 'PUT'
+            }
+            await updatedPost([slug!, payload])
+            navigate(routes.myPosts)
+        } else {
+            const payload = {
+                ...data,
+                thumbnail: blogImageFile!,
+                published_at: date || new Date(),
+                allow_comments: isAllowComment ? 1 : 0,
+                tags: tags,
+                is_active: 1,
+                categories: data.categories.split(',').map((category) => category.trim()),
+                status: selectedStatus as 'published' | 'private'
+            }
+            await createNewPost(payload)
+            navigate(routes.myPosts)
         }
-        await createNewPost(payload)
+    }
+
+    useEffect(() => {
+        if (postData) {
+            setValue('title', postData.title)
+            setValue('description', postData.description)
+            setValue('content', postData.content)
+            setValue('categories', postData.categories.map((category) => category.id.toString()).join(','))
+            setSelectedCategory(postData.categories[0].id.toString())
+            setSelectedStatus(postData.status)
+            setBlogImagePath(getImagesUrl(postData.thumbnail))
+            setIsAllowComment(postData.allow_comments === 1)
+            setDate(new Date(postData.published_at))
+            setTags(postData.tags.map((tag) => tag.name))
+        }
+    }, [postData, setValue])
+
+    if (isLoading && slug) {
+        return <Loading />
     }
 
     return (
@@ -318,7 +359,9 @@ const NewPost = () => {
                 </Tabs>
 
                 <div className="ml-auto">
-                    <Button type="submit">Xuất bản</Button>
+                    <Button type="submit" disabled={isSubmitting}>
+                        {postData ? 'Cập nhật bài viết' : 'Tạo bài viết'}
+                    </Button>
                 </div>
             </div>
         </form>

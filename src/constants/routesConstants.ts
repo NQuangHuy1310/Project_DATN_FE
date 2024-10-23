@@ -46,13 +46,9 @@ import MyPosts from '@/views/user/Posts/MyPosts'
 import NewPost from '@/views/user/Posts/NewPosts'
 import MyBookmarks from '@/views/user/Posts/MyBookmarks'
 
-import CreateCourse from '@/views/instructor/Course/CreateCourse'
-import Posts from '@/views/user/Posts/Post'
-
 import Transaction from '@/views/user/wallet/Transaction'
 import Payment from '@/views/user/Payment/Payment'
-import MyPost from '@/views/user/Posts/MyPosts'
-import BookMark from '@/views/user/Posts/BookMark'
+
 
 // Routes không cần đăng nhập
 export const publicRoutes = [

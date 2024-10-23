@@ -47,8 +47,13 @@ export const sidebarList = [
     {
         title: 'Bài viết',
         icon: MdArticle,
-        path: routes.newPost,
+        path: routes.posts,
         children: [
+            {
+                title: 'Viết Blog',
+                icon: RiBloggerLine,
+                path: routes.newPost
+            },
             {
                 title: 'Bài viết của tôi',
                 icon: RiBloggerLine,

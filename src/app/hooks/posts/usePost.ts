@@ -3,7 +3,7 @@ import { useMutation, useQuery, UseQueryOptions } from '@tanstack/react-query'
 import { postsApi } from '@/app/services/posts'
 import { ICreatePost, IPosts } from '@/types/post'
 
-export const usePost = (options?: Omit<UseQueryOptions<IPosts[]>, 'queryKey' | 'queryFn'>) => {
+export const useGetPosts = (options?: Omit<UseQueryOptions<IPosts[]>, 'queryKey' | 'queryFn'>) => {
     return useQuery<IPosts[]>({
         ...options,
         queryKey: ['posts'],

@@ -1,5 +1,5 @@
 import { useUpdateLessonProCess } from '@/app/hooks/courses/useLesson'
-import { ILessonLeaning } from '@/types'
+import { ILessonLeaning } from '@/types/course/course'
 import { Dispatch, SetStateAction, useEffect } from 'react'
 
 const LeaningCourseDocument = ({

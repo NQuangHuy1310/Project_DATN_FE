@@ -5,7 +5,7 @@ import { useMutation, useQuery, useQueryClient, UseQueryOptions } from '@tanstac
 export const useLessonById = (id: number, options?: Omit<UseQueryOptions<ILessonLeaning>, 'queryKey' | 'queryFn'>) => {
     return useQuery<ILessonLeaning>({
         ...options,
-        queryKey: ['course', id],
+        queryKey: ['lesson', id],
         enabled: !!id,
         queryFn: () => lessonApi.detailLessonLeaning(id)
     })

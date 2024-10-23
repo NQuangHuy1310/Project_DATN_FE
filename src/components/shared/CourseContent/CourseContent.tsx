@@ -3,22 +3,24 @@ import { useState } from 'react'
 import { FiPlus } from 'react-icons/fi'
 import { FaBars, FaPen, FaRegTrashAlt } from 'react-icons/fa'
 
-import { ILesson } from '@/types/instructor'
+import { ILesson, ILessonQuiz } from '@/types/instructor'
 import { Button } from '@/components/ui/button'
 import { useDeleteModule } from '@/app/hooks/instructors'
 import LessonItem from '@/components/shared/CourseContent/LessonItem'
 import LessonOptions from '@/components/shared/CourseContent/LessonOptions'
 import ConfirmDialog from '@/components/shared/CourseContent/Dialog/ConfirmDialog'
+import QuizItem from '@/components/shared/CourseContent/QuizItem'
 
 interface CourseContentProps {
     name: string
     id: number
     lessons: ILesson[]
+    quiz: ILessonQuiz
     description: string
     handleSelectedItem: (item: { name: string; description: string; id: string }) => void
 }
 
-const CourseContent = ({ name, id, lessons, handleSelectedItem, description }: CourseContentProps) => {
+const CourseContent = ({ name, id, lessons, handleSelectedItem, description, quiz }: CourseContentProps) => {
     const { mutateAsync: deleteModule, isPending } = useDeleteModule()
 
     const [confirmDialog, setConfirmDialog] = useState(false)
@@ -69,6 +71,8 @@ const CourseContent = ({ name, id, lessons, handleSelectedItem, description }: C
                             return <LessonItem key={item.id} lesson={item} moduleId={id} />
                         })}
 
+                    {quiz && <QuizItem lesson={quiz} moduleId={id} />}
+
                     {/* Hiển thị LessonOptions nếu đang thêm mới */}
                     {isAddNew && <LessonOptions handleClose={setIsAddNew} moduleId={id} />}
 
@@ -78,7 +82,9 @@ const CourseContent = ({ name, id, lessons, handleSelectedItem, description }: C
                             <Button
                                 className="flex items-center gap-2"
                                 variant="outline"
-                                onClick={() => setIsAddNew(true)}
+                                onClick={() => {
+                                    setIsAddNew(true)
+                                }}
                             >
                                 <FiPlus />
                                 Mục trong chương trình

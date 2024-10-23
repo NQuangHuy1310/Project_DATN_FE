@@ -7,10 +7,14 @@ import {
     ICreateCourseData,
     ILessonDetail,
     ILessonDocData,
+    ILessonQuiz,
+    ILessonQuizData,
     ILessonVideoData,
     IModule,
     IModuleData,
     IOverviewCourseData,
+    IQuestion,
+    IQuestionData,
     ITargetCourse
 } from '@/types/instructor'
 
@@ -77,5 +81,30 @@ export const instructorApi = {
     },
     deleteLessonVideo: async (lessonId: number): Promise<any> => {
         return axiosClient.delete(instructorUri.DELETE_LESSON_DOC(lessonId))
+    },
+
+    // Api create lesson type quiz
+    createLessonQuiz: async (moduleId: number, lessonData: ILessonQuizData): Promise<ILessonQuiz> => {
+        return axiosClient.post(instructorUri.CREATE_LESSON_QUIZ(moduleId), lessonData)
+    },
+    getLessonQuiz: async (moduleId: number): Promise<any> => {
+        return axiosClient.get(instructorUri.GET_LESSON_QUIZ(moduleId))
+    },
+    updateLessonQuiz: async (lessonId: number, lessonData: ILessonQuizData): Promise<ILessonQuiz> => {
+        return axiosClient.post(instructorUri.UPDATE_LESSON_QUIZ(lessonId), lessonData)
+    },
+    deleteLessonQuiz: async (lessonId: number): Promise<any> => {
+        return axiosClient.delete(instructorUri.DELETE_LESSON_QUIZ(lessonId))
+    },
+
+    // Api add question for quiz
+    createQuestion: async (quizId: number, questionData: IQuestionData): Promise<IQuestion> => {
+        return axiosClient.post(instructorUri.CREATE_QUESTION(quizId), questionData)
+    },
+    updateQuestion: async (questionId: number, questionData: IQuestionData): Promise<IQuestion> => {
+        return axiosClient.post(instructorUri.UPDATE_QUESTION(questionId), questionData)
+    },
+    deleteQuestion: async (questionId: number): Promise<any> => {
+        return axiosClient.delete(instructorUri.DELETE_QUESTION(questionId))
     }
 }

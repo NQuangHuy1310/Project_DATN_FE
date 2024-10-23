@@ -41,9 +41,7 @@ const LessonItem = ({ lesson, moduleId }: LessonItemProps) => {
                     <div className="flex h-[36px] items-center justify-start gap-2">
                         {content_type === 'document' && <IoIosDocument className="size-5 text-primary" />}
                         {content_type === 'video' && <FaRegCirclePlay className="size-5 text-primary" />}
-                        {content_type === 'quiz' && <FaRegCirclePlay className="size-5 text-primary" />}
                         <h4 className="text-base font-medium">
-                            {content_type === 'quiz' && 'Trắc nhiệm'}
                             Bài giảng: <strong>{title}</strong>
                         </h4>
                     </div>

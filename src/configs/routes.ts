@@ -33,11 +33,14 @@ const routes = {
     wallet: '/wallet',
     transaction: '/transaction',
 
+    //Payment
+    payment: '/payment',
+
     // Post management routes
     posts: '/posts',
     newPost: '/posts/new',
     myPosts: '/posts/me',
-    myBookmarks: '/posts/me/bookmarks',
+    myBookmarks: '/posts/bookmarks/me',
 
     // Instructor dashboard
     instructorDashboard: '/instructor/dashboard',

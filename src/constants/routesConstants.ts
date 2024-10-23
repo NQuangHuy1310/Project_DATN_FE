@@ -46,7 +46,13 @@ import MyPosts from '@/views/user/Posts/MyPosts'
 import NewPost from '@/views/user/Posts/NewPosts'
 import MyBookmarks from '@/views/user/Posts/MyBookmarks'
 
-import Transaction from '@/views/user/wallet/transaction'
+import CreateCourse from '@/views/instructor/Course/CreateCourse'
+import Posts from '@/views/user/Posts/Post'
+
+import Transaction from '@/views/user/wallet/Transaction'
+import Payment from '@/views/user/Payment/Payment'
+import MyPost from '@/views/user/Posts/MyPosts'
+import BookMark from '@/views/user/Posts/BookMark'
 
 // Routes không cần đăng nhập
 export const publicRoutes = [
@@ -75,6 +81,7 @@ export const privateRoutes = [
     { path: routes.instructorDetail, layout: UserDashboardLayout, element: InstructorDetail, title: 'Người hướng dẫn' },
     { path: routes.notification, layout: UserDashboardLayout, element: Notifications, title: 'Thông báo' },
     { path: routes.newPost, layout: UserDashboardLayout, element: NewPost, title: 'Tạo bài viết' },
+
     { path: routes.posts, layout: UserDashboardLayout, element: Posts, title: 'Danh sách bài viết' },
     { path: routes.myPosts, layout: UserDashboardLayout, element: MyPosts, title: 'Bài viết của tôi' },
     { path: routes.myBookmarks, layout: UserDashboardLayout, element: MyBookmarks, title: 'Bài viết đã lưu' },
@@ -82,6 +89,9 @@ export const privateRoutes = [
     // wallet
     { path: routes.wallet, layout: UserDashboardLayout, element: Transaction, title: 'Nạp tiền vào tài khoản' },
     { path: routes.transaction, layout: UserDashboardLayout, element: Transaction, title: 'Nạp tiền' },
+
+    //Payment
+    { path: routes.payment, layout: UserDashboardLayout, element: Payment, title: 'Thanh toán' },
 
     // Instructor Dashboard
     { path: routes.instructorDashboard, layout: InstructorDashboardLayout, element: InstructorDashboard },

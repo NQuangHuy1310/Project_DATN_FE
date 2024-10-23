@@ -102,7 +102,7 @@ export interface IOption {
     id: number
     id_question: number
     option: string
-    image_url: string | null
+    image_url: string
     is_correct: number
     created_at: string
     updated_at: string
@@ -193,15 +193,15 @@ export interface ILessonQuizData {
 
 interface QuestionOptionData {
     text: string
-    image?: File
+    image?: File | string
 }
 
 interface QuestionData {
     question: string
     type: 'one_choice' | 'multiple_choice'
     points: number
-    image?: string
-    correct_answer: number[]
+    image?: File | string
+    correct_answer: number[] | number
 }
 
 export interface IQuestionData {

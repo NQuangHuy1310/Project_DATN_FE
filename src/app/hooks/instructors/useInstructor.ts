@@ -187,8 +187,8 @@ export const useUpdateLessonQuiz = () => {
     const queryClient = useQueryClient()
 
     return useMutation<any, Error, [number, ILessonQuizData]>({
-        mutationFn: async ([moduleId, lessonData]) => {
-            return instructorApi.updateLessonQuiz(moduleId, lessonData)
+        mutationFn: async ([lessonId, lessonData]) => {
+            return instructorApi.updateLessonQuiz(lessonId, lessonData)
         },
         onSuccess() {
             queryClient.invalidateQueries({ queryKey: ['modules'] })
@@ -223,11 +223,15 @@ export const useCreateQuestion = () => {
 }
 
 export const useUpdateQuestion = () => {
+    const queryClient = useQueryClient()
+
     return useMutation<any, Error, [number, IQuestionData]>({
         mutationFn: async ([questionID, lessonData]) => {
             return instructorApi.updateQuestion(questionID, lessonData)
         },
-        onSuccess() {}
+        onSuccess() {
+            queryClient.invalidateQueries({ queryKey: ['quiz'] })
+        }
     })
 }
 

@@ -1,8 +1,8 @@
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { BsDot, BsThreeDots } from 'react-icons/bs'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 
-const MyPost = () => {
+const MyPosts = () => {
     return (
         <div className='flex flex-col gap-5 p-7 bg-white rounded-md'>
             <Tabs defaultValue="draft" className="flex min-h-[500px] flex-col gap-3">
@@ -72,8 +72,7 @@ const MyPost = () => {
                 </div>
             </Tabs>
         </div>
-
     )
 }
 
-export default MyPost
+export default MyPosts

@@ -1,12 +1,23 @@
 import { Link } from 'react-router-dom'
+
+import { getImagesUrl } from '@/lib'
 import routes from '@/configs/routes'
 import { FaClock } from 'react-icons/fa'
 import { IoIosStar } from 'react-icons/io'
 import { TbCoinFilled } from 'react-icons/tb'
-import { Button } from '@/components/ui/button'
 import { IoArrowBackOutline } from 'react-icons/io5'
+import useGetUserProfile from '@/app/hooks/accounts/useGetUser'
+import { useTransactionById } from '@/app/hooks/transactions/transaction'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+
+import { Button } from '@/components/ui/button'
 
 const Payment = () => {
+    const { user } = useGetUserProfile()
+
+    const { data: transactionData } = useTransactionById(user?.id || 0)
+    const balance = Math.floor(transactionData?.balance ?? 0)
+
     return (
         <div className="mx-auto max-w-7xl p-4">
             <div className="flex flex-col gap-5 md:flex-row">
@@ -28,12 +39,17 @@ const Payment = () => {
                                         Accelerate Your Learning: Master Angular 18 and ASP.NET 8.0
                                     </h3>
                                     <div className="flex items-center gap-2">
-                                        <img
-                                            src="https://cdn.tuoitre.vn/thumb_w/600/471584752817336320/2023/2/14/img-bgt-2021-phim-hay-cua-park-bo-gum-18-1663723586-width600height750-1676358138290491025399.jpeg"
-                                            alt=""
-                                            className="h-8 w-8 rounded-full object-cover"
-                                        />
-                                        <p className="text-[15px] font-medium">Lê Đình Dũng</p>
+                                        <Avatar className="size-7 cursor-pointer">
+                                            <AvatarImage
+                                                className="object-cover"
+                                                src={getImagesUrl(user?.avatar || '')}
+                                                alt={user?.name}
+                                            />
+                                            <AvatarFallback className="bg-slate-500/50 text-xl font-semibold text-white">
+                                                {user?.name.charAt(0).toUpperCase()}
+                                            </AvatarFallback>
+                                        </Avatar>
+                                        <p className="text-[15px] font-medium">{user?.name}</p>
                                     </div>
                                     <div className="flex items-center gap-5">
                                         <div className="flex items-center gap-1">
@@ -76,7 +92,7 @@ const Payment = () => {
                                 <span className="text-[15px] font-medium">Số dư hiện tại:</span>
                                 <div className="flex gap-1">
                                     <TbCoinFilled className="size-5 text-yellow-500" />
-                                    <span className="font-medium">5000</span>
+                                    <span className="font-medium">{balance}</span>
                                 </div>
                             </div>
                             <div className="flex items-center justify-between">

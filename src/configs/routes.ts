@@ -34,7 +34,7 @@ const routes = {
     transaction: '/transaction',
 
     //Payment
-    payment: '/payment',
+    payment: '/payment/course/:slug',
 
     // Post management routes
     posts: '/posts',

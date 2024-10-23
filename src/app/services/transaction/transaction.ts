@@ -1,6 +1,6 @@
 import axiosClient from '@/configs/axiosClient'
 import { userUri } from '../Uri/accounts'
-import { IPayment } from '@/types/transaction'
+import { ITransaction } from '@/types/transaction'
 import axios from 'axios'
 
 export const transactionsApi = {
@@ -8,7 +8,7 @@ export const transactionsApi = {
         return axiosClient.get(userUri.GET_BALANCE(userId))
     },
 
-    addPayment: async (userId: number, paymentData: IPayment): Promise<any> => {
+    addPayment: async (userId: number, paymentData: ITransaction): Promise<any> => {
         const token = localStorage.getItem('access_token')
         return axios.post(`http://localhost:8000/api/transactions/payment/${userId}`, paymentData, {
             headers: {

@@ -2,7 +2,7 @@ export interface IRecharge {
     cent: number
     cash: number
 }
-export interface IPayment {
+export interface ITransaction {
     amount: number
     balance?: number
 }

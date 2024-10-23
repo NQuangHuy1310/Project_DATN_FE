@@ -1,5 +1,5 @@
 import { TeacherStatus } from '@/constants'
-import { ICourse } from '@/types/course'
+import { ICourse } from '@/types/course/course'
 export interface ITeacher {
     user_id: number
     user_avatar: string

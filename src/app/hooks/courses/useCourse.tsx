@@ -1,5 +1,5 @@
 import { courseApi } from '@/app/services/courses/courses'
-import { CourseData } from '@/types'
+import { CourseData } from '@/types/course/course'
 import { useQuery, UseQueryOptions } from '@tanstack/react-query'
 
 export const useCourseLeaningBySlug = (

@@ -1,6 +1,6 @@
-import { courseUri } from '@/app/services/Uri/courses/courses'
 import axiosClient from '@/configs/axiosClient'
-import { CourseData } from '@/types'
+import { courseUri } from '@/app/services/Uri/courses/courses'
+import { CourseData } from '@/types/course/course'
 
 export const courseApi = {
     detailCourseLeaning: async (slug: string): Promise<CourseData> => {

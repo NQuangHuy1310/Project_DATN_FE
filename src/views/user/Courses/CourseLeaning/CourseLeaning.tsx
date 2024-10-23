@@ -18,26 +18,32 @@ import logo from '@/assets/Union.svg'
 
 import Loading from '@/components/Common/Loading/Loading'
 import { Button } from '@/components/ui/button'
-import AddAllNode from '@/components/shared/CourseLeaning/Sheet/AddAllNote'
+import useFormatTime from '@/app/hooks/common/useFomatTime'
+import AllNoteCourse from '@/components/shared/CourseLeaning/Sheet/AllNoteCourse'
 import { useLessonById } from '@/app/hooks/courses/useLesson'
 import LeaningCourseQuiz from '@/components/shared/CourseLeaning/LeaningCourseQuiz'
 import LeaningCourseVideo from '@/components/shared/CourseLeaning/LeaningCourseVideo'
-import { useCourseLeaningBySlug } from '@/app/hooks/courses/useCourse'
 import LeaningCourseDocument from '@/components/shared/CourseLeaning/LeaningCourseDocument'
-import useFormatTime from '@/app/hooks/common/useFomatTime'
+import { useCourseLeaningBySlug } from '@/app/hooks/courses/useCourse'
+import { ILessonLeaning, IModuleLeaning } from '@/types/course/course'
 import { useGetIdParams, useGetSlugParams } from '@/app/hooks/common/useCustomParams'
-import { ILessonLeaning, IModuleLeaning } from '@/types'
 
 const CourseLearning = () => {
     const [toggleTab, setToggleTab] = useState<boolean>(true)
     const [activeModules, setActiveModules] = useState<number[]>([])
     const [allNodeSheet, setAllNodeSheet] = useState(false)
+    const [checkNote, setCheckNote] = useState<boolean>(false)
     const [checkButton, setCheckButton] = useState<boolean>(true)
     const [searchParams, setSearchParams] = useSearchParams()
     const courseListRef = useRef<HTMLDivElement | null>(null)
 
+    const [pauseVideoCallback, setPauseVideoCallback] = useState<() => void>(() => {})
+    const [playVideoCallback, setPlayVideoCallback] = useState<() => void>(() => {})
+
     const slug = useGetSlugParams('slug')
     const idLesson = useGetIdParams('id')
+
+    console.log(playVideoCallback)
 
     // call api danh sách bài học (slug)
     const { data: courseModule, isLoading, refetch } = useCourseLeaningBySlug(slug!)
@@ -307,11 +313,27 @@ const CourseLearning = () => {
                             {courseModule?.completed_lessons!}/{courseModule?.total_lessons!} bài học
                         </span>
                     </div>
-                    <div className="flex cursor-pointer items-center gap-1" onClick={() => setAllNodeSheet(true)}>
+                    <div
+                        className="flex cursor-pointer items-center gap-1"
+                        onClick={() => {
+                            setAllNodeSheet(true)
+                            pauseVideoCallback()
+                        }}
+                    >
                         <HiDocument className="size-5" />
                         <span className="hidden lg:block">Ghi chú</span>
                     </div>
-                    <AddAllNode open={allNodeSheet} isOpen={setAllNodeSheet} />
+                    <AllNoteCourse
+                        id_course={courseModule?.modules[0].id_course!}
+                        checkNote={checkNote}
+                        open={allNodeSheet}
+                        isOpen={(isOpen) => {
+                            setAllNodeSheet(isOpen)
+                            if (!isOpen) {
+                                playVideoCallback()
+                            }
+                        }}
+                    />
                     <div className="flex items-center gap-1">
                         <HiQuestionMarkCircle className="size-5" />
                         <span className="hidden lg:block">Hướng dẫn</span>
@@ -329,9 +351,12 @@ const CourseLearning = () => {
                     )}
                     {courseLesson?.content_type === 'video' && (
                         <LeaningCourseVideo
+                            setCheckNote={setCheckNote}
                             toggleTab={toggleTab}
                             dataLesson={courseLesson}
                             setCheckButton={setCheckButton}
+                            onPauseVideo={(pauseVideo) => setPauseVideoCallback(() => pauseVideo)}
+                            onPlayVideo={(playVideo) => setPlayVideoCallback(() => playVideo)}
                         />
                     )}
                     {courseLesson?.content_type === 'quiz' && (

@@ -2,7 +2,7 @@ import { MdEdit } from 'react-icons/md'
 import { LuTrash } from 'react-icons/lu'
 import { FaCheck } from 'react-icons/fa6'
 import { IoMdClose } from 'react-icons/io'
-import { Dispatch, SetStateAction, useEffect } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -11,6 +11,8 @@ import { useCreateLessonQuiz, useDeleteQuestion, useGetLessonQuiz, useUpdateLess
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { lessonQuiz, lessonQuizSchema } from '@/validations'
+import { IQuestion } from '@/types/instructor'
+import DialogAddQuestion from '@/components/shared/CourseContent/Dialog/DialogAddQuestion'
 
 interface LessonQuizzesProps {
     moduleId: number
@@ -30,6 +32,8 @@ const LessonQuizzes = ({ handleHiddenLesson, moduleId }: LessonQuizzesProps) => 
     const { mutateAsync: updateLessonQuiz } = useUpdateLessonQuiz()
     const { mutateAsync: deleteLessonQuiz } = useDeleteQuestion()
     const { data } = useGetLessonQuiz(moduleId)
+    const [selectedQuestion, setSelectedQuestion] = useState<IQuestion>()
+    const [openDialog, setOpenDialog] = useState(false)
 
     const handleSubmitForm: SubmitHandler<lessonQuiz> = async (formData) => {
         if (formData && data?.quiz) {
@@ -125,7 +129,10 @@ const LessonQuizzes = ({ handleHiddenLesson, moduleId }: LessonQuizzesProps) => 
                                                     size="icon"
                                                     variant="outline"
                                                     className="h-[30px] w-[30px]"
-                                                    onClick={() => {}}
+                                                    onClick={() => {
+                                                        setSelectedQuestion(question)
+                                                        setOpenDialog(true)
+                                                    }}
                                                 >
                                                     <MdEdit />
                                                 </Button>
@@ -176,6 +183,9 @@ const LessonQuizzes = ({ handleHiddenLesson, moduleId }: LessonQuizzesProps) => 
                     </div>
                 </div>
             </form>
+
+            {/* Dialog */}
+            <DialogAddQuestion openDialog={openDialog} setOpenDialog={setOpenDialog} question={selectedQuestion!} />
         </>
     )
 }

@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { FaBars } from 'react-icons/fa6'
+import { CSS } from '@dnd-kit/utilities'
 import { IoIosDocument } from 'react-icons/io'
+import { useSortable } from '@dnd-kit/sortable'
 import { FaRegCirclePlay } from 'react-icons/fa6'
 import { FaPen, FaRegTrashAlt } from 'react-icons/fa'
 
@@ -18,12 +20,23 @@ interface LessonItemProps {
 
 const LessonItem = ({ lesson }: LessonItemProps) => {
     const { id, content_type, title } = lesson
+    const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+        id: lesson.id,
+        data: { ...lesson }
+    })
     const { mutateAsync: deleteLessonDoc, isPending } = useDeleteLessonDoc()
     const { mutateAsync: deleteLessonVideo } = useDeleteLessonVideo()
     const [lessonId, setLessonId] = useState<number>(id)
     const [isOpenDialog, setIsOpenDialog] = useState(false)
     const [isEditLessonDoc, setIsEditLesson] = useState(false)
     const [isEditLessonVideo, setIsEditLessonVideo] = useState(false)
+
+    const dndKitColumnStyles = {
+        transform: CSS.Translate.toString(transform),
+        transition,
+        height: '100%',
+        opacity: isDragging ? 0.5 : undefined
+    }
 
     const handleDeleteLesson = async () => {
         if (content_type === 'document') {
@@ -36,7 +49,12 @@ const LessonItem = ({ lesson }: LessonItemProps) => {
 
     return (
         <>
-            <div className="flex items-center justify-between gap-4 rounded-lg bg-white px-4 py-2.5">
+            <div
+                className="flex items-center justify-between gap-4 rounded-lg bg-white px-4 py-2.5"
+                ref={setNodeRef}
+                style={dndKitColumnStyles}
+                {...attributes}
+            >
                 <div className="flex w-full items-start justify-between gap-4">
                     <div className="flex h-[36px] items-center justify-start gap-2">
                         {content_type === 'document' && <IoIosDocument className="size-5 text-primary" />}
@@ -62,7 +80,7 @@ const LessonItem = ({ lesson }: LessonItemProps) => {
                         </Button>
                     </div>
                 </div>
-                <div className="block cursor-all-scroll">
+                <div className="block cursor-all-scroll" {...listeners}>
                     <FaBars className="size-4" />
                 </div>
             </div>

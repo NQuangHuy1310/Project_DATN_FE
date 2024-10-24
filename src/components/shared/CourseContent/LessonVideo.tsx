@@ -8,21 +8,21 @@ import { MessageErrors } from '@/constants'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import placeholder from '@/assets/placeholder.jpg'
-import { ILessonDetail, ILessonVideoData } from '@/types/instructor'
+import { ILessonVideoData } from '@/types/instructor'
 import { getImagesUrl, readFileAsDataUrl, validateFileSize } from '@/lib'
 import { lessonVideo, lessonVideoSchema } from '@/validations'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { useCreateLessonVideo, useUpdateLessonVideo } from '@/app/hooks/instructors'
+import { useCreateLessonVideo, useGetLessonDetail, useUpdateLessonVideo } from '@/app/hooks/instructors'
 
 interface LessonVideoProps {
-    moduleId: number
-    lessonData?: ILessonDetail
+    moduleId?: number
     courseId?: number
+    lessonId?: number
     setIsEditLesson?: Dispatch<SetStateAction<boolean>>
     handleHiddenLesson?: Dispatch<SetStateAction<boolean>>
 }
 
-const LessonVideo = ({ moduleId, handleHiddenLesson, lessonData, setIsEditLesson, courseId }: LessonVideoProps) => {
+const LessonVideo = ({ moduleId, handleHiddenLesson, lessonId, setIsEditLesson, courseId }: LessonVideoProps) => {
     const {
         reset,
         register,
@@ -34,6 +34,7 @@ const LessonVideo = ({ moduleId, handleHiddenLesson, lessonData, setIsEditLesson
         resolver: zodResolver(lessonVideoSchema)
     })
 
+    const { data: lessonData, refetch } = useGetLessonDetail(lessonId!)
     const { mutateAsync: createLessonVideo } = useCreateLessonVideo()
     const { mutateAsync: updateLessonVideo } = useUpdateLessonVideo()
 
@@ -105,6 +106,10 @@ const LessonVideo = ({ moduleId, handleHiddenLesson, lessonData, setIsEditLesson
         if (lessonData) setIsEditLesson?.(false)
         else handleHiddenLesson?.(false)
     }
+
+    useEffect(() => {
+        refetch()
+    }, [refetch])
 
     useEffect(() => {
         if (lessonData) {

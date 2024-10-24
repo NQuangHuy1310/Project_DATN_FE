@@ -7,7 +7,7 @@ import { FaPen, FaRegTrashAlt } from 'react-icons/fa'
 import { ILesson } from '@/types/instructor'
 import { Button } from '@/components/ui/button'
 import ConfirmDialog from '@/components/shared/CourseContent/Dialog/ConfirmDialog'
-import { useDeleteLessonDoc, useDeleteLessonVideo, useGetLessonDetail } from '@/app/hooks/instructors'
+import { useDeleteLessonDoc, useDeleteLessonVideo } from '@/app/hooks/instructors'
 import LessonDocument from '@/components/shared/CourseContent/LessonDocument'
 import LessonVideo from '@/components/shared/CourseContent/LessonVideo'
 
@@ -16,11 +16,11 @@ interface LessonItemProps {
     moduleId: number
 }
 
-const LessonItem = ({ lesson, moduleId }: LessonItemProps) => {
+const LessonItem = ({ lesson }: LessonItemProps) => {
     const { id, content_type, title } = lesson
-    const { data } = useGetLessonDetail(id)
     const { mutateAsync: deleteLessonDoc, isPending } = useDeleteLessonDoc()
     const { mutateAsync: deleteLessonVideo } = useDeleteLessonVideo()
+    const [lessonId, setLessonId] = useState<number>(id)
     const [isOpenDialog, setIsOpenDialog] = useState(false)
     const [isEditLessonDoc, setIsEditLesson] = useState(false)
     const [isEditLessonVideo, setIsEditLessonVideo] = useState(false)
@@ -52,6 +52,7 @@ const LessonItem = ({ lesson, moduleId }: LessonItemProps) => {
                             onClick={() => {
                                 if (content_type === 'document') setIsEditLesson(!isEditLessonDoc)
                                 if (content_type === 'video') setIsEditLessonVideo(!isEditLessonVideo)
+                                setLessonId(id)
                             }}
                         >
                             <FaPen className="size-4" />
@@ -67,24 +68,11 @@ const LessonItem = ({ lesson, moduleId }: LessonItemProps) => {
             </div>
 
             {/* Handle edit lesson doc */}
-            {isEditLessonDoc && (
-                <LessonDocument
-                    isEdit={isEditLessonDoc}
-                    lessonData={data}
-                    moduleId={moduleId}
-                    courseId={id}
-                    setIsEditLesson={setIsEditLesson}
-                />
-            )}
+            {isEditLessonDoc && <LessonDocument lessonId={lessonId} courseId={id} setIsEditLesson={setIsEditLesson} />}
 
             {/* Handle edit lesson video */}
             {isEditLessonVideo && (
-                <LessonVideo
-                    moduleId={moduleId}
-                    lessonData={data!}
-                    courseId={id}
-                    setIsEditLesson={setIsEditLessonVideo}
-                />
+                <LessonVideo lessonId={lessonId} courseId={id} setIsEditLesson={setIsEditLessonVideo} />
             )}
 
             {/* Confirm dialog */}

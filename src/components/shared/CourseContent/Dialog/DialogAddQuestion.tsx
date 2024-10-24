@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import { toast } from 'sonner'
 import { FaPlus } from 'react-icons/fa6'
 import { IoMdClose } from 'react-icons/io'
@@ -23,6 +24,7 @@ interface DialogAddQuestionProps {
 }
 
 interface Answer {
+    id?: number
     text: string
     image?: File | string
 }
@@ -116,18 +118,28 @@ const DialogAddQuestion = ({ openDialog, setOpenDialog, quizId, question }: Dial
 
     const handleSubmit = async () => {
         const correct_answer = questionType === 'one_choice' ? correctAnswers[0] : correctAnswers
+        const options = question
+            ? answers.map((answers) => {
+                  return {
+                      text: answers.text,
+                      image: answers.image,
+                      id: answers.id
+                  }
+              })
+            : answers.map((answer) => ({
+                  text: answer.text,
+                  image: typeof answer.image === 'string' ? undefined : answer.image
+              }))
+
         const data = {
             question: {
                 question: questionText,
                 type: questionType,
                 points,
                 correct_answer: correct_answer,
-                image: questionImage
+                image: typeof questionImage === 'string' ? undefined : questionImage
             },
-            options: answers.map((answer) => ({
-                text: answer.text,
-                image: answer.image
-            }))
+            options: options
         }
 
         if (question) {
@@ -168,7 +180,8 @@ const DialogAddQuestion = ({ openDialog, setOpenDialog, quizId, question }: Dial
             setAnswers(
                 question.options.map((option) => ({
                     text: option.option,
-                    image: option.image_url ? getImagesUrl(option.image_url) : undefined
+                    image: option.image_url ? getImagesUrl(option.image_url) : undefined,
+                    id: option.id
                 }))
             )
             setCorrectAnswers(correctAnswers)

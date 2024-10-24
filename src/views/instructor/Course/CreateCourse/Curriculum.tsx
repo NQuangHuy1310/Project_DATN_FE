@@ -1,6 +1,6 @@
-import { memo, useEffect, useState } from 'react'
 import { FiPlus } from 'react-icons/fi'
 import { useParams } from 'react-router-dom'
+import { memo, useEffect, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
 import { useGetModule } from '@/app/hooks/instructors'
@@ -39,7 +39,6 @@ const Curriculum = memo(({ setIsDataComplete }: { setIsDataComplete: () => void 
 
             <div className="mt-4 flex flex-col gap-7">
                 {moduleData &&
-                    moduleData.modules &&
                     moduleData.modules.map((item) => (
                         <CourseContent
                             id={item.id}

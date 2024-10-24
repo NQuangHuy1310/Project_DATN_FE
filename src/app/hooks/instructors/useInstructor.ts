@@ -125,8 +125,9 @@ export const useUpdateLessonDoc = () => {
         mutationFn: async ([lessonId, lessonData]) => {
             return instructorApi.updateLessonDoc(lessonId, lessonData)
         },
-        onSuccess() {
+        onSettled() {
             queryClient.invalidateQueries({ queryKey: ['modules'] })
+            queryClient.invalidateQueries({ queryKey: ['lesson'] })
         }
     })
 }
@@ -153,6 +154,7 @@ export const useUpdateLessonVideo = () => {
         },
         onSuccess() {
             queryClient.invalidateQueries({ queryKey: ['modules'] })
+            queryClient.invalidateQueries({ queryKey: ['lesson'] })
         }
     })
 }
@@ -192,6 +194,7 @@ export const useUpdateLessonQuiz = () => {
         },
         onSuccess() {
             queryClient.invalidateQueries({ queryKey: ['modules'] })
+            queryClient.invalidateQueries({ queryKey: ['quiz'] })
         }
     })
 }
@@ -231,6 +234,7 @@ export const useUpdateQuestion = () => {
         },
         onSuccess() {
             queryClient.invalidateQueries({ queryKey: ['quiz'] })
+            toast.success('Cập nhật câu hỏi thành công!')
         }
     })
 }
@@ -306,6 +310,7 @@ export const useGetLessonDetail = (
 ) => {
     return useQuery({
         ...options,
+        enabled: !!id,
         queryKey: ['lesson', id],
         queryFn: () => instructorApi.getLessonDetail(id)
     })

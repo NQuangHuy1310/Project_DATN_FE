@@ -192,6 +192,7 @@ export interface ILessonQuizData {
 }
 
 interface QuestionOptionData {
+    id?: number
     text: string
     image?: File | string
 }

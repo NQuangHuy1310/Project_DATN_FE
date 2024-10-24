@@ -6,26 +6,17 @@ import { Button } from '@/components/ui/button'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { lessonDoc, lessonDocSchema } from '@/validations'
 import { Dispatch, SetStateAction, useEffect, useRef } from 'react'
-import { useCreateLessonDoc, useUpdateLessonDoc } from '@/app/hooks/instructors'
-import { ILessonDetail } from '@/types/instructor'
+import { useCreateLessonDoc, useGetLessonDetail, useUpdateLessonDoc } from '@/app/hooks/instructors'
 
 interface LessonDocumentProps {
-    isEdit?: boolean
-    lessonData?: ILessonDetail
     courseId?: number
-    moduleId: number
+    moduleId?: number
+    lessonId?: number
     handleHiddenLesson?: Dispatch<SetStateAction<boolean>>
     setIsEditLesson?: Dispatch<SetStateAction<boolean>>
 }
 
-const LessonDocument = ({
-    moduleId,
-    handleHiddenLesson,
-    isEdit,
-    lessonData,
-    courseId,
-    setIsEditLesson
-}: LessonDocumentProps) => {
+const LessonDocument = ({ moduleId, handleHiddenLesson, courseId, lessonId, setIsEditLesson }: LessonDocumentProps) => {
     const {
         reset,
         register,
@@ -36,6 +27,7 @@ const LessonDocument = ({
     } = useForm<lessonDoc>({
         resolver: zodResolver(lessonDocSchema)
     })
+    const { data: lessonData } = useGetLessonDetail(lessonId ? lessonId : 0)
     const { mutateAsync: createLessonDoc } = useCreateLessonDoc()
     const { mutateAsync: updateLessonDoc } = useUpdateLessonDoc()
     const quillRef = useRef<ReactQuill | null>(null)
@@ -53,7 +45,7 @@ const LessonDocument = ({
             await updateLessonDoc([courseId!, payload])
             setIsEditLesson?.(false)
         } else {
-            await createLessonDoc([moduleId, data])
+            await createLessonDoc([moduleId!, data])
             handleHiddenLesson?.(false)
         }
         reset()
@@ -72,7 +64,7 @@ const LessonDocument = ({
             setValue('title', lessonData!.title)
             setValue('content', contentData!)
         }
-    }, [lessonData, setValue, reset])
+    }, [lessonData, setValue, reset, lessonId])
 
     return (
         <>
@@ -108,7 +100,7 @@ const LessonDocument = ({
                             Huỷ
                         </Button>
                         <Button type="submit" disabled={isSubmitting}>
-                            {isEdit ? 'Lưu thông tin' : 'Thêm bài giảng'}
+                            {lessonData ? 'Lưu thông tin' : 'Thêm bài giảng'}
                         </Button>
                     </div>
                 </div>

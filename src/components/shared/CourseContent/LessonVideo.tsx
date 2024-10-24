@@ -34,7 +34,7 @@ const LessonVideo = ({ moduleId, handleHiddenLesson, lessonId, setIsEditLesson, 
         resolver: zodResolver(lessonVideoSchema)
     })
 
-    const { data: lessonData, refetch } = useGetLessonDetail(lessonId!)
+    const { data: lessonData } = useGetLessonDetail(lessonId ? lessonId : 0)
     const { mutateAsync: createLessonVideo } = useCreateLessonVideo()
     const { mutateAsync: updateLessonVideo } = useUpdateLessonVideo()
 
@@ -106,10 +106,6 @@ const LessonVideo = ({ moduleId, handleHiddenLesson, lessonId, setIsEditLesson, 
         if (lessonData) setIsEditLesson?.(false)
         else handleHiddenLesson?.(false)
     }
-
-    useEffect(() => {
-        refetch()
-    }, [refetch])
 
     useEffect(() => {
         if (lessonData) {

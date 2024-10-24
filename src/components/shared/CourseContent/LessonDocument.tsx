@@ -27,7 +27,7 @@ const LessonDocument = ({ moduleId, handleHiddenLesson, courseId, lessonId, setI
     } = useForm<lessonDoc>({
         resolver: zodResolver(lessonDocSchema)
     })
-    const { data: lessonData, refetch } = useGetLessonDetail(lessonId!)
+    const { data: lessonData } = useGetLessonDetail(lessonId ? lessonId : 0)
     const { mutateAsync: createLessonDoc } = useCreateLessonDoc()
     const { mutateAsync: updateLessonDoc } = useUpdateLessonDoc()
     const quillRef = useRef<ReactQuill | null>(null)
@@ -64,7 +64,7 @@ const LessonDocument = ({ moduleId, handleHiddenLesson, courseId, lessonId, setI
             setValue('title', lessonData!.title)
             setValue('content', contentData!)
         }
-    }, [lessonData, setValue, reset, lessonId, refetch])
+    }, [lessonData, setValue, reset, lessonId])
 
     return (
         <>

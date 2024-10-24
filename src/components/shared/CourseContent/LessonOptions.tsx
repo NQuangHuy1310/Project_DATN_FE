@@ -12,7 +12,12 @@ import { lessonOptions } from '@/constants'
 
 type lessonTypes = 'video' | 'document' | 'quizzes' | 'coding'
 
-const LessonOptions = ({ handleClose, moduleId }: { handleClose: (value: boolean) => void; moduleId: number }) => {
+interface LessonOptionsProps {
+    handleClose: (value: boolean) => void
+    moduleId: number
+}
+
+const LessonOptions = ({ handleClose, moduleId }: LessonOptionsProps) => {
     const [isShowLesson, setIsShowLesson] = useState(false)
     const [lessonType, setLessonType] = useState<lessonTypes | undefined>(undefined)
 

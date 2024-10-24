@@ -24,7 +24,7 @@ export interface ICreatePost {
     title: string
     description: string
     content: string
-    published_at: Date
+    published_at?: Date
     status: 'published' | 'private'
     allow_comments: number
     categories: string[]

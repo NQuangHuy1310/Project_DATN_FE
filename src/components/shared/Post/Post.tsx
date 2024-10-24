@@ -13,7 +13,7 @@ const Post = ({ image, category, title, userName, avatar }: PostProps) => {
     const postImage = getImagesUrl(image)
 
     return (
-        <div className="flex max-w-[360px] cursor-pointer flex-col gap-4 rounded-lg border p-4 shadow-md">
+        <div className="flex w-full max-w-[360px] cursor-pointer flex-col gap-4 rounded-lg border p-4 shadow-md">
             <div className="h-[170px] w-full overflow-hidden rounded-lg">
                 <img src={postImage} alt={title} className="h-full w-full object-cover" />
             </div>

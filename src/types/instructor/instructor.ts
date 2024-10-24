@@ -58,6 +58,7 @@ export interface IModule {
     title: string
     description: string
     lessons: ILesson[]
+    quiz: ILessonQuiz
 }
 
 export interface ILessonDetail {
@@ -78,11 +79,57 @@ export interface ILessonDetail {
     }
 }
 
+export interface ILessonQuiz {
+    id: number
+    id_module: number
+    total_points: number
+    title: string
+    description: string
+}
+
 export interface IModules {
     modules: IModule[]
 }
 
-// ----------------------------- Request
+export interface ILessonQuiz {
+    id: number
+    id_module: number
+    total_points: number
+    title: string
+    description: string
+}
+export interface IOption {
+    id: number
+    id_question: number
+    option: string
+    image_url: string
+    is_correct: number
+    created_at: string
+    updated_at: string
+}
+
+export interface IQuestion {
+    id: number
+    id_quiz: number
+    question: string
+    type: 'one_choice' | 'multiple_choice'
+    image_url: string | null
+    points: number
+    options: IOption[]
+}
+
+export interface IQuiz {
+    quiz: {
+        id: number
+        id_module: number
+        total_points: number
+        title: string
+        description: string
+        questions: IQuestion[]
+    }
+}
+
+// ----------- Request -------------------
 export interface ICreateCourseData {
     name: string
     id_category: string
@@ -135,5 +182,30 @@ export interface ILessonVideoData {
     video?: File
     video_youtube_id?: string
     duration?: number
+    _method?: string
+}
+
+export interface ILessonQuizData {
+    title: string
+    description: string
+    _method?: string
+}
+
+interface QuestionOptionData {
+    text: string
+    image?: File | string
+}
+
+interface QuestionData {
+    question: string
+    type: 'one_choice' | 'multiple_choice'
+    points: number
+    image?: File | string
+    correct_answer: number[] | number
+}
+
+export interface IQuestionData {
+    question: QuestionData
+    options: QuestionOptionData[]
     _method?: string
 }

@@ -1,20 +1,24 @@
-import { toast } from 'sonner'
 import { useMutation, useQuery, useQueryClient, UseQueryOptions } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
+import { instructorApi } from '@/app/services/instructors'
 import {
     ICourses,
     ICreateCourseData,
     ILessonDetail,
     ILessonDocData,
+    ILessonQuiz,
+    ILessonQuizData,
     ILessonVideoData,
     IModule,
     IModuleData,
     IModules,
     IOverviewCourse,
     IOverviewCourseData,
+    IQuestionData,
+    IQuiz,
     ITargetCourse
 } from '@/types/instructor'
-import { instructorApi } from '@/app/services/instructors'
 
 // Mutation
 export const useCreateCourse = () => {
@@ -36,6 +40,7 @@ export const useSubmitCourse = () => {
 
 export const useTargetCourse = () => {
     const queryClient = useQueryClient()
+
     return useMutation<ITargetCourse, Error, [string, ITargetCourse]>({
         mutationFn: async ([courseId, courseData]) => {
             return instructorApi.targetCourse(courseId, courseData)
@@ -49,6 +54,7 @@ export const useTargetCourse = () => {
 
 export const useOverviewCourse = () => {
     const queryClient = useQueryClient()
+
     return useMutation<IOverviewCourseData, Error, [string, IOverviewCourseData]>({
         mutationFn: async ([courseId, courseData]) => {
             return instructorApi.courseOverview(courseId, courseData)
@@ -164,7 +170,84 @@ export const useDeleteLessonVideo = () => {
     })
 }
 
-// Queries
+export const useCreateLessonQuiz = () => {
+    const queryClient = useQueryClient()
+
+    return useMutation<ILessonQuiz, Error, [number, ILessonQuizData]>({
+        mutationFn: async ([moduleId, lessonData]) => {
+            return instructorApi.createLessonQuiz(moduleId, lessonData)
+        },
+        onSuccess() {
+            queryClient.invalidateQueries({ queryKey: ['modules'] })
+        }
+    })
+}
+
+export const useUpdateLessonQuiz = () => {
+    const queryClient = useQueryClient()
+
+    return useMutation<any, Error, [number, ILessonQuizData]>({
+        mutationFn: async ([lessonId, lessonData]) => {
+            return instructorApi.updateLessonQuiz(lessonId, lessonData)
+        },
+        onSuccess() {
+            queryClient.invalidateQueries({ queryKey: ['modules'] })
+        }
+    })
+}
+
+export const useDeleteLessonQuiz = () => {
+    const queryClient = useQueryClient()
+
+    return useMutation({
+        mutationFn: async (lessonId: number) => {
+            return instructorApi.deleteLessonQuiz(lessonId)
+        },
+        onSuccess() {
+            queryClient.invalidateQueries({ queryKey: ['modules'] })
+        }
+    })
+}
+
+export const useCreateQuestion = () => {
+    const queryClient = useQueryClient()
+
+    return useMutation<any, Error, [number, IQuestionData]>({
+        mutationFn: async ([quizId, lessonData]) => {
+            return instructorApi.createQuestion(quizId, lessonData)
+        },
+        onSuccess() {
+            queryClient.invalidateQueries({ queryKey: ['quiz'] })
+        }
+    })
+}
+
+export const useUpdateQuestion = () => {
+    const queryClient = useQueryClient()
+
+    return useMutation<any, Error, [number, IQuestionData]>({
+        mutationFn: async ([questionID, lessonData]) => {
+            return instructorApi.updateQuestion(questionID, lessonData)
+        },
+        onSuccess() {
+            queryClient.invalidateQueries({ queryKey: ['quiz'] })
+        }
+    })
+}
+
+export const useDeleteQuestion = () => {
+    const queryClient = useQueryClient()
+
+    return useMutation({
+        mutationFn: async (questionID: number) => {
+            return instructorApi.deleteQuestion(questionID)
+        },
+        onSuccess() {
+            queryClient.invalidateQueries({ queryKey: ['quiz'] })
+        }
+    })
+}
+
 export const useCreateLessonVideo = () => {
     const queryClient = useQueryClient()
 
@@ -178,6 +261,7 @@ export const useCreateLessonVideo = () => {
     })
 }
 
+// Queries
 export const useGetCourses = (options?: Omit<UseQueryOptions<ICourses>, 'queryKey' | 'queryFn'>) => {
     return useQuery({
         ...options,
@@ -224,5 +308,13 @@ export const useGetLessonDetail = (
         ...options,
         queryKey: ['lesson', id],
         queryFn: () => instructorApi.getLessonDetail(id)
+    })
+}
+
+export const useGetLessonQuiz = (id: number, options?: Omit<UseQueryOptions<IQuiz>, 'queryKey' | 'queryFn'>) => {
+    return useQuery({
+        ...options,
+        queryKey: ['quiz', id],
+        queryFn: () => instructorApi.getLessonQuiz(id)
     })
 }

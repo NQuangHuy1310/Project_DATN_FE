@@ -29,6 +29,7 @@ const Posts = () => {
                             category={item.categories[0]?.name}
                             userName={item.username}
                             title={item.title}
+                            slug={item.slug}
                         />
                     ))
                 ) : (

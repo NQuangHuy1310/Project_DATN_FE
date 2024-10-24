@@ -46,9 +46,9 @@ import MyPosts from '@/views/user/Posts/MyPosts'
 import NewPost from '@/views/user/Posts/NewPosts'
 import MyBookmarks from '@/views/user/Posts/MyBookmarks'
 
-import Transaction from '@/views/user/wallet/transaction'
 import Payment from '@/views/user/Payment/Payment'
 import PostDetail from '@/views/user/Posts/PostDetail'
+import Transaction from '@/views/user/wallet/Transaction'
 
 // Routes không cần đăng nhập
 export const publicRoutes = [
@@ -82,11 +82,10 @@ export const privateRoutes = [
     { path: routes.posts, layout: UserDashboardLayout, element: Posts, title: 'Danh sách bài viết' },
     { path: routes.myPosts, layout: UserDashboardLayout, element: MyPosts, title: 'Bài viết của tôi' },
     { path: routes.myBookmarks, layout: UserDashboardLayout, element: MyBookmarks, title: 'Bài viết đã lưu' },
-    { path: routes.postsDetail, layout: UserDashboardLayout, element: PostDetail },
+    { path: routes.postsDetail, layout: UserDashboardLayout, element: PostDetail, title: 'Chi tiết bài viết' },
 
     // wallet
     { path: routes.wallet, layout: UserDashboardLayout, element: Transaction, title: 'Nạp tiền vào tài khoản' },
-    { path: routes.transaction, layout: UserDashboardLayout, element: Transaction, title: 'Nạp tiền' },
 
     //Payment
     { path: routes.payment, layout: UserDashboardLayout, element: Payment, title: 'Thanh toán' },

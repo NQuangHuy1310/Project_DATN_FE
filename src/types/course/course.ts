@@ -5,12 +5,14 @@ export interface ICourse {
     course_id: number
     course_thumbnail: string
     course_name: string
+    price: number
+    price_sale: number
     average_rating: number
-    level: CourseLevel
+    level?: CourseLevel
     total_student?: number
     totalVideo?: number
     totalTime?: string
-    createdBy: IUser
+    createdBy?: IUser
     progressLesson?: number
     totalLesson?: number
 }
@@ -106,3 +108,18 @@ export interface ILessonProCess {
     _method?: string
 }
 
+export interface ICourseSale {
+    user_id: number
+    user_name: string
+    user_avatar: string
+    course_id: number
+    course_name: string
+    course_thumbnail: string | null
+    price: number
+    price_sale: number
+    total_student: number
+    total_lessons: number
+    course_duration: string | null
+    course_created_at: string
+    average_rating: number
+}

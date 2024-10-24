@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FiPlus } from 'react-icons/fi'
 import { FaAngleUp, FaAngleDown } from 'react-icons/fa'
 import { closestCorners, DndContext } from '@dnd-kit/core'
@@ -50,6 +50,10 @@ const CourseContent = ({ name, id, lessons, handleSelectedItem, description, qui
             setLessonData(newItems)
         }
     }
+
+    useEffect(() => {
+        setLessonData(lessons)
+    }, [lessonData, lessons])
 
     return (
         <>

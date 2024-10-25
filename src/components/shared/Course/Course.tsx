@@ -61,7 +61,7 @@ const Course = ({
                     {user && (
                         <div className="flex items-center gap-2">
                             <Avatar className="size-8 flex-shrink-0">
-                                <AvatarImage src={user?.avatar || ''} alt={user.name} />
+                                <AvatarImage src={getImagesUrl(user?.avatar || '')} alt={user.name} />
                                 <AvatarFallback className="flex size-8 items-center justify-center bg-slate-500/50 font-semibold">
                                     {user.name.charAt(0)}
                                 </AvatarFallback>

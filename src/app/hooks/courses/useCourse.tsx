@@ -28,9 +28,9 @@ export const useCourseDetailBySlug = (
 
 export const useCourseDetailNoLoginBySlug = (
     slug: string,
-    options?: Omit<UseQueryOptions<ICourseDetail[]>, 'queryKey' | 'queryFn'>
+    options?: Omit<UseQueryOptions<ICourseDetail>, 'queryKey' | 'queryFn'>
 ) => {
-    return useQuery<ICourseDetail[]>({
+    return useQuery<ICourseDetail>({
         ...options,
         queryKey: ['course-detail-no-login', slug],
         enabled: !!slug,

@@ -151,6 +151,7 @@ export interface ICourseDetail {
     submited_at: string | null
     total_lessons: number
     total_duration: number
+    total_duration_vid?: string
     category: ICategory
     tags: any[]
     goals: Goal[]

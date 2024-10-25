@@ -20,7 +20,7 @@ interface DialogAddQuestionProps {
     openDialog: boolean
     quizId?: number
     setOpenDialog: Dispatch<SetStateAction<boolean>>
-    question: IQuestion
+    question?: IQuestion
 }
 
 interface Answer {

@@ -20,12 +20,14 @@ const CourseToday = ({
     level,
     module,
     total_student,
-    totalVideo,
     totalTime,
     price,
     price_sale,
-    page
+    page,
+    totalLesson
 }: ICourseToday) => {
+    const formatData = useFormatTime(totalTime!)
+
     return (
         <div className="card flex w-full max-w-full cursor-text flex-col gap-4 p-4 hover:shadow-[0px_40px_100px_0px_#0000000d] hover:transition-all lg:max-w-[360px] xl:max-w-[400px] xl:p-7 2xl:max-w-[400px]">
             <div className="relative h-[160px] flex-shrink-0 cursor-pointer">
@@ -55,17 +57,18 @@ const CourseToday = ({
                     <span className="text-sm text-orange-500 lg:text-base">Miễn phí</span>
                 )}
 
-                <div className="flex items-center justify-between">
-                    <Link to="" className="flex w-full items-center justify-between gap-2.5">
+                <div className="flex items-center gap-2">
+                    <Link to="" className="flex w-full items-center gap-2.5">
                         <Avatar className="size-8 flex-shrink-0">
-                            <AvatarImage src={user?.avatar || ''} alt={user?.name} />
+                            <AvatarImage src={getImagesUrl(user?.avatar as string) || ''} alt={user?.name} />
                             <AvatarFallback className="flex size-8 items-center justify-center bg-slate-500/50 font-semibold">
                                 {user?.name.charAt(0)}
                             </AvatarFallback>
                         </Avatar>
-                        <p className="w-fit text-sm xl2:text-base">{user?.name}</p>
+                        <p className="w-fit text-sm font-medium xl2:text-base">{user?.name}</p>
                     </Link>
                 </div>
+
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-1.5">
                         <FaRegUser className="size-4 text-darkGrey" />
@@ -73,11 +76,11 @@ const CourseToday = ({
                     </div>
                     <div className="flex items-center gap-1.5">
                         <IoTimeOutline className="size-4 text-darkGrey" />
-                        <p className="font-medium text-black">{totalTime ? useFormatTime(totalTime!) : 0}</p>
+                        <p className="font-medium text-black">{totalTime ? formatData : 0}</p>
                     </div>
                     <div className="flex items-center gap-1.5">
                         <FaRegCirclePlay className="size-4 text-darkGrey" />
-                        <p className="font-medium text-black">{totalVideo}</p>
+                        <p className="font-medium text-black">{totalLesson}</p>
                     </div>
                 </div>
                 <div className="flex w-full flex-col gap-3">
@@ -100,12 +103,13 @@ const CourseToday = ({
                     </ul>
                 </div>
             </div>
+
             {page === routes.courseDetail ? (
                 <Link
                     className="rounded-md bg-primary py-2 text-center text-white"
                     to={`/payment/course/${course_slug}`}
                 >
-                    Mua khóa học
+                    Mua khoá học
                 </Link>
             ) : (
                 <Button>Xem chi tiết</Button>

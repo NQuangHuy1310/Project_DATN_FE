@@ -9,7 +9,7 @@ export const courseApi = {
     detailCourse: async (slug: string): Promise<ICourseDetail[]> => {
         return axiosClient.get(courseUri.DETAIL_COURSE(slug))
     },
-    detailCourseNoLogin: async (slug: string): Promise<ICourseDetail[]> => {
+    detailCourseNoLogin: async (slug: string): Promise<ICourseDetail> => {
         return axiosClient.get(courseUri.DETAIL_COURSE_NO_LOGIN(slug))
     },
     saleCourseHome: async (): Promise<ICourseSale[]> => {

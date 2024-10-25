@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button'
 import { ChangePasswordFields, changePasswordSchema } from '@/validations'
 import { useState } from 'react'
 import { IoEyeOffSharp, IoEyeSharp } from 'react-icons/io5'
+import { toast } from 'sonner'
 
 const ChangePassword = () => {
     const {
@@ -30,6 +31,7 @@ const ChangePassword = () => {
 
     const onSubmit: SubmitHandler<ChangePasswordFields> = async (data) => {
         await userApis.changePassword(data)
+        toast.success('Bạn đã thay đổi mật khẩu thành công')
     }
 
     return (

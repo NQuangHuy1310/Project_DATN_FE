@@ -71,3 +71,19 @@ export const getVisiblePages = (totalPages: number, currentPage: number, maxPage
 
     return Array.from({ length: endPage - displayPage + 1 }, (_, index) => displayPage + index)
 }
+
+export const formatDuration = (totalDurationInSeconds: number): string => {
+    const hours = Math.floor(totalDurationInSeconds / 3600)
+    const minutes = Math.floor((totalDurationInSeconds % 3600) / 60)
+
+    const formattedParts: string[] = []
+
+    if (hours > 0) {
+        formattedParts.push(`${hours} Giờ`)
+    }
+    if (minutes > 0) {
+        formattedParts.push(`${minutes} Phút`)
+    }
+
+    return formattedParts.join(', ')
+}

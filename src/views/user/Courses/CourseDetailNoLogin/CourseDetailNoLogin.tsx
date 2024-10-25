@@ -21,7 +21,7 @@ import Tools from '@/views/user/Courses/CourseDetail/Tools'
 import CourseToday from '@/components/shared/Course/CourseToday'
 import { useCourseDetailNoLoginBySlug } from '@/app/hooks/courses/useCourse'
 import { useGetSlugParams } from '@/app/hooks/common/useCustomParams'
-import { getImagesUrl } from '@/lib/common'
+import { formatDuration, getImagesUrl } from '@/lib/common'
 import Loading from '@/components/Common/Loading/Loading'
 import {
     Breadcrumb,
@@ -38,14 +38,14 @@ const CourseDetailNoLogin = () => {
 
     const slug = useGetSlugParams('slug')
 
-    const { data: courseDetail = [], isLoading } = useCourseDetailNoLoginBySlug(slug!)
+    const { data: courseDetail, isLoading } = useCourseDetailNoLoginBySlug(slug!)
 
-    console.log(courseDetail)
+    const totalTime = formatDuration((courseDetail?.total_duration_vid as unknown as number) || 0)
 
     if (isLoading) return <Loading />
 
     return (
-        <div className="px-5">
+        <div className="">
             <Breadcrumb className="py-4">
                 <BreadcrumbList>
                     <BreadcrumbItem>
@@ -53,22 +53,22 @@ const CourseDetailNoLogin = () => {
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />
                     <BreadcrumbItem>
-                        <BreadcrumbLink href="/docs/components">Khóa học</BreadcrumbLink>
+                        <BreadcrumbLink href="">Khoá học</BreadcrumbLink>
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />
                     <BreadcrumbItem>
-                        <BreadcrumbLink href="">Chi tiết khóa học</BreadcrumbLink>
+                        <BreadcrumbLink href="">{courseDetail?.name}</BreadcrumbLink>
                     </BreadcrumbItem>
                 </BreadcrumbList>
             </Breadcrumb>
-            <div className="flex w-full flex-wrap gap-5">
-                <div className="card flex w-full flex-col gap-5 lg:max-w-[805px]">
+            <div className="flex w-full flex-wrap justify-between gap-5">
+                <div className="card flex w-full flex-1 flex-col gap-6 lg:max-w-[805px]">
                     <Link to={routes.course}>
                         <HiArrowLeft className="size-6" />
                     </Link>
                     <div className="h-[300px] w-full md:h-[400px] lg:h-[440px]">
                         <video
-                            src={getImagesUrl(courseDetail[0]?.trailer)}
+                            src={getImagesUrl(courseDetail?.trailer || '')}
                             title="YouTube video player"
                             className="h-full w-full rounded-lg"
                             controls
@@ -76,43 +76,53 @@ const CourseDetailNoLogin = () => {
                     </div>
                     <div className="flex flex-col gap-7 px-2">
                         <div className="flex flex-col gap-5">
-                            <h4 className="text-lg font-bold md:text-xl lg:text-2xl">{courseDetail[0]?.name}</h4>
+                            <h4 className="text-lg font-bold md:text-xl lg:text-2xl">{courseDetail?.name}</h4>
+
                             <div className="flex flex-wrap items-center justify-between gap-5">
-                                <div className="flex items-center gap-2.5">
-                                    <Avatar className="size-8">
-                                        <AvatarImage
-                                            src={getImagesUrl(courseDetail[0]?.user.avatar || '')}
-                                            alt={courseDetail[0].user.name}
-                                            className="h-full w-full object-cover"
-                                        />
-                                        <AvatarFallback>{courseDetail[0].user.name.slice(0, 2)}</AvatarFallback>
-                                    </Avatar>
-                                    <h6 className="md:text-base">{courseDetail[0].user.name}</h6>
+                                <div className="flex gap-5">
+                                    <div className="flex items-center gap-2.5">
+                                        <Avatar className="size-8">
+                                            <AvatarImage
+                                                src={getImagesUrl(courseDetail?.user.avatar || '')}
+                                                alt={courseDetail?.user.name}
+                                                className="h-full w-full object-cover"
+                                            />
+                                            <AvatarFallback>{courseDetail?.user?.name?.slice(0, 2)}</AvatarFallback>
+                                        </Avatar>
+                                        <h6 className="md:text-base">{courseDetail?.user.name}</h6>
+                                    </div>
+                                    <div className="flex items-center gap-1">
+                                        <IoIosStar className="size-5 text-primary" />
+                                        <span> 4,5 (500 Reviews)</span>
+                                    </div>
                                 </div>
                                 <Button className="bg-transparent text-primary hover:text-primary/80" variant="outline">
-                                    + Follow Mentor
+                                    + Theo dõi
                                 </Button>
-                                <div className="flex items-center gap-1">
-                                    <IoIosStar className="size-5 text-primary" />
-                                    <span> 4,5 (500 Reviews)</span>
-                                </div>
                                 <div className="block md:hidden">
-                                    <CourseLevel courseLevel={courseDetail[0]?.level} />
+                                    <CourseLevel courseLevel={courseDetail?.level || ''} />
                                 </div>
                             </div>
+
                             <div className="flex items-center justify-between">
                                 <div className="flex w-full items-center justify-between gap-5 md:w-auto">
                                     <div className="flex items-center gap-1.5">
                                         <FaRegUser className="size-4 text-darkGrey" />
-                                        <p className="text-xs font-medium text-black md:text-base">500 học sinh</p>
+                                        <p className="text-xs font-medium text-black md:text-base">
+                                            {courseDetail?.total_student} học sinh
+                                        </p>
                                     </div>
                                     <div className="flex items-center gap-1.5">
                                         <FaRegCirclePlay className="size-4 text-darkGrey" />
-                                        <p className="text-xs font-medium text-black md:text-base">100 bài giảng</p>
+                                        <p className="text-xs font-medium text-black md:text-base">
+                                            Tổng số {courseDetail?.total_lessons} bài giảng
+                                        </p>
                                     </div>
                                     <div className="flex items-center gap-1.5">
                                         <IoTimeOutline className="size-4 text-darkGrey" />
-                                        <p className="text-xs font-medium text-black md:text-base">2h30</p>
+                                        <p className="text-xs font-medium text-black md:text-base">
+                                            Thời lượng {totalTime}
+                                        </p>
                                     </div>
                                 </div>
                                 <div className="hidden md:block">
@@ -120,6 +130,7 @@ const CourseDetailNoLogin = () => {
                                 </div>
                             </div>
                         </div>
+
                         {/* Tabs */}
                         <Tabs defaultValue="about" className="flex flex-col gap-6">
                             <TabsList className="scrollbar-hide flex w-full items-start justify-start gap-2 overflow-x-auto">
@@ -139,9 +150,9 @@ const CourseDetailNoLogin = () => {
                             <div className="p-4">
                                 <TabsContent value="about">
                                     <About
-                                        goals={courseDetail[0].goals}
-                                        description={courseDetail[0].description}
-                                        requirements={courseDetail[0].requirements}
+                                        goals={courseDetail?.goals || []}
+                                        description={courseDetail?.description || ''}
+                                        requirements={courseDetail?.requirements || []}
                                     />
                                 </TabsContent>
                                 <TabsContent value="assignment">
@@ -157,29 +168,29 @@ const CourseDetailNoLogin = () => {
                         </Tabs>
                     </div>
                 </div>
-                <div className="w-full lg:max-w-[330px]">
+
+                <div className="w-full max-w-[360px]">
                     <div className="hidden w-full flex-shrink-0 transition-transform duration-500 lg:block">
                         <CourseToday
-                            total_student={courseDetail[0].total_student}
+                            total_student={courseDetail?.total_student}
                             page={routes.courseDetail}
-                            totalLesson={courseDetail[0].total_lessons}
-                            totalTime={courseDetail[0].total_duration}
-                            price_sale={courseDetail[0].price_sale}
-                            course_name={courseDetail[0].name}
-                            module={courseDetail[0].modules}
-                            course_slug={courseDetail[0].slug}
-                            user={courseDetail[0].user}
-                            course_thumbnail={courseDetail[0].thumbnail}
-                            price={courseDetail[0].price}
-                            level={courseDetail[0].level}
+                            totalLesson={courseDetail?.total_lessons}
+                            totalTime={courseDetail?.total_duration}
+                            price_sale={courseDetail?.price_sale || 0}
+                            course_name={courseDetail?.name || ''}
+                            module={courseDetail?.modules || []}
+                            course_slug={courseDetail?.slug || ''}
+                            user={courseDetail?.user}
+                            course_thumbnail={courseDetail?.thumbnail || ''}
+                            price={courseDetail?.price || 0}
+                            level={courseDetail?.level || ''}
                         />
                     </div>
                     <div className="card flex w-full flex-col gap-4 lg:hidden">
                         <div className="flex items-center justify-between">
-                            <span className="text-lg font-semibold">5 Chương</span>
-                            <span>0/5 hoàn thành</span>
+                            <span className="text-lg font-semibold">{courseDetail?.modules.length}</span>
                         </div>
-                        <Button onClick={handleToggleCourse}>Tham gia khóa học</Button>
+                        <Button onClick={handleToggleCourse}>Tham gia khoá học</Button>
                     </div>
 
                     {toggleCourse && (
@@ -190,18 +201,18 @@ const CourseDetailNoLogin = () => {
                         className={`fixed inset-x-0 bottom-0 z-50 w-full bg-white transition-transform duration-500 ease-in-out lg:hidden ${toggleCourse ? 'translate-y-0' : 'translate-y-full'}`}
                     >
                         <CourseToday
-                            total_student={courseDetail[0].total_student}
+                            total_student={courseDetail?.total_student}
                             page={routes.courseDetail}
-                            totalLesson={courseDetail[0].total_lessons}
-                            totalTime={courseDetail[0].total_duration}
-                            price_sale={courseDetail[0].price_sale}
-                            course_name={courseDetail[0].name}
-                            module={courseDetail[0].modules}
-                            course_slug={courseDetail[0].slug}
-                            user={courseDetail[0].user}
-                            course_thumbnail={courseDetail[0].thumbnail}
-                            price={courseDetail[0].price}
-                            level={courseDetail[0].level}
+                            totalLesson={courseDetail?.total_lessons}
+                            totalTime={courseDetail?.total_duration}
+                            price_sale={courseDetail?.price_sale || 0}
+                            course_name={courseDetail?.name || ''}
+                            module={courseDetail?.modules || []}
+                            course_slug={courseDetail?.slug || ''}
+                            user={courseDetail?.user}
+                            course_thumbnail={courseDetail?.thumbnail || ''}
+                            price={courseDetail?.price || 0}
+                            level={courseDetail?.level || ''}
                         />
                     </div>
                 </div>

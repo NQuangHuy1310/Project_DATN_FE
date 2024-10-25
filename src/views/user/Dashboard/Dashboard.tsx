@@ -8,7 +8,7 @@ import { courses, coursesToday, mockTeachers } from '@/constants/mockData'
 const Dashboard = () => {
     return (
         <div className="grid grid-cols-12 items-start gap-5">
-            <div className="card col-span-12 flex flex-1 flex-col gap-7 md:col-span-7 lg:col-span-8">
+            <div className="card col-span-12 flex flex-1 flex-col gap-7 md:col-span-7 lg:col-span-9">
                 <Carousel
                     className="w-full"
                     opts={{
@@ -79,7 +79,7 @@ const Dashboard = () => {
                     </div>
                 </Carousel>
             </div>
-            <div className="card col-span-12 w-full md:col-span-5 lg:col-span-4">
+            <div className="card col-span-12 w-full md:col-span-5 lg:col-span-3">
                 <Carousel
                     className="w-full"
                     opts={{

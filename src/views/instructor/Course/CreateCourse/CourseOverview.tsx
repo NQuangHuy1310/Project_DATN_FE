@@ -84,25 +84,19 @@ const CourseOverview = memo(({ setIsDataComplete }: { setIsDataComplete: () => v
     }
 
     const handleSubmitForm: SubmitHandler<courseOverview> = async (data) => {
-        if (courseImageFile && courseVideoFile) {
-            const payload: IOverviewCourseData = {
-                ...data,
-                thumbnail: courseImageFile,
-                trailer: courseVideoFile,
-                _method: 'PUT'
-            }
-
-            await createOverviewCourse([id!, payload])
-            setIsDataComplete()
-        } else {
-            const payload: IOverviewCourseData = {
-                ...data,
-                _method: 'PUT'
-            }
-
-            await createOverviewCourse([id!, payload])
-            setIsDataComplete()
+        const payload: IOverviewCourseData = {
+            ...data,
+            _method: 'PUT'
         }
+
+        if (courseImageFile) {
+            payload.thumbnail = courseImageFile
+        } else if (courseVideoFile) {
+            payload.trailer = courseVideoFile
+        }
+
+        await createOverviewCourse([id!, payload])
+        setIsDataComplete()
     }
 
     useEffect(() => {

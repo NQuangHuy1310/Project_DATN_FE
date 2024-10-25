@@ -29,6 +29,7 @@ const CourseContent = ({ name, id, lessons, handleSelectedItem, description, qui
     const [isAddNew, setIsAddNew] = useState(false)
     const [confirmDialog, setConfirmDialog] = useState(false)
     const [isShowContent, setIsShowContent] = useState(true)
+    const [originalLessonData, setOriginalLessonData] = useState<ILesson[]>(lessons)
     const [lessonData, setLessonData] = useState<ILesson[]>(lessons)
 
     const handleDeleteModule = async () => {
@@ -52,8 +53,11 @@ const CourseContent = ({ name, id, lessons, handleSelectedItem, description, qui
     }
 
     useEffect(() => {
-        setLessonData(lessons)
-    }, [lessonData, lessons])
+        if (lessons.length > 0 && JSON.stringify(lessons) !== JSON.stringify(originalLessonData)) {
+            setOriginalLessonData(lessons)
+            setLessonData(lessons)
+        }
+    }, [lessons, originalLessonData])
 
     return (
         <>

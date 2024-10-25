@@ -29,12 +29,12 @@ const AccountProfile = () => {
     } = useForm<ProfileFormFields>({ resolver: zodResolver(profileSchema) })
 
     const { data: userProfile, isLoading } = useProfile()
-    const { user, profile } = useGetUserProfile()
+    const { user: userData, profile } = useGetUserProfile()
     const setUser = useUserStore((state) => state.setUser)
     const setProfile = useUserStore((state) => state.setProfile)
 
     const [file, setFile] = useState<File | undefined>(undefined)
-    const [userAvatar, setUserAvatar] = useState<string>(getImagesUrl(user?.avatar || ''))
+    const [userAvatar, setUserAvatar] = useState<string>(getImagesUrl(userData?.avatar || ''))
     const fileInputRef = useRef<HTMLInputElement | null>(null)
 
     const handleButtonClick = () => {
@@ -73,17 +73,14 @@ const AccountProfile = () => {
     }
 
     useEffect(() => {
-        if (userProfile) {
-            setUser(userProfile.user)
-            setProfile(userProfile.profile)
-
-            setValue('name', userProfile.user.name ?? user?.name)
-            setValue('address', userProfile.profile?.address ?? profile?.address)
-            setValue('phone', userProfile.profile?.phone ?? profile?.phone)
-            setValue('experience', userProfile.profile?.experience ?? profile?.experience)
-            setValue('bio', userProfile.profile?.bio ?? profile?.bio)
+        if (userData && profile) {
+            setValue('name', userData?.name || '')
+            setValue('address', profile?.address)
+            setValue('phone', profile?.phone)
+            setValue('experience', profile?.experience)
+            setValue('bio', profile?.bio)
         }
-    }, [userProfile, setUser, setProfile, setValue, user, profile])
+    }, [userProfile, setUser, setProfile, setValue, userData, profile])
 
     if (isLoading) {
         return <Loading />
@@ -94,9 +91,9 @@ const AccountProfile = () => {
             <h4 className="text-lg font-bold">Chỉnh sửa thông tin cá nhân</h4>
             <div className="flex items-center gap-7">
                 <Avatar className="relative h-[140px] w-[140px] cursor-pointer hover:opacity-80 hover:transition-all">
-                    <AvatarImage src={userAvatar} alt={user?.name} className="object-cover" />
+                    <AvatarImage src={userAvatar} alt={userData?.name} className="object-cover" />
                     <AvatarFallback className="h-full w-full bg-slate-500/50 text-3xl font-semibold">
-                        {user?.name.charAt(0).toUpperCase()}
+                        {userData?.name.charAt(0).toUpperCase()}
                     </AvatarFallback>
                 </Avatar>
                 <div className="flex flex-col gap-2">

@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { FaBars } from 'react-icons/fa6'
 import { FaPen, FaRegTrashAlt } from 'react-icons/fa'
 import { FaRegCircleQuestion } from 'react-icons/fa6'
 
@@ -48,10 +47,6 @@ const QuizItem = ({ lesson, moduleId }: QuizItemProps) => {
                             <FaRegTrashAlt className="size-4" />
                         </Button>
                     </div>
-                </div>
-
-                <div className="block cursor-all-scroll">
-                    <FaBars className="size-4" />
                 </div>
             </div>
 

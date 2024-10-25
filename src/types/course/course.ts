@@ -189,3 +189,12 @@ export interface Audience {
     created_at: string
     updated_at: string
 }
+
+export interface IQuizDetail {
+    id: number
+    id_module: number
+    title: string
+    description: string
+    total_points: number
+    created_at: string
+}

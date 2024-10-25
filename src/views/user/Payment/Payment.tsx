@@ -16,7 +16,14 @@ import { useGetSlugParams } from '@/app/hooks/common/useCustomParams'
 import { useBuyCourse, usePaymentCourseBySlug } from '@/app/hooks/payment'
 import Loading from '@/components/Common/Loading/Loading'
 import {
-    AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle
 } from '@/components/ui/alert-dialog'
 import useFormatTime from '@/app/hooks/common/useFomatTime'
 
@@ -51,6 +58,7 @@ const Payment = () => {
     }
 
     if (isLoading) return <Loading />
+
     return (
         <div className="mx-auto max-w-7xl p-4">
             <div className="flex flex-col gap-5 md:flex-row">
@@ -69,25 +77,29 @@ const Payment = () => {
                                 </div>
 
                                 <div className="flex flex-col gap-4">
-                                    <h3 className="text-lg md:text-2xl font-bold">{courseData?.course_name}</h3>
+                                    <h3 className="text-lg font-bold md:text-2xl">{courseData?.course_name}</h3>
 
                                     <div className="flex items-center gap-5">
                                         <div className="flex items-center gap-1">
                                             <IoIosStar className="size-5 text-primary" />
-                                            <span className="text-[16px] font-medium">{courseData?.average_rating}</span>
+                                            <span className="text-[16px] font-medium">
+                                                {courseData?.average_rating}
+                                            </span>
                                         </div>
                                         <div>
-                                            <span className="text-[16px] font-medium">{courseData?.total_lessons} bài học</span>
+                                            <span className="text-[16px] font-medium">
+                                                {courseData?.total_lessons} bài học
+                                            </span>
                                         </div>
                                         <div className="flex items-center gap-1">
                                             <FaClock />
-                                            <span className="text-[16px] font-medium">{
-                                                useFormatTime(courseData?.course_duration || 0)
-                                            }</span>
+                                            <span className="text-[16px] font-medium">
+                                                {useFormatTime(courseData?.course_duration || 0)}
+                                            </span>
                                         </div>
                                     </div>
                                     <div className="flex items-center gap-2">
-                                        <Avatar className="size-7 md:size-10 cursor-pointer">
+                                        <Avatar className="size-7 cursor-pointer md:size-10">
                                             <AvatarImage
                                                 className="object-cover"
                                                 src={courseData?.user_avatar}
@@ -97,22 +109,21 @@ const Payment = () => {
                                                 {courseData?.user_avatar}
                                             </AvatarFallback>
                                         </Avatar>
-                                        <p className="text-[16px] md:text-lg font-medium">{courseData?.user_name}</p>
+                                        <p className="text-[16px] font-medium md:text-lg">{courseData?.user_name}</p>
                                     </div>
                                     <div className="flex items-center gap-2">
                                         <h4 className="text-[16px] font-medium">Giá: </h4>
                                         <div className="flex gap-1">
                                             <TbCoinFilled className="size-5 text-yellow-500" />
                                             <span className="text-[16px] font-semibold">
-                                                {Math.floor(courseData?.price_sale || 0) || Math.floor(courseData?.price || 0)}
+                                                {Math.floor(courseData?.price_sale || 0) ||
+                                                    Math.floor(courseData?.price || 0)}
                                             </span>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
 
@@ -149,7 +160,9 @@ const Payment = () => {
                                 <div className="flex gap-1">
                                     <TbCoinFilled className="size-5 text-yellow-500" />
                                     <span className="font-medium">
-                                        {courseData?.price_sale ? courseData?.price_sale - discount : (courseData?.price || 0) - discount}
+                                        {courseData?.price_sale
+                                            ? courseData?.price_sale - discount
+                                            : (courseData?.price || 0) - discount}
                                     </span>
                                 </div>
                             </div>
@@ -165,7 +178,7 @@ const Payment = () => {
                                 <Button className="w-full" onClick={() => setIsOpen(true)}>
                                     Thanh toán
                                 </Button>
-                                <div className='flex gap-2'>
+                                <div className="flex gap-2">
                                     <Link to={routes.courseDetail} className="w-full">
                                         <Button variant="outline" className="flex w-full gap-2">
                                             <IoArrowBackOutline className="size-5" />

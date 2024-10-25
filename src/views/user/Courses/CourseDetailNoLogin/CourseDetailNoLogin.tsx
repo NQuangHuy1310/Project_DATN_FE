@@ -147,6 +147,7 @@ const CourseDetailNoLogin = () => {
                                     Đánh giá
                                 </TabsTrigger>
                             </TabsList>
+
                             <div className="p-4">
                                 <TabsContent value="about">
                                     <About
@@ -155,12 +156,15 @@ const CourseDetailNoLogin = () => {
                                         requirements={courseDetail?.requirements || []}
                                     />
                                 </TabsContent>
+
                                 <TabsContent value="assignment">
                                     <Assignment />
                                 </TabsContent>
+
                                 <TabsContent value="tool">
                                     <Tools />
                                 </TabsContent>
+
                                 <TabsContent value="review">
                                     <Reviews />
                                 </TabsContent>

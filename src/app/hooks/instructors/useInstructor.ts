@@ -323,3 +323,11 @@ export const useGetLessonQuiz = (id: number, options?: Omit<UseQueryOptions<IQui
         queryFn: () => instructorApi.getLessonQuiz(id)
     })
 }
+
+export const useGetModuleQuiz = (slug: string, options?: Omit<UseQueryOptions<IQuiz>, 'queryKey' | 'queryFn'>) => {
+    return useQuery({
+        ...options,
+        queryKey: ['quizzes', slug]
+        // queryFn: () => instructorApi.getLessonQuiz(id)
+    })
+}

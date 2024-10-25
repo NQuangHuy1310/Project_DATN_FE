@@ -1,6 +1,7 @@
 import { imageBaseUrl } from '@/configs/baseUrl'
 import { MessageErrors } from '@/constants'
 import { placeholders } from '@/constants/placeholders'
+import { differenceInDays, differenceInHours, differenceInMinutes } from 'date-fns'
 import { toast } from 'sonner'
 
 const maxImageSizeInMB = 2
@@ -72,6 +73,7 @@ export const getVisiblePages = (totalPages: number, currentPage: number, maxPage
     return Array.from({ length: endPage - displayPage + 1 }, (_, index) => displayPage + index)
 }
 
+// Tính thời gian theo tiếng
 export const formatDuration = (totalDurationInSeconds: number): string => {
     const hours = Math.floor(totalDurationInSeconds / 3600)
     const minutes = Math.floor((totalDurationInSeconds % 3600) / 60)
@@ -86,4 +88,22 @@ export const formatDuration = (totalDurationInSeconds: number): string => {
     }
 
     return formattedParts.join(', ')
+}
+
+// Tính thời gian
+export const calculateTimeAgo = (createdAt: string) => {
+    const createdDate = new Date(createdAt)
+    const now = new Date()
+
+    const daysDiff = differenceInDays(now, createdDate)
+    const hoursDiff = differenceInHours(now, createdDate) % 24
+    const minutesDiff = differenceInMinutes(now, createdDate) % 60
+
+    if (daysDiff > 0) {
+        return `${daysDiff} ngày trước`
+    }
+    if (hoursDiff > 0) {
+        return `${hoursDiff} giờ trước`
+    }
+    return `${minutesDiff} phút trước`
 }

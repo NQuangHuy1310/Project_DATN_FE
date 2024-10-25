@@ -191,6 +191,15 @@ export interface Audience {
     updated_at: string
 }
 
+export interface IQuizDetail {
+    id: number
+    id_module: number
+    title: string
+    description: string
+    total_points: number
+    created_at: string
+}
+
 export interface ICourseCategory extends ICategory {
     courses: ICourse[]
 }

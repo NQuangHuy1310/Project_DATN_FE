@@ -1,4 +1,5 @@
 import { courseApi } from '@/app/services/courses/courses'
+import { CourseData, ICourseDetail, ICourseSale, IQuizDetail } from '@/types/course/course'
 import { CourseData, ICourseCategory, ICourseDetail, ICourseSale } from '@/types/course/course'
 import { useQuery, UseQueryOptions } from '@tanstack/react-query'
 
@@ -51,5 +52,17 @@ export const useCourseSaleHome = (options?: Omit<UseQueryOptions<ICourseSale[]>,
         ...options,
         queryKey: ['course-sale'],
         queryFn: () => courseApi.saleCourseHome()
+    })
+}
+
+export const useDetailQuizBySlug = (
+    slug: string,
+    options?: Omit<UseQueryOptions<IQuizDetail[]>, 'queryKey' | 'queryFn'>
+) => {
+    return useQuery<any>({
+        ...options,
+        queryKey: ['detail-quiz', slug],
+        enabled: !!slug,
+        queryFn: () => courseApi.getDetailQuiz(slug)
     })
 }

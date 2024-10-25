@@ -4,8 +4,10 @@ import { ICategory } from '@/types/category'
 export interface ICourse {
     course_slug?: string
     course_id?: number
-    course_thumbnail: string
-    course_name: string
+    course_thumbnail?: string
+    thumbnail?: string
+    course_name?: string
+    name?: string
     price: number
     price_sale: number
     average_rating?: number

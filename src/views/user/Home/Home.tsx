@@ -85,19 +85,21 @@ const Home = () => {
                             </div>
                             <div className="flex flex-wrap gap-8">
                                 {category.courses.length > 0 ? (
-                                    category.courses.map((course, index) => (
-                                        <Course
-                                            key={index}
-                                            course_id={course.course_id}
-                                            course_name={course.course_name}
-                                            course_thumbnail={course.course_thumbnail}
-                                            user={course.user}
-                                            level={course.level}
-                                            price={course.price}
-                                            price_sale={course.price_sale}
-                                            total_student={course.total_student}
-                                        />
-                                    ))
+                                    category.courses.map((course, index) => {
+                                        return (
+                                            <Course
+                                                key={index}
+                                                course_id={course.course_id}
+                                                course_name={course.name}
+                                                course_thumbnail={course.thumbnail}
+                                                user={course.user}
+                                                level={course.level}
+                                                price={course.price}
+                                                price_sale={course.price_sale}
+                                                total_student={course.total_student}
+                                            />
+                                        )
+                                    })
                                 ) : (
                                     <p>Không có khóa học nào</p>
                                 )}

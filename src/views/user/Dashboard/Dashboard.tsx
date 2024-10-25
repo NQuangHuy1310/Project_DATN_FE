@@ -1,11 +1,17 @@
+import { useCoursePopulate } from '@/app/hooks/courses/useCourse'
+import Loading from '@/components/Common/Loading/Loading'
 import Course from '@/components/shared/Course'
 import CourseToday from '@/components/shared/Course/CourseToday'
 import Teacher from '@/components/shared/Teacher'
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
+import routes from '@/configs/routes'
 
 import { courses, coursesToday, mockTeachers } from '@/constants/mockData'
 
 const Dashboard = () => {
+    const { data: coursePopulate, isLoading } = useCoursePopulate()
+
+    if (isLoading) return <Loading />
     return (
         <div className="grid grid-cols-12 items-start gap-5">
             <div className="card col-span-12 flex flex-1 flex-col gap-7 md:col-span-7 lg:col-span-9">
@@ -59,20 +65,9 @@ const Dashboard = () => {
                     </div>
                     <div className="w-full">
                         <CarouselContent className="w-full gap-4">
-                            {courses.map((item, index) => (
+                            {coursePopulate?.map((item, index) => (
                                 <CarouselItem key={index} className="w-full min-w-0 basis-full md:basis-[367px]">
-                                    <Course
-                                        key={index}
-                                        course_id={item.course_id}
-                                        course_name={item.course_name}
-                                        course_thumbnail={item.course_thumbnail}
-                                        createdBy={item.createdBy}
-                                        level={item.level}
-                                        average_rating={item.average_rating}
-                                        totalTime={item.totalTime}
-                                        total_student={item.total_student}
-                                        totalVideo={item.totalVideo}
-                                    />
+                                    <Course data={item} page={routes.courseDetail} />
                                 </CarouselItem>
                             ))}
                         </CarouselContent>
@@ -97,7 +92,7 @@ const Dashboard = () => {
                         <CarouselContent className="!m-0 w-full !py-0">
                             {coursesToday.map((item, index) => (
                                 <CarouselItem key={index} className="w-full min-w-0 basis-full !p-0">
-                                    <CourseToday
+                                    {/* <CourseToday
                                         key={index}
                                         course_id={item.course_id}
                                         course_name={item.course_name}
@@ -109,7 +104,7 @@ const Dashboard = () => {
                                         total_student={item.total_student}
                                         totalTime={item.totalTime}
                                         totalVideo={item.totalVideo}
-                                    />
+                                    /> */}
                                 </CarouselItem>
                             ))}
                         </CarouselContent>

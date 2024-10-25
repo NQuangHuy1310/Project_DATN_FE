@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { AiFillStar } from 'react-icons/ai'
 import bannerImage from '@/assets/banner.png'
 import Banner from '@/assets/homeBanner.png'
+import routes from '@/configs/routes'
 
 const Home = () => {
     const { data: ratings, isLoading: loadingRating } = useGetRatingHome()
@@ -52,17 +53,7 @@ const Home = () => {
             </div>
             <div className="mx-auto flex max-w-[1200px] flex-wrap gap-8 px-5 lg:px-0">
                 {course_sales?.map((item, index) => (
-                    <Course
-                        key={index}
-                        course_id={item.course_id}
-                        course_name={item.course_name}
-                        course_thumbnail={item.course_thumbnail!}
-                        average_rating={item.average_rating}
-                        totalLesson={item.total_lessons}
-                        price={item.price}
-                        price_sale={item.price_sale}
-                        total_student={item.total_student}
-                    />
+                    <Course key={index} data={item} page={routes.courseDetailNoLogin} />
                 ))}
             </div>
 
@@ -89,19 +80,7 @@ const Home = () => {
                             <div className="flex flex-wrap gap-8">
                                 {category.courses.length > 0 ? (
                                     category.courses.map((course, index) => {
-                                        return (
-                                            <Course
-                                                key={index}
-                                                course_id={course.course_id}
-                                                course_name={course.name}
-                                                course_thumbnail={course.thumbnail}
-                                                user={course.user}
-                                                level={course.level}
-                                                price={course.price}
-                                                price_sale={course.price_sale}
-                                                total_student={course.total_student}
-                                            />
-                                        )
+                                        return <Course data={course} key={index} page={routes.courseDetailNoLogin} />
                                     })
                                 ) : (
                                     <p>Không có khóa học nào</p>

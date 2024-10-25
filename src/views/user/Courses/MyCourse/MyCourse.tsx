@@ -1,28 +1,18 @@
-import { myCourses } from '@/constants/mockData'
-import Course from '@/components/shared/Course/Course'
 import FilterBar from '@/components/shared/FilterBar/FilterBar'
+import { useCourseMyBought } from '@/app/hooks/accounts/useMyBought'
+import Loading from '@/components/Common/Loading/Loading'
+import CourseMyBought from '@/components/shared/Course/CourseMyBought'
 
 const MyCourses = () => {
+    const { data: courseBought, isLoading } = useCourseMyBought()
+    if (isLoading) return <Loading />
     return (
         <div className="flex flex-col gap-7">
             <FilterBar placeholder="Tìm kiếm khóa học và người hướng dẫn" lever />
             <div className="flex flex-wrap gap-10">
-                {myCourses &&
-                    myCourses.length > 0 &&
-                    myCourses.map((item, index) => (
-                        <Course
-                            key={index}
-                            course_id={item.course_id}
-                            course_name={item.course_name}
-                            course_thumbnail={item.course_thumbnail}
-                            createdBy={item.createdBy}
-                            level={item.level}
-                            average_rating={item.average_rating}
-                            totalTime={item.totalTime}
-                            total_student={item.total_student}
-                            totalVideo={item.totalVideo}
-                        />
-                    ))}
+                {courseBought &&
+                    courseBought.user_courses.length > 0 &&
+                    courseBought.user_courses.map((item, index) => <CourseMyBought data={item} key={index} />)}
             </div>
         </div>
     )

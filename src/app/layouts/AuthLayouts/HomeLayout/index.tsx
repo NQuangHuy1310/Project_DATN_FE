@@ -6,7 +6,7 @@ const HomeLayout = ({ children }: { children: React.ReactNode }) => {
         <div>
             <Header />
             <main className="mt-[120px] min-h-screen">
-                <div className="container-main flex-1 pb-10 pt-5">{children}</div>
+                <div className="flex-1">{children}</div>
             </main>
             <Footer />
         </div>

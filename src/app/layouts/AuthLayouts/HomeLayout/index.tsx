@@ -3,10 +3,10 @@ import Header from '@/app/layouts/AuthLayouts/Components/Header'
 
 const HomeLayout = ({ children }: { children: React.ReactNode }) => {
     return (
-        <div className="bg-softGrey">
+        <div>
             <Header />
             <main className="mt-[120px] min-h-screen">
-                <div className="mx-auto max-w-[1200px] flex-1">{children}</div>
+                <div className="container-main flex-1 pb-10 pt-5">{children}</div>
             </main>
             <Footer />
         </div>

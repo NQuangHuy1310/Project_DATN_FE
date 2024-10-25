@@ -2,13 +2,14 @@ import { IUser } from '@/types/auth'
 import { ICategory } from '@/types/category'
 
 export interface ICourse {
-    course_slug: string
+    course_slug?: string
+    course_id?: number
     course_thumbnail: string
     course_name: string
     price: number
     price_sale: number
     average_rating?: number
-    level: string
+    level?: string
     total_student?: number
     totalVideo?: number
     totalTime?: number
@@ -197,4 +198,8 @@ export interface IQuizDetail {
     description: string
     total_points: number
     created_at: string
+}
+
+export interface ICourseCategory extends ICategory {
+    courses: ICourse[]
 }

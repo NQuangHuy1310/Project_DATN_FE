@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import { FaBars } from 'react-icons/fa'
 import { IoSearchCircle } from 'react-icons/io5'
 import { useEffect, useState } from 'react'
@@ -12,6 +12,9 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { useGetCategories } from '@/app/hooks/categories'
 import { IoIosArrowDown, IoIosSearch } from 'react-icons/io'
 import { HiX } from 'react-icons/hi'
+import { getAccessTokenFromLocalStorage } from '@/lib/common'
+import useGetUserProfile from '@/app/hooks/accounts/useGetUser'
+import UserButton from '@/components/shared/UserButton'
 
 const Header = () => {
     const [menuOpen, setMenuOpen] = useState(false)
@@ -20,6 +23,11 @@ const Header = () => {
 
     const toggleMenu = () => setMenuOpen((prev) => !prev)
     const toggleDropdown = () => setIsOpen((prev) => !prev)
+
+    const { data: categories = [] } = useGetCategories()
+
+    const token = getAccessTokenFromLocalStorage()
+    const { user } = useGetUserProfile()
 
     useEffect(() => {
         if (menuOpen || openSearch) {
@@ -32,12 +40,11 @@ const Header = () => {
         }
     }, [menuOpen, openSearch])
 
-    const { data: categories = [] } = useGetCategories()
     return (
         <header className="fixed left-0 right-0 top-0 z-50 h-[120px] border-b-[1px] bg-white shadow-sm">
             <div className="mx-auto h-full max-w-[1200px] px-5 py-3 lg:px-2">
                 <div className="flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-10">
+                    <div className="flex items-center gap-4 md:gap-10">
                         <FaBars onClick={toggleMenu} className="block size-5 cursor-pointer lg:hidden" />
                         <Link to={routes.home} className="flex items-center gap-3" aria-label="Home">
                             <div className="h-10 w-10">
@@ -51,7 +58,7 @@ const Header = () => {
                         </Link>
                         <div className="hidden md:block">
                             <Select>
-                                <SelectTrigger className="!h-[35px] w-[100px] text-primary hover:text-primary lg:!h-[40px] lg:w-[130px]">
+                                <SelectTrigger className="!h-[35px] min-w-[100px] text-primary hover:text-primary lg:!h-[40px] lg:min-w-[130px]">
                                     <SelectValue placeholder="Danh mục" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -74,16 +81,25 @@ const Header = () => {
                         </div>
                     </div>
 
-                    <div className="hidden items-center gap-3 md:flex">
-                        <Link to={routes.register} className="hidden md:flex">
-                            <Button variant="secondary">Đăng ký</Button>
-                        </Link>
-                        <Link to={routes.login}>
-                            <Button>Đăng nhập</Button>
-                        </Link>
-                    </div>
-                    <div className="block md:hidden" onClick={() => setIsOpenSearch(true)}>
-                        <IoIosSearch className="size-5 cursor-pointer" />
+                    <div className="flex items-center gap-2">
+                        {token && user ? (
+                            <div className="flex items-center gap-2">
+                                <h2 className="hidden text-base font-semibold md:block">{user.name}</h2>
+                                <UserButton />
+                            </div>
+                        ) : (
+                            <div className="hidden items-center gap-3 md:flex">
+                                <Link to={routes.register} className="hidden md:flex">
+                                    <Button variant="secondary">Đăng ký</Button>
+                                </Link>
+                                <Link to={routes.login}>
+                                    <Button>Đăng nhập</Button>
+                                </Link>
+                            </div>
+                        )}
+                        <div className="block md:hidden" onClick={() => setIsOpenSearch(true)}>
+                            <IoIosSearch className="size-5 cursor-pointer" />
+                        </div>
                     </div>
                 </div>
                 {menuOpen && (
@@ -156,16 +172,37 @@ const Header = () => {
                         </div>
                     </div>
                 )}
-                <nav className="flex px-4 pt-5 lg:px-6">
-                    <ul className="flex gap-7 text-sm lg:text-base">
+                <nav className="flex pt-5">
+                    <ul className="flex gap-5 *:text-sm lg:text-base lg:*:text-base">
                         <li>
-                            <Link to={routes.home}>Trang chủ</Link>
+                            <NavLink
+                                to={routes.home}
+                                className={({ isActive }) =>
+                                    `px-2 pb-5 lg:pb-[18px] ${isActive ? 'border-b-[3px] border-primary font-semibold' : ''}`
+                                }
+                            >
+                                Trang chủ
+                            </NavLink>
                         </li>
                         <li>
-                            <Link to={''}>Khóa học</Link>
+                            <NavLink
+                                to={''}
+                                className={({ isActive }) =>
+                                    `px-2 pb-5 lg:pb-[18px] ${isActive ? 'border-b-[3px] border-primary font-semibold' : ''}`
+                                }
+                            >
+                                Khóa học
+                            </NavLink>
                         </li>
                         <li>
-                            <Link to={''}>Bài viết</Link>
+                            <NavLink
+                                to={''}
+                                className={({ isActive }) =>
+                                    `px-2 pb-5 lg:pb-[18px] ${isActive ? 'border-b-[3px] border-primary font-semibold' : ''}`
+                                }
+                            >
+                                Bài viết
+                            </NavLink>
                         </li>
                     </ul>
                 </nav>

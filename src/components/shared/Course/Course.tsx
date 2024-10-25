@@ -18,7 +18,7 @@ const Course = ({
     total_student,
     totalVideo,
     totalTime,
-    createdBy,
+    user,
     price,
     price_sale,
     level,
@@ -40,23 +40,28 @@ const Course = ({
                 <h3 className="text-overflow cursor-pointer text-base font-bold text-black md:text-lg">
                     {course_name}
                 </h3>
-                <div className="flex items-center gap-3">
-                    <div className="flex items-center gap-1">
-                        <RiMoneyDollarCircleFill className="size-4 text-orange-500" />
-                        <del>{Math.floor(price)} xu</del>
+                {price || price_sale ? (
+                    <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-1">
+                            <RiMoneyDollarCircleFill className="size-4 text-orange-500" />
+                            <del>{Math.floor(price)} xu</del>
+                        </div>
+                        <p className="font-semibold text-red-600">{Math.floor(price_sale)} xu</p>
                     </div>
-                    <p className="font-semibold text-red-600">{Math.floor(price_sale)} xu</p>
-                </div>
+                ) : (
+                    <span className="text-orange-500">Miễn phí</span>
+                )}
+
                 <div className="flex items-center justify-between">
-                    {createdBy && (
+                    {user && (
                         <div className="flex items-center gap-2">
                             <Avatar className="size-8 flex-shrink-0">
-                                <AvatarImage src={createdBy?.avatar || ''} alt={createdBy.name} />
+                                <AvatarImage src={user?.avatar || ''} alt={user.name} />
                                 <AvatarFallback className="flex size-8 items-center justify-center bg-slate-500/50 font-semibold">
-                                    {createdBy.name.charAt(0)}
+                                    {user.name.charAt(0)}
                                 </AvatarFallback>
                             </Avatar>
-                            <p className="flex-1">{createdBy.name}</p>
+                            <p className="flex-1">{user.name}</p>
                         </div>
                     )}
                     <div className="flex items-center gap-1">

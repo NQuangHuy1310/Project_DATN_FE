@@ -1,5 +1,6 @@
 import { courseApi } from '@/app/services/courses/courses'
 import { CourseData, ICourseDetail, ICourseSale, IQuizDetail } from '@/types/course/course'
+import { CourseData, ICourseCategory, ICourseDetail, ICourseSale } from '@/types/course/course'
 import { useQuery, UseQueryOptions } from '@tanstack/react-query'
 
 export const useCourseLeaningBySlug = (
@@ -35,6 +36,14 @@ export const useCourseDetailNoLoginBySlug = (
         queryKey: ['course-detail-no-login', slug],
         enabled: !!slug,
         queryFn: () => courseApi.detailCourseNoLogin(slug)
+    })
+}
+
+export const useCourseCategoryHome = (options?: Omit<UseQueryOptions<ICourseCategory[]>, 'queryKey' | 'queryFn'>) => {
+    return useQuery<ICourseCategory[]>({
+        ...options,
+        queryKey: ['course-category-home'],
+        queryFn: () => courseApi.courseCategoryHome()
     })
 }
 

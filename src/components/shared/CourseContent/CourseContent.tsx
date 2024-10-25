@@ -67,7 +67,7 @@ const CourseContent = ({ name, id, lessons, handleSelectedItem, description, qui
                         <div className="flex flex-col gap-5">
                             <div className="group flex items-center justify-between">
                                 <div className="flex items-center gap-4">
-                                    <h5 className="text-base font-semibold">Tên chương: {name}</h5>
+                                    <h5 className="text-lg font-semibold">Tên chương: {name}</h5>
                                     <div className="hidden gap-4 group-hover:flex">
                                         <div
                                             className=""

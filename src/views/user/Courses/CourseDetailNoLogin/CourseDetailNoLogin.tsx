@@ -1,9 +1,7 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
 
 import { IoIosStar } from 'react-icons/io'
 import { FaRegUser } from 'react-icons/fa'
-import { HiArrowLeft } from 'react-icons/hi'
 import { IoTimeOutline } from 'react-icons/io5'
 import { FaRegCirclePlay } from 'react-icons/fa6'
 
@@ -63,15 +61,13 @@ const CourseDetailNoLogin = () => {
             </Breadcrumb>
             <div className="flex w-full flex-wrap justify-between gap-5">
                 <div className="card flex w-full flex-1 flex-col gap-6 lg:max-w-[805px]">
-                    <Link to={routes.course}>
-                        <HiArrowLeft className="size-6" />
-                    </Link>
                     <div className="h-[300px] w-full md:h-[400px] lg:h-[440px]">
                         <video
                             src={getImagesUrl(courseDetail?.trailer || '')}
                             title="YouTube video player"
                             className="h-full w-full rounded-lg"
                             controls
+                            autoPlay
                         ></video>
                     </div>
                     <div className="flex flex-col gap-7 px-2">

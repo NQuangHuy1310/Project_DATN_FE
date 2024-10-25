@@ -1,4 +1,5 @@
 const PAYMENT_URL = 'payment/'
 export const paymentUri = {
-    GET_COURSE: (slug: string) => `${PAYMENT_URL}course/${slug}`
+    GET_COURSE: (slug: string) => `${PAYMENT_URL}course/${slug}`,
+    BUY_COURSE: (userId: number, courseId: number) => `transactions/buy-course/${userId}/${courseId}`
 }

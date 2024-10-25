@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import { getImagesUrl } from '@/lib'
 import routes from '@/configs/routes'
@@ -11,6 +11,7 @@ import useGetUserProfile from '@/app/hooks/accounts/useGetUser'
 import { useTransactionById } from '@/app/hooks/transactions/transaction'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
+import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { useGetSlugParams } from '@/app/hooks/common/useCustomParams'
 import { useBuyCourse, usePaymentCourseBySlug } from '@/app/hooks/payment'
@@ -18,18 +19,17 @@ import Loading from '@/components/Common/Loading/Loading'
 import {
     AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle
 } from '@/components/ui/alert-dialog'
-import useFormatTime from '@/app/hooks/common/useFomatTime'
 
 const Payment = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const slug = useGetSlugParams('slug')
-
+    const navigate = useNavigate()
     // Lấy dữ liệu khóa học theo slug
     const { data: courseData, isLoading } = usePaymentCourseBySlug(slug!)
     // Lấy thông tin người dùng
     const { user } = useGetUserProfile()
     // Lấy dữ liệu giao dịch
-    const { data: transactionData, refetch } = useTransactionById(user?.id || 0)
+    const { data: transactionData } = useTransactionById(user?.id || 0)
     // Tính toán số dư và giảm giá
     const balance = Math.floor(transactionData?.balance ?? 0)
     const discount = 0
@@ -37,17 +37,21 @@ const Payment = () => {
     const { mutateAsync: confirmPayment } = useBuyCourse()
     const handlePayment = async () => {
         if (user && courseData) {
-            await confirmPayment([
-                user?.id,
-                courseData?.course_id,
-                {
-                    total_coin: courseData?.price,
-                    coin_discount: discount,
-                    total_coin_after_discount: courseData?.price - discount
-                }
-            ])
-            refetch()
+            if (balance < (courseData.price_sale || courseData.price) - discount) {
+                toast.error('Số dư ví không đủ, vui lòng nạp thêm tiền')
+            } else {
+                await confirmPayment([
+                    user?.id,
+                    courseData?.course_id,
+                    {
+                        total_coin: courseData?.price,
+                        coin_discount: discount,
+                        total_coin_after_discount: (courseData.price_sale || courseData.price) - discount
+                    }
+                ])
+            }
         }
+        navigate(routes.myCourses)
     }
 
     if (isLoading) return <Loading />
@@ -82,7 +86,7 @@ const Payment = () => {
                                         <div className="flex items-center gap-1">
                                             <FaClock />
                                             <span className="text-[16px] font-medium">{
-                                                useFormatTime(courseData?.course_duration || 0)
+                                                courseData?.course_duration || 0
                                             }</span>
                                         </div>
                                     </div>

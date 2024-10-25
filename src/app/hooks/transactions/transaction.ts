@@ -8,7 +8,7 @@ export const useTransactionById = (
 ) => {
     return useQuery<ITransaction>({
         ...options,
-        queryKey: ['instructor', { id }],
+        queryKey: ['transaction', { id }],
         queryFn: () => transactionsApi.getBalance(id)
     })
 }
@@ -20,7 +20,7 @@ export const usePostPayment = () => {
             return transactionsApi.addPayment(userId, paymentData)
         },
         onSuccess() {
-            queryClient.invalidateQueries({ queryKey: ['transactions'] })
+            queryClient.invalidateQueries({ queryKey: ['transaction'] })
         }
     })
 }

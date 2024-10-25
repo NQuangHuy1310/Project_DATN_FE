@@ -47,7 +47,7 @@ const Comment = ({ isOpen, postId }: IComment) => {
         setIsOpenComment(false)
         setActiveReply(null)
     }
-    console.log(comments)
+
     return (
         <Sheet open={isOpen} onOpenChange={() => setIsOpenComment(!isOpenComment)}>
             <SheetContent>

@@ -78,7 +78,7 @@ const CreateCourse = () => {
                     >
                         <p className="w-2/3 flex-shrink-0 text-sm font-medium">{option.label}</p>
                         {type === 'draft' ? (
-                            isDataComplete[option.key] && <FaCheckCircle className="text-green-500" />
+                            isDataComplete[option.key] && <FaCheckCircle className="size-4 flex-1 text-primary" />
                         ) : (
                             <FaCheckCircle className="size-4 flex-1 text-primary" />
                         )}

@@ -1,4 +1,5 @@
 import { getImagesUrl } from '@/lib'
+import { Link } from 'react-router-dom'
 
 interface PostProps {
     image: string
@@ -6,9 +7,10 @@ interface PostProps {
     title: string
     userName: string
     avatar: string
+    slug: string
 }
 
-const Post = ({ image, category, title, userName, avatar }: PostProps) => {
+const Post = ({ image, title, userName, avatar, slug }: PostProps) => {
     const userAvatar = getImagesUrl(avatar)
     const postImage = getImagesUrl(image)
 
@@ -19,10 +21,7 @@ const Post = ({ image, category, title, userName, avatar }: PostProps) => {
             </div>
             <div className="flex flex-col gap-3">
                 <div className="flex flex-col gap-1">
-                    <div className="w-fit cursor-pointer rounded-md bg-secondaryYellow/80 px-2 py-1 text-xs text-white">
-                        {category}
-                    </div>
-                    <h3 className="truncate text-lg font-semibold">{title}</h3>
+                    <Link to={`/posts/${slug}`}> <h3 className="truncate text-lg font-semibold">{title}</h3></Link>
                 </div>
                 <div className="flex items-center justify-between gap-2 text-xs text-gray-500">
                     <div className="flex items-center gap-2">
@@ -31,7 +30,7 @@ const Post = ({ image, category, title, userName, avatar }: PostProps) => {
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     )
 }
 

@@ -8,7 +8,7 @@ export const usePaymentCourseBySlug = (
 ) => {
     return useQuery<IPayment>({
         ...options,
-        queryKey: ['course', slug],
+        queryKey: ['buy-course', slug],
         enabled: !!slug,
         queryFn: () => paymentApi.getCourseForBuy(slug)
     })

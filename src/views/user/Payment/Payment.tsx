@@ -172,7 +172,7 @@ const Payment = () => {
                                             Quay lại
                                         </Button>
                                     </Link>
-                                    <Link to={routes.transaction} className="w-full">
+                                    <Link to={routes.wallet} className="w-full">
                                         <Button className="w-full" variant="outline">
                                             Nạp thêm xu
                                         </Button>

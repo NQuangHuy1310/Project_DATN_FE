@@ -1,5 +1,6 @@
 import { IUser } from '@/types/auth'
 import { ICategory } from '@/types/category'
+import { IQuestion } from '@/types/instructor'
 
 export interface ICourse {
     course_slug?: string
@@ -74,9 +75,18 @@ export interface IModuleLeaning {
     position: number
     created_at: string
     updated_at: string
+    quiz: IQuizLeaning
     lessons: ILessonLeaning[]
 }
-
+export interface IQuizLeaning {
+    id: number
+    id_module: number
+    total_points: number
+    title: string
+    is_complete: number
+    description: string
+    questions: IQuestion[]
+}
 export interface NextLessonLeaning {
     id: number
     id_module: number

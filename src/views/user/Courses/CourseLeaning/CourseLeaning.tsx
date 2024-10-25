@@ -20,7 +20,7 @@ import Loading from '@/components/Common/Loading/Loading'
 import { Button } from '@/components/ui/button'
 import useFormatTime from '@/app/hooks/common/useFomatTime'
 import AllNoteCourse from '@/components/shared/CourseLeaning/Sheet/AllNoteCourse'
-import { useLessonById } from '@/app/hooks/courses/useLesson'
+import { useCourseData } from '@/app/hooks/courses/useLesson'
 import LeaningCourseQuiz from '@/components/shared/CourseLeaning/LeaningCourseQuiz'
 import LeaningCourseVideo from '@/components/shared/CourseLeaning/LeaningCourseVideo'
 import LeaningCourseDocument from '@/components/shared/CourseLeaning/LeaningCourseDocument'
@@ -36,32 +36,47 @@ const CourseLearning = () => {
     const [checkButton, setCheckButton] = useState<boolean>(true)
     const [searchParams, setSearchParams] = useSearchParams()
     const courseListRef = useRef<HTMLDivElement | null>(null)
+    const idLesson = useGetIdParams('id')
 
     const [pauseVideoCallback, setPauseVideoCallback] = useState<() => void>(() => {})
     const [playVideoCallback, setPlayVideoCallback] = useState<() => void>(() => {})
 
     const slug = useGetSlugParams('slug')
-    const idLesson = useGetIdParams('id')
 
-    console.log(playVideoCallback)
-
-    // call api danh sách bài học (slug)
+    // Danh sách bài học theo khóa học
     const { data: courseModule, isLoading, refetch } = useCourseLeaningBySlug(slug!)
 
-    // Kiếm tra id trên url có nằm trong danh sách khóa học hay không
+    const quizArray: any =
+        courseModule?.modules.reduce<any>((acc, cur) => {
+            if (cur.quiz) {
+                console.log(cur.quiz)
+                acc.push({
+                    id: cur.quiz.id,
+                    id_module: cur.quiz.id_module
+                })
+            }
+            return acc
+        }, []) || []
+
+    const isLessonQuiz = quizArray.every((quiz: any) => {
+        return quiz.id === idLesson
+    })
+
+    const { data: courseLesson } = useCourseData(idLesson!, isLessonQuiz ? isLessonQuiz : 0)
+
     const lessons = courseModule?.modules?.flatMap((module) => module.lessons) || []
     const isLessonInModule = lessons.some((lesson) => lesson.id === idLesson)
     const nextLessonId = courseModule?.next_lesson?.id
+
     useEffect(() => {
-        if (courseModule && !isLessonInModule && courseModule.next_lesson?.id) {
-            if (idLesson !== courseModule.next_lesson.id) {
-                setSearchParams({ id: courseModule.next_lesson.id.toString() })
+        if (courseModule && !isLessonInModule && nextLessonId) {
+            if (idLesson !== nextLessonId) {
+                setSearchParams({ id: nextLessonId.toString() })
             }
         }
-    }, [courseModule, isLessonInModule, idLesson, setSearchParams])
+    }, [courseModule, isLessonInModule, idLesson, nextLessonId, setSearchParams])
 
-    // Chỉ gọi API khi id nằm trong danh sách khóa học
-    const { data: courseLesson } = useLessonById(isLessonInModule ? idLesson! : 0)
+    // Chi tiết bài học theo id
 
     const handleToggleTab = useCallback(() => setToggleTab((prev) => !prev), [])
 
@@ -70,14 +85,13 @@ const CourseLearning = () => {
             setToggleTab(false)
         }
     }, [])
+
     useEffect(() => {
-        // Khi người học hoàn thành bài học hiện tại thì call lại api list bài học
         if (!checkButton) {
             refetch()
         }
     }, [checkButton, refetch])
 
-    // Lấy id bài học và đẩy lên url
     const handleLessonClick = useCallback(
         (lessonId: number) => {
             setSearchParams({ id: lessonId.toString() })
@@ -85,34 +99,17 @@ const CourseLearning = () => {
         [setSearchParams]
     )
 
-    useEffect(() => {
-        if (courseModule && nextLessonId) {
-            // Tìm module chứa bài học next_lesson
-            const nextModuleIndex = courseModule.modules.findIndex((module) =>
-                module.lessons.some((lesson) => lesson.id === nextLessonId)
-            )
-            const lessonModuleIndex = courseModule.modules.findIndex((module) =>
-                module.lessons.some((lesson) => lesson.id === idLesson)
-            )
-            const modulesToOpen = []
-            if (nextModuleIndex !== -1) {
-                modulesToOpen.push(nextModuleIndex)
-            }
-            if (lessonModuleIndex !== -1) {
-                modulesToOpen.push(lessonModuleIndex)
-            }
-            if (modulesToOpen.length > 0) {
-                setActiveModules(modulesToOpen)
-            }
-        }
-    }, [courseModule, nextLessonId, idLesson])
+    const handleQuizClick = useCallback(
+        (idQuiz: number) => {
+            setSearchParams({ id: idQuiz.toString() })
+        },
+        [setSearchParams]
+    )
 
-    // Thực hiện đóng mở các module
     const handleToggleModule = useCallback((index: number) => {
         setActiveModules((prev) => (prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]))
     }, [])
 
-    // Thực hiện đóng mở tab khóa học
     useEffect(() => {
         if (toggleTab) {
             document.addEventListener('mousedown', handleClickOutside)
@@ -126,58 +123,100 @@ const CourseLearning = () => {
         const nextLessonId = courseModule?.next_lesson?.id
         if (!searchParams.get('id') && nextLessonId) {
             setSearchParams({ id: nextLessonId.toString() })
-        } else {
-            if (searchParams.get('id')) {
-                const currentLesson = courseModule?.modules
-                    .flatMap((module) => module.lessons)
-                    .find((lesson) => lesson.id === Number(idLesson))
-                if (currentLesson) {
-                    if (currentLesson.is_completed === 1) {
-                        setSearchParams({ id: currentLesson.id.toString() })
-                        setCheckButton(false)
-                    } else if (currentLesson.is_completed === 0) {
-                        setSearchParams({ id: nextLessonId?.toString()! })
-                        setCheckButton(true)
-                    } else {
-                        setSearchParams({ id: nextLessonId?.toString()! })
-                        setCheckButton(true)
-                    }
+        } else if (searchParams.get('id')) {
+            const currentLesson = courseModule?.modules
+                .flatMap((module) => module.lessons)
+                .find((lesson) => lesson.id === Number(idLesson))
+
+            if (currentLesson) {
+                if (currentLesson.is_completed === 1) {
+                    setSearchParams({ id: currentLesson.id.toString() })
+                    setCheckButton(false)
+                } else {
+                    setSearchParams({ id: nextLessonId?.toString()! })
+                    setCheckButton(true)
                 }
             }
         }
-    }, [courseModule, idLesson])
+    }, [courseModule, idLesson, searchParams, setSearchParams])
+
+    useEffect(() => {
+        if (courseModule && nextLessonId !== undefined && idLesson !== undefined) {
+            const quizModuleIndex = courseModule.modules.findIndex((module) => module.quiz?.id === idLesson)
+            if (quizModuleIndex !== -1) {
+                setActiveModules((prev) => [...new Set([...prev, quizModuleIndex])])
+            } else {
+                const lessonModuleIndex = courseModule.modules.findIndex((module) =>
+                    module.lessons.some((lesson) => lesson.id === idLesson)
+                )
+                if (lessonModuleIndex !== -1) {
+                    setActiveModules((pre) => [...new Set([...pre, lessonModuleIndex])])
+                }
+            }
+        }
+    }, [courseModule, nextLessonId, idLesson])
 
     const handleChangeLesson = useCallback(
         (direction: 'next' | 'previous') => {
             if (!courseModule || !idLesson) return
 
-            // Tìm module chứa bài học hiện tại
-            const currentModuleIndex = courseModule.modules.findIndex((module) =>
-                module.lessons.some((lesson) => lesson.id === Number(idLesson))
+            // Tìm module hiện tại dựa trên bài học hoặc quiz
+            const currentModuleIndex = courseModule.modules.findIndex(
+                (module) =>
+                    module.lessons.some((lesson) => lesson.id === Number(idLesson)) ||
+                    module.quiz?.id === Number(idLesson)
             )
 
             if (currentModuleIndex === -1) return
 
             const currentModule = courseModule.modules[currentModuleIndex]
             const currentLesson = currentModule.lessons.find((lesson) => lesson.id === Number(idLesson))
+            const isQuiz = currentModule.quiz && currentModule.quiz.id === Number(idLesson)
 
-            if (!currentLesson) return
-
-            const currentLessonPosition = currentLesson.position
+            // Lấy vị trí của bài học hiện tại (nếu có) hoặc 0 nếu là quiz
+            const currentLessonPosition = currentLesson ? currentLesson.position : 0
+            const hasQuiz = currentModule.quiz !== null
 
             if (direction === 'next') {
+                const nextModuleIndex = currentModuleIndex + 1
+                const isLastLesson =
+                    currentLesson &&
+                    currentLessonPosition === currentModule.lessons[currentModule.lessons.length - 1].position
+
+                if (isLastLesson) {
+                    if (hasQuiz) {
+                        handleQuizClick(currentModule.quiz.id)
+                        return
+                    } else if (nextModuleIndex < courseModule.modules.length) {
+                        const nextModule = courseModule.modules[nextModuleIndex]
+                        const firstLessonOfNextModule = nextModule.lessons[0]
+                        setActiveModules((prev) => [...new Set([...prev, nextModuleIndex])])
+                        handleLessonClick(firstLessonOfNextModule.id)
+                        return
+                    }
+                }
+
                 const nextLesson = currentModule.lessons.find((lesson) => lesson.position === currentLessonPosition + 1)
                 if (nextLesson) {
                     handleLessonClick(nextLesson.id)
-                } else if (currentModuleIndex < courseModule.modules.length - 1) {
-                    const nextModule = courseModule.modules[currentModuleIndex + 1]
-                    setActiveModules((prev) => [...prev, currentModuleIndex + 1])
-                    const firstLessonOfNextModule = nextModule.lessons[0]
-                    handleLessonClick(firstLessonOfNextModule.id)
+                } else if (hasQuiz && nextModuleIndex < courseModule.modules.length) {
+                    const nextModule = courseModule.modules[nextModuleIndex]
+                    if (!nextModule.quiz) {
+                        const firstLessonOfNextModule = nextModule.lessons[0]
+                        setActiveModules((prev) => [...new Set([...prev, nextModuleIndex])])
+                        handleLessonClick(firstLessonOfNextModule.id)
+                    }
                 }
             }
 
             if (direction === 'previous') {
+                if (isQuiz) {
+                    // Nếu đang ở quiz, quay lại bài học cuối của module hiện tại
+                    const lastLessonOfCurrentModule = currentModule.lessons[currentModule.lessons.length - 1]
+                    handleLessonClick(lastLessonOfCurrentModule.id)
+                    return
+                }
+
                 const previousLesson = currentModule.lessons.find(
                     (lesson) => lesson.position === currentLessonPosition - 1
                 )
@@ -185,14 +224,21 @@ const CourseLearning = () => {
                 if (previousLesson) {
                     handleLessonClick(previousLesson.id)
                 } else if (currentModuleIndex > 0) {
-                    const previousModule = courseModule.modules[currentModuleIndex - 1]
-                    setActiveModules((prev) => [...prev, currentModuleIndex - 1])
+                    const previousModuleIndex = currentModuleIndex - 1
+                    const previousModule = courseModule.modules[previousModuleIndex]
                     const lastLessonOfPreviousModule = previousModule.lessons[previousModule.lessons.length - 1]
-                    handleLessonClick(lastLessonOfPreviousModule.id)
+
+                    setActiveModules((prev) => [...new Set([...prev, previousModuleIndex])])
+
+                    if (previousModule.quiz) {
+                        handleQuizClick(previousModule.quiz.id)
+                    } else {
+                        handleLessonClick(lastLessonOfPreviousModule.id)
+                    }
                 }
             }
         },
-        [courseModule, idLesson, handleLessonClick, setActiveModules]
+        [courseModule, idLesson, handleLessonClick, handleQuizClick, setActiveModules]
     )
 
     // Lấy ra title module theo bài học hiện tại
@@ -222,7 +268,7 @@ const CourseLearning = () => {
                                     {index + 1}. {module.title}
                                 </h4>
                                 <span className="text-sm">
-                                    {completedCount}/{module.lessons.length}
+                                    {completedCount}/{module.quiz ? module.lessons.length + 1 : module.lessons.length}
                                 </span>
                             </div>
                             {activeModules.includes(index) ? (
@@ -285,12 +331,43 @@ const CourseLearning = () => {
                                         </div>
                                     </div>
                                 ))}
+                                {module.quiz && (
+                                    <div
+                                        className={`flex items-center justify-between border-b px-7 py-2 ${module.quiz.id === idLesson ? 'bg-primary/15' : ''} ${
+                                            courseModule.next_lesson.id === module.quiz.id ||
+                                            module.quiz?.is_complete == 1
+                                                ? 'cursor-pointer'
+                                                : 'cursor-not-allowed'
+                                        }`}
+                                        onClick={() => {
+                                            if (
+                                                courseModule.next_lesson.id === module.quiz.id ||
+                                                module.quiz?.is_complete == 1
+                                            ) {
+                                                handleQuizClick(module.quiz.id)
+                                            }
+                                        }}
+                                    >
+                                        <div className="flex max-w-44 flex-col gap-3">
+                                            <h4 className="lg:text-md text-sm font-medium">
+                                                {index + 1}. {module.quiz.title}
+                                            </h4>
+                                            <HiQuestionMarkCircle className="size-4 text-primary" />
+                                        </div>
+                                        {/* Kiểm tra trạng thái mở khóa cho quiz */}
+                                        {courseModule.next_lesson.id === module.quiz.id ? (
+                                            <></>
+                                        ) : (
+                                            <FaLock className="size-3 text-darkGrey" />
+                                        )}
+                                    </div>
+                                )}
                             </div>
                         )}
                     </div>
                 )
             }),
-        [courseModule, activeModules, handleLessonClick, checkButton]
+        [courseModule, activeModules, handleLessonClick]
     )
 
     if (isLoading) return <Loading />
@@ -346,21 +423,25 @@ const CourseLearning = () => {
                 <section
                     className={`${toggleTab ? 'w-full lg:w-[77%]' : 'w-full'} relative max-h-[85vh] overflow-y-auto`}
                 >
-                    {courseLesson?.content_type === 'document' && (
-                        <LeaningCourseDocument dataLesson={courseLesson} setCheckButton={setCheckButton} />
-                    )}
-                    {courseLesson?.content_type === 'video' && (
-                        <LeaningCourseVideo
-                            setCheckNote={setCheckNote}
-                            toggleTab={toggleTab}
-                            dataLesson={courseLesson}
-                            setCheckButton={setCheckButton}
-                            onPauseVideo={(pauseVideo) => setPauseVideoCallback(() => pauseVideo)}
-                            onPlayVideo={(playVideo) => setPlayVideoCallback(() => playVideo)}
-                        />
-                    )}
-                    {courseLesson?.content_type === 'quiz' && (
-                        <LeaningCourseQuiz dataLesson={courseLesson} setCheckButton={setCheckButton} />
+                    {courseLesson && 'content_type' in courseLesson && (
+                        <>
+                            {courseLesson.content_type === 'document' && (
+                                <LeaningCourseDocument dataLesson={courseLesson} setCheckButton={setCheckButton} />
+                            )}
+                            {courseLesson.content_type === 'video' && (
+                                <LeaningCourseVideo
+                                    setCheckNote={setCheckNote}
+                                    toggleTab={toggleTab}
+                                    dataLesson={courseLesson}
+                                    setCheckButton={setCheckButton}
+                                    onPauseVideo={(pauseVideo) => setPauseVideoCallback(() => pauseVideo)}
+                                    onPlayVideo={(playVideo) => setPlayVideoCallback(() => playVideo)}
+                                />
+                            )}
+                            {courseLesson.content_type === 'quiz' && (
+                                <LeaningCourseQuiz dataLesson={courseLesson} setCheckButton={setCheckButton} />
+                            )}
+                        </>
                     )}
                 </section>
 

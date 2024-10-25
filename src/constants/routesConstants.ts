@@ -48,14 +48,17 @@ import MyBookmarks from '@/views/user/Posts/MyBookmarks'
 
 import Payment from '@/views/user/Payment/Payment'
 import PostDetail from '@/views/user/Posts/PostDetail'
+import CourseDetailNoLogin from '@/views/user/Courses/CourseDetailNoLogin/CourseDetailNoLogin'
 import Transaction from '@/views/user/wallet/Transaction'
+
 
 // Routes không cần đăng nhập
 export const publicRoutes = [
     { path: routes.home, layout: HomeLayout, element: Home },
     { path: routes.login, layout: HomeLayout, element: Login },
     { path: routes.register, layout: HomeLayout, element: Register },
-    { path: routes.forgotPassword, layout: HomeLayout, element: ForgotPassword }
+    { path: routes.forgotPassword, layout: HomeLayout, element: ForgotPassword },
+    { path: routes.courseDetailNoLogin, layout: HomeLayout, element: CourseDetailNoLogin }
 ]
 
 // Routes cần đăng nhập

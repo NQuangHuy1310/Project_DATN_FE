@@ -20,47 +20,53 @@ import Assignment from '@/views/user/Courses/CourseDetail/Assignment'
 import Reviews from '@/views/user/Courses/CourseDetail/Reviews'
 import Tools from '@/views/user/Courses/CourseDetail/Tools'
 import CourseToday from '@/components/shared/Course/CourseToday'
+import { useCourseDetailBySlug } from '@/app/hooks/courses/useCourse'
+import { useGetSlugParams } from '@/app/hooks/common/useCustomParams'
+import { getImagesUrl } from '@/lib/common'
+import Loading from '@/components/Common/Loading/Loading'
 
 const CourseDetail = () => {
     const [toggleCourse, setToggleCourse] = useState<boolean>(false)
 
     const handleToggleCourse = () => setToggleCourse(!toggleCourse)
 
+    const slug = useGetSlugParams('slug')
+
+    const { data: courseDetail = [], isLoading } = useCourseDetailBySlug(slug!)
+
+    console.log(courseDetail)
+
+    if (isLoading) return <Loading />
+
     return (
         <div className="grid w-full grid-cols-12 gap-5">
-            <div className="xl2:col-span-9 card col-span-12 flex flex-col gap-5 lg:col-span-8">
+            <div className="card col-span-12 flex flex-col gap-5 lg:col-span-8 xl2:col-span-9">
                 <Link to={routes.course}>
                     <HiArrowLeft className="size-6" />
                 </Link>
-                <div className="h-[300px] md:h-[400px] lg:h-[500px]">
-                    <iframe
-                        src="https://www.youtube.com/embed/R6plN3FvzFY"
+                <div className="h-[300px] w-full md:h-[400px] lg:h-[500px]">
+                    <video
+                        src={getImagesUrl(courseDetail[0]?.trailer)}
                         title="YouTube video player"
                         className="h-full w-full rounded-lg"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen
-                    ></iframe>
+                        controls
+                    ></video>
                 </div>
-                <div className="flex flex-col gap-7">
+                <div className="flex flex-col gap-7 px-2">
                     <div className="flex flex-col gap-5">
-                        <h4 className="text-xl font-bold md:text-2xl lg:text-4xl">
-                            Animation is the Key of Successfull UI/UX Design
-                        </h4>
+                        <h4 className="text-lg font-bold md:text-xl lg:text-2xl">{courseDetail[0]?.name}</h4>
                         <div className="flex flex-wrap items-center justify-between gap-5">
                             <div className="flex items-center gap-2.5">
                                 <Avatar className="size-8">
                                     <AvatarImage
-                                        src="https://github.com/shadcn.png"
-                                        alt="@shadcn"
+                                        src={getImagesUrl(courseDetail[0]?.user.avatar || '')}
+                                        alt={courseDetail[0].user.name}
                                         className="h-full w-full object-cover"
                                     />
-                                    <AvatarFallback>CN</AvatarFallback>
+                                    <AvatarFallback>{courseDetail[0].user.name.slice(0, 2)}</AvatarFallback>
                                 </Avatar>
-                                <h6 className="md:text-base">Emerson Siphron</h6>
+                                <h6 className="md:text-base">{courseDetail[0].user.name}</h6>
                             </div>
-                            <p className="hidden border-l border-r border-grey px-3 text-darkGrey md:block">
-                                UI UX Design . Apps Design
-                            </p>
                             <Button className="bg-transparent text-primary hover:text-primary/80" variant="outline">
                                 + Follow Mentor
                             </Button>
@@ -69,7 +75,7 @@ const CourseDetail = () => {
                                 <span> 4,5 (500 Reviews)</span>
                             </div>
                             <div className="block md:hidden">
-                                <CourseLevel courseLevel={CourseLevelType.Beginner} />
+                                <CourseLevel courseLevel={courseDetail[0]?.level} />
                             </div>
                         </div>
                         <div className="flex items-center justify-between">
@@ -110,7 +116,11 @@ const CourseDetail = () => {
                         </TabsList>
                         <div className="p-4">
                             <TabsContent value="about">
-                                <About />
+                                <About
+                                    goals={courseDetail[0].goals}
+                                    description={courseDetail[0].description}
+                                    requirements={courseDetail[0].requirements}
+                                />
                             </TabsContent>
                             <TabsContent value="assignment">
                                 <Assignment />
@@ -125,9 +135,22 @@ const CourseDetail = () => {
                     </Tabs>
                 </div>
             </div>
-            <div className="xl2:col-span-3 col-span-12 w-full lg:col-span-4">
+            <div className="col-span-12 w-full lg:col-span-4 xl2:col-span-3">
                 <div className="hidden w-full flex-shrink-0 transition-transform duration-500 lg:block">
-                    <CourseToday page={routes.courseDetail} {...coursesToday[0]} />
+                    <CourseToday
+                        total_student={courseDetail[0].total_student}
+                        page={routes.courseDetail}
+                        totalLesson={courseDetail[0].total_lessons}
+                        totalTime={courseDetail[0].total_duration}
+                        price_sale={courseDetail[0].price_sale}
+                        course_name={courseDetail[0].name}
+                        module={courseDetail[0].modules}
+                        course_slug={courseDetail[0].slug}
+                        user={courseDetail[0].user}
+                        course_thumbnail={courseDetail[0].thumbnail}
+                        price={courseDetail[0].price}
+                        level={courseDetail[0].level}
+                    />
                 </div>
                 <div className="card flex w-full flex-col gap-4 lg:hidden">
                     <div className="flex items-center justify-between">

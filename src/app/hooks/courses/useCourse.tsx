@@ -1,5 +1,5 @@
 import { courseApi } from '@/app/services/courses/courses'
-import { CourseData, ICourseSale } from '@/types/course/course'
+import { CourseData, ICourseDetail, ICourseSale } from '@/types/course/course'
 import { useQuery, UseQueryOptions } from '@tanstack/react-query'
 
 export const useCourseLeaningBySlug = (
@@ -8,9 +8,33 @@ export const useCourseLeaningBySlug = (
 ) => {
     return useQuery<CourseData>({
         ...options,
-        queryKey: ['course', slug],
+        queryKey: ['course-leaning', slug],
         enabled: !!slug,
         queryFn: () => courseApi.detailCourseLeaning(slug)
+    })
+}
+
+export const useCourseDetailBySlug = (
+    slug: string,
+    options?: Omit<UseQueryOptions<ICourseDetail[]>, 'queryKey' | 'queryFn'>
+) => {
+    return useQuery<ICourseDetail[]>({
+        ...options,
+        queryKey: ['course-detail', slug],
+        enabled: !!slug,
+        queryFn: () => courseApi.detailCourse(slug)
+    })
+}
+
+export const useCourseDetailNoLoginBySlug = (
+    slug: string,
+    options?: Omit<UseQueryOptions<ICourseDetail[]>, 'queryKey' | 'queryFn'>
+) => {
+    return useQuery<ICourseDetail[]>({
+        ...options,
+        queryKey: ['course-detail-no-login', slug],
+        enabled: !!slug,
+        queryFn: () => courseApi.detailCourseNoLogin(slug)
     })
 }
 

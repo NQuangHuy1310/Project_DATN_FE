@@ -1,6 +1,6 @@
 import { CourseLevel as level } from '@/constants'
 
-export const CourseLevel = ({ courseLevel }: { courseLevel: level }) => {
+export const CourseLevel = ({ courseLevel }: { courseLevel: string }) => {
     return (
         <div className="flex h-8 items-center justify-center rounded-lg bg-white px-1.5 py-2">
             {courseLevel === level.Beginner && (

@@ -8,7 +8,7 @@ const CourseProgress = ({
 }: {
     progressLesson: number
     totalLesson: number
-    level: CourseLevel
+    level: string
 }) => {
     return (
         <div className="w-full">

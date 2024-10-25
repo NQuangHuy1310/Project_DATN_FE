@@ -7,7 +7,8 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { AiFillStar } from 'react-icons/ai'
-import bannerImage from '../../../assets/banner.png'
+import bannerImage from '@/assets/banner.png'
+import Banner from '@/assets/homeBanner.png'
 
 const Home = () => {
     const { data: ratings, isLoading: loadingRating } = useGetRatingHome()
@@ -15,6 +16,8 @@ const Home = () => {
     const { data: course_category = [], isLoading: loadingCourseCategory } = useCourseCategoryHome()
 
     if (loadingRating || loadingSaleHome || loadingCourseCategory) return <Loading />
+
+    console.log(course_category)
 
     return (
         <div>
@@ -35,9 +38,9 @@ const Home = () => {
                     </div>
                     <div className="px-5 lg:px-0">
                         <img
-                            src="https://s3-alpha-sig.figma.com/img/697a/3f1b/a23ad3c00bfbc43b9cee05c0fb3c24db?Expires=1730678400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=d2SOJBLobzviHqa0g8JbwJsYv4Ed6~mzTrJ28ZxkMjbD3phtp9MmcmaatqgMbbitEGCPwV6O06foOLL1phcTLXEO8nK32qoKreZrYEiC30EBv0xFxDwylXagMYEZe03-Uz5dE2LLVHJM-M4YtWAntOhnk24iMKs~9q0QiyJesJoXJ733FTJQB9Molg1qrV2snuUFZ3g7SyT1nnT5mRXQHLXCDq~F7bo7TWEsyGnAYgsPDTP1xmDbiROzcUaDJYZn7yNUPDvtlKA2ZXp0I1qOSXUaawHnqg-HsOexvCUCIzwNnIw~ESKW810eSzTv1XM9TsGsMNngeTiYRqIn3jlBcw__"
+                            src={Banner}
                             className="max-h-[400px] w-full max-w-[550px] rounded-md lg:max-h-[450px]"
-                            alt=""
+                            alt="Coursea"
                         />
                     </div>
                 </div>
@@ -85,19 +88,21 @@ const Home = () => {
                             </div>
                             <div className="flex flex-wrap gap-8">
                                 {category.courses.length > 0 ? (
-                                    category.courses.map((course, index) => (
-                                        <Course
-                                            key={index}
-                                            course_id={course.course_id}
-                                            course_name={course.course_name}
-                                            course_thumbnail={course.course_thumbnail}
-                                            user={course.user}
-                                            level={course.level}
-                                            price={course.price}
-                                            price_sale={course.price_sale}
-                                            total_student={course.total_student}
-                                        />
-                                    ))
+                                    category.courses.map((course, index) => {
+                                        return (
+                                            <Course
+                                                key={index}
+                                                course_id={course.course_id}
+                                                course_name={course.name}
+                                                course_thumbnail={course.thumbnail}
+                                                user={course.user}
+                                                level={course.level}
+                                                price={course.price}
+                                                price_sale={course.price_sale}
+                                                total_student={course.total_student}
+                                            />
+                                        )
+                                    })
                                 ) : (
                                     <p>Không có khóa học nào</p>
                                 )}

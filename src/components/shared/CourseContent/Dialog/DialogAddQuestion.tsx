@@ -27,6 +27,7 @@ interface Answer {
     id?: number
     text: string
     image?: File | string
+    remove_image?: boolean
 }
 
 const DialogAddQuestion = ({ openDialog, setOpenDialog, quizId, question }: DialogAddQuestionProps) => {

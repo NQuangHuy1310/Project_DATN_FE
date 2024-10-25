@@ -45,7 +45,7 @@ const CourseOverview = memo(({ setIsDataComplete }: { setIsDataComplete: () => v
         }
     }
 
-    const handleChangeSelect = (value: string, type: 'level' | 'id_category') => {
+    const handleChangeSelect = (value: string, type: 'level' | 'id_category' | 'is_active') => {
         setValue(type, value, {
             shouldValidate: true
         })
@@ -228,6 +228,27 @@ const CourseOverview = memo(({ setIsDataComplete }: { setIsDataComplete: () => v
                             {errors.id_category && (
                                 <div className="text-sm text-red-500">{errors.id_category.message}</div>
                             )}
+                        </div>
+
+                        <div className="flex flex-col gap-1">
+                            <Select
+                                onValueChange={(value) => handleChangeSelect(value, 'is_active')}
+                                value={getValues('is_active')}
+                                name="is_active"
+                                defaultValue="1"
+                            >
+                                <SelectTrigger className="flex w-[290px] items-center justify-between">
+                                    <SelectValue placeholder="-- Trạng thái --" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectContent side="bottom" align="end">
+                                        <SelectGroup>
+                                            <SelectItem value={'1'}>Công khai</SelectItem>
+                                            <SelectItem value={'0'}>Riêng tư</SelectItem>
+                                        </SelectGroup>
+                                    </SelectContent>
+                                </SelectContent>
+                            </Select>
                         </div>
                     </div>
                 </div>

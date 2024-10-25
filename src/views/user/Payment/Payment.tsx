@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import { getImagesUrl } from '@/lib'
 import routes from '@/configs/routes'
@@ -11,25 +11,32 @@ import useGetUserProfile from '@/app/hooks/accounts/useGetUser'
 import { useTransactionById } from '@/app/hooks/transactions/transaction'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
+import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { useGetSlugParams } from '@/app/hooks/common/useCustomParams'
 import { useBuyCourse, usePaymentCourseBySlug } from '@/app/hooks/payment'
 import Loading from '@/components/Common/Loading/Loading'
 import {
-    AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle
 } from '@/components/ui/alert-dialog'
-import useFormatTime from '@/app/hooks/common/useFomatTime'
 
 const Payment = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const slug = useGetSlugParams('slug')
-
+    const navigate = useNavigate()
     // Lấy dữ liệu khóa học theo slug
     const { data: courseData, isLoading } = usePaymentCourseBySlug(slug!)
     // Lấy thông tin người dùng
     const { user } = useGetUserProfile()
     // Lấy dữ liệu giao dịch
-    const { data: transactionData, refetch } = useTransactionById(user?.id || 0)
+    const { data: transactionData } = useTransactionById(user?.id || 0)
     // Tính toán số dư và giảm giá
     const balance = Math.floor(transactionData?.balance ?? 0)
     const discount = 0
@@ -37,20 +44,25 @@ const Payment = () => {
     const { mutateAsync: confirmPayment } = useBuyCourse()
     const handlePayment = async () => {
         if (user && courseData) {
-            await confirmPayment([
-                user?.id,
-                courseData?.course_id,
-                {
-                    total_coin: courseData?.price,
-                    coin_discount: discount,
-                    total_coin_after_discount: courseData?.price - discount
-                }
-            ])
-            refetch()
+            if (balance < (courseData.price_sale || courseData.price) - discount) {
+                toast.error('Số dư ví không đủ, vui lòng nạp thêm tiền')
+            } else {
+                await confirmPayment([
+                    user?.id,
+                    courseData?.course_id,
+                    {
+                        total_coin: courseData?.price,
+                        coin_discount: discount,
+                        total_coin_after_discount: (courseData.price_sale || courseData.price) - discount
+                    }
+                ])
+            }
         }
+        navigate(routes.myCourses)
     }
 
     if (isLoading) return <Loading />
+
     return (
         <div className="mx-auto max-w-7xl p-4">
             <div className="flex flex-col gap-5 md:flex-row">
@@ -69,25 +81,32 @@ const Payment = () => {
                                 </div>
 
                                 <div className="flex flex-col gap-4">
-                                    <h3 className="text-lg md:text-2xl font-bold">{courseData?.course_name}</h3>
+                                    <h3 className="text-lg font-bold md:text-2xl">{courseData?.course_name}</h3>
 
                                     <div className="flex items-center gap-5">
                                         <div className="flex items-center gap-1">
                                             <IoIosStar className="size-5 text-primary" />
-                                            <span className="text-[16px] font-medium">{courseData?.average_rating}</span>
+                                            <span className="text-[16px] font-medium">
+                                                {courseData?.average_rating}
+                                            </span>
                                         </div>
                                         <div>
-                                            <span className="text-[16px] font-medium">{courseData?.total_lessons} bài học</span>
+                                            <span className="text-[16px] font-medium">
+                                                {courseData?.total_lessons} bài học
+                                            </span>
                                         </div>
                                         <div className="flex items-center gap-1">
                                             <FaClock />
                                             <span className="text-[16px] font-medium">{
-                                                useFormatTime(courseData?.course_duration || 0)
+                                                courseData?.course_duration || 0
                                             }</span>
+                                            <span className="text-[16px] font-medium">
+                                                {useFormatTime(courseData?.course_duration || 0)}
+                                            </span>
                                         </div>
                                     </div>
                                     <div className="flex items-center gap-2">
-                                        <Avatar className="size-7 md:size-10 cursor-pointer">
+                                        <Avatar className="size-7 cursor-pointer md:size-10">
                                             <AvatarImage
                                                 className="object-cover"
                                                 src={courseData?.user_avatar}
@@ -97,22 +116,21 @@ const Payment = () => {
                                                 {courseData?.user_avatar}
                                             </AvatarFallback>
                                         </Avatar>
-                                        <p className="text-[16px] md:text-lg font-medium">{courseData?.user_name}</p>
+                                        <p className="text-[16px] font-medium md:text-lg">{courseData?.user_name}</p>
                                     </div>
                                     <div className="flex items-center gap-2">
                                         <h4 className="text-[16px] font-medium">Giá: </h4>
                                         <div className="flex gap-1">
                                             <TbCoinFilled className="size-5 text-yellow-500" />
                                             <span className="text-[16px] font-semibold">
-                                                {Math.floor(courseData?.price_sale || 0) || Math.floor(courseData?.price || 0)}
+                                                {Math.floor(courseData?.price_sale || 0) ||
+                                                    Math.floor(courseData?.price || 0)}
                                             </span>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
 
@@ -149,7 +167,9 @@ const Payment = () => {
                                 <div className="flex gap-1">
                                     <TbCoinFilled className="size-5 text-yellow-500" />
                                     <span className="font-medium">
-                                        {courseData?.price_sale ? courseData?.price_sale - discount : (courseData?.price || 0) - discount}
+                                        {courseData?.price_sale
+                                            ? courseData?.price_sale - discount
+                                            : (courseData?.price || 0) - discount}
                                     </span>
                                 </div>
                             </div>
@@ -165,14 +185,14 @@ const Payment = () => {
                                 <Button className="w-full" onClick={() => setIsOpen(true)}>
                                     Thanh toán
                                 </Button>
-                                <div className='flex gap-2'>
+                                <div className="flex gap-2">
                                     <Link to={routes.courseDetail} className="w-full">
                                         <Button variant="outline" className="flex w-full gap-2">
                                             <IoArrowBackOutline className="size-5" />
                                             Quay lại
                                         </Button>
                                     </Link>
-                                    <Link to={routes.transaction} className="w-full">
+                                    <Link to={routes.wallet} className="w-full">
                                         <Button className="w-full" variant="outline">
                                             Nạp thêm xu
                                         </Button>

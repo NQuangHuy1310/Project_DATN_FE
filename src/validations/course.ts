@@ -14,7 +14,7 @@ export const courseOverviewSchema = z.object({
     price: z.string().min(0),
     price_sale: z.string().min(0),
     tags: z.array(z.string()).optional(),
-    is_active: z.number().optional()
+    is_active: z.string().optional().default('1')
 })
 
 export const courseModuleSchema = z.object({

@@ -5,8 +5,10 @@ import { IQuestion } from '@/types/instructor'
 export interface ICourse {
     course_slug?: string
     course_id?: number
-    course_thumbnail: string
-    course_name: string
+    course_thumbnail?: string
+    thumbnail?: string
+    course_name?: string
+    name?: string
     price: number
     price_sale: number
     average_rating?: number
@@ -199,6 +201,15 @@ export interface Audience {
     course_id: number
     created_at: string
     updated_at: string
+}
+
+export interface IQuizDetail {
+    id: number
+    id_module: number
+    title: string
+    description: string
+    total_points: number
+    created_at: string
 }
 
 export interface ICourseCategory extends ICategory {

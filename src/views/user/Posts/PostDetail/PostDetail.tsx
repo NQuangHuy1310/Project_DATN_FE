@@ -1,10 +1,5 @@
-import { useState } from 'react'
-import ReactQuill from 'react-quill'
-import { formats, modules } from '@/constants/quillConstants'
-
 import { getImagesUrl } from '@/lib'
-import { useGetPost } from '@/app/hooks/posts'
-import useGetUserProfile from '@/app/hooks/accounts/useGetUser'
+
 import { useGetSlugParams } from '@/app/hooks/common/useCustomParams'
 
 import { LuDot } from 'react-icons/lu'
@@ -15,21 +10,18 @@ import { FaRegMessage } from 'react-icons/fa6'
 import { CiBookmark, CiHeart } from 'react-icons/ci'
 import { FaFacebookSquare, FaLink } from 'react-icons/fa'
 
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
 import Loading from '@/components/Common/Loading/Loading'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Sheet, SheetContent, SheetDescription, SheetHeader } from '@/components/ui/sheet'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 
+import Comment from './Comment'
+import { useGetPost } from '@/app/hooks/posts'
+import { useState } from 'react'
 const PostDetail = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false)
-    const [isOpenComment, setIsOpenComment] = useState<boolean>(false)
 
-    const { user } = useGetUserProfile()
     const slug = useGetSlugParams('slug')
     const { data: postDetailData, isLoading } = useGetPost(slug!)
-
     if (isLoading) return <Loading />
 
     return (
@@ -58,7 +50,7 @@ const PostDetail = () => {
                                     alt={postDetailData?.username}
                                 />
                                 <AvatarFallback className="flex size-8 items-center justify-center bg-slate-500/50 font-semibold">
-                                    {postDetailData?.username.charAt(0)}
+                                    {postDetailData?.username}
                                 </AvatarFallback>
                             </Avatar>
                             <div className="flex flex-col">
@@ -89,7 +81,7 @@ const PostDetail = () => {
                                             <FaLink />
                                             Sao chép liên kết
                                         </DropdownMenuItem>
-                                        <DropdownMenuItem>
+                                        <DropdownMenuItem className="flex gap-2">
                                             <IoFlagSharp />
                                             Báo cáo bài viết
                                         </DropdownMenuItem>
@@ -124,50 +116,7 @@ const PostDetail = () => {
                     </div>
                 </div>
             </div>
-
-            <Sheet open={isOpen} onOpenChange={() => setIsOpen(false)}>
-                <SheetContent>
-                    <SheetHeader>
-                        <SheetDescription>
-                            <div className="flex gap-3 p-3">
-                                <div className="flex gap-2">
-                                    <Avatar className="size-7 cursor-pointer md:size-10">
-                                        <AvatarImage
-                                            className="object-cover"
-                                            src={getImagesUrl(user?.avatar || '')}
-                                            alt={user?.name}
-                                        />
-                                        <AvatarFallback className="bg-slate-500/50 text-xl font-semibold text-white">
-                                            {user?.avatar}
-                                        </AvatarFallback>
-                                    </Avatar>
-                                </div>
-                                {isOpenComment ? (
-                                    <div className="flex w-full flex-col gap-2">
-                                        <div className="w-full">
-                                            <ReactQuill theme="snow" formats={formats} modules={modules} />
-                                        </div>
-                                        <div className="flex justify-end gap-2">
-                                            <Button onClick={() => setIsOpenComment(false)} variant="outline">
-                                                Hủy
-                                            </Button>
-                                            <Button>Bình luận</Button>
-                                        </div>
-                                    </div>
-                                ) : (
-                                    <Input
-                                        onClick={() => setIsOpenComment(true)}
-                                        placeholder="Nhập bình luận của bạn ở đây"
-                                    />
-                                )}
-                            </div>
-                            <div>
-                                <h3 className="text-lg font-semibold">0 Bình luận</h3>
-                            </div>
-                        </SheetDescription>
-                    </SheetHeader>
-                </SheetContent>
-            </Sheet>
+            <Comment postId={postDetailData?.id || 0} isOpen={isOpen} />
         </div>
     )
 }

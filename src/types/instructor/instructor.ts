@@ -183,7 +183,7 @@ export interface IOverviewCourseData {
     id_category: string
     price?: string
     price_sale?: string
-    is_active?: number
+    is_active?: string
     tags?: string[]
     _method?: 'PUT'
 }

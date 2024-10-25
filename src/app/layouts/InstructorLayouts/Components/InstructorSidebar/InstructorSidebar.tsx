@@ -41,7 +41,7 @@ const InstructorSidebar = ({
             <div className="relative flex flex-col gap-8 pt-6">
                 <Link to={routes.home} className="flex items-center justify-center gap-2">
                     <div className="h-10 w-10">
-                        <img src={logo} alt="Coursea" className="h-f w-full object-cover" />
+                        <img src={logo} alt="Coursea" className="h-f w-full rounded-md object-cover" />
                     </div>
                     {(isSidebar || isSmallScreen) && <h2 className="text-3xl font-medium text-black">Coursea</h2>}
                 </Link>

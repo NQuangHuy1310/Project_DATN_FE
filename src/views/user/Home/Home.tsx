@@ -7,6 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { AiFillStar } from 'react-icons/ai'
+import bannerImage from '../../../assets/banner.png'
 
 const Home = () => {
     const { data: ratings, isLoading: loadingRating } = useGetRatingHome()
@@ -141,7 +142,7 @@ const Home = () => {
                 <div
                     className="relative h-[250px] w-full overflow-hidden rounded-md bg-cover bg-center md:h-[350px] lg:h-[419px]"
                     style={{
-                        backgroundImage: `url('https://s3-alpha-sig.figma.com/img/d3c8/8035/d49d8de62c3d3d330b8abed39cc351e5?Expires=1730678400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=I-8LoDSWchYKm9Xk3B8gZ4UZ3yv8kzpa0knLYchOIt3Ih3nIVJ0~SFDLRKjZrDWMEMSZCEGgQvuPKEor1Gkvg0gKSdQT4xGkWitN9TneGtf-YaRMPbPF~ACx6DO1nVYmhbTqSRvppUPmgnZDLbLl9ZE72S5SgiqEKPJ1-MqHmOL8zo44QQi8QbuTdsaLaMLiRYbXhUMcfXPZp7KPxi2J0e3kFCcMJBlXZwf8BsjUuT6YtelG1lB9hEtPxP8uK-HEIZetcNJYktoC0fg-T~ra-MrlxYecKujJh4ZDjg4KY1P1eFdNnlaFWzDmGBUeLNAELwFaT7tAwjxPZOXx1Xvj6g__')`
+                        backgroundImage: `url(${bannerImage})`
                     }}
                 >
                     <div className="absolute inset-0 bg-gradient-to-t from-yellow-300 to-transparent"></div>

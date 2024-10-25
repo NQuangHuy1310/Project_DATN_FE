@@ -13,9 +13,9 @@ export const courseApi = {
         return axiosClient.get(courseUri.DETAIL_COURSE_NO_LOGIN(slug))
     },
     courseCategoryHome: async (): Promise<ICourseCategory[]> => {
-        return axiosClient.get(courseUri.COURSE_CATEGORY_HOME())
+        return axiosClient.get(courseUri.COURSE_CATEGORY_HOME)
     },
     saleCourseHome: async (): Promise<ICourseSale[]> => {
-        return axiosClient.get(courseUri.COURSE_SALE_HOME())
+        return axiosClient.get(courseUri.COURSE_SALE_HOME)
     }
 }

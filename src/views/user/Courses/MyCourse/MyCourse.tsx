@@ -1,7 +1,7 @@
-import FilterBar from '@/components/shared/FilterBar/FilterBar'
-import { useCourseMyBought } from '@/app/hooks/accounts/useMyBought'
 import Loading from '@/components/Common/Loading/Loading'
+import FilterBar from '@/components/shared/FilterBar/FilterBar'
 import CourseMyBought from '@/components/shared/Course/CourseMyBought'
+import { useCourseMyBought } from '@/app/hooks/accounts/useMyBought'
 
 const MyCourses = () => {
     const { data: courseBought, isLoading } = useCourseMyBought()

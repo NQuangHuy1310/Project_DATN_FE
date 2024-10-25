@@ -27,7 +27,7 @@ export interface ICourse {
     status?: string
     admin_comments?: string | null
     submited_at?: string | null
-    lessons_count: number
+    lessons_count?: number
     quiz_count?: number
     total_lessons: number
     total_duration_video: number

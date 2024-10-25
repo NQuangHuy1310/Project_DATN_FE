@@ -1,12 +1,11 @@
-import { useCoursePopulate } from '@/app/hooks/courses/useCourse'
-import Loading from '@/components/Common/Loading/Loading'
-import Course from '@/components/shared/Course'
-import CourseToday from '@/components/shared/Course/CourseToday'
-import Teacher from '@/components/shared/Teacher'
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
 import routes from '@/configs/routes'
+import Course from '@/components/shared/Course'
+import Loading from '@/components/Common/Loading/Loading'
+import Teacher from '@/components/shared/Teacher'
+import { useCoursePopulate } from '@/app/hooks/courses/useCourse'
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
 
-import { courses, coursesToday, mockTeachers } from '@/constants/mockData'
+import { coursesToday, mockTeachers } from '@/constants/mockData'
 
 const Dashboard = () => {
     const { data: coursePopulate, isLoading } = useCoursePopulate()

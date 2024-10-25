@@ -1,7 +1,6 @@
 import axiosClient from '@/configs/axiosClient'
 import { courseUri } from '@/app/services/Uri/courses/courses'
-import { CourseData, ICourseDetail, ICourseSale, IQuizDetail } from '@/types/course/course'
-import { CourseData, ICourseCategory, ICourseDetail, ICourseSale } from '@/types/course/course'
+import { CourseData, ICourseCategory, ICourseDetail, ICourseSale, IQuizDetail } from '@/types/course/course'
 
 export const courseApi = {
     detailCourseLeaning: async (slug: string): Promise<CourseData> => {

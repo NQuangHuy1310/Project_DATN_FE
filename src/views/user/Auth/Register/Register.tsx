@@ -61,7 +61,7 @@ const Register = () => {
         setUser(response.user)
         setProfile(response.profile)
         setAccessToken(response.access_token)
-        navigate(routes.home)
+        navigate(routes.userDashboard)
         reset()
     }
 

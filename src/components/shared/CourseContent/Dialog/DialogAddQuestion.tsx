@@ -382,7 +382,7 @@ const DialogAddQuestion = ({ openDialog, setOpenDialog, quizId, question }: Dial
                                     <SelectGroup>
                                         {[...Array(20).keys()].map((item) => (
                                             <SelectItem key={item + 1} value={(item + 1).toString()}>
-                                                {item + 1} {item + 1 === 1 ? 'point' : 'points'}
+                                                {item + 1} Điểm
                                             </SelectItem>
                                         ))}
                                     </SelectGroup>

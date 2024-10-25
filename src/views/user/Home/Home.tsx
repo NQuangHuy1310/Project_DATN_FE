@@ -17,8 +17,6 @@ const Home = () => {
 
     if (loadingRating || loadingSaleHome || loadingCourseCategory) return <Loading />
 
-    console.log(course_category)
-
     return (
         <div>
             <div className="bg-softGrey">

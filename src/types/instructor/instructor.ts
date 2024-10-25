@@ -1,3 +1,4 @@
+import { IUser } from '@/types/auth'
 import { ICourseCategory } from '@/types/common'
 
 // Response
@@ -12,9 +13,32 @@ export interface ICreateCourse {
 
 export interface ICourseItem {
     id: number
+    id_user: number
+    id_category: number
+    code: string
     name: string
-    thumbnail: string | null
-    status: 'draft' | 'pending' | 'approved' | 'rejected'
+    thumbnail: string
+    trailer: string
+    description: string
+    learned: string | null
+    slug: string
+    level: string
+    duration: string | null
+    sort_description: string | null
+    price: string
+    price_sale: string
+    total_student: number
+    is_active: number
+    is_free: number
+    is_trending: number
+    created_at: string
+    updated_at: string
+    status: string
+    admin_comments: string | null
+    submited_at: string
+    user: IUser
+    category: ICourseCategory
+    tags: any[]
 }
 
 export interface ICourses {
@@ -159,7 +183,7 @@ export interface IOverviewCourseData {
     id_category: string
     price?: string
     price_sale?: string
-    is_active?: number
+    is_active?: string
     tags?: string[]
     _method?: 'PUT'
 }

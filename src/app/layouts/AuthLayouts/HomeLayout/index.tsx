@@ -1,14 +1,12 @@
 import Footer from '@/app/layouts/AuthLayouts/Components/Footer'
 import Header from '@/app/layouts/AuthLayouts/Components/Header'
-import SideBar from '@/app/layouts/AuthLayouts/Components/SideBar'
 
 const HomeLayout = ({ children }: { children: React.ReactNode }) => {
     return (
         <div>
             <Header />
-            <main className="mt-headerHight flex min-h-screen">
-                <SideBar />
-                <div className="flex-1 p-4">{children}</div>
+            <main className="mt-[120px] min-h-screen">
+                <div className="container-main flex-1 pb-10 pt-5">{children}</div>
             </main>
             <Footer />
         </div>

@@ -1,16 +1,21 @@
 import { IUser } from '@/types/auth'
-import { CourseLevel } from '@/constants'
+import { ICategory } from '@/types/category'
 
 export interface ICourse {
-    course_id: number
-    course_thumbnail: string
-    course_name: string
-    average_rating: number
-    level: CourseLevel
+    course_slug?: string
+    course_id?: number
+    course_thumbnail?: string
+    thumbnail?: string
+    course_name?: string
+    name?: string
+    price: number
+    price_sale: number
+    average_rating?: number
+    level?: string
     total_student?: number
     totalVideo?: number
-    totalTime?: string
-    createdBy: IUser
+    totalTime?: number
+    user?: IUser
     progressLesson?: number
     totalLesson?: number
 }
@@ -106,3 +111,97 @@ export interface ILessonProCess {
     _method?: string
 }
 
+export interface ICourseSale {
+    user_id: number
+    user_name: string
+    user_avatar: string
+    course_id: number
+    course_name: string
+    course_thumbnail: string | null
+    price: number
+    price_sale: number
+    total_student: number
+    total_lessons: number
+    course_duration: string | null
+    course_created_at: string
+    average_rating: number
+}
+
+export interface ICourseDetail {
+    id: number
+    id_user: number
+    id_category: number
+    code: string
+    name: string
+    thumbnail: string
+    trailer: string
+    description: string
+    learned: string | null
+    slug: string
+    level: string
+    duration: string | null
+    sort_description: string | null
+    price: number
+    price_sale: number
+    total_student: number
+    is_active: number
+    is_free: number
+    is_trending: number
+    created_at: string
+    updated_at: string
+    status: string
+    admin_comments: string | null
+    submited_at: string | null
+    total_lessons: number
+    total_duration: number
+    total_duration_vid?: string
+    category: ICategory
+    tags: any[]
+    goals: Goal[]
+    requirements: Requirement[]
+    audiences: Audience[]
+    modules: IModule[]
+    user: IUser
+}
+
+export interface Goal {
+    id: number
+    goal: string
+    position: number
+    course_id: number
+    created_at: string
+    updated_at: string
+}
+
+// Interface cho Requirement
+export interface Requirement {
+    id: number
+    requirement: string
+    position: number
+    course_id: number
+    created_at: string
+    updated_at: string
+}
+
+// Interface cho Audience
+export interface Audience {
+    id: number
+    audience: string
+    position: number
+    course_id: number
+    created_at: string
+    updated_at: string
+}
+
+export interface IQuizDetail {
+    id: number
+    id_module: number
+    title: string
+    description: string
+    total_points: number
+    created_at: string
+}
+
+export interface ICourseCategory extends ICategory {
+    courses: ICourse[]
+}

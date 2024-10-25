@@ -5,15 +5,18 @@ import { Button } from '@/components/ui/button'
 import CourseOverview from '@/views/instructor/Course/CreateCourse/CourseOverview'
 import Curriculum from '@/views/instructor/Course/CreateCourse/Curriculum'
 import StudentGoals from '@/views/instructor/Course/CreateCourse/StudentGoals'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useSubmitCourse } from '@/app/hooks/instructors'
 import routes from '@/configs/routes'
 
 type OptionKey = 'studentGoals' | 'curriculum' | 'courseOverview'
 
 const CreateCourse = () => {
-    const navigate = useNavigate()
     const { id } = useParams()
+    const navigate = useNavigate()
+    const location = useLocation()
+    const queryParams = new URLSearchParams(location.search)
+
     const { mutateAsync: submitCourse, isPending } = useSubmitCourse()
 
     const [isDataComplete, setIsDataComplete] = useState<Record<OptionKey, boolean>>({
@@ -21,6 +24,7 @@ const CreateCourse = () => {
         curriculum: false,
         courseOverview: false
     })
+    const type = queryParams.get('type')
 
     const handleSetDataComplete = useCallback((key: OptionKey) => {
         setIsDataComplete((prev) => ({ ...prev, [key]: true }))
@@ -73,12 +77,18 @@ const CreateCourse = () => {
                         onClick={() => setSelectedKey(option.key)}
                     >
                         <p className="w-2/3 flex-shrink-0 text-sm font-medium">{option.label}</p>
-                        {isDataComplete[option.key] && <FaCheckCircle className="size-4 flex-1 text-primary" />}
+                        {type === 'draft' ? (
+                            isDataComplete[option.key] && <FaCheckCircle className="size-4 flex-1 text-primary" />
+                        ) : (
+                            <FaCheckCircle className="size-4 flex-1 text-primary" />
+                        )}
                     </div>
                 ))}
-                <Button disabled={!isAllComplete || isPending} onClick={handleSubmit}>
-                    Gửi đi để xem xét
-                </Button>
+                {type === 'draft' && (
+                    <Button disabled={!isAllComplete || isPending} onClick={handleSubmit}>
+                        Gửi đi để xem xét
+                    </Button>
+                )}
             </div>
             <div className="card flex-1 rounded-lg border-[1px] border-softGrey shadow-md">
                 {options.find((option) => option.key === selectedKey)?.component}

@@ -20,13 +20,14 @@ interface DialogAddQuestionProps {
     openDialog: boolean
     quizId?: number
     setOpenDialog: Dispatch<SetStateAction<boolean>>
-    question: IQuestion
+    question?: IQuestion
 }
 
 interface Answer {
     id?: number
     text: string
     image?: File | string
+    remove_image?: boolean
 }
 
 const DialogAddQuestion = ({ openDialog, setOpenDialog, quizId, question }: DialogAddQuestionProps) => {

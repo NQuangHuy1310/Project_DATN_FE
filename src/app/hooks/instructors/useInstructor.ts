@@ -194,6 +194,7 @@ export const useUpdateLessonQuiz = () => {
         },
         onSuccess() {
             queryClient.invalidateQueries({ queryKey: ['modules'] })
+            queryClient.invalidateQueries({ queryKey: ['quiz'] })
         }
     })
 }

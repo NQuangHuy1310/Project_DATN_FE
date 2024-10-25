@@ -51,7 +51,6 @@ import PostDetail from '@/views/user/Posts/PostDetail'
 import CourseDetailNoLogin from '@/views/user/Courses/CourseDetailNoLogin/CourseDetailNoLogin'
 import Transaction from '@/views/user/wallet/Transaction'
 
-
 // Routes không cần đăng nhập
 export const publicRoutes = [
     { path: routes.home, layout: HomeLayout, element: Home },
@@ -94,7 +93,12 @@ export const privateRoutes = [
     { path: routes.payment, layout: UserDashboardLayout, element: Payment, title: 'Thanh toán' },
 
     // Instructor Dashboard
-    { path: routes.instructorDashboard, layout: InstructorDashboardLayout, element: InstructorDashboard },
+    {
+        path: routes.instructorDashboard,
+        layout: InstructorDashboardLayout,
+        element: InstructorDashboard,
+        title: 'Quản lý khoá học'
+    },
 
     { path: routes.instructorQa, layout: InstructorCommunicate, element: CommunicateQa, title: 'Hỏi đáp' },
     { path: routes.instructorMessage, layout: InstructorCommunicate, element: CommunicateMessage, title: 'Tin nhắn' },

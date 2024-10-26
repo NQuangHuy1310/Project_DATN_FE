@@ -1,8 +1,14 @@
 import Teacher from '@/components/shared/Teacher'
 import FilterBar from '@/components/shared/FilterBar/FilterBar'
 import { mockTeachers } from '@/constants/mockData'
+import { useCoursePopulate } from '@/app/hooks/courses/useCourse'
+import Loading from '@/components/Common/Loading/Loading'
+import Course from '@/components/shared/Course'
+import routes from '@/configs/routes'
 
 const CoursesExplore = () => {
+    const { data: coursePopulate, isLoading } = useCoursePopulate()
+    if (isLoading) return <Loading />
     return (
         <div className="flex flex-col gap-8">
             <FilterBar placeholder="Tìm kiếm khóa học và người hướng dẫn" lever />
@@ -27,22 +33,11 @@ const CoursesExplore = () => {
             <div className="flex flex-col gap-6">
                 <h2 className="text-2xl font-semibold text-black">Khoá học hàng tháng nổi bật</h2>
                 <div className="flex flex-wrap gap-10">
-                    {/* {courses &&
-                        courses.length > 0 &&
-                        courses.map((item, index) => (
-                            <Course
-                                key={index}
-                                course_id={item.course_id}
-                                course_name={item.course_name}
-                                course_thumbnail={item.course_thumbnail}
-                                createdBy={item.createdBy}
-                                level={item.level}
-                                average_rating={item.average_rating}
-                                totalTime={item.totalTime}
-                                total_student={item.total_student}
-                                totalVideo={item.totalVideo}
-                            />
-                        ))} */}
+                    {coursePopulate &&
+                        coursePopulate.length > 0 &&
+                        coursePopulate.map((item, index) => (
+                            <Course data={item} key={index} page={routes.courseDetail} />
+                        ))}
                 </div>
             </div>
         </div>

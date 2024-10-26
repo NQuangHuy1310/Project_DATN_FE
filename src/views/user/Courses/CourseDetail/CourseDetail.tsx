@@ -16,7 +16,7 @@ import { Button } from '@/components/ui/button'
 import Assignment from '@/views/user/Courses/CourseDetail/Assignment'
 import CourseToday from '@/components/shared/Course/CourseToday'
 import { CourseLevel } from '@/components/shared/Course/CourseLevel'
-import { getImagesUrl } from '@/lib/common'
+import { formatDuration, getImagesUrl } from '@/lib/common'
 import { useGetSlugParams } from '@/app/hooks/common/useCustomParams'
 import { useCourseDetailNoLoginBySlug } from '@/app/hooks/courses/useCourse'
 import { CourseLevel as CourseLevelType } from '@/constants'
@@ -32,7 +32,7 @@ const CourseDetail = () => {
 
     const { data: courseDetail, isLoading } = useCourseDetailNoLoginBySlug(slug!)
 
-    console.log(courseDetail)
+    const totalTime = formatDuration((courseDetail?.total_duration_video as unknown as number) || 0)
 
     if (isLoading) return <Loading />
 
@@ -80,15 +80,21 @@ const CourseDetail = () => {
                             <div className="flex w-full items-center justify-between gap-5 md:w-auto">
                                 <div className="flex items-center gap-1.5">
                                     <FaRegUser className="size-4 text-darkGrey" />
-                                    <p className="text-xs font-medium text-black md:text-base">500 học sinh</p>
+                                    <p className="text-xs font-medium text-black md:text-base">
+                                        {courseDetail?.total_student} học sinh
+                                    </p>
                                 </div>
                                 <div className="flex items-center gap-1.5">
                                     <FaRegCirclePlay className="size-4 text-darkGrey" />
-                                    <p className="text-xs font-medium text-black md:text-base">100 bài giảng</p>
+                                    <p className="text-xs font-medium text-black md:text-base">
+                                        Tổng số {courseDetail?.total_lessons} bài giảng
+                                    </p>
                                 </div>
                                 <div className="flex items-center gap-1.5">
                                     <IoTimeOutline className="size-4 text-darkGrey" />
-                                    <p className="text-xs font-medium text-black md:text-base">2h30</p>
+                                    <p className="text-xs font-medium text-black md:text-base">
+                                        Thời lượng {totalTime}
+                                    </p>
                                 </div>
                             </div>
                             <div className="hidden md:block">

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { FaRegUser } from 'react-icons/fa'
 import { IoTimeOutline } from 'react-icons/io5'
 import { FaRegCirclePlay } from 'react-icons/fa6'
@@ -8,8 +8,7 @@ import { Button } from '@/components/ui/button'
 import { CourseLevel } from '@/components/shared/Course/CourseLevel'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { ICourseToday } from '@/types/course/course'
-import useFormatTime from '@/app/hooks/common/useFomatTime'
-import { getImagesUrl } from '@/lib'
+import { formatDuration, getImagesUrl } from '@/lib'
 import { RiMoneyDollarCircleFill } from 'react-icons/ri'
 
 const CourseToday = ({
@@ -26,7 +25,8 @@ const CourseToday = ({
     page,
     total_lessons
 }: ICourseToday) => {
-    const formatData = useFormatTime(total_duration_video!)
+    const navigate = useNavigate()
+    const totalTime = formatDuration((total_duration_video as unknown as number) || 0)
 
     return (
         <div className="card flex w-full max-w-full cursor-text flex-col gap-4 p-4 hover:shadow-[0px_40px_100px_0px_#0000000d] hover:transition-all lg:max-w-[360px] xl:max-w-[400px] xl:p-7 2xl:max-w-[400px]">
@@ -70,7 +70,7 @@ const CourseToday = ({
                     </div>
                     <div className="flex items-center gap-1.5">
                         <IoTimeOutline className="size-4 text-darkGrey" />
-                        <p className="font-medium text-black">{total_duration_video ? formatData : 0}</p>
+                        <p className="font-medium text-black">{total_duration_video ? totalTime : 0}</p>
                     </div>
                     <div className="flex items-center gap-1.5">
                         <FaRegCirclePlay className="size-4 text-darkGrey" />
@@ -79,11 +79,11 @@ const CourseToday = ({
                 </div>
                 <div className="flex w-full flex-col gap-3">
                     <div className="flex items-center justify-between">
-                        <h3 className="text-sm font-semibold xl2:text-base">{module.length} Chương</h3>
-                        <span className="text-sm text-darkGrey xl2:text-base">0/{module.length} hoàn thành</span>
+                        <h3 className="text-sm font-semibold xl2:text-base">{module?.length} Chương</h3>
+                        <span className="text-sm text-darkGrey xl2:text-base">0/{module?.length} hoàn thành</span>
                     </div>
                     <ul className="flex flex-col gap-3">
-                        {module.map((item, index) => (
+                        {module?.map((item, index) => (
                             <li key={index} className="flex items-center justify-between">
                                 <div className="flex items-center gap-3">
                                     <span className="h-8 w-8 rounded-md border bg-darkGrey/20 text-center font-semibold leading-8">
@@ -98,7 +98,9 @@ const CourseToday = ({
                 </div>
             </div>
 
-            {page === routes.courseDetailNoLogin || page === routes.courseDetail ? (
+            {price == 0 ? (
+                <Button onClick={() => navigate(routes.courseLeaning.replace(':slug', slug))}>Học ngay</Button>
+            ) : page === routes.courseDetailNoLogin || page === routes.courseDetail ? (
                 <Link className="rounded-md bg-primary py-2 text-center text-white" to={`/payment/course/${slug}`}>
                     Mua khoá học
                 </Link>

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
-import { getImagesUrl } from '@/lib'
+import { formatDuration, getImagesUrl } from '@/lib'
 import routes from '@/configs/routes'
 import { FaClock } from 'react-icons/fa'
 import { IoIosStar } from 'react-icons/io'
@@ -41,7 +41,11 @@ const Payment = () => {
     const balance = Math.floor(transactionData?.balance ?? 0)
     const discount = 0
     // Xử lý hành động thanh toán
+
+    const totalTime = formatDuration((courseData?.course_duration as unknown as number) || 0)
+
     const { mutateAsync: confirmPayment } = useBuyCourse()
+
     const handlePayment = async () => {
         if (user && courseData) {
             if (balance < (courseData.price_sale || courseData.price) - discount) {
@@ -97,12 +101,7 @@ const Payment = () => {
                                         </div>
                                         <div className="flex items-center gap-1">
                                             <FaClock />
-                                            <span className="text-[16px] font-medium">{
-                                                courseData?.course_duration || 0
-                                            }</span>
-                                            <span className="text-[16px] font-medium">
-                                                {useFormatTime(courseData?.course_duration || 0)}
-                                            </span>
+                                            <span className="text-[16px] font-medium">{totalTime}</span>
                                         </div>
                                     </div>
                                     <div className="flex items-center gap-2">

@@ -186,7 +186,7 @@ const Header = () => {
                         </li>
                         <li>
                             <NavLink
-                                to={''}
+                                to={'/home-courses'}
                                 className={({ isActive }) =>
                                     `px-2 pb-5 lg:pb-[18px] ${isActive ? 'border-b-[3px] border-primary font-semibold' : ''}`
                                 }
@@ -196,7 +196,7 @@ const Header = () => {
                         </li>
                         <li>
                             <NavLink
-                                to={''}
+                                to={'home-posts'}
                                 className={({ isActive }) =>
                                     `px-2 pb-5 lg:pb-[18px] ${isActive ? 'border-b-[3px] border-primary font-semibold' : ''}`
                                 }

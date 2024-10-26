@@ -1,5 +1,5 @@
 import { courseApi } from '@/app/services/courses/courses'
-import { CourseData, ICourseCategory, ICourseDetail, ICourseSale, IQuizDetail } from '@/types/course/course'
+import { CourseData, ICourse, ICourseCategory, ICourseDetail, IQuizDetail } from '@/types/course/course'
 import { useQuery, UseQueryOptions } from '@tanstack/react-query'
 
 export const useCourseLeaningBySlug = (
@@ -46,8 +46,8 @@ export const useCourseCategoryHome = (options?: Omit<UseQueryOptions<ICourseCate
     })
 }
 
-export const useCourseSaleHome = (options?: Omit<UseQueryOptions<ICourseSale[]>, 'queryKey' | 'queryFn'>) => {
-    return useQuery<ICourseSale[]>({
+export const useCourseSaleHome = (options?: Omit<UseQueryOptions<ICourse[]>, 'queryKey' | 'queryFn'>) => {
+    return useQuery<ICourse[]>({
         ...options,
         queryKey: ['course-sale'],
         queryFn: () => courseApi.saleCourseHome()
@@ -63,5 +63,13 @@ export const useDetailQuizBySlug = (
         queryKey: ['detail-quiz', slug],
         enabled: !!slug,
         queryFn: () => courseApi.getDetailQuiz(slug)
+    })
+}
+
+export const useCoursePopulate = (options?: Omit<UseQueryOptions<ICourse[]>, 'queryKey' | 'queryFn'>) => {
+    return useQuery<ICourse[]>({
+        ...options,
+        queryKey: ['course-sale'],
+        queryFn: () => courseApi.populateCourse()
     })
 }

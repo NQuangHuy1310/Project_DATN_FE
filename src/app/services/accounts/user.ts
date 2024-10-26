@@ -2,6 +2,7 @@ import { userUri } from '@/app/services/Uri/accounts'
 import axiosClient from '@/configs/axiosClient'
 
 import { IChangePassword, IResponse, IUpdateProfile, IUserProfile } from '@/types'
+import { ICourseMyBought } from '@/types/user'
 
 export const userApis = {
     getProfile: async (): Promise<IUserProfile> => {
@@ -16,5 +17,8 @@ export const userApis = {
     },
     changePassword: async (data: IChangePassword): Promise<IResponse> => {
         return axiosClient.post(userUri.CHANGE_PASSWORD, data)
+    },
+    getMyCourseBought: async (): Promise<ICourseMyBought> => {
+        return axiosClient.get(userUri.GET_MY_COURSE_BOUGHT)
     }
 }

@@ -8,16 +8,15 @@ import { FaRegCirclePlay } from 'react-icons/fa6'
 import CourseProgress from '@/components/shared/Course/CourseProgress'
 import { CourseLevel } from '@/components/shared/Course/CourseLevel'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
-import { ICourse } from '@/types/course/course'
 import { RiMoneyDollarCircleFill } from 'react-icons/ri'
 import { getImagesUrl } from '@/lib'
 import useFormatTime from '@/app/hooks/common/useFomatTime'
-import routes from '@/configs/routes'
+import { ICourseUser } from '@/types/user'
 
-const Course = ({ data, progressLesson, page }: { data: ICourse; progressLesson?: number; page?: string }) => {
+const CourseMyBought = ({ data, progressLesson }: { data: ICourseUser; progressLesson?: number }) => {
     return (
         <Link
-            to={page == routes.courseDetailNoLogin ? `/course/${data.slug}` : `/courses/${data.slug}`}
+            to={`/leaning/${data.slug}`}
             className="card flex w-full cursor-text flex-col gap-4 shadow-md hover:shadow-[0px_40px_100px_0px_#0000000d] hover:transition-all md:w-[360px]"
         >
             <div className="relative h-[160px] flex-shrink-0 cursor-pointer">
@@ -88,4 +87,4 @@ const Course = ({ data, progressLesson, page }: { data: ICourse; progressLesson?
     )
 }
 
-export default Course
+export default CourseMyBought

@@ -13,38 +13,32 @@ import { getImagesUrl } from '@/lib'
 import { RiMoneyDollarCircleFill } from 'react-icons/ri'
 
 const CourseToday = ({
-    course_thumbnail,
-    course_name,
-    course_slug,
+    thumbnail,
+    name,
+    slug,
     user,
     level,
     module,
     total_student,
-    totalTime,
+    total_duration_video,
     price,
     price_sale,
     page,
-    totalLesson
+    total_lessons
 }: ICourseToday) => {
-    const formatData = useFormatTime(totalTime!)
+    const formatData = useFormatTime(total_duration_video!)
 
     return (
         <div className="card flex w-full max-w-full cursor-text flex-col gap-4 p-4 hover:shadow-[0px_40px_100px_0px_#0000000d] hover:transition-all lg:max-w-[360px] xl:max-w-[400px] xl:p-7 2xl:max-w-[400px]">
             <div className="relative h-[160px] flex-shrink-0 cursor-pointer">
-                <img
-                    src={getImagesUrl(course_thumbnail)}
-                    alt={course_name}
-                    className="h-full w-full rounded-lg object-cover"
-                />
+                <img src={getImagesUrl(thumbnail)} alt={name} className="h-full w-full rounded-lg object-cover" />
                 <div className="absolute bottom-2.5 left-2.5">
                     <CourseLevel courseLevel={level!} />
                 </div>
             </div>
 
             <div className="flex flex-col gap-4">
-                <h3 className="text-overflow cursor-pointer text-base font-bold text-black xl2:text-lg">
-                    {course_name}
-                </h3>
+                <h3 className="text-overflow cursor-pointer text-base font-bold text-black xl2:text-lg">{name}</h3>
                 {price && price_sale ? (
                     <div className="flex items-center gap-3">
                         <div className="flex items-center gap-1">
@@ -76,11 +70,11 @@ const CourseToday = ({
                     </div>
                     <div className="flex items-center gap-1.5">
                         <IoTimeOutline className="size-4 text-darkGrey" />
-                        <p className="font-medium text-black">{totalTime ? formatData : 0}</p>
+                        <p className="font-medium text-black">{total_duration_video ? formatData : 0}</p>
                     </div>
                     <div className="flex items-center gap-1.5">
                         <FaRegCirclePlay className="size-4 text-darkGrey" />
-                        <p className="font-medium text-black">{totalLesson}</p>
+                        <p className="font-medium text-black">{total_lessons}</p>
                     </div>
                 </div>
                 <div className="flex w-full flex-col gap-3">
@@ -104,11 +98,8 @@ const CourseToday = ({
                 </div>
             </div>
 
-            {page === routes.courseDetail ? (
-                <Link
-                    className="rounded-md bg-primary py-2 text-center text-white"
-                    to={`/payment/course/${course_slug}`}
-                >
+            {page === routes.courseDetailNoLogin || page === routes.courseDetail ? (
+                <Link className="rounded-md bg-primary py-2 text-center text-white" to={`/payment/course/${slug}`}>
                     Mua khoá học
                 </Link>
             ) : (

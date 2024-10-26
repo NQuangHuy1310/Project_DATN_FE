@@ -1,7 +1,6 @@
-import Course from '@/components/shared/Course/Course'
 import Teacher from '@/components/shared/Teacher'
 import FilterBar from '@/components/shared/FilterBar/FilterBar'
-import { courses, mockTeachers } from '@/constants/mockData'
+import { mockTeachers } from '@/constants/mockData'
 
 const CoursesExplore = () => {
     return (
@@ -28,7 +27,7 @@ const CoursesExplore = () => {
             <div className="flex flex-col gap-6">
                 <h2 className="text-2xl font-semibold text-black">Khoá học hàng tháng nổi bật</h2>
                 <div className="flex flex-wrap gap-10">
-                    {courses &&
+                    {/* {courses &&
                         courses.length > 0 &&
                         courses.map((item, index) => (
                             <Course
@@ -43,7 +42,7 @@ const CoursesExplore = () => {
                                 total_student={item.total_student}
                                 totalVideo={item.totalVideo}
                             />
-                        ))}
+                        ))} */}
                 </div>
             </div>
         </div>

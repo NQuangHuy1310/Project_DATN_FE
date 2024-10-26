@@ -47,26 +47,26 @@ const UserButton = () => {
                 <DropdownMenuContent align="end" className="w-52">
                     <DropdownMenuGroup className="flex flex-col gap-1.5 p-2">
                         {location.pathname.includes(routes.userDashboard) ? (
-                            <Link to={routes.instructorDashboard} className="">
-                                <DropdownMenuItem className="flex cursor-pointer items-center gap-2">
+                            <DropdownMenuItem className="cursor-pointer">
+                                <Link to={routes.instructorDashboard} className="flex items-center gap-2">
                                     <TbUserHexagon className="size-4" />
                                     <span className="text-base font-medium">Người hướng dẫn</span>
-                                </DropdownMenuItem>
-                            </Link>
+                                </Link>
+                            </DropdownMenuItem>
                         ) : (
-                            <Link to={routes.userDashboard} className="">
-                                <DropdownMenuItem className="flex cursor-pointer items-center gap-2">
+                            <DropdownMenuItem className="cursor-pointer">
+                                <Link to={routes.userDashboard} className="flex items-center gap-2">
                                     <TbUserHexagon className="size-4" />
                                     <span className="text-base font-medium">Học viên</span>
-                                </DropdownMenuItem>
-                            </Link>
+                                </Link>
+                            </DropdownMenuItem>
                         )}
-                        <Link to={routes.accountProfile}>
-                            <DropdownMenuItem className="flex cursor-pointer items-center gap-2">
+                        <DropdownMenuItem className="cursor-pointer">
+                            <Link to={routes.accountProfile} className="flex items-center gap-2">
                                 <IoSettingsOutline className="size-4" />
                                 <span className="text-base font-medium">Quản lý tài khoản</span>
-                            </DropdownMenuItem>
-                        </Link>
+                            </Link>
+                        </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem className="cursor-pointer" onClick={handleLogout}>
                             <LuLogOut className="mr-2 size-4" />

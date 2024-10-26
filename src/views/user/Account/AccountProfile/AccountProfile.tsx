@@ -70,9 +70,6 @@ const AccountProfile = () => {
         const response = await userApis.updateProfile(payload)
         setUser(response.user)
         setProfile(response.profile)
-        toast.success('Cập nhật thông tin thành công', {
-            description: 'Thông tin cá nhân của bạn đã được cập nhật thành công'
-        })
     }
 
     useEffect(() => {

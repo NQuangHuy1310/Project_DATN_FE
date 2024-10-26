@@ -38,7 +38,7 @@ const Login = () => {
             setUser(response.user)
             setProfile(response.profile)
             setAccessToken(response.access_token)
-            navigate(routes.userDashboard)
+            navigate(routes.home)
         } catch (error: any) {
             if (error.data && error.data.errors) {
                 error.data.errors.forEach((errorItem: any) => {

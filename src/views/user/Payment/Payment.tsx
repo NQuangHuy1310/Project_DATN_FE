@@ -60,9 +60,10 @@ const Payment = () => {
                         total_coin_after_discount: (courseData.price_sale || courseData.price) - discount
                     }
                 ])
+                navigate(routes.myCourses)
             }
         }
-        navigate(routes.myCourses)
+
     }
 
     if (isLoading) return <Loading />
@@ -185,7 +186,7 @@ const Payment = () => {
                                     Thanh toán
                                 </Button>
                                 <div className="flex gap-2">
-                                    <Link to={routes.courseDetail} className="w-full">
+                                    <Link to={`/course/${slug}`} className="w-full">
                                         <Button variant="outline" className="flex w-full gap-2">
                                             <IoArrowBackOutline className="size-5" />
                                             Quay lại

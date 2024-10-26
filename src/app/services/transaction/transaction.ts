@@ -1,7 +1,8 @@
 import axiosClient from '@/configs/axiosClient'
 import { userUri } from '../Uri/accounts'
-import { ITransaction } from '@/types/transaction'
+import { IHistory, ITransaction } from '@/types/transaction'
 import axios from 'axios'
+import { transactionUri } from '../Uri/transaction'
 
 export const transactionsApi = {
     getBalance: async (userId: number): Promise<any> => {
@@ -15,5 +16,8 @@ export const transactionsApi = {
                 Authorization: `Bearer ${token}`
             }
         })
+    },
+    getHistory: async (userId: number): Promise<IHistory[]> => {
+        return axiosClient.get(transactionUri.GET_HISTORY(userId))
     }
 }

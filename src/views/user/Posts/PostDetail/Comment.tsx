@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 import ReactQuill from 'react-quill'
 
 import { getImagesUrl } from '@/lib'
@@ -15,10 +15,11 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 
 interface IComment {
     isOpen: boolean
+    setIsOpen: Dispatch<SetStateAction<boolean>>
     postId: number
 }
 
-const Comment = ({ isOpen, postId }: IComment) => {
+const Comment = ({ isOpen, setIsOpen, postId }: IComment) => {
     const [content, setContent] = useState<string>('')
     const [isOpenComment, setIsOpenComment] = useState<boolean>(false)
     const [activeReply, setActiveReply] = useState<number | null>(null)
@@ -49,7 +50,7 @@ const Comment = ({ isOpen, postId }: IComment) => {
     }
 
     return (
-        <Sheet open={isOpen} onOpenChange={() => setIsOpenComment(!isOpenComment)}>
+        <Sheet open={isOpen} onOpenChange={() => setIsOpen(!isOpen)}>
             <SheetContent>
                 <div className="flex gap-3 p-3">
                     {isOpenComment ? (

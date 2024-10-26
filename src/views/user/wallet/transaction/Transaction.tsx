@@ -16,44 +16,62 @@ import { TbCoinFilled } from 'react-icons/tb'
 import { transaction } from '@/constants/mockData'
 import ConfirmTransaction from './ConfirmTransaction'
 import useGetUserProfile from '@/app/hooks/accounts/useGetUser'
-import { useTransactionById } from '@/app/hooks/transactions/transaction'
+import { useGetHistory, useTransactionById } from '@/app/hooks/transactions/transaction'
 
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import Loading from '@/components/Common/Loading/Loading'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
+
 const Transaction = () => {
     const [totalAmount, setTotalAmount] = useState<number>(0)
     const [inputValue, setInputValue] = useState<string>('')
-
+    const [error, setError] = useState<string>('')
     const { user } = useGetUserProfile()
 
     const { data: transactionData, isLoading } = useTransactionById(user?.id || 0)
     const balance = Math.floor(transactionData?.balance ?? 0)
 
+    const { data: history } = useGetHistory(user?.id || 0)
     const handleSelect = (cash: number) => {
         setTotalAmount(cash)
         setInputValue('')
+        setError('')
     }
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value
-        const numericValue = value ? e.target.valueAsNumber : 0
-        setTotalAmount(numericValue)
-        setInputValue(value)
+        // Kiểm tra nếu nhập chỉ chứa số
+        if (/^\d*$/.test(value)) {
+            const numericValue = Number(value)
+            // Kiểm tra nếu giá trị không vượt quá 5 triệu
+            if (numericValue <= 5000000) {
+                setTotalAmount(numericValue)
+                setInputValue(value)
+                setError('')
+            } else {
+                setError('Giá trị không được vượt quá 5 triệu.')
+            }
+        } else {
+            setError('Vui lòng chỉ nhập số.')
+        }
     }
 
     useEffect(() => {
         const queryParams = new URLSearchParams(window.location.search)
         const statusFromURL = queryParams.get('status')
         if (statusFromURL === 'success') {
-            toast.success('Bạn đã nạp tiền thành công')
-        } else if (statusFromURL === 'error') {
+            toast.success('Nạp tiền thành công! Vui lòng kiểm tra số dư')
+            queryParams.delete('status')
+            window.history.replaceState(null, '', '?' + queryParams.toString())
+        }
+        if (statusFromURL === 'error') {
             toast.error('Nạp tiền thất bại! Vui lòng thử lại')
+            queryParams.delete('status')
+            window.history.replaceState(null, '', '?' + queryParams.toString())
         }
     }, [])
-
 
     if (isLoading) return <Loading />
 
@@ -172,13 +190,19 @@ const Transaction = () => {
                                     </div>
                                     <div className="flex flex-col gap-2">
                                         <span>Bạn cũng có thể nhập số tiền muốn nạp</span>
-                                        <Input
-                                            type="number"
-                                            placeholder="Nhập số tiền mà bạn muốn nạp"
-                                            className="w-full"
-                                            value={inputValue}
-                                            onChange={handleInputChange}
-                                        />
+                                        <div className="relative">
+                                            <Input
+                                                type="text"
+                                                placeholder="Nhập số tiền mà bạn muốn nạp"
+                                                className="w-full pr-12"
+                                                value={inputValue}
+                                                onChange={handleInputChange}
+                                            />
+                                            <span className="absolute right-2 top-1/2 -translate-y-1/2 transform font-medium text-darkGrey">
+                                                VNĐ
+                                            </span>
+                                        </div>
+                                        {error && <p className="mt-2 text-red-500">{error}</p>}
                                     </div>
                                     <div className="flex flex-col gap-4">
                                         <span className="font-medium">
@@ -196,6 +220,52 @@ const Transaction = () => {
                             </div>
                         </div>
                     </div>
+                </div>
+
+                <div className="flex flex-col gap-5 sm:rounded-lg">
+                    <h3 className="text-2xl font-bold">Lịch sử nạp tiền</h3>
+                    <table className="w-full text-left text-sm text-darkGrey rtl:text-right">
+                        <thead className="bg-gray-50 text-xs uppercase text-darkGrey">
+                            <tr>
+                                <th scope="col" className="p-4">
+                                    #
+                                </th>
+                                <th scope="col" className="px-6 py-3">
+                                    Số tiền nạp
+                                </th>
+                                <th scope="col" className="px-6 py-3">
+                                    Sỗ xu
+                                </th>
+                                <th scope="col" className="px-6 py-3">
+                                    Ngày nạp
+                                </th>
+                                <th scope="col" className="px-6 py-3">
+                                    Trạng thái
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {history?.map((data, index) => (
+                                <tr key={index} className="dark:border-dartext-darkGrey border-b bg-white hover:bg-gray-50 dark:bg-gray-800">
+                                    <th
+                                        scope="row"
+                                        className="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white"
+                                    >
+                                        {index + 1}
+                                    </th>
+                                    <td className="px-6 py-4">{Math.floor(data.amount).toLocaleString('vi-VN')} VNĐ</td>
+                                    <td className="flex gap-1 px-6 py-4">
+                                        <TbCoinFilled className="size-5 text-yellow-500" />
+                                        {Math.floor(data.coin)}
+                                    </td>
+                                    <td className="px-6 py-4"> {new Date(data.date_of_transaction).toLocaleDateString('vi-VN')}</td>
+                                    <td className="px-6 py-4">
+                                        {data.status == 'success' ? 'Thành công' : 'Đang xử lý'}
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

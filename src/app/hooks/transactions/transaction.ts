@@ -1,4 +1,4 @@
-import { ITransaction } from '@/types/transaction'
+import { IHistory, ITransaction } from '@/types/transaction'
 import { transactionsApi } from '@/app/services/transaction'
 import { useMutation, useQuery, useQueryClient, UseQueryOptions } from '@tanstack/react-query'
 
@@ -22,5 +22,12 @@ export const usePostPayment = () => {
         onSuccess() {
             queryClient.invalidateQueries({ queryKey: ['transaction'] })
         }
+    })
+}
+export const useGetHistory = (id: number, options?: Omit<UseQueryOptions<IHistory[]>, 'queryKey' | 'queryFn'>) => {
+    return useQuery<IHistory[]>({
+        ...options,
+        queryKey: ['history-transaction', { id }],
+        queryFn: () => transactionsApi.getHistory(id)
     })
 }

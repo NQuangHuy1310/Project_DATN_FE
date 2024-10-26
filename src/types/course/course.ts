@@ -35,7 +35,7 @@ export interface ICourse {
     user: IUser
 }
 export interface ICourseToday extends ICourse {
-    module: IModule[]
+    module?: IModule[]
     page?: string
 }
 

@@ -6,11 +6,13 @@ import { useCoursePopulate } from '@/app/hooks/courses/useCourse'
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
 
 import { coursesToday, mockTeachers } from '@/constants/mockData'
+import CourseToday from '@/components/shared/Course/CourseToday'
 
 const Dashboard = () => {
     const { data: coursePopulate, isLoading } = useCoursePopulate()
 
     if (isLoading) return <Loading />
+
     return (
         <div className="grid grid-cols-12 items-start gap-5">
             <div className="card col-span-12 flex flex-1 flex-col gap-7 md:col-span-7 lg:col-span-9">
@@ -89,21 +91,21 @@ const Dashboard = () => {
                     </div>
                     <div className="w-full gap-0">
                         <CarouselContent className="!m-0 w-full !py-0">
-                            {coursesToday.map((item, index) => (
+                            {coursePopulate?.slice(0, 2).map((item, index) => (
                                 <CarouselItem key={index} className="w-full min-w-0 basis-full !p-0">
-                                    {/* <CourseToday
-                                        key={index}
-                                        course_id={item.course_id}
-                                        course_name={item.course_name}
-                                        course_thumbnail={item.course_thumbnail}
-                                        createdBy={item.createdBy}
-                                        level={item.level}
-                                        module={item.module}
-                                        average_rating={item.average_rating}
-                                        total_student={item.total_student}
-                                        totalTime={item.totalTime}
-                                        totalVideo={item.totalVideo}
-                                    /> */}
+                                    <CourseToday
+                                        id={item?.id!}
+                                        total_student={item?.total_student!}
+                                        total_lessons={item?.total_lessons!}
+                                        total_duration_video={item?.total_duration_video!}
+                                        price_sale={item?.price_sale!}
+                                        name={item?.name!}
+                                        slug={item?.slug!}
+                                        user={item?.user!}
+                                        thumbnail={item?.thumbnail!}
+                                        price={item?.price!}
+                                        level={item?.level!}
+                                    />
                                 </CarouselItem>
                             ))}
                         </CarouselContent>

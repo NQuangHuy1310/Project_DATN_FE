@@ -34,8 +34,6 @@ const CourseDetail = () => {
 
     const { data: courseDetail = [], isLoading } = useCourseDetailBySlug(slug!)
 
-    console.log(courseDetail)
-
     if (isLoading) return <Loading />
 
     return (

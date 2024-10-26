@@ -11,6 +11,7 @@ import { ICourseToday } from '@/types/course/course'
 import useFormatTime from '@/app/hooks/common/useFomatTime'
 import { getImagesUrl } from '@/lib'
 import { RiMoneyDollarCircleFill } from 'react-icons/ri'
+import useGetUserProfile from '@/app/hooks/accounts/useGetUser'
 
 const CourseToday = ({
     course_thumbnail,
@@ -27,6 +28,7 @@ const CourseToday = ({
     totalLesson
 }: ICourseToday) => {
     const formatData = useFormatTime(totalTime!)
+    const { user: currentUser } = useGetUserProfile()
 
     return (
         <div className="card flex w-full max-w-full cursor-text flex-col gap-4 p-4 hover:shadow-[0px_40px_100px_0px_#0000000d] hover:transition-all lg:max-w-[360px] xl:max-w-[400px] xl:p-7 2xl:max-w-[400px]">
@@ -104,16 +106,21 @@ const CourseToday = ({
                 </div>
             </div>
 
-            {page === routes.courseDetail ? (
-                <Link
-                    className="rounded-md bg-primary py-2 text-center text-white"
-                    to={`/payment/course/${course_slug}`}
-                >
-                    Mua khoá học
-                </Link>
-            ) : (
-                <Button>Xem chi tiết</Button>
+            {user?.id !== currentUser?.id && (
+                <div className='w-full'>
+                    {page === routes.courseDetail ? (
+                        <Link
+                            className="block rounded-md bg-primary py-2 text-center text-white w-full "
+                            to={`/payment/course/${course_slug}`}
+                        >
+                            Mua khoá học
+                        </Link>
+                    ) : (
+                        <Button>Xem chi tiết</Button>
+                    )}
+                </div>
             )}
+
         </div>
     )
 }

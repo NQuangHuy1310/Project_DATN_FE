@@ -56,9 +56,10 @@ const Payment = () => {
                         total_coin_after_discount: (courseData.price_sale || courseData.price) - discount
                     }
                 ])
+                navigate(routes.myCourses)
             }
         }
-        navigate(routes.myCourses)
+
     }
 
     if (isLoading) return <Loading />
@@ -101,7 +102,7 @@ const Payment = () => {
                                                 courseData?.course_duration || 0
                                             }</span>
                                             <span className="text-[16px] font-medium">
-                                                {useFormatTime(courseData?.course_duration || 0)}
+                                                {courseData?.course_duration || 0}
                                             </span>
                                         </div>
                                     </div>
@@ -186,7 +187,7 @@ const Payment = () => {
                                     Thanh toán
                                 </Button>
                                 <div className="flex gap-2">
-                                    <Link to={routes.courseDetail} className="w-full">
+                                    <Link to={`/course/${slug}`} className="w-full">
                                         <Button variant="outline" className="flex w-full gap-2">
                                             <IoArrowBackOutline className="size-5" />
                                             Quay lại

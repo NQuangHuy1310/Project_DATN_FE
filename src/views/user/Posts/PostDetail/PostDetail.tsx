@@ -116,7 +116,7 @@ const PostDetail = () => {
                     </div>
                 </div>
             </div>
-            <Comment postId={postDetailData?.id || 0} isOpen={isOpen} />
+            <Comment postId={postDetailData?.id || 0} isOpen={isOpen} setIsOpen={setIsOpen} />
         </div>
     )
 }

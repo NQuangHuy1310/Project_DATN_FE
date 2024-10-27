@@ -1,14 +1,4 @@
-// import { Link } from 'react-router-dom'
 import { ChangeEvent, useEffect, useState } from 'react'
-
-// import {
-//     Breadcrumb,
-//     BreadcrumbItem,
-//     BreadcrumbLink,
-//     BreadcrumbList,
-//     BreadcrumbPage,
-//     BreadcrumbSeparator
-// } from '@/components/ui/breadcrumb'
 import { toast } from 'sonner'
 import { getImagesUrl } from '@/lib'
 import { IoIosWarning } from 'react-icons/io'
@@ -22,7 +12,6 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import Loading from '@/components/Common/Loading/Loading'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-
 
 const Transaction = () => {
     const [totalAmount, setTotalAmount] = useState<number>(0)
@@ -77,25 +66,9 @@ const Transaction = () => {
 
     return (
         <div>
-            {/* <div className="flex flex-col gap-2 rounded-md p-7">
-                <h1 className="text-2xl font-bold">Nạp tiền vào tài khoản</h1>
-                <Breadcrumb>
-                    <BreadcrumbList>
-                        <BreadcrumbItem>
-                            <BreadcrumbLink>
-                                <Link to={'/'}>Trang chủ</Link>
-                            </BreadcrumbLink>
-                        </BreadcrumbItem>
-                        <BreadcrumbSeparator />
-                        <BreadcrumbItem>
-                            <BreadcrumbPage>Nạp tiền</BreadcrumbPage>
-                        </BreadcrumbItem>
-                    </BreadcrumbList>
-                </Breadcrumb>
-            </div> */}
             <div className="flex flex-col gap-2 rounded-md bg-white p-7">
                 <div className="flex justify-between gap-5">
-                    <div className="flex w-4/12 flex-col gap-5">
+                    <div className="flex w-3/12 flex-col gap-5">
                         <div className="rounded-md bg-[#04A4F459]">
                             <div className="flex items-center gap-3 p-5">
                                 <Avatar className="size-10 cursor-pointer">
@@ -159,7 +132,7 @@ const Transaction = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="w-8/12 rounded-md border p-10">
+                    <div className="w-9/12 rounded-md border p-10">
                         <div className="flex flex-col gap-5">
                             <p className="text-lg">
                                 Tại đây bạn có thể nạp tiền vào tài khoản cá nhân để sử dụng thanh toán cho các lần chi
@@ -168,7 +141,7 @@ const Transaction = () => {
 
                             <div className="flex flex-col gap-3">
                                 <span className="text-lg font-medium">Chọn mệnh giá</span>
-                                <div className="mx-auto flex max-w-[750px] flex-col gap-5">
+                                <div className="mx-auto flex flex-col gap-5">
                                     <div className="flex flex-wrap justify-between gap-5">
                                         {transaction.map((transaction, index) => (
                                             <div
@@ -246,7 +219,10 @@ const Transaction = () => {
                         </thead>
                         <tbody>
                             {history?.map((data, index) => (
-                                <tr key={index} className="dark:border-dartext-darkGrey border-b bg-white hover:bg-gray-50 dark:bg-gray-800">
+                                <tr
+                                    key={index}
+                                    className="dark:border-dartext-darkGrey border-b bg-white hover:bg-gray-50 dark:bg-gray-800"
+                                >
                                     <th
                                         scope="row"
                                         className="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white"
@@ -258,7 +234,10 @@ const Transaction = () => {
                                         <TbCoinFilled className="size-5 text-yellow-500" />
                                         {Math.floor(data.coin)}
                                     </td>
-                                    <td className="px-6 py-4"> {new Date(data.date_of_transaction).toLocaleDateString('vi-VN')}</td>
+                                    <td className="px-6 py-4">
+                                        {' '}
+                                        {new Date(data.date_of_transaction).toLocaleDateString('vi-VN')}
+                                    </td>
                                     <td className="px-6 py-4">
                                         {data.status == 'success' ? 'Thành công' : 'Đang xử lý'}
                                     </td>

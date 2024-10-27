@@ -66,7 +66,10 @@ export const useDeletePost = () => {
         }
     })
 }
-export const useGetComment = (slug: string, options?: Omit<UseQueryOptions<ICommentPost>, 'queryKey' | 'queryFn'>) => {
+export const useGetComment = (
+    slug: string,
+    options?: Omit<UseQueryOptions<ICommentPost[]>, 'queryKey' | 'queryFn'>
+) => {
     return useQuery({
         ...options,
         queryKey: ['comments'],

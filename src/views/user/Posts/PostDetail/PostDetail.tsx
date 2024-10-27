@@ -1,13 +1,11 @@
 import { getImagesUrl } from '@/lib'
-
 import { useGetSlugParams } from '@/app/hooks/common/useCustomParams'
 
 import { LuDot } from 'react-icons/lu'
 import { MdEmail } from 'react-icons/md'
 import { BsThreeDots } from 'react-icons/bs'
 import { IoFlagSharp } from 'react-icons/io5'
-import { FaRegMessage } from 'react-icons/fa6'
-import { CiBookmark, CiHeart } from 'react-icons/ci'
+import { CiBookmark } from 'react-icons/ci'
 import { FaFacebookSquare, FaLink } from 'react-icons/fa'
 
 import Loading from '@/components/Common/Loading/Loading'
@@ -17,11 +15,19 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import Comment from './Comment'
 import { useGetPost } from '@/app/hooks/posts'
 import { useState } from 'react'
+import { GoComment } from 'react-icons/go'
+import { PiHeartStraight } from 'react-icons/pi'
+
 const PostDetail = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false)
+    const [totalComment, setTotalComment] = useState<number>(0)
 
     const slug = useGetSlugParams('slug')
     const { data: postDetailData, isLoading } = useGetPost(slug!)
+
+    const handleTotalComment = (total: number) => {
+        setTotalComment(total)
+    }
     if (isLoading) return <Loading />
 
     return (
@@ -30,11 +36,11 @@ const PostDetail = () => {
                 <h3 className="border-b-2 py-2 text-xl font-bold">{postDetailData?.username}</h3>
                 <div className="flex items-center gap-5 font-medium text-darkGrey">
                     <div className="flex gap-1">
-                        <CiHeart className="size-6" /> <span>6</span>
+                        <PiHeartStraight className="size-7" /> <span></span>
                     </div>
                     <div className="flex items-center gap-1">
-                        <FaRegMessage onClick={() => setIsOpen(true)} className="size-4" />
-                        <span>6</span>
+                        <GoComment onClick={() => setIsOpen(true)} className="size-6" />
+                        <span>{totalComment}</span>
                     </div>
                 </div>
             </div>
@@ -50,7 +56,7 @@ const PostDetail = () => {
                                     alt={postDetailData?.username}
                                 />
                                 <AvatarFallback className="flex size-8 items-center justify-center bg-slate-500/50 font-semibold">
-                                    {postDetailData?.username}
+                                    {postDetailData?.username.charAt(0)}
                                 </AvatarFallback>
                             </Avatar>
                             <div className="flex flex-col">
@@ -108,15 +114,20 @@ const PostDetail = () => {
             <div className="mt-5 flex justify-between md:hidden">
                 <div className="flex items-center gap-5 font-medium text-darkGrey">
                     <div className="flex gap-1">
-                        <CiHeart className="size-6" /> <span>6</span>
+                        <PiHeartStraight className="size-6" /> <span>6</span>
                     </div>
                     <div className="flex items-center gap-1">
-                        <FaRegMessage onClick={() => setIsOpen(true)} className="size-4" />
+                        <GoComment onClick={() => setIsOpen(true)} className="size-4" />
                         <span>6</span>
                     </div>
                 </div>
             </div>
-            <Comment postId={postDetailData?.id || 0} isOpen={isOpen} setIsOpen={setIsOpen} />
+            <Comment
+                postId={postDetailData?.id || 0}
+                isOpen={isOpen}
+                setIsOpen={setIsOpen}
+                onUpdateTotalComments={handleTotalComment}
+            />
         </div>
     )
 }

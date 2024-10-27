@@ -24,7 +24,7 @@ export const postsApi = {
     deletePost: async (postSlug: string) => {
         return axiosClient.delete(postUri.DELETE_POST(postSlug))
     },
-    getComment: async (postSlug: string): Promise<ICommentPost> => {
+    getComment: async (postSlug: string): Promise<ICommentPost[]> => {
         return axiosClient.get(postUri.COMMENT(postSlug))
     },
     addComment: async (commentData: ICreateCommentPost): Promise<any> => {

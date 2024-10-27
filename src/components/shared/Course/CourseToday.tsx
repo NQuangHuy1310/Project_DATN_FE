@@ -12,6 +12,7 @@ import { formatDuration, getImagesUrl } from '@/lib'
 import { RiMoneyDollarCircleFill } from 'react-icons/ri'
 import useGetUserProfile from '@/app/hooks/accounts/useGetUser'
 
+
 const CourseToday = ({
     thumbnail,
     name,
@@ -26,11 +27,9 @@ const CourseToday = ({
     page,
     total_lessons
 }: ICourseToday) => {
-    const formatData = useFormatTime(totalTime!)
     const { user: currentUser } = useGetUserProfile()
     const navigate = useNavigate()
     const totalTime = formatDuration((total_duration_video as unknown as number) || 0)
-    
     return (
         <div className="card flex w-full max-w-full cursor-text flex-col gap-4 p-4 hover:shadow-[0px_40px_100px_0px_#0000000d] hover:transition-all lg:max-w-[360px] xl:max-w-[400px] xl:p-7 2xl:max-w-[400px]">
             <div className="relative h-[160px] flex-shrink-0 cursor-pointer">
@@ -101,16 +100,22 @@ const CourseToday = ({
                 </div>
             </div>
 
-            {price == 0 ? (
-                <Button onClick={() => navigate(routes.courseLeaning.replace(':slug', slug))}>Học ngay</Button>
-            ) : page === routes.courseDetailNoLogin || page === routes.courseDetail ? (
-                <Link className="rounded-md bg-primary py-2 text-center text-white" to={`/payment/course/${slug}`}>
-                    Mua khoá học
-                </Link>
-            ) : (
-                <Button>Xem chi tiết</Button>
+            {user?.id !== currentUser?.id && (
+                <div className="w-full">
+                    {price == 0 ? (
+                        <Button onClick={() => navigate(routes.courseLeaning.replace(':slug', slug))}>Học ngay</Button>
+                    ) : page === routes.courseDetailNoLogin || page === routes.courseDetail ? (
+                        <Link
+                            className="block w-full rounded-md bg-primary py-2 text-center text-white"
+                            to={`/payment/course/${slug}`}
+                        >
+                            Mua khoá học
+                        </Link>
+                    ) : (
+                        <Button>Xem chi tiết</Button>
+                    )}
+                </div>
             )}
-
         </div>
     )
 }

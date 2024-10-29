@@ -4,8 +4,9 @@ import { useParams } from 'react-router-dom'
 import { Dispatch, useState, SetStateAction, useEffect } from 'react'
 import { selectedModule } from '@/views/instructor/Course/CreateCourse/Curriculum.tsx'
 import { closestCorners, DndContext } from '@dnd-kit/core'
-import { SortableContext } from '@dnd-kit/sortable'
+import { horizontalListSortingStrategy, SortableContext } from '@dnd-kit/sortable'
 import CourseModules from '@/components/shared/CourseContent/CourseModules.tsx'
+import { useUpdatePositionModule } from '@/app/hooks/instructors'
 
 interface CourseContentProps {
     moduleData: IModules
@@ -23,6 +24,8 @@ const CourseContent = ({
     selectedItem
 }: CourseContentProps) => {
     const { id } = useParams()
+    const { mutateAsync: updatePositionModule } = useUpdatePositionModule()
+
     const [confirmDialog, setConfirmDialog] = useState(false)
     const [showContent, setShowContent] = useState<{ [key: string]: boolean }>({})
     const [originalModuleData, setOriginalModuleData] = useState<IModule[]>(moduleData.modules)
@@ -40,7 +43,7 @@ const CourseContent = ({
         }))
     }
 
-    const handleDragEnd = (event: any) => {
+    const handleDragEnd = async (event: any) => {
         const { active, over } = event
 
         if (active.data.current.position !== over.data.current.position) {
@@ -58,6 +61,16 @@ const CourseContent = ({
                 })
 
                 setModules(newItems)
+
+                const payload = {
+                    modules: newItems.map((item) => ({
+                        id: item.id,
+                        position: item.position
+                    })),
+                    _method: 'PUT'
+                }
+
+                await updatePositionModule([id!, payload])
             }
         }
     }
@@ -76,7 +89,10 @@ const CourseContent = ({
     return (
         <>
             <DndContext collisionDetection={closestCorners} onDragEnd={handleDragEnd}>
-                <SortableContext items={modules?.map((module) => module.position)}>
+                <SortableContext
+                    items={modules?.map((module) => module.position)}
+                    strategy={horizontalListSortingStrategy}
+                >
                     <div className="mt-4 flex flex-col gap-5">
                         {modules.map((module) => {
                             const isShowContent = showContent[module.id] || false

@@ -16,7 +16,8 @@ import {
     IQuestion,
     IQuestionData,
     ITargetCourse,
-    IUpdatePositionData
+    IUpdatePositionLessonData,
+    IUpdatePositionModuleData
 } from '@/types/instructor'
 
 export const instructorApi = {
@@ -57,13 +58,17 @@ export const instructorApi = {
     getModule: async (courseId: string): Promise<any> => {
         return axiosClient.get(instructorUri.GET_MODULE(courseId))
     },
+    // update position module
+    updatePositionModule: async (courseId: string, moduleData: IUpdatePositionModuleData): Promise<any> => {
+        return axiosClient.post(instructorUri.UPDATE_POSITION_MODULE(courseId), moduleData)
+    },
 
     getLessonDetail: async (lessonId: number): Promise<ILessonDetail> => {
         return axiosClient.get(instructorUri.GET_LESSON_DETAIL(lessonId))
     },
 
     // update position lesson
-    updatePositionLesson: async (moduleId: number, lessonData: IUpdatePositionData): Promise<any> => {
+    updatePositionLesson: async (moduleId: number, lessonData: IUpdatePositionLessonData): Promise<any> => {
         return axiosClient.post(instructorUri.UPDATE_POSITION_LESSON(moduleId), lessonData)
     },
 

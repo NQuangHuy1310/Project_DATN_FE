@@ -1,10 +1,9 @@
 import { useState } from 'react'
-import { FaBars } from 'react-icons/fa6'
 import { CSS } from '@dnd-kit/utilities'
 import { IoIosDocument } from 'react-icons/io'
 import { useSortable } from '@dnd-kit/sortable'
-import { FaRegCirclePlay } from 'react-icons/fa6'
 import { FaPen, FaRegTrashAlt } from 'react-icons/fa'
+import { FaBars, FaRegCirclePlay } from 'react-icons/fa6'
 
 import { ILesson } from '@/types/instructor'
 import { Button } from '@/components/ui/button'
@@ -81,9 +80,14 @@ const LessonItem = ({ lesson }: LessonItemProps) => {
                         </Button>
                     </div>
                 </div>
-                <div className="block cursor-all-scroll" {...listeners}>
+                <Button
+                    className="flex cursor-all-scroll items-center justify-center"
+                    {...listeners}
+                    size="icon"
+                    variant="ghost"
+                >
                     <FaBars className="size-4" />
-                </div>
+                </Button>
             </div>
 
             {/* Handle edit lesson doc */}

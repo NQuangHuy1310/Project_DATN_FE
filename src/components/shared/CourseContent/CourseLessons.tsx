@@ -1,13 +1,14 @@
-import { useDeleteModule, useUpdatePositionLesson } from '@/app/hooks/instructors'
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
-import { ILesson, ILessonQuiz } from '@/types/instructor'
-import { closestCorners, DndContext } from '@dnd-kit/core'
-import { horizontalListSortingStrategy, SortableContext } from '@dnd-kit/sortable'
-import { Button } from '@/components/ui/button.tsx'
-import LessonItem from '@/components/shared/CourseContent/LessonItem.tsx'
-import QuizItem from '@/components/shared/CourseContent/QuizItem.tsx'
-import LessonOptions from '@/components/shared/CourseContent/LessonOptions.tsx'
 import { FiPlus } from 'react-icons/fi'
+import { horizontalListSortingStrategy, SortableContext } from '@dnd-kit/sortable'
+import { closestCorners, DndContext } from '@dnd-kit/core'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+
+import { ILesson, ILessonQuiz } from '@/types/instructor'
+import { Button } from '@/components/ui/button.tsx'
+import QuizItem from '@/components/shared/CourseContent/QuizItem.tsx'
+import LessonItem from '@/components/shared/CourseContent/LessonItem.tsx'
+import LessonOptions from '@/components/shared/CourseContent/LessonOptions.tsx'
+import { useDeleteModule, useUpdatePositionLesson } from '@/app/hooks/instructors'
 import ConfirmDialog from '@/components/shared/CourseContent/Dialog/ConfirmDialog.tsx'
 
 interface CourseModuleProps {

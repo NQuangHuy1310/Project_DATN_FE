@@ -18,7 +18,8 @@ import {
     IQuestionData,
     IQuiz,
     ITargetCourse,
-    IUpdatePositionData
+    IUpdatePositionLessonData,
+    IUpdatePositionModuleData
 } from '@/types/instructor'
 
 // Mutation
@@ -46,8 +47,8 @@ export const useTargetCourse = () => {
         mutationFn: async ([courseId, courseData]) => {
             return instructorApi.targetCourse(courseId, courseData)
         },
-        onSuccess() {
-            queryClient.invalidateQueries({ queryKey: ['targetCourse'] })
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['targetCourse'] })
             toast.success('Cập nhật thông tin khoá học thành công thành công!')
         }
     })
@@ -60,8 +61,8 @@ export const useOverviewCourse = () => {
         mutationFn: async ([courseId, courseData]) => {
             return instructorApi.courseOverview(courseId, courseData)
         },
-        onSuccess() {
-            queryClient.invalidateQueries({ queryKey: ['overviewCourse'] })
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['overviewCourse'] })
             toast.success('Cập nhật thông tin khoá học thành công!')
         }
     })
@@ -74,8 +75,8 @@ export const useCreateModule = () => {
         mutationFn: async ([courseId, courseData]) => {
             return instructorApi.createModule(courseId, courseData)
         },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['modules'] })
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['modules'] })
         }
     })
 }
@@ -87,8 +88,8 @@ export const useDeleteModule = () => {
         mutationFn: async (moduleId: string) => {
             return instructorApi.deleteModule(moduleId)
         },
-        onSuccess() {
-            queryClient.invalidateQueries({ queryKey: ['modules'] })
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['modules'] })
         }
     })
 }
@@ -100,8 +101,8 @@ export const useUpdateModule = () => {
         mutationFn: async ([moduleId, moduleData]) => {
             return instructorApi.updateModule(moduleId, moduleData)
         },
-        onSettled() {
-            queryClient.invalidateQueries({ queryKey: ['modules'] })
+        onSettled: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['modules'] })
             toast.success('Cập nhật thông tin chương học thành công!')
         }
     })
@@ -114,8 +115,8 @@ export const useCreateLessonDoc = () => {
         mutationFn: async ([lessonId, lessonData]) => {
             return instructorApi.createLessonDoc(lessonId, lessonData)
         },
-        onSuccess() {
-            queryClient.invalidateQueries({ queryKey: ['modules'] })
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['modules'] })
         }
     })
 }
@@ -127,9 +128,9 @@ export const useUpdateLessonDoc = () => {
         mutationFn: async ([lessonId, lessonData]) => {
             return instructorApi.updateLessonDoc(lessonId, lessonData)
         },
-        onSettled() {
-            queryClient.invalidateQueries({ queryKey: ['modules'] })
-            queryClient.invalidateQueries({ queryKey: ['lesson'] })
+        onSettled: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['modules'] })
+            await queryClient.invalidateQueries({ queryKey: ['lesson'] })
         }
     })
 }
@@ -141,8 +142,8 @@ export const useDeleteLessonDoc = () => {
         mutationFn: async (lessonId: number) => {
             return instructorApi.deleteLessonDoc(lessonId)
         },
-        onSuccess() {
-            queryClient.invalidateQueries({ queryKey: ['modules'] })
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['modules'] })
         }
     })
 }
@@ -154,8 +155,8 @@ export const useCreateLessonVideo = () => {
         mutationFn: async ([lessonId, lessonData]) => {
             return instructorApi.createLessonVideo(lessonId, lessonData)
         },
-        onSuccess() {
-            queryClient.invalidateQueries({ queryKey: ['modules'] })
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['modules'] })
         }
     })
 }
@@ -167,9 +168,9 @@ export const useUpdateLessonVideo = () => {
         mutationFn: async ([lessonId, lessonData]) => {
             return instructorApi.updateLessonVideo(lessonId, lessonData)
         },
-        onSuccess() {
-            queryClient.invalidateQueries({ queryKey: ['modules'] })
-            queryClient.invalidateQueries({ queryKey: ['lesson'] })
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['modules'] })
+            await queryClient.invalidateQueries({ queryKey: ['lesson'] })
         }
     })
 }
@@ -181,8 +182,8 @@ export const useDeleteLessonVideo = () => {
         mutationFn: async (lessonId: number) => {
             return instructorApi.deleteLessonVideo(lessonId)
         },
-        onSuccess() {
-            queryClient.invalidateQueries({ queryKey: ['modules'] })
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['modules'] })
         }
     })
 }
@@ -194,8 +195,8 @@ export const useCreateLessonQuiz = () => {
         mutationFn: async ([moduleId, lessonData]) => {
             return instructorApi.createLessonQuiz(moduleId, lessonData)
         },
-        onSuccess() {
-            queryClient.invalidateQueries({ queryKey: ['modules'] })
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['modules'] })
         }
     })
 }
@@ -207,9 +208,9 @@ export const useUpdateLessonQuiz = () => {
         mutationFn: async ([lessonId, lessonData]) => {
             return instructorApi.updateLessonQuiz(lessonId, lessonData)
         },
-        onSuccess() {
-            queryClient.invalidateQueries({ queryKey: ['modules'] })
-            queryClient.invalidateQueries({ queryKey: ['quiz'] })
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['modules'] })
+            await queryClient.invalidateQueries({ queryKey: ['quiz'] })
         }
     })
 }
@@ -221,8 +222,8 @@ export const useDeleteLessonQuiz = () => {
         mutationFn: async (lessonId: number) => {
             return instructorApi.deleteLessonQuiz(lessonId)
         },
-        onSuccess() {
-            queryClient.invalidateQueries({ queryKey: ['modules'] })
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['modules'] })
         }
     })
 }
@@ -234,8 +235,8 @@ export const useCreateQuestion = () => {
         mutationFn: async ([quizId, lessonData]) => {
             return instructorApi.createQuestion(quizId, lessonData)
         },
-        onSuccess() {
-            queryClient.invalidateQueries({ queryKey: ['quiz'] })
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['quiz'] })
         }
     })
 }
@@ -247,8 +248,8 @@ export const useUpdateQuestion = () => {
         mutationFn: async ([questionID, lessonData]) => {
             return instructorApi.updateQuestion(questionID, lessonData)
         },
-        onSuccess() {
-            queryClient.invalidateQueries({ queryKey: ['quiz'] })
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['quiz'] })
             toast.success('Cập nhật câu hỏi thành công!')
         }
     })
@@ -261,16 +262,34 @@ export const useDeleteQuestion = () => {
         mutationFn: async (questionID: number) => {
             return instructorApi.deleteQuestion(questionID)
         },
-        onSuccess() {
-            queryClient.invalidateQueries({ queryKey: ['quiz'] })
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['quiz'] })
         }
     })
 }
 
 export const useUpdatePositionLesson = () => {
-    return useMutation<any, Error, [number, IUpdatePositionData]>({
-        mutationFn: async ([moduleId, lesonData]) => {
-            return instructorApi.updatePositionLesson(moduleId, lesonData)
+    const queryClient = useQueryClient()
+
+    return useMutation<any, Error, [number, IUpdatePositionLessonData]>({
+        mutationFn: async ([moduleId, lessonData]) => {
+            return instructorApi.updatePositionLesson(moduleId, lessonData)
+        },
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['modules'] })
+        }
+    })
+}
+
+export const useUpdatePositionModule = () => {
+    const queryClient = useQueryClient()
+
+    return useMutation<any, Error, [string, IUpdatePositionModuleData]>({
+        mutationFn: async ([courseId, lessonData]) => {
+            return instructorApi.updatePositionModule(courseId, lessonData)
+        },
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['modules'] })
         }
     })
 }
@@ -331,13 +350,5 @@ export const useGetLessonQuiz = (id: number, options?: Omit<UseQueryOptions<IQui
         ...options,
         queryKey: ['quiz', id],
         queryFn: () => instructorApi.getLessonQuiz(id)
-    })
-}
-
-export const useGetModuleQuiz = (slug: string, options?: Omit<UseQueryOptions<IQuiz>, 'queryKey' | 'queryFn'>) => {
-    return useQuery({
-        ...options,
-        queryKey: ['quizzes', slug]
-        // queryFn: () => instructorApi.getLessonQuiz(id)
     })
 }

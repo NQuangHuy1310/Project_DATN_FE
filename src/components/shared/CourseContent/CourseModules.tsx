@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+import { CSS } from '@dnd-kit/utilities'
 import { useSortable } from '@dnd-kit/sortable'
 import { Dispatch, SetStateAction } from 'react'
 import { FaAngleDown, FaAngleUp, FaBars, FaPen, FaRegTrashAlt } from 'react-icons/fa'
@@ -6,7 +7,6 @@ import { FaAngleDown, FaAngleUp, FaBars, FaPen, FaRegTrashAlt } from 'react-icon
 import { IModule } from '@/types/instructor'
 import { Button } from '@/components/ui/button.tsx'
 import { selectedModule } from '@/views/instructor/Course/CreateCourse/Curriculum.tsx'
-import { CSS } from '@dnd-kit/utilities'
 import CourseLessons from '@/components/shared/CourseContent/CourseLessons.tsx'
 
 interface CourseModulesProps {

@@ -21,7 +21,7 @@ interface LessonItemProps {
 const LessonItem = ({ lesson }: LessonItemProps) => {
     const { id, content_type, title } = lesson
     const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
-        id: lesson.id,
+        id: lesson.position,
         data: { ...lesson }
     })
     const { mutateAsync: deleteLessonDoc, isPending } = useDeleteLessonDoc()
@@ -35,7 +35,8 @@ const LessonItem = ({ lesson }: LessonItemProps) => {
         transform: CSS.Translate.toString(transform),
         transition,
         height: '100%',
-        opacity: isDragging ? 0.5 : undefined
+        opacity: isDragging ? 0.5 : undefined,
+        willChange: 'transform, opacity'
     }
 
     const handleDeleteLesson = async () => {

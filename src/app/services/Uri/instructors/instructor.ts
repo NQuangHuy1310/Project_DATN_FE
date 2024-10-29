@@ -13,6 +13,7 @@ export const instructorUri = {
     DELETE_MODULE: (moduleId: string) => `${INSTRUCTOR_URL}module/${moduleId}/delete`,
 
     GET_LESSON_DETAIL: (lessonId: number) => `${INSTRUCTOR_URL}lesson/${lessonId}/detail`,
+    UPDATE_POSITION_LESSON: (moduleId: number) => `${INSTRUCTOR_URL}lesson/${moduleId}/update-lesson-position`,
 
     CREATE_LESSON_DOC: (moduleID: number) => `${INSTRUCTOR_URL}lesson/${moduleID}/add-text-lesson`,
     UPDATE_LESSON_DOC: (lessonID: number) => `${INSTRUCTOR_URL}lesson/${lessonID}/update-text-lesson`,

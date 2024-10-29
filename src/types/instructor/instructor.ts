@@ -122,6 +122,7 @@ export interface ILessonQuiz {
     title: string
     description: string
 }
+
 export interface IOption {
     id: number
     id_question: number
@@ -151,6 +152,16 @@ export interface IQuiz {
         description: string
         questions: IQuestion[]
     }
+}
+
+export interface IUpdatePosition {
+    id: number
+    position: number
+}
+
+export interface IUpdatePositionData {
+    lessons: IUpdatePosition[]
+    _method?: string
 }
 
 // ----------- Request -------------------

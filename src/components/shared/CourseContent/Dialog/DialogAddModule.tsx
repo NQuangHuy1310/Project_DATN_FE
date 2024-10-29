@@ -30,6 +30,20 @@ const DialogAddModule = ({ id, openDialog, setOpenDialog, selectedData }: Dialog
     const { mutateAsync: createModule } = useCreateModule()
     const { mutateAsync: updateModule } = useUpdateModule()
 
+    const handleSubmitForm: SubmitHandler<courseModule> = async (data) => {
+        if (selectedData) {
+            const payload = {
+                ...data,
+                _method: 'PUT'
+            }
+            await updateModule([selectedData.id, payload])
+        } else {
+            await createModule([id, data])
+        }
+        reset()
+        setOpenDialog(false)
+    }
+
     useEffect(() => {
         if (openDialog && selectedData) {
             setValue('title', selectedData.name)
@@ -38,22 +52,6 @@ const DialogAddModule = ({ id, openDialog, setOpenDialog, selectedData }: Dialog
             reset()
         }
     }, [openDialog, setValue, reset, selectedData])
-
-    const handleSubmitForm: SubmitHandler<courseModule> = async (data) => {
-        if (selectedData) {
-            const payload = {
-                ...data,
-                _method: 'PUT'
-            }
-            await updateModule([selectedData.id, payload])
-            reset()
-            setOpenDialog(false)
-        } else {
-            await createModule([id, data])
-            reset()
-            setOpenDialog(false)
-        }
-    }
 
     return (
         <Dialog open={openDialog} onOpenChange={setOpenDialog}>
@@ -89,8 +87,8 @@ const DialogAddModule = ({ id, openDialog, setOpenDialog, selectedData }: Dialog
                     <DialogFooter>
                         <Button
                             type="button"
-                            variant="outline"
                             onClick={() => setOpenDialog(false)}
+                            variant="outline"
                             disabled={isSubmitting}
                         >
                             Huỷ

@@ -6,19 +6,19 @@ import { Button } from '@/components/ui/button'
 import { useGetModule } from '@/app/hooks/instructors'
 import Loading from '@/components/Common/Loading/Loading'
 import CourseContent from '@/components/shared/CourseContent'
-import DialogAddModule from '@/components/shared/CourseContent/Dialog/DialogAddModule'
+
+export interface selectedModule {
+    name: string
+    description: string
+    id: string
+}
 
 const Curriculum = memo(({ setIsDataComplete }: { setIsDataComplete: () => void }) => {
     const { id } = useParams()
     const { data: moduleData, isLoading } = useGetModule(id!)
     const [openDialog, setOpenDialog] = useState(false)
     const [isComplete, setIsComplete] = useState(false)
-    const [selectedItem, setSelectedItem] = useState<{ name: string; description: string; id: string }>()
-
-    const handleChangeModule = (value: { name: string; description: string; id: string }) => {
-        setOpenDialog(true)
-        setSelectedItem(value)
-    }
+    const [selectedItem, setSelectedItem] = useState<selectedModule>()
 
     useEffect(() => {
         if (moduleData && moduleData.modules.length >= 5 && !isComplete) {
@@ -37,19 +37,16 @@ const Curriculum = memo(({ setIsDataComplete }: { setIsDataComplete: () => void 
                 <h4 className="text-2xl font-semibold capitalize">Chương trình giảng dạy</h4>
             </div>
 
-            <div className="mt-4 flex flex-col gap-7">
-                {moduleData &&
-                    moduleData.modules.map((item) => (
-                        <CourseContent
-                            id={item.id}
-                            key={item.id}
-                            name={item.title}
-                            lessons={item.lessons}
-                            quiz={item.quiz}
-                            description={item.description}
-                            handleSelectedItem={handleChangeModule}
-                        />
-                    ))}
+            <div className="flex flex-col gap-5">
+                {moduleData && moduleData.modules.length > 0 && (
+                    <CourseContent
+                        moduleData={moduleData}
+                        openDialog={openDialog}
+                        setOpenDialog={setOpenDialog}
+                        selectedItem={selectedItem!}
+                        setSelectedItem={setSelectedItem}
+                    />
+                )}
 
                 <div>
                     <Button
@@ -64,14 +61,6 @@ const Curriculum = memo(({ setIsDataComplete }: { setIsDataComplete: () => void 
                     </Button>
                 </div>
             </div>
-
-            {/* Dialog add module */}
-            <DialogAddModule
-                id={id!}
-                openDialog={openDialog}
-                setOpenDialog={setOpenDialog}
-                selectedData={selectedItem}
-            />
         </div>
     )
 })

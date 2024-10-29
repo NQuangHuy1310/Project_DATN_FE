@@ -74,7 +74,7 @@ export const useCreateModule = () => {
         mutationFn: async ([courseId, courseData]) => {
             return instructorApi.createModule(courseId, courseData)
         },
-        onSuccess() {
+        onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['modules'] })
         }
     })
@@ -100,8 +100,9 @@ export const useUpdateModule = () => {
         mutationFn: async ([moduleId, moduleData]) => {
             return instructorApi.updateModule(moduleId, moduleData)
         },
-        onSuccess() {
+        onSettled() {
             queryClient.invalidateQueries({ queryKey: ['modules'] })
+            toast.success('Cập nhật thông tin chương học thành công!')
         }
     })
 }
@@ -267,15 +268,10 @@ export const useDeleteQuestion = () => {
 }
 
 export const useUpdatePositionLesson = () => {
-    const queryClient = useQueryClient()
-
     return useMutation<any, Error, [number, IUpdatePositionData]>({
         mutationFn: async ([moduleId, lesonData]) => {
             return instructorApi.updatePositionLesson(moduleId, lesonData)
         }
-        // onSuccess() {
-        //     queryClient.invalidateQueries({ queryKey: ['modules'] })
-        // }
     })
 }
 

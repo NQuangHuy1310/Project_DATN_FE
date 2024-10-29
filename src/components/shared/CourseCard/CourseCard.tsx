@@ -42,9 +42,9 @@ const CourseCard = ({ name, id, status, thumbnail, submited_at: submittedAt, cat
                                 Trạng thái:{' '}
                                 <strong>
                                     {status === 'draft' && 'Bản nháp'}
-                                    {status === 'approved' && 'Đã xác nhận'}
-                                    {status === 'pending' && 'Chờ xác nhận'}
-                                    {status === 'rejected' && 'Bị từ chối'}
+                                    {status === 'approved' && 'Đã phê duyệt'}
+                                    {status === 'pending' && 'Chờ phê duyệt'}
+                                    {status === 'rejected' && 'Từ chối phê duyệt'}
                                 </strong>
                             </p>
                         </div>
@@ -58,6 +58,7 @@ const CourseCard = ({ name, id, status, thumbnail, submited_at: submittedAt, cat
                     <DropdownMenuContent align="end" sideOffset={5}>
                         <DropdownMenuItem onClick={() => redirectToCourse(status)}>Chỉnh sửa khoá học</DropdownMenuItem>
                         <DropdownMenuItem>Xem trước khoá học</DropdownMenuItem>
+                        <DropdownMenuItem>Ẩn khoá học</DropdownMenuItem>
                         <DropdownMenuItem>Xóa khoá học</DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>

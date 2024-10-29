@@ -1,4 +1,4 @@
-import { bannerApi } from '@/app/services/others/banners'
+import { bannerApi } from '@/app/services/others/others'
 import { IBanner } from '@/types/banner'
 import { useQuery, UseQueryOptions } from '@tanstack/react-query'
 

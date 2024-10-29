@@ -1,5 +1,5 @@
 import axiosClient from '@/configs/axiosClient'
-import { bannerUri } from '../Uri/others/banners'
+import { bannerUri } from '../Uri/others/others'
 import { IBanner } from '@/types/banner'
 
 export const bannerApi = {

@@ -17,7 +17,8 @@ import {
     IOverviewCourseData,
     IQuestionData,
     IQuiz,
-    ITargetCourse
+    ITargetCourse,
+    IUpdatePositionData
 } from '@/types/instructor'
 
 // Mutation
@@ -145,6 +146,19 @@ export const useDeleteLessonDoc = () => {
     })
 }
 
+export const useCreateLessonVideo = () => {
+    const queryClient = useQueryClient()
+
+    return useMutation<any, Error, [number, ILessonVideoData]>({
+        mutationFn: async ([lessonId, lessonData]) => {
+            return instructorApi.createLessonVideo(lessonId, lessonData)
+        },
+        onSuccess() {
+            queryClient.invalidateQueries({ queryKey: ['modules'] })
+        }
+    })
+}
+
 export const useUpdateLessonVideo = () => {
     const queryClient = useQueryClient()
 
@@ -252,16 +266,16 @@ export const useDeleteQuestion = () => {
     })
 }
 
-export const useCreateLessonVideo = () => {
+export const useUpdatePositionLesson = () => {
     const queryClient = useQueryClient()
 
-    return useMutation<any, Error, [number, ILessonVideoData]>({
-        mutationFn: async ([lessonId, lessonData]) => {
-            return instructorApi.createLessonVideo(lessonId, lessonData)
-        },
-        onSuccess() {
-            queryClient.invalidateQueries({ queryKey: ['modules'] })
+    return useMutation<any, Error, [number, IUpdatePositionData]>({
+        mutationFn: async ([moduleId, lesonData]) => {
+            return instructorApi.updatePositionLesson(moduleId, lesonData)
         }
+        // onSuccess() {
+        //     queryClient.invalidateQueries({ queryKey: ['modules'] })
+        // }
     })
 }
 

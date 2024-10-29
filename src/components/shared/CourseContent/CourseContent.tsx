@@ -8,7 +8,7 @@ import { SortableContext, horizontalListSortingStrategy } from '@dnd-kit/sortabl
 
 import { ILesson, ILessonQuiz } from '@/types/instructor'
 import { Button } from '@/components/ui/button'
-import { useDeleteModule } from '@/app/hooks/instructors'
+import { useDeleteModule, useUpdatePositionLesson } from '@/app/hooks/instructors'
 import LessonItem from '@/components/shared/CourseContent/LessonItem'
 import LessonOptions from '@/components/shared/CourseContent/LessonOptions'
 import ConfirmDialog from '@/components/shared/CourseContent/Dialog/ConfirmDialog'
@@ -25,6 +25,7 @@ interface CourseContentProps {
 
 const CourseContent = ({ name, id, lessons, handleSelectedItem, description, quiz }: CourseContentProps) => {
     const { mutateAsync: deleteModule, isPending } = useDeleteModule()
+    const { mutateAsync: updatePosition } = useUpdatePositionLesson()
 
     const [isAddNew, setIsAddNew] = useState(false)
     const [confirmDialog, setConfirmDialog] = useState(false)
@@ -37,18 +38,35 @@ const CourseContent = ({ name, id, lessons, handleSelectedItem, description, qui
         setConfirmDialog(false)
     }
 
-    const handleDragEnd = (event: any) => {
+    const handleDragEnd = async (event: any) => {
         const { active, over } = event
-        if (active.id !== over.id) {
+        const moduleId: number = active.data.current.id_module
+
+        if (active.data.current.position !== over.data.current.position) {
             const newItems = [...lessonData]
-            const activeIndex = lessonData.findIndex((item) => item.id === active.id)
-            const overIndex = lessonData.findIndex((item) => item.id === over.id)
+            const activeIndex = lessonData.findIndex((item) => item.position === active.data.current.position)
+            const overIndex = lessonData.findIndex((item) => item.position === over.data.current.position)
 
-            const temp = newItems[activeIndex]
-            newItems[activeIndex] = newItems[overIndex]
-            newItems[overIndex] = temp
+            if (activeIndex !== -1 && overIndex !== -1) {
+                const temp = newItems[activeIndex]
+                newItems[activeIndex] = newItems[overIndex]
+                newItems[overIndex] = temp
 
-            setLessonData(newItems)
+                newItems.forEach((item, index) => {
+                    item.position = index + 1
+                })
+
+                setLessonData(newItems)
+
+                const payload = {
+                    lessons: newItems.map((item) => ({
+                        id: item.id,
+                        position: item.position
+                    })),
+                    _method: 'PUT'
+                }
+                await updatePosition([moduleId, payload])
+            }
         }
     }
 
@@ -62,7 +80,7 @@ const CourseContent = ({ name, id, lessons, handleSelectedItem, description, qui
     return (
         <>
             <DndContext collisionDetection={closestCorners} onDragEnd={handleDragEnd}>
-                <SortableContext items={lessons?.map((c) => c.id)} strategy={horizontalListSortingStrategy}>
+                <SortableContext items={lessons?.map((c) => c.position)} strategy={horizontalListSortingStrategy}>
                     <div className="rounded-md border border-grey bg-softGrey p-4">
                         <div className="flex flex-col gap-5">
                             <div className="group flex items-center justify-between">

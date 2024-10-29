@@ -15,7 +15,8 @@ import {
     IOverviewCourseData,
     IQuestion,
     IQuestionData,
-    ITargetCourse
+    ITargetCourse,
+    IUpdatePositionData
 } from '@/types/instructor'
 
 export const instructorApi = {
@@ -59,6 +60,11 @@ export const instructorApi = {
 
     getLessonDetail: async (lessonId: number): Promise<ILessonDetail> => {
         return axiosClient.get(instructorUri.GET_LESSON_DETAIL(lessonId))
+    },
+
+    // update position lesson
+    updatePositionLesson: async (moduleId: number, lessonData: IUpdatePositionData): Promise<any> => {
+        return axiosClient.post(instructorUri.UPDATE_POSITION_LESSON(moduleId), lessonData)
     },
 
     // Api create lesson type doc

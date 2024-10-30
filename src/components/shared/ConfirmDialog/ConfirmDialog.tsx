@@ -16,7 +16,7 @@ interface ConfirmDialogProps {
     description: string
     confirmDialog: boolean
     setConfirmDialog: Dispatch<SetStateAction<boolean>>
-    handleDeleteModule: () => void
+    handleDelete: () => void
 }
 
 const ConfirmDialog = ({
@@ -25,20 +25,18 @@ const ConfirmDialog = ({
     description,
     confirmDialog,
     setConfirmDialog,
-    handleDeleteModule
+    handleDelete
 }: ConfirmDialogProps) => {
     return (
-        <AlertDialog open={confirmDialog} onOpenChange={setConfirmDialog}>
+        <AlertDialog open={confirmDialog} onOpenChange={setConfirmDialog} >
             <AlertDialogContent>
                 <AlertDialogHeader>
                     <AlertDialogTitle>{title}</AlertDialogTitle>
                     <AlertDialogDescription>{description}</AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                    <AlertDialogCancel disabled={isPending} onClick={() => setConfirmDialog(false)}>
-                        Huỷ
-                    </AlertDialogCancel>
-                    <AlertDialogAction onClick={handleDeleteModule} disabled={isPending}>
+                    <AlertDialogCancel disabled={isPending}>Huỷ</AlertDialogCancel>
+                    <AlertDialogAction onClick={handleDelete} disabled={isPending}>
                         Xoá
                     </AlertDialogAction>
                 </AlertDialogFooter>

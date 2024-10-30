@@ -154,13 +154,23 @@ export interface IQuiz {
     }
 }
 
-export interface IUpdatePosition {
+export interface IUpdateLessonPosition {
     id: number
     position: number
 }
 
-export interface IUpdatePositionData {
-    lessons: IUpdatePosition[]
+export interface IUpdatePositionLessonData {
+    lessons: IUpdateLessonPosition[]
+    _method?: string
+}
+
+export interface IUpdateModulePosition {
+    id: number
+    position: number
+}
+
+export interface IUpdatePositionModuleData {
+    modules: IUpdateModulePosition[]
     _method?: string
 }
 

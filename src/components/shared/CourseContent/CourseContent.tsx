@@ -93,22 +93,24 @@ const CourseContent = ({
                     items={modules?.map((module) => module.position)}
                     strategy={horizontalListSortingStrategy}
                 >
-                    <div className="mt-4 flex flex-col gap-5">
-                        {modules.map((module) => {
-                            const isShowContent = showContent[module.id] || false
-                            return (
-                                <CourseModules
-                                    key={module.id}
-                                    module={module}
-                                    isShowContent={isShowContent}
-                                    setConfirmDialog={setConfirmDialog}
-                                    toggleContentVisibility={toggleContentVisibility}
-                                    handleSetSelectedData={handleSetSelectedData}
-                                    confirmDialog={confirmDialog}
-                                />
-                            )
-                        })}
-                    </div>
+                    {modules && modules.length > 0 ? (
+                        <div className="mt-4 flex flex-col gap-5">
+                            {modules.map((module) => {
+                                const isShowContent = showContent[module.id] || false
+                                return (
+                                    <CourseModules
+                                        key={module.id}
+                                        module={module}
+                                        isShowContent={isShowContent}
+                                        setConfirmDialog={setConfirmDialog}
+                                        toggleContentVisibility={toggleContentVisibility}
+                                        handleSetSelectedData={handleSetSelectedData}
+                                        confirmDialog={confirmDialog}
+                                    />
+                                )
+                            })}
+                        </div>
+                    ) : null}
                 </SortableContext>
             </DndContext>
 

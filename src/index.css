@@ -6,6 +6,7 @@
     * {
         @apply border-border font-inter;
     }
+
     body {
         @apply bg-background text-sm text-black;
     }
@@ -80,12 +81,17 @@
         --chart-4: 280 65% 60%;
         --chart-5: 340 75% 55%;
     }
+
+    body {
+        pointer-events: auto !important;
+    }
 }
 
 @layer utilities {
     .active {
         @apply bg-softGrey text-black;
     }
+
     .text-overflow {
         display: -webkit-box;
         -webkit-box-orient: vertical;
@@ -93,11 +99,13 @@
         overflow: hidden;
         text-overflow: ellipsis;
     }
+
     .card {
         padding: 16px;
         background-color: white;
         border-radius: 8px;
     }
+
     .scrollbar-hide {
         -ms-overflow-style: none; /* IE và Edge */
         scrollbar-width: none; /* Firefox */

@@ -15,7 +15,9 @@ import {
     IOverviewCourseData,
     IQuestion,
     IQuestionData,
-    ITargetCourse
+    ITargetCourse,
+    IUpdatePositionLessonData,
+    IUpdatePositionModuleData
 } from '@/types/instructor'
 
 export const instructorApi = {
@@ -27,6 +29,19 @@ export const instructorApi = {
     },
     submitCourse: async (courseID: string): Promise<any> => {
         return axiosClient.post(instructorUri.SUBMIT_COURSE(courseID), {})
+    },
+    disableCourse: async (courseID: string): Promise<any> => {
+        return axiosClient.post(instructorUri.DISABLE_COURSE(courseID), {
+            _method: 'PUT'
+        })
+    },
+    enableCourse: async (courseID: string): Promise<any> => {
+        return axiosClient.post(instructorUri.ENABLE_COURSE(courseID), {
+            _method: 'PUT'
+        })
+    },
+    deleteCourse: async (courseID: string): Promise<any> => {
+        return axiosClient.delete(instructorUri.DELETE_COURSE(courseID), {})
     },
 
     targetCourse: async (courseId: string, courseData: ITargetCourse): Promise<ITargetCourse> => {
@@ -56,9 +71,18 @@ export const instructorApi = {
     getModule: async (courseId: string): Promise<any> => {
         return axiosClient.get(instructorUri.GET_MODULE(courseId))
     },
+    // update position module
+    updatePositionModule: async (courseId: string, moduleData: IUpdatePositionModuleData): Promise<any> => {
+        return axiosClient.post(instructorUri.UPDATE_POSITION_MODULE(courseId), moduleData)
+    },
 
     getLessonDetail: async (lessonId: number): Promise<ILessonDetail> => {
         return axiosClient.get(instructorUri.GET_LESSON_DETAIL(lessonId))
+    },
+
+    // update position lesson
+    updatePositionLesson: async (moduleId: number, lessonData: IUpdatePositionLessonData): Promise<any> => {
+        return axiosClient.post(instructorUri.UPDATE_POSITION_LESSON(moduleId), lessonData)
     },
 
     // Api create lesson type doc
@@ -80,7 +104,7 @@ export const instructorApi = {
         return axiosClient.post(instructorUri.UPDATE_LESSON_VIDEO(lessonId), lessonData)
     },
     deleteLessonVideo: async (lessonId: number): Promise<any> => {
-        return axiosClient.delete(instructorUri.DELETE_LESSON_DOC(lessonId))
+        return axiosClient.delete(instructorUri.DELETE_LESSON_VIDEO(lessonId))
     },
 
     // Api create lesson type quiz

@@ -35,7 +35,7 @@ const Dashboard = () => {
     })
 
     const navigate = useNavigate()
-    const createNewCourse = useCreateCourse()
+    const { mutateAsync: createNewCourse } = useCreateCourse()
     const { data: categories } = useGetCategories()
     const { data: courseData, isLoading } = useGetCourses()
     const [openDialog, setOpenDialog] = useState(false)
@@ -47,7 +47,7 @@ const Dashboard = () => {
     }
 
     const handleSubmitForm: SubmitHandler<createNewCourse> = async (formData) => {
-        const response = await createNewCourse.mutateAsync(formData)
+        const response = await createNewCourse(formData)
         const courseId = response.id
         const goalsUrl = routes.createCourse.replace(':id', courseId.toString()).concat('?type=draft')
         navigate(goalsUrl)

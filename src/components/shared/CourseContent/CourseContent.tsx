@@ -1,154 +1,125 @@
-/* eslint-disable no-unused-vars */
-import { useEffect, useState } from 'react'
-import { FiPlus } from 'react-icons/fi'
-import { FaAngleUp, FaAngleDown } from 'react-icons/fa'
+import { IModule, IModules } from '@/types/instructor'
+import DialogAddModule from '@/components/shared/CourseContent/Dialog/DialogAddModule.tsx'
+import { useParams } from 'react-router-dom'
+import { Dispatch, useState, SetStateAction, useEffect } from 'react'
+import { selectedModule } from '@/views/instructor/Course/CreateCourse/Curriculum.tsx'
 import { closestCorners, DndContext } from '@dnd-kit/core'
-import { FaBars, FaPen, FaRegTrashAlt } from 'react-icons/fa'
-import { SortableContext, horizontalListSortingStrategy } from '@dnd-kit/sortable'
-
-import { ILesson, ILessonQuiz } from '@/types/instructor'
-import { Button } from '@/components/ui/button'
-import { useDeleteModule } from '@/app/hooks/instructors'
-import LessonItem from '@/components/shared/CourseContent/LessonItem'
-import LessonOptions from '@/components/shared/CourseContent/LessonOptions'
-import ConfirmDialog from '@/components/shared/CourseContent/Dialog/ConfirmDialog'
-import QuizItem from '@/components/shared/CourseContent/QuizItem'
+import { horizontalListSortingStrategy, SortableContext } from '@dnd-kit/sortable'
+import CourseModules from '@/components/shared/CourseContent/CourseModules.tsx'
+import { useUpdatePositionModule } from '@/app/hooks/instructors'
 
 interface CourseContentProps {
-    name: string
-    id: number
-    lessons: ILesson[]
-    quiz: ILessonQuiz
-    description: string
-    handleSelectedItem: (item: { name: string; description: string; id: string }) => void
+    moduleData: IModules
+    openDialog: boolean
+    selectedItem: selectedModule
+    setSelectedItem: Dispatch<SetStateAction<selectedModule | undefined>>
+    setOpenDialog: Dispatch<SetStateAction<boolean>>
 }
 
-const CourseContent = ({ name, id, lessons, handleSelectedItem, description, quiz }: CourseContentProps) => {
-    const { mutateAsync: deleteModule, isPending } = useDeleteModule()
+const CourseContent = ({
+    moduleData,
+    openDialog,
+    setOpenDialog,
+    setSelectedItem,
+    selectedItem
+}: CourseContentProps) => {
+    const { id } = useParams()
+    const { mutateAsync: updatePositionModule } = useUpdatePositionModule()
 
-    const [isAddNew, setIsAddNew] = useState(false)
     const [confirmDialog, setConfirmDialog] = useState(false)
-    const [isShowContent, setIsShowContent] = useState(true)
-    const [originalLessonData, setOriginalLessonData] = useState<ILesson[]>(lessons)
-    const [lessonData, setLessonData] = useState<ILesson[]>(lessons)
+    const [showContent, setShowContent] = useState<{ [key: string]: boolean }>({})
+    const [originalModuleData, setOriginalModuleData] = useState<IModule[]>(moduleData.modules)
+    const [modules, setModules] = useState<IModule[]>(moduleData.modules)
 
-    const handleDeleteModule = async () => {
-        await deleteModule(id.toString())
-        setConfirmDialog(false)
+    const handleSetSelectedData = (selectedData: selectedModule) => {
+        setSelectedItem(selectedData)
+        setOpenDialog(true)
     }
 
-    const handleDragEnd = (event: any) => {
+    const toggleContentVisibility = (moduleId: number) => {
+        setShowContent((prev) => ({
+            ...prev,
+            [moduleId]: !prev[moduleId]
+        }))
+    }
+
+    const handleDragEnd = async (event: any) => {
         const { active, over } = event
-        if (active.id !== over.id) {
-            const newItems = [...lessonData]
-            const activeIndex = lessonData.findIndex((item) => item.id === active.id)
-            const overIndex = lessonData.findIndex((item) => item.id === over.id)
 
-            const temp = newItems[activeIndex]
-            newItems[activeIndex] = newItems[overIndex]
-            newItems[overIndex] = temp
+        if (active.data.current.position !== over.data.current.position) {
+            const newItems = [...modules]
+            const activeIndex = modules.findIndex((item) => item.position === active.data.current.position)
+            const overIndex = modules.findIndex((item) => item.position === over.data.current.position)
 
-            setLessonData(newItems)
+            if (activeIndex !== -1 && overIndex !== -1) {
+                const temp = newItems[activeIndex]
+                newItems[activeIndex] = newItems[overIndex]
+                newItems[overIndex] = temp
+
+                newItems.forEach((item, index) => {
+                    item.position = index + 1
+                })
+
+                setModules(newItems)
+
+                const payload = {
+                    modules: newItems.map((item) => ({
+                        id: item.id,
+                        position: item.position
+                    })),
+                    _method: 'PUT'
+                }
+
+                await updatePositionModule([id!, payload])
+            }
         }
     }
 
     useEffect(() => {
-        if (lessons.length > 0 && JSON.stringify(lessons) !== JSON.stringify(originalLessonData)) {
-            setOriginalLessonData(lessons)
-            setLessonData(lessons)
+        if (modules.length > 0 && JSON.stringify(modules) !== JSON.stringify(originalModuleData)) {
+            setOriginalModuleData(modules)
+            setModules(modules)
         }
-    }, [lessons, originalLessonData])
+    }, [modules, originalModuleData])
+
+    useEffect(() => {
+        setModules(moduleData.modules)
+    }, [moduleData])
 
     return (
         <>
             <DndContext collisionDetection={closestCorners} onDragEnd={handleDragEnd}>
-                <SortableContext items={lessons?.map((c) => c.id)} strategy={horizontalListSortingStrategy}>
-                    <div className="rounded-md border border-grey bg-softGrey p-4">
-                        <div className="flex flex-col gap-5">
-                            <div className="group flex items-center justify-between">
-                                <div className="flex items-center gap-4">
-                                    <h5 className="text-base font-semibold">Tên chương: {name}</h5>
-                                    <div className="hidden gap-4 group-hover:flex">
-                                        <div
-                                            className=""
-                                            onClick={() =>
-                                                handleSelectedItem({
-                                                    name: name,
-                                                    description: description,
-                                                    id: id.toString()
-                                                })
-                                            }
-                                        >
-                                            <FaPen className="size-4 cursor-pointer" />
-                                        </div>
-
-                                        <FaRegTrashAlt
-                                            className="size-4 cursor-pointer hover:text-black"
-                                            onClick={() => setConfirmDialog(true)}
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="flex items-center gap-3">
-                                    <Button
-                                        size="icon"
-                                        variant="outline"
-                                        className="cursor-pointer"
-                                        onClick={() => setIsShowContent(!isShowContent)}
-                                    >
-                                        {isShowContent ? (
-                                            <FaAngleUp className="size-4" />
-                                        ) : (
-                                            <FaAngleDown className="size-4" />
-                                        )}
-                                    </Button>
-                                    <Button size="icon" variant="outline" className="cursor-all-scroll">
-                                        <FaBars className="size-4" />
-                                    </Button>
-                                </div>
-                            </div>
-
-                            {/* Hiển thị LessonItem */}
-                            {isShowContent &&
-                                lessonData &&
-                                lessonData.length > 0 &&
-                                lessonData.map((item) => {
-                                    return <LessonItem key={item.id} lesson={item} moduleId={id} />
-                                })}
-
-                            {isShowContent && quiz && <QuizItem lesson={quiz} moduleId={id} />}
-
-                            {/* Hiển thị LessonOptions nếu đang thêm mới */}
-                            {isAddNew && <LessonOptions handleClose={setIsAddNew} moduleId={id} />}
-
-                            {/* Nút thêm mục mới */}
-                            {!isAddNew && (
-                                <div>
-                                    <Button
-                                        className="flex items-center gap-2"
-                                        variant="outline"
-                                        onClick={() => {
-                                            setIsAddNew(true)
-                                        }}
-                                    >
-                                        <FiPlus />
-                                        Mục trong chương trình
-                                    </Button>
-                                </div>
-                            )}
+                <SortableContext
+                    items={modules?.map((module) => module.position)}
+                    strategy={horizontalListSortingStrategy}
+                >
+                    {modules && modules.length > 0 ? (
+                        <div className="mt-4 flex flex-col gap-5">
+                            {modules.map((module) => {
+                                const isShowContent = showContent[module.id] || false
+                                return (
+                                    <CourseModules
+                                        key={module.id}
+                                        module={module}
+                                        isShowContent={isShowContent}
+                                        setConfirmDialog={setConfirmDialog}
+                                        toggleContentVisibility={toggleContentVisibility}
+                                        handleSetSelectedData={handleSetSelectedData}
+                                        confirmDialog={confirmDialog}
+                                    />
+                                )
+                            })}
                         </div>
-                    </div>
+                    ) : null}
                 </SortableContext>
             </DndContext>
 
-            {/* Confirm dialog */}
-            <ConfirmDialog
-                isPending={isPending}
-                confirmDialog={confirmDialog}
-                setConfirmDialog={setConfirmDialog}
-                handleDeleteModule={handleDeleteModule}
-                title="Xoá chương trong khoá học"
-                description="Bạn sắp xóa một chương trình giảng dạy. Bạn có chắc chắn muốn tiếp tục không?"
+            {/* Dialog add module */}
+            <DialogAddModule
+                id={id!}
+                openDialog={openDialog}
+                setOpenDialog={setOpenDialog}
+                selectedData={selectedItem!}
             />
         </>
     )

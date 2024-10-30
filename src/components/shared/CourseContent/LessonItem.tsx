@@ -1,14 +1,13 @@
 import { useState } from 'react'
-import { FaBars } from 'react-icons/fa6'
 import { CSS } from '@dnd-kit/utilities'
 import { IoIosDocument } from 'react-icons/io'
 import { useSortable } from '@dnd-kit/sortable'
-import { FaRegCirclePlay } from 'react-icons/fa6'
 import { FaPen, FaRegTrashAlt } from 'react-icons/fa'
+import { FaBars, FaRegCirclePlay } from 'react-icons/fa6'
 
 import { ILesson } from '@/types/instructor'
 import { Button } from '@/components/ui/button'
-import ConfirmDialog from '@/components/shared/CourseContent/Dialog/ConfirmDialog'
+import ConfirmDialog from '@/components/shared/ConfirmDialog/ConfirmDialog.tsx'
 import { useDeleteLessonDoc, useDeleteLessonVideo } from '@/app/hooks/instructors'
 import LessonDocument from '@/components/shared/CourseContent/LessonDocument'
 import LessonVideo from '@/components/shared/CourseContent/LessonVideo'
@@ -21,7 +20,7 @@ interface LessonItemProps {
 const LessonItem = ({ lesson }: LessonItemProps) => {
     const { id, content_type, title } = lesson
     const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
-        id: lesson.id,
+        id: lesson.position,
         data: { ...lesson }
     })
     const { mutateAsync: deleteLessonDoc, isPending } = useDeleteLessonDoc()
@@ -35,7 +34,8 @@ const LessonItem = ({ lesson }: LessonItemProps) => {
         transform: CSS.Translate.toString(transform),
         transition,
         height: '100%',
-        opacity: isDragging ? 0.5 : undefined
+        opacity: isDragging ? 0.5 : undefined,
+        willChange: 'transform, opacity'
     }
 
     const handleDeleteLesson = async () => {
@@ -80,9 +80,14 @@ const LessonItem = ({ lesson }: LessonItemProps) => {
                         </Button>
                     </div>
                 </div>
-                <div className="block cursor-all-scroll" {...listeners}>
+                <Button
+                    className="flex cursor-all-scroll items-center justify-center"
+                    {...listeners}
+                    size="icon"
+                    variant="ghost"
+                >
                     <FaBars className="size-4" />
-                </div>
+                </Button>
             </div>
 
             {/* Handle edit lesson doc */}
@@ -98,7 +103,7 @@ const LessonItem = ({ lesson }: LessonItemProps) => {
                 isPending={isPending}
                 confirmDialog={isOpenDialog}
                 setConfirmDialog={setIsOpenDialog}
-                handleDeleteModule={handleDeleteLesson}
+                handleDelete={handleDeleteLesson}
                 title="Xác nhận xoá bài giảng"
                 description="Bạn sắp xóa một chương trình giảng dạy. Bạn có chắc chắn muốn tiếp tục không?"
             />

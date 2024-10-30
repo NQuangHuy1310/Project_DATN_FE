@@ -7,7 +7,7 @@ import { FaBars, FaRegCirclePlay } from 'react-icons/fa6'
 
 import { ILesson } from '@/types/instructor'
 import { Button } from '@/components/ui/button'
-import ConfirmDialog from '@/components/shared/CourseContent/Dialog/ConfirmDialog'
+import ConfirmDialog from '@/components/shared/ConfirmDialog/ConfirmDialog.tsx'
 import { useDeleteLessonDoc, useDeleteLessonVideo } from '@/app/hooks/instructors'
 import LessonDocument from '@/components/shared/CourseContent/LessonDocument'
 import LessonVideo from '@/components/shared/CourseContent/LessonVideo'
@@ -103,7 +103,7 @@ const LessonItem = ({ lesson }: LessonItemProps) => {
                 isPending={isPending}
                 confirmDialog={isOpenDialog}
                 setConfirmDialog={setIsOpenDialog}
-                handleDeleteModule={handleDeleteLesson}
+                handleDelete={handleDeleteLesson}
                 title="Xác nhận xoá bài giảng"
                 description="Bạn sắp xóa một chương trình giảng dạy. Bạn có chắc chắn muốn tiếp tục không?"
             />

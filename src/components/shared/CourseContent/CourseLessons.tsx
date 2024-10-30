@@ -9,7 +9,7 @@ import QuizItem from '@/components/shared/CourseContent/QuizItem.tsx'
 import LessonItem from '@/components/shared/CourseContent/LessonItem.tsx'
 import LessonOptions from '@/components/shared/CourseContent/LessonOptions.tsx'
 import { useDeleteModule, useUpdatePositionLesson } from '@/app/hooks/instructors'
-import ConfirmDialog from '@/components/shared/CourseContent/Dialog/ConfirmDialog.tsx'
+import ConfirmDialog from '@/components/shared/ConfirmDialog'
 
 interface CourseModuleProps {
     id: number
@@ -30,7 +30,7 @@ const CourseLessons = ({ id, lessons, quiz, isShowContent, confirmDialog, setCon
 
     const handleDeleteModule = async () => {
         await deleteModule(id.toString())
-        setConfirmDialog(false)
+        // setConfirmDialog(false)
     }
 
     const handleDragEnd = async (event: any) => {
@@ -114,7 +114,7 @@ const CourseLessons = ({ id, lessons, quiz, isShowContent, confirmDialog, setCon
                 isPending={isPending}
                 confirmDialog={confirmDialog}
                 setConfirmDialog={setConfirmDialog}
-                handleDeleteModule={handleDeleteModule}
+                handleDelete={handleDeleteModule}
                 title="Xoá chương trong khoá học"
                 description="Bạn sắp xóa một chương trình giảng dạy. Bạn có chắc chắn muốn tiếp tục không?"
             />

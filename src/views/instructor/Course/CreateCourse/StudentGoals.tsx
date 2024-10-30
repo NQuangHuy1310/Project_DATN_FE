@@ -1,18 +1,21 @@
 import { memo, useEffect, useState } from 'react'
 import { FaPlus } from 'react-icons/fa6'
 import { FiTrash } from 'react-icons/fi'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { getInputCoursePlaceholder } from '@/lib'
 import { useGetTargetCourse, useTargetCourse } from '@/app/hooks/instructors/useInstructor'
 import Loading from '@/components/Common/Loading/Loading'
+import { toast } from 'sonner'
+import routes from '@/configs/routes.ts'
 
 const StudentGoals = memo(({ setIsDataComplete }: { setIsDataComplete: () => void }) => {
     const { id } = useParams()
+    const navigate = useNavigate()
     const { mutateAsync: createTargetCourse, isPending } = useTargetCourse()
-    const { data, isPending: loadingTargetCourse } = useGetTargetCourse(id!)
+    const { data, isPending: loadingTargetCourse, error } = useGetTargetCourse(id!)
 
     const [inputs, setInputs] = useState({
         goals: Array.from({ length: 4 }, () => ({
@@ -81,6 +84,8 @@ const StudentGoals = memo(({ setIsDataComplete }: { setIsDataComplete: () => voi
         return result
     }
 
+    console.log(error)
+
     const handleReset = () => {
         setInputs({
             goals: Array.from({ length: 4 }, () => ({
@@ -125,6 +130,15 @@ const StudentGoals = memo(({ setIsDataComplete }: { setIsDataComplete: () => voi
             handleReset()
         }
     }, [data, setIsDataComplete])
+
+    useEffect(() => {
+        if (error) {
+            toast.error('Khóa học không tồn tại. Vui lòng kiểm tra lại thông tin.', {
+                description: 'Nếu bạn cần trợ giúp, hãy liên hệ với bộ phận hỗ trợ.'
+            })
+            navigate(routes.instructorDashboard)
+        }
+    }, [error, navigate])
 
     if (loadingTargetCourse) {
         return <Loading />

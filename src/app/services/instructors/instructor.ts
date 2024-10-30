@@ -30,6 +30,19 @@ export const instructorApi = {
     submitCourse: async (courseID: string): Promise<any> => {
         return axiosClient.post(instructorUri.SUBMIT_COURSE(courseID), {})
     },
+    disableCourse: async (courseID: string): Promise<any> => {
+        return axiosClient.post(instructorUri.DISABLE_COURSE(courseID), {
+            _method: 'PUT'
+        })
+    },
+    enableCourse: async (courseID: string): Promise<any> => {
+        return axiosClient.post(instructorUri.ENABLE_COURSE(courseID), {
+            _method: 'PUT'
+        })
+    },
+    deleteCourse: async (courseID: string): Promise<any> => {
+        return axiosClient.delete(instructorUri.DELETE_COURSE(courseID), {})
+    },
 
     targetCourse: async (courseId: string, courseData: ITargetCourse): Promise<ITargetCourse> => {
         return axiosClient.post(instructorUri.TARGET_COURSE(courseId), courseData)
@@ -91,7 +104,7 @@ export const instructorApi = {
         return axiosClient.post(instructorUri.UPDATE_LESSON_VIDEO(lessonId), lessonData)
     },
     deleteLessonVideo: async (lessonId: number): Promise<any> => {
-        return axiosClient.delete(instructorUri.DELETE_LESSON_DOC(lessonId))
+        return axiosClient.delete(instructorUri.DELETE_LESSON_VIDEO(lessonId))
     },
 
     // Api create lesson type quiz

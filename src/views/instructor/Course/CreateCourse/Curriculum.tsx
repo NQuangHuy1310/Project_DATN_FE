@@ -32,21 +32,19 @@ const Curriculum = memo(({ setIsDataComplete }: { setIsDataComplete: () => void 
     }
 
     return (
-        <div className="rounded-lg p-5">
+        <div className="flex flex-col gap-5 rounded-lg p-5">
             <div className="flex items-center justify-between border-b-2 border-gray-300 pb-5">
                 <h4 className="text-2xl font-semibold capitalize">Chương trình giảng dạy</h4>
             </div>
 
             <div className="flex flex-col gap-5">
-                {moduleData && moduleData.modules.length > 0 && (
-                    <CourseContent
-                        moduleData={moduleData}
-                        openDialog={openDialog}
-                        setOpenDialog={setOpenDialog}
-                        selectedItem={selectedItem!}
-                        setSelectedItem={setSelectedItem}
-                    />
-                )}
+                <CourseContent
+                    moduleData={moduleData!}
+                    openDialog={openDialog}
+                    setOpenDialog={setOpenDialog}
+                    selectedItem={selectedItem!}
+                    setSelectedItem={setSelectedItem}
+                />
 
                 <div>
                     <Button

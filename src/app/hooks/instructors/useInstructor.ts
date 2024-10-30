@@ -40,6 +40,48 @@ export const useSubmitCourse = () => {
     })
 }
 
+export const useDisableCourse = () => {
+    const queryClient = useQueryClient()
+
+    return useMutation({
+        mutationFn: async (courseID: string) => {
+            return instructorApi.disableCourse(courseID)
+        },
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['instructorCourse'] })
+            toast.success('Khóa học đã được ẩn thành công! Bạn có thể khôi phục lại bất cứ lúc nào.')
+        }
+    })
+}
+
+export const useEnableCourse = () => {
+    const queryClient = useQueryClient()
+
+    return useMutation({
+        mutationFn: async (courseID: string) => {
+            return instructorApi.enableCourse(courseID)
+        },
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['instructorCourse'] })
+            toast.success('Khóa học đã được kích hoạt hiển thị thành công! Học viên giờ có thể truy cập.')
+        }
+    })
+}
+
+export const usedeleteCourse = () => {
+    const queryClient = useQueryClient()
+
+    return useMutation({
+        mutationFn: async (courseID: string) => {
+            return instructorApi.deleteCourse(courseID)
+        },
+        onSuccess: async () => {
+            toast.success('Khóa học đã xóa thành công! Hãy chắc chắn rằng bạn không cần nó nữa.')
+            await queryClient.invalidateQueries({ queryKey: ['instructorCourse'] })
+        }
+    })
+}
+
 export const useTargetCourse = () => {
     const queryClient = useQueryClient()
 

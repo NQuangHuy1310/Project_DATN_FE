@@ -1,6 +1,7 @@
 import axiosClient from '@/configs/axiosClient'
 import { courseUri } from '@/app/services/Uri/courses/courses'
 import { CourseData, ICourse, ICourseCategory, ICourseDetail, IQuizDetail } from '@/types/course/course'
+import { IComment, ICreateComment } from '@/types/comment'
 
 export const courseApi = {
     detailCourseLeaning: async (slug: string): Promise<CourseData> => {
@@ -23,5 +24,11 @@ export const courseApi = {
     },
     populateCourse: async (): Promise<ICourse[]> => {
         return axiosClient.get(courseUri.COURSE_POPULATE)
+    },
+    addCommentCourse: async (commentData: ICreateComment): Promise<any> => {
+        return axiosClient.post(courseUri.ADD_COMMENT_COURSE, commentData)
+    },
+    getComment: async (id: number): Promise<IComment[]> => {
+        return axiosClient.get(courseUri.GET_COMMENT(id))
     }
 }

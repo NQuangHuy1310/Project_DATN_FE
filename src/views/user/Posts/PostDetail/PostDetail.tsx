@@ -12,11 +12,12 @@ import Loading from '@/components/Common/Loading/Loading'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 
-import Comment from './Comment'
+
 import { useGetPost } from '@/app/hooks/posts'
 import { useState } from 'react'
 import { GoComment } from 'react-icons/go'
 import { PiHeartStraight } from 'react-icons/pi'
+import CommentPost from '@/components/shared/Comment/CommentPost'
 
 const PostDetail = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false)
@@ -35,10 +36,10 @@ const PostDetail = () => {
             <div className="fixed hidden w-2/12 flex-col gap-5 md:flex">
                 <h3 className="border-b-2 py-2 text-xl font-bold">{postDetailData?.username}</h3>
                 <div className="flex items-center gap-5 font-medium text-darkGrey">
-                    <div className="flex gap-1">
+                    <div className="flex gap-1 cursor-pointer">
                         <PiHeartStraight className="size-7" /> <span></span>
                     </div>
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-1 cursor-pointer">
                         <GoComment onClick={() => setIsOpen(true)} className="size-6" />
                         <span>{totalComment}</span>
                     </div>
@@ -122,8 +123,8 @@ const PostDetail = () => {
                     </div>
                 </div>
             </div>
-            <Comment
-                postId={postDetailData?.id || 0}
+            <CommentPost
+                commentId={postDetailData?.id || 0}
                 isOpen={isOpen}
                 setIsOpen={setIsOpen}
                 onUpdateTotalComments={handleTotalComment}

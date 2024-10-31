@@ -144,7 +144,7 @@ const DialogAddQuestion = ({ openDialog, setOpenDialog, quizId, question }: Dial
                 type: questionType,
                 points,
                 correct_answer: correct_answer,
-                image: typeof questionImage === 'string' ? undefined : questionImage
+                image: questionImage
             },
             options: options
         }

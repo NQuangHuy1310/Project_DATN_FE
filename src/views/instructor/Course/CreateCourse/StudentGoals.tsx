@@ -84,8 +84,6 @@ const StudentGoals = memo(({ setIsDataComplete }: { setIsDataComplete: () => voi
         return result
     }
 
-    console.log(error)
-
     const handleReset = () => {
         setInputs({
             goals: Array.from({ length: 4 }, () => ({

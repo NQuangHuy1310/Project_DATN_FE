@@ -1,7 +1,7 @@
 import { toast } from 'sonner'
 import ReactQuill from 'react-quill'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
+import { ChangeEvent, Dispatch, RefObject, SetStateAction, useEffect, useRef, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { MessageErrors } from '@/constants'
@@ -45,7 +45,7 @@ const LessonVideo = ({ moduleId, handleHiddenLesson, lessonId, setIsEditLesson, 
     const courseVideo = useRef<HTMLInputElement | null>(null)
     const quillRef = useRef<ReactQuill>(null)
 
-    const handleUploadVideo = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleUploadVideo = async (e: ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]
         if (file && validateFileSize(file, 'video')) {
             try {
@@ -59,7 +59,7 @@ const LessonVideo = ({ moduleId, handleHiddenLesson, lessonId, setIsEditLesson, 
         }
     }
 
-    const handleButtonClick = (inputRef: React.RefObject<HTMLInputElement>) => {
+    const handleButtonClick = (inputRef: RefObject<HTMLInputElement>) => {
         if (inputRef.current) {
             inputRef.current.click()
         }

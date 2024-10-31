@@ -1,7 +1,7 @@
 import { toast } from 'sonner'
 import ReactQuill from 'react-quill'
 import { useParams } from 'react-router-dom'
-import { memo, useEffect, useRef, useState } from 'react'
+import { ChangeEvent, memo, useEffect, useRef, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
@@ -55,7 +55,7 @@ const CourseOverview = memo(({ setIsDataComplete }: { setIsDataComplete: () => v
         setValue('description', value)
     }
 
-    const handleUploadImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleUploadImage = async (e: ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]
         if (file && validateFileSize(file, 'image')) {
             try {
@@ -69,7 +69,7 @@ const CourseOverview = memo(({ setIsDataComplete }: { setIsDataComplete: () => v
         }
     }
 
-    const handleUploadVideo = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleUploadVideo = async (e: ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]
         if (file && validateFileSize(file, 'video')) {
             try {
@@ -299,7 +299,11 @@ const CourseOverview = memo(({ setIsDataComplete }: { setIsDataComplete: () => v
                     <h5 className="text-base font-bold">Hình ảnh khoá học</h5>
                     <div className="flex items-start gap-8">
                         <div className="h-[300px] w-[450px] flex-shrink-0 overflow-hidden rounded-md border-[1px]">
-                            <img src={courseImagePath} alt="Course image" className="h-full w-full object-cover" />
+                            <img
+                                src={courseImagePath ?? placeholder}
+                                alt="Course image"
+                                className="h-full w-full object-cover"
+                            />
                         </div>
                         <div className="flex w-[450px] flex-col gap-3">
                             <p className="text-sm leading-6">

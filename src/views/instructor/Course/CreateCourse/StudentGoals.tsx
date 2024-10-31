@@ -295,7 +295,7 @@ const StudentGoals = memo(({ setIsDataComplete }: { setIsDataComplete: () => voi
                                 onClick={() => handleAdd('audiences')}
                             >
                                 <FaPlus />
-                                <span>Thêm mục tiêu vào khoá học của bạn</span>
+                                <span>Thêm đối tượng có thể tham gia khoá học của bạn</span>
                             </Button>
                         </div>
                     </div>

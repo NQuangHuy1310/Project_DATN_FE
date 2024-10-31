@@ -1,17 +1,20 @@
-import { useCourseCategoryHome, useCourseSaleHome } from '@/app/hooks/courses/useCourse'
-import { useGetRatingHome } from '@/app/hooks/ratings/useRating'
-import Loading from '@/components/Common/Loading/Loading'
-import CountdownTime from '@/components/shared/CountDownTime'
-import Course from '@/components/shared/Course'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Button } from '@/components/ui/button'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { AiFillStar } from 'react-icons/ai'
-import bannerImage from '@/assets/banner.png'
+
 import Banner from '@/assets/homeBanner.png'
+import bannerImage from '@/assets/banner.png'
+
+import Course from '@/components/shared/Course'
 import routes from '@/configs/routes'
-import { useGetBanners } from '@/app/hooks/others/useOthers'
+import Loading from '@/components/Common/Loading/Loading'
+import { Button } from '@/components/ui/button'
+import CountdownTime from '@/components/shared/CountDownTime'
 import { getImagesUrl } from '@/lib'
+import { useGetBanners } from '@/app/hooks/others/useOthers'
+import { useGetRatingHome } from '@/app/hooks/ratings/useRating'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { useCourseCategoryHome, useCourseSaleHome } from '@/app/hooks/courses/useCourse'
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
 
 const Home = () => {
     const { data: ratings, isLoading: loadingRating } = useGetRatingHome()
@@ -25,31 +28,35 @@ const Home = () => {
         <div>
             <div className="bg-softGrey">
                 {banners && banners.length > 0 ? (
-                    <div>
-                        {banners?.map((banner) => (
-                            <div
-                                key={banner.id}
-                                className="mx-auto flex max-w-[1200px] flex-col-reverse flex-wrap items-center justify-between gap-y-5 px-5 py-5 lg:flex-row lg:flex-nowrap lg:px-0"
-                            >
-                                <div className="mx-auto flex max-w-full flex-col gap-2 px-6 lg:max-w-[540px] lg:gap-6">
-                                    <h1 className="text-2xl font-semibold md:text-[30px] lg:text-[40px] lg:leading-[60px]">
-                                        {banner.title}
-                                    </h1>
-                                    <p className="text-xs md:text-sm lg:text-base">{banner.content}</p>
-                                    <div className="flex items-center gap-4">
-                                        <Button className="border border-white px-8 py-[19px]">Đăng ký ngay</Button>
+                    <Carousel className="container-main relative w-full px-5">
+                        <CarouselContent>
+                            {banners?.map((banner) => (
+                                <CarouselItem
+                                    key={banner.id}
+                                    className="mx-auto flex max-w-[1200px] flex-col-reverse flex-wrap items-center justify-between gap-y-5 px-5 py-5 lg:flex-row lg:flex-nowrap lg:px-0"
+                                >
+                                    <div className="mx-auto flex max-w-full flex-col gap-2 px-6 lg:max-w-[540px] lg:gap-6">
+                                        <h1 className="text-2xl font-semibold md:text-[30px] lg:text-[40px] lg:leading-[60px]">
+                                            {banner.title}
+                                        </h1>
+                                        <p className="text-xs md:text-sm lg:text-base">{banner.content}</p>
+                                        <div className="flex items-center gap-4">
+                                            <Button className="border border-white px-8 py-[19px]">Đăng ký ngay</Button>
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="px-5 lg:px-0">
-                                    <img
-                                        src={getImagesUrl(banner.image)}
-                                        className="max-h-[400px] w-full max-w-[550px] rounded-md lg:max-h-[450px]"
-                                        alt="Coursea"
-                                    />
-                                </div>
-                            </div>
-                        ))}
-                    </div>
+                                    <div className="px-5 lg:px-0">
+                                        <img
+                                            src={getImagesUrl(banner.image)}
+                                            className="max-h-[400px] w-full max-w-[550px] rounded-md lg:max-h-[450px]"
+                                            alt="Coursea"
+                                        />
+                                    </div>
+                                </CarouselItem>
+                            ))}
+                        </CarouselContent>
+                        <CarouselPrevious className="absolute left-0 top-1/2 -translate-y-1/2" />
+                        <CarouselNext className="absolute right-0 top-1/2 -translate-y-1/2" />
+                    </Carousel>
                 ) : (
                     <div className="mx-auto flex max-w-[1200px] flex-col-reverse flex-wrap items-center justify-between gap-y-5 px-5 py-5 lg:flex-row lg:flex-nowrap lg:px-0">
                         <div className="mx-auto flex max-w-full flex-col gap-2 px-6 lg:max-w-[540px] lg:gap-6">

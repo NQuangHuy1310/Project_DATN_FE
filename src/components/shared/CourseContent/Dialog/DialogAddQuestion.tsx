@@ -129,13 +129,13 @@ const DialogAddQuestion = ({ openDialog, setOpenDialog, quizId, question }: Dial
                       text: answer.text,
                       image: answer.image,
                       id: answer.id,
-                      remove_image: answer.remove_image
+                      ...(answer.image ? {} : { remove_image: answer.remove_image })
                   }
               })
             : answers.map((answer) => ({
                   text: answer.text,
                   image: typeof answer.image === 'string' ? undefined : answer.image,
-                  remove_image: answer.remove_image
+                  ...(typeof answer.image === 'undefined' ? { remove_image: answer.remove_image } : {})
               }))
 
         const data = {
@@ -160,6 +160,7 @@ const DialogAddQuestion = ({ openDialog, setOpenDialog, quizId, question }: Dial
     }
 
     const resetForm = () => {
+        setOpenDialog(false)
         setQuestionText('')
         setQuestionImage(undefined)
         setAnswers([
@@ -388,7 +389,7 @@ const DialogAddQuestion = ({ openDialog, setOpenDialog, quizId, question }: Dial
                                     <SelectGroup>
                                         {[...Array(20).keys()].map((item) => (
                                             <SelectItem key={item + 1} value={(item + 1).toString()}>
-                                                {item + 1} {item + 1 === 1 ? 'point' : 'points'}
+                                                {item + 1} Điểm
                                             </SelectItem>
                                         ))}
                                     </SelectGroup>

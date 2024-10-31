@@ -20,9 +20,17 @@ interface LessonVideoProps {
     lessonId?: number
     setIsEditLesson?: Dispatch<SetStateAction<boolean>>
     handleHiddenLesson?: Dispatch<SetStateAction<boolean>>
+    setIsSelectingLessonType?: Dispatch<SetStateAction<boolean>>
 }
 
-const LessonVideo = ({ moduleId, handleHiddenLesson, lessonId, setIsEditLesson, courseId }: LessonVideoProps) => {
+const LessonVideo = ({
+    moduleId,
+    handleHiddenLesson,
+    lessonId,
+    setIsEditLesson,
+    courseId,
+    setIsSelectingLessonType
+}: LessonVideoProps) => {
     const {
         reset,
         register,
@@ -105,6 +113,7 @@ const LessonVideo = ({ moduleId, handleHiddenLesson, lessonId, setIsEditLesson, 
     const handleClose = () => {
         if (lessonData) setIsEditLesson?.(false)
         else handleHiddenLesson?.(false)
+        setIsSelectingLessonType?.(false)
     }
 
     useEffect(() => {

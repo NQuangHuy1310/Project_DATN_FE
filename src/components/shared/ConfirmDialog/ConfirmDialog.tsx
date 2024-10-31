@@ -17,6 +17,7 @@ interface ConfirmDialogProps {
     confirmDialog: boolean
     setConfirmDialog: Dispatch<SetStateAction<boolean>>
     handleDelete: () => void
+    actionTitle?: string
 }
 
 const ConfirmDialog = ({
@@ -25,10 +26,11 @@ const ConfirmDialog = ({
     description,
     confirmDialog,
     setConfirmDialog,
-    handleDelete
+    handleDelete,
+    actionTitle
 }: ConfirmDialogProps) => {
     return (
-        <AlertDialog open={confirmDialog} onOpenChange={setConfirmDialog} >
+        <AlertDialog open={confirmDialog} onOpenChange={setConfirmDialog}>
             <AlertDialogContent>
                 <AlertDialogHeader>
                     <AlertDialogTitle>{title}</AlertDialogTitle>
@@ -37,7 +39,7 @@ const ConfirmDialog = ({
                 <AlertDialogFooter>
                     <AlertDialogCancel disabled={isPending}>Huỷ</AlertDialogCancel>
                     <AlertDialogAction onClick={handleDelete} disabled={isPending}>
-                        Xoá
+                        {actionTitle ?? 'Xoá'}
                     </AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>

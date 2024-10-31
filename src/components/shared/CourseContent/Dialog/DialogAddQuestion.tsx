@@ -3,7 +3,7 @@ import { toast } from 'sonner'
 import { FaPlus } from 'react-icons/fa6'
 import { IoMdClose } from 'react-icons/io'
 import { FaRegTrashAlt, FaImage } from 'react-icons/fa'
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
+import { Dispatch, SetStateAction, useCallback, useEffect, useRef, useState } from 'react'
 
 import { MessageErrors } from '@/constants'
 import { Input } from '@/components/ui/input'
@@ -36,10 +36,10 @@ const DialogAddQuestion = ({ openDialog, setOpenDialog, quizId, question }: Dial
     const [questionType, setQuestionType] = useState<'one_choice' | 'multiple_choice'>('one_choice')
     const [points, setPoints] = useState<number>(1)
     const [answers, setAnswers] = useState<Answer[]>([
-        { text: '', image: undefined },
-        { text: '', image: undefined },
-        { text: '', image: undefined },
-        { text: '', image: undefined }
+        { text: '', image: undefined, remove_image: false },
+        { text: '', image: undefined, remove_image: false },
+        { text: '', image: undefined, remove_image: false },
+        { text: '', image: undefined, remove_image: false }
     ])
     const [correctAnswers, setCorrectAnswers] = useState<number[]>([])
     const fileInputRefs = useRef<(HTMLInputElement | null)[]>([])
@@ -47,8 +47,8 @@ const DialogAddQuestion = ({ openDialog, setOpenDialog, quizId, question }: Dial
     const [previewImage, setPreviewImage] = useState<string>('')
     const [openPreview, setOpenPreview] = useState<boolean>(false)
 
-    const { mutateAsync: createQuestion, isPending } = useCreateQuestion()
-    const { mutateAsync: updateQuestion } = useUpdateQuestion()
+    const { mutateAsync: createQuestion, isPending: isPendingCreate } = useCreateQuestion()
+    const { mutateAsync: updateQuestion, isPending: isPendingUpdate } = useUpdateQuestion()
 
     const handleOptionChange = (index: number, value: string) => {
         const newAnswers = [...answers]
@@ -56,17 +56,16 @@ const DialogAddQuestion = ({ openDialog, setOpenDialog, quizId, question }: Dial
         setAnswers(newAnswers)
     }
 
-    const handleCorrectChange = (index: number) => {
-        if (questionType === 'one_choice') {
-            const newCorrectAnswers = [index]
-            setCorrectAnswers(newCorrectAnswers)
-        } else {
-            const newCorrectAnswers = correctAnswers.includes(index)
-                ? correctAnswers.filter((i) => i !== index)
-                : [...correctAnswers, index]
-            setCorrectAnswers(newCorrectAnswers)
-        }
-    }
+    const handleCorrectChange = useCallback(
+        (index: number) => {
+            if (questionType === 'one_choice') {
+                setCorrectAnswers([index])
+            } else {
+                setCorrectAnswers((prev) => (prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]))
+            }
+        },
+        [questionType]
+    )
 
     const handleAddAnswer = () => {
         if (answers.length < 5) {
@@ -105,6 +104,7 @@ const DialogAddQuestion = ({ openDialog, setOpenDialog, quizId, question }: Dial
     const handleImageRemove = (index: number) => {
         const newAnswers = [...answers]
         newAnswers[index].image = undefined
+        newAnswers[index].remove_image = true
         setAnswers(newAnswers)
     }
 
@@ -117,19 +117,25 @@ const DialogAddQuestion = ({ openDialog, setOpenDialog, quizId, question }: Dial
         setOpenPreview(true)
     }
 
+    const isValidQuestion = (questionText: string, answers: Answer[]): boolean => {
+        return !!questionText && answers.some((answer) => answer.text.trim() !== '')
+    }
+
     const handleSubmit = async () => {
         const correct_answer = questionType === 'one_choice' ? correctAnswers[0] : correctAnswers
         const options = question
-            ? answers.map((answers) => {
+            ? answers.map((answer) => {
                   return {
-                      text: answers.text,
-                      image: answers.image,
-                      id: answers.id
+                      text: answer.text,
+                      image: answer.image,
+                      id: answer.id,
+                      remove_image: answer.remove_image
                   }
               })
             : answers.map((answer) => ({
                   text: answer.text,
-                  image: typeof answer.image === 'string' ? undefined : answer.image
+                  image: typeof answer.image === 'string' ? undefined : answer.image,
+                  remove_image: answer.remove_image
               }))
 
         const data = {
@@ -144,16 +150,16 @@ const DialogAddQuestion = ({ openDialog, setOpenDialog, quizId, question }: Dial
         }
 
         if (question) {
-            const payload = {
-                ...data,
-                _method: 'PUT'
-            }
+            const payload = { ...data, _method: 'PUT' }
             await updateQuestion([question.id, payload])
         } else {
             await createQuestion([quizId!, data])
         }
 
-        setOpenDialog(false)
+        resetForm()
+    }
+
+    const resetForm = () => {
         setQuestionText('')
         setQuestionImage(undefined)
         setAnswers([
@@ -395,7 +401,16 @@ const DialogAddQuestion = ({ openDialog, setOpenDialog, quizId, question }: Dial
                         <Button type="button" variant="outline" onClick={() => setOpenDialog(false)}>
                             Huỷ
                         </Button>
-                        <Button type="button" onClick={handleSubmit} disabled={isPending}>
+                        <Button
+                            type="button"
+                            onClick={handleSubmit}
+                            disabled={
+                                isPendingCreate ||
+                                isPendingUpdate ||
+                                !questionText ||
+                                !isValidQuestion(questionText, answers)
+                            }
+                        >
                             {question ? 'Cập nhật' : 'Thêm'} câu hỏi
                         </Button>
                     </DialogFooter>

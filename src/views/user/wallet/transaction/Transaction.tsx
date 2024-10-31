@@ -239,7 +239,7 @@ const Transaction = () => {
                                         {new Date(data.date_of_transaction).toLocaleDateString('vi-VN')}
                                     </td>
                                     <td className="px-6 py-4">
-                                        {data.status == 'success' ? 'Thành công' : 'Đang xử lý'}
+                                        {data.status}
                                     </td>
                                 </tr>
                             ))}

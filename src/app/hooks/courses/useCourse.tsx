@@ -94,3 +94,12 @@ export const useAddCommentCourse = () => {
         }
     })
 }
+//CHECK BUY COURSE
+export const useCheckBuyCourse = (userId: number, courseId: number, options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>) => {
+    return useQuery<any>({
+        ...options,
+        enabled: !!userId && !!courseId,
+        queryKey: ['check-buy-course', userId, courseId],
+        queryFn: () => courseApi.checkBuyCourse(userId, courseId)
+    })
+}

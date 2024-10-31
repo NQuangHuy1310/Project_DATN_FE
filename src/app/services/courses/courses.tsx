@@ -30,5 +30,9 @@ export const courseApi = {
     },
     getComment: async (id: number): Promise<IComment[]> => {
         return axiosClient.get(courseUri.GET_COMMENT(id))
+    },
+    checkBuyCourse: async (userId: number, courseId: number): Promise<any> => {
+        return axiosClient.get(courseUri.CHECK_BUY_COURSE(userId, courseId))
     }
+
 }

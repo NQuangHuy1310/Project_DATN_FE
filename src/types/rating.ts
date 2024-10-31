@@ -6,3 +6,9 @@ export interface IRating {
     created_at: number
     rate: 5
 }
+export interface IRatingCreate {
+    id_user: number
+    id_course: number
+    content: string
+    rate: number
+}

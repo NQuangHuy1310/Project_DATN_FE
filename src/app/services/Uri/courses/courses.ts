@@ -9,5 +9,6 @@ export const courseUri = {
     COURSE_CATEGORY_HOME: `${COURSE_URL}category-course`,
     COURSE_POPULATE: `${COURSE_URL}popular-course`,
     ADD_COMMENT_COURSE: 'comments/add-comment-lesson',
-    GET_COMMENT: (id: number) => `comments/comment-lesson/${id}`
+    GET_COMMENT: (id: number) => `comments/comment-lesson/${id}`,
+    CHECK_BUY_COURSE:(userId: number, courseId: number) => `${COURSE_URL}check-buy-course/${userId}/${courseId}`
 }

@@ -14,9 +14,17 @@ interface LessonDocumentProps {
     lessonId?: number
     handleHiddenLesson?: Dispatch<SetStateAction<boolean>>
     setIsEditLesson?: Dispatch<SetStateAction<boolean>>
+    setIsSelectingLessonType?: Dispatch<SetStateAction<boolean>>
 }
 
-const LessonDocument = ({ moduleId, handleHiddenLesson, courseId, lessonId, setIsEditLesson }: LessonDocumentProps) => {
+const LessonDocument = ({
+    moduleId,
+    handleHiddenLesson,
+    courseId,
+    lessonId,
+    setIsEditLesson,
+    setIsSelectingLessonType
+}: LessonDocumentProps) => {
     const {
         reset,
         register,
@@ -54,6 +62,7 @@ const LessonDocument = ({ moduleId, handleHiddenLesson, courseId, lessonId, setI
     const handleClose = () => {
         if (lessonData) setIsEditLesson?.(false)
         else handleHiddenLesson?.(false)
+        setIsSelectingLessonType?.(false)
         reset()
     }
 

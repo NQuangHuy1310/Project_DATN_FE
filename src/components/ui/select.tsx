@@ -4,6 +4,10 @@ import * as SelectPrimitive from '@radix-ui/react-select'
 
 import { cn } from '@/lib/utils'
 
+interface CustomSelectTriggerProps {
+    isArrow?: boolean
+}
+
 const Select = SelectPrimitive.Root
 
 const SelectGroup = SelectPrimitive.Group
@@ -12,8 +16,8 @@ const SelectValue = SelectPrimitive.Value
 
 const SelectTrigger = React.forwardRef<
     React.ElementRef<typeof SelectPrimitive.Trigger>,
-    React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>
->(({ className, children, ...props }, ref) => (
+    React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> & CustomSelectTriggerProps
+>(({ className, children, isArrow = true, ...props }, ref) => (
     <SelectPrimitive.Trigger
         ref={ref}
         className={cn(
@@ -23,9 +27,11 @@ const SelectTrigger = React.forwardRef<
         {...props}
     >
         {children}
-        <SelectPrimitive.Icon asChild>
-            <CaretSortIcon className="h-4 w-4 opacity-50" />
-        </SelectPrimitive.Icon>
+        {isArrow && (
+            <SelectPrimitive.Icon asChild>
+                <CaretSortIcon className="h-4 w-4 opacity-50" />
+            </SelectPrimitive.Icon>
+        )}
     </SelectPrimitive.Trigger>
 ))
 SelectTrigger.displayName = SelectPrimitive.Trigger.displayName
@@ -105,7 +111,7 @@ const SelectItem = React.forwardRef<
     <SelectPrimitive.Item
         ref={ref}
         className={cn(
-            'relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-2 pr-8 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+            'relative flex w-full cursor-pointer select-none items-center rounded-sm py-1.5 pl-2 pr-8 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
             className
         )}
         {...props}

@@ -93,6 +93,11 @@ export const sidebarListInstructor = [
         title: 'Hiệu xuất',
         icon: FaChartSimple,
         path: routes.instructorPerformance
+    },
+    {
+        title: 'Quản lý ví',
+        icon: IoWalletSharp,
+        path: routes.instructorWallet
     }
 ]
 

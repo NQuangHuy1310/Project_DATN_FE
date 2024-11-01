@@ -107,3 +107,5 @@ export const calculateTimeAgo = (createdAt: string) => {
     }
     return `${minutesDiff} phút trước`
 }
+
+export const formatPrice = (price: any) => (price ? parseFloat(price).toFixed(0) : '')

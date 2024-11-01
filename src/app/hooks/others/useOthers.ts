@@ -1,5 +1,6 @@
-import { bannerApi } from '@/app/services/others/others'
 import { IBanner } from '@/types/others'
+import { bannerApi, getBanks } from '@/app/services/others/others'
+
 import { useQuery, UseQueryOptions } from '@tanstack/react-query'
 
 export const useGetBanners = (options?: Omit<UseQueryOptions<IBanner[]>, 'queryKey' | 'queryFn'>) => {
@@ -7,5 +8,13 @@ export const useGetBanners = (options?: Omit<UseQueryOptions<IBanner[]>, 'queryK
         ...options,
         queryKey: ['banners'],
         queryFn: bannerApi.getBanners
+    })
+}
+
+export const useGetBanks = (options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>) => {
+    return useQuery({
+        ...options,
+        queryKey: ['banks'],
+        queryFn: getBanks
     })
 }

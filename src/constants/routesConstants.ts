@@ -39,6 +39,7 @@ import CommunicateQa from '@/views/instructor/Communicate/CommunicateQa'
 import CommunicateMessage from '@/views/instructor/Communicate/CommunicateMessage'
 import CommunicateAnnoucement from '@/views/instructor/Communicate/CommunicateAnnoucement'
 import CommunicateAssiment from '@/views/instructor/Communicate/CommunicateAssiment'
+import InsstructorWallet from '@/views/instructor/Wallet'
 
 // Post
 import Posts from '@/views/user/Posts/Posts'
@@ -49,7 +50,7 @@ import MyBookmarks from '@/views/user/Posts/MyBookmarks'
 import Payment from '@/views/user/Payment/Payment'
 import PostDetail from '@/views/user/Posts/PostDetail'
 import CourseDetailNoLogin from '@/views/user/Courses/CourseDetailNoLogin/CourseDetailNoLogin'
-import Transaction from '@/views/user/wallet/Transaction'
+import Transaction from '@/views/user/wallet/transaction'
 
 // Routes không cần đăng nhập
 export const publicRoutes = [
@@ -99,6 +100,7 @@ export const privateRoutes = [
         element: InstructorDashboard,
         title: 'Quản lý khoá học'
     },
+    { path: routes.createCourse, layout: InstructorDashboardLayout, element: CreateCourse, title: 'Tạo mới khoá học' },
 
     { path: routes.instructorQa, layout: InstructorCommunicate, element: CommunicateQa, title: 'Hỏi đáp' },
     { path: routes.instructorMessage, layout: InstructorCommunicate, element: CommunicateMessage, title: 'Tin nhắn' },
@@ -115,5 +117,10 @@ export const privateRoutes = [
         title: 'Bài tập'
     },
 
-    { path: routes.createCourse, layout: InstructorDashboardLayout, element: CreateCourse, title: 'Tạo mới khoá học' }
+    {
+        path: routes.instructorWallet,
+        layout: InstructorDashboardLayout,
+        element: InsstructorWallet,
+        title: 'Ví của tôi'
+    }
 ]

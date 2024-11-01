@@ -50,7 +50,7 @@ import MyBookmarks from '@/views/user/Posts/MyBookmarks'
 import Payment from '@/views/user/Payment/Payment'
 import PostDetail from '@/views/user/Posts/PostDetail'
 import CourseDetailNoLogin from '@/views/user/Courses/CourseDetailNoLogin/CourseDetailNoLogin'
-import Transaction from '@/views/user/wallet/Transaction'
+import Transaction from '@/views/user/wallet/transaction'
 
 // Routes không cần đăng nhập
 export const publicRoutes = [

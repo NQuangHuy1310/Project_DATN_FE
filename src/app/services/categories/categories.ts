@@ -1,6 +1,7 @@
 import { categoriesUri } from '@/app/services/Uri/categories/categories'
 import axiosClient from '@/configs/axiosClient'
-import { ICategory } from '@/types/category'
+import { ICategory } from '@/types'
+
 
 export const categoryApis = {
     getCategories: async (): Promise<ICategory[]> => {

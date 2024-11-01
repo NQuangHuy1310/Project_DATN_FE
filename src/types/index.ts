@@ -1,5 +1,5 @@
 export * from './auth'
 export * from './common'
-export * from './course'
+export * from './others'
 export * from './teacher'
-export * from './notificationMessage'
+export * from './payment'

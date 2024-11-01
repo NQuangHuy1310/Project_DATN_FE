@@ -45,6 +45,8 @@ const routes = {
     myPosts: '/posts/me',
     myBookmarks: '/posts/bookmarks/me',
 
+    //Rating
+    rating: '/rating',
     // Instructor dashboard
     instructorDashboard: '/instructor/dashboard',
 

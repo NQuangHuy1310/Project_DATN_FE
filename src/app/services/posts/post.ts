@@ -1,6 +1,8 @@
 import { postUri } from '@/app/services/Uri/posts'
 import axiosClient from '@/configs/axiosClient'
-import { ICommentPost, ICreateCommentPost, ICreatePost, IPosts } from '@/types/post'
+import { IComment, ICreateComment } from '@/types'
+
+import { ICreatePost, IPosts } from '@/types/post'
 
 export const postsApi = {
     getAllPost: async (): Promise<IPosts[]> => {
@@ -24,10 +26,10 @@ export const postsApi = {
     deletePost: async (postSlug: string) => {
         return axiosClient.delete(postUri.DELETE_POST(postSlug))
     },
-    getComment: async (postSlug: string): Promise<ICommentPost[]> => {
+    getComment: async (postSlug: string): Promise<IComment[]> => {
         return axiosClient.get(postUri.COMMENT(postSlug))
     },
-    addComment: async (commentData: ICreateCommentPost): Promise<any> => {
+    addComment: async (commentData: ICreateComment): Promise<ICreateComment> => {
         return axiosClient.post(postUri.ADD_COMMENT, commentData)
     }
 }

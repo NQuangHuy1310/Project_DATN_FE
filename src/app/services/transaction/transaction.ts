@@ -3,6 +3,7 @@ import { userUri } from '../Uri/accounts'
 import { IHistory, ITransaction } from '@/types/transaction'
 import axios from 'axios'
 import { transactionUri } from '../Uri/transaction'
+import { backendUrl } from '@/configs/baseUrl'
 
 export const transactionsApi = {
     getBalance: async (userId: number): Promise<any> => {
@@ -11,7 +12,7 @@ export const transactionsApi = {
 
     addPayment: async (userId: number, paymentData: ITransaction): Promise<any> => {
         const token = localStorage.getItem('access_token')
-        return axios.post(`http://localhost:8000/api/transactions/payment/${userId}`, paymentData, {
+        return axios.post(`${backendUrl}transactions/payment/${userId}`, paymentData, {
             headers: {
                 Authorization: `Bearer ${token}`
             }

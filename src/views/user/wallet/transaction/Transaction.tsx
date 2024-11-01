@@ -6,12 +6,13 @@ import { TbCoinFilled } from 'react-icons/tb'
 import { transaction } from '@/constants/mockData'
 import ConfirmTransaction from './ConfirmTransaction'
 import useGetUserProfile from '@/app/hooks/accounts/useGetUser'
-import { useGetHistory, useTransactionById } from '@/app/hooks/transactions/transaction'
+
 
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import Loading from '@/components/Common/Loading/Loading'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { useGetHistoryClient, useTransactionById } from '@/app/hooks/transactions/useTransaction'
 
 const Transaction = () => {
     const [totalAmount, setTotalAmount] = useState<number>(0)
@@ -22,7 +23,7 @@ const Transaction = () => {
     const { data: transactionData, isLoading } = useTransactionById(user?.id || 0)
     const balance = Math.floor(transactionData?.balance ?? 0)
 
-    const { data: history } = useGetHistory(user?.id || 0)
+    const { data: history } = useGetHistoryClient(user?.id || 0)
     const handleSelect = (cash: number) => {
         setTotalAmount(cash)
         setInputValue('')
@@ -239,7 +240,7 @@ const Transaction = () => {
                                         {new Date(data.date_of_transaction).toLocaleDateString('vi-VN')}
                                     </td>
                                     <td className="px-6 py-4">
-                                        {data.status == 'success' ? 'Thành công' : 'Đang xử lý'}
+                                        {data.status}
                                     </td>
                                 </tr>
                             ))}

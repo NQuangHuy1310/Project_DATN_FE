@@ -32,22 +32,3 @@ export interface ICreatePost {
     tags: string[]
     thumbnail: File
 }
-export interface ICommentPost {
-    id: number
-    id_user: number
-    content: string
-    parent_id?: number
-    commentable_id: number
-    is_approved?: number
-    name: string
-    avatar: string
-    email: string
-    created_at: string
-    children: ICommentPost[]
-}
-export interface ICreateCommentPost {
-    id_user: number
-    content: string
-    parent_id?: number
-    commentable_id: number
-}

@@ -1,7 +1,9 @@
 import { useMutation, useQuery, useQueryClient, UseQueryOptions } from '@tanstack/react-query'
 
 import { postsApi } from '@/app/services/posts'
-import { ICommentPost, ICreateCommentPost, ICreatePost, IPosts } from '@/types/post'
+import { ICreatePost, IPosts } from '@/types/post'
+import { IComment, ICreateComment } from '@/types'
+
 
 export const useGetPosts = (options?: Omit<UseQueryOptions<IPosts[]>, 'queryKey' | 'queryFn'>) => {
     return useQuery<IPosts[]>({
@@ -66,25 +68,25 @@ export const useDeletePost = () => {
         }
     })
 }
-export const useGetComment = (
+export const useGetCommentPost = (
     slug: string,
-    options?: Omit<UseQueryOptions<ICommentPost[]>, 'queryKey' | 'queryFn'>
+    options?: Omit<UseQueryOptions<IComment[]>, 'queryKey' | 'queryFn'>
 ) => {
     return useQuery({
         ...options,
-        queryKey: ['comments'],
+        queryKey: ['comments-post'],
         queryFn: () => postsApi.getComment(slug)
     })
 }
-export const useAddComment = () => {
-    const queryClient = useQueryClient()
 
+export const useAddCommentPost = () => {
+    const queryClient = useQueryClient()
     return useMutation({
-        mutationFn: async (data: ICreateCommentPost) => {
+        mutationFn: async (data: ICreateComment) => {
             return postsApi.addComment(data)
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['comments'] })
+            queryClient.invalidateQueries({ queryKey: ['comments-post'] })
         }
     })
 }

@@ -1,6 +1,7 @@
 import { courseApi } from '@/app/services/courses/courses'
+import { IComment, ICreateComment } from '@/types/comment'
 import { CourseData, ICourse, ICourseCategory, ICourseDetail, IQuizDetail } from '@/types/course/course'
-import { useQuery, UseQueryOptions } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient, UseQueryOptions } from '@tanstack/react-query'
 
 export const useCourseLeaningBySlug = (
     slug: string,
@@ -71,5 +72,34 @@ export const useCoursePopulate = (options?: Omit<UseQueryOptions<ICourse[]>, 'qu
         ...options,
         queryKey: ['course-sale'],
         queryFn: () => courseApi.populateCourse()
+    })
+}
+
+//COMMENT
+export const useGetCommentCourse = (id: number, options?: Omit<UseQueryOptions<IComment[]>, 'queryKey' | 'queryFn'>) => {
+    return useQuery({
+        ...options,
+        queryKey: ['comments-course'],
+        queryFn: () => courseApi.getComment(id)
+    })
+}
+export const useAddCommentCourse = () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: async (data: ICreateComment) => {
+            return courseApi.addCommentCourse(data)
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['comments-course'] })
+        }
+    })
+}
+//CHECK BUY COURSE
+export const useCheckBuyCourse = (userId: number, courseId: number, options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>) => {
+    return useQuery<any>({
+        ...options,
+        enabled: !!userId && !!courseId,
+        queryKey: ['check-buy-course', userId, courseId],
+        queryFn: () => courseApi.checkBuyCourse(userId, courseId)
     })
 }

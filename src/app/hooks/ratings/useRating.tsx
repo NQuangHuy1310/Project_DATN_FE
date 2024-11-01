@@ -37,11 +37,3 @@ export const useCheckRatingUser = (userId: number, courseId: number, options?: O
         queryFn: () => ratingsApi.checkRatingUser(userId, courseId)
     })
 }
-export const useCheckRated = (userId: number, courseId: number, options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>) => {
-    return useQuery<any>({
-        ...options,
-        enabled: !!userId && !!courseId,
-        queryKey: ['check-rated', userId, courseId],
-        queryFn: () => ratingsApi.checkRated(userId, courseId)
-    })
-}

@@ -15,15 +15,7 @@ export const ratingsApi = {
     },
     checkRatingUser: async (userId: number, courseId: number): Promise<any> => {
         const token = localStorage.getItem('access_token')
-        return axios.get(`http://127.0.0.1:8000/api/ratings/check-rating-course/${userId}/${courseId}`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-    },
-    checkRated: async (userId: number, courseId: number): Promise<any> => {
-        const token = localStorage.getItem('access_token')
-        return axios.get(`http://127.0.0.1:8000/api/ratings/check-rated/${userId}/${courseId}`, {
+        return axios.get(`http://127.0.0.1:8000/api/ratings/check-rating/${userId}/${courseId}`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }

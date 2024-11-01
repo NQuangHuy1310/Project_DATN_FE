@@ -16,7 +16,7 @@ import { CourseLevel as CourseLevelType } from '@/constants'
 
 import useGetUserProfile from '@/app/hooks/accounts/useGetUser'
 import { useGetSlugParams } from '@/app/hooks/common/useCustomParams'
-import { useCheckRated, useCheckRatingUser, useCreateRating } from '@/app/hooks/ratings/useRating'
+import { useCheckRatingUser, useCreateRating } from '@/app/hooks/ratings/useRating'
 import { useCheckBuyCourse, useCourseDetailNoLoginBySlug } from '@/app/hooks/courses/useCourse'
 
 import Tools from '@/views/user/Courses/CourseDetail/Tools'
@@ -55,18 +55,16 @@ const CourseDetail = () => {
 
     const slug = useGetSlugParams('slug')
     const { user } = useGetUserProfile()
+    const { mutateAsync: addRating } = useCreateRating()
 
     const { data: courseDetail, isLoading: LoadingCourse } = useCourseDetailNoLoginBySlug(slug!)
 
     const { data: isPurchased, isLoading: LoadingPurchased } = useCheckBuyCourse(user?.id || 0, courseDetail?.id || 0)
-
     const { data: checkRating } = useCheckRatingUser(user?.id || 0, courseDetail?.id || 0)
-    const { data: checkRated, refetch } = useCheckRated(user?.id || 0, courseDetail?.id || 0)
 
     const totalTime = formatDuration((courseDetail?.total_duration_video as unknown as number) || 0)
     const rating = watch('rate')
 
-    const { mutateAsync: addRating } = useCreateRating()
     const onSubmit = async (data) => {
         if (checkRating?.rating === 'block') {
             toast.error('Bạn chưa hoàn thành khóa học')
@@ -284,11 +282,11 @@ const CourseDetail = () => {
                                         >
                                             Vào học
                                         </Button>
-                                        {checkRated?.data.status === 'error' ? (
+                                        {checkRating?.rating === 'block' ? (
                                             <Button variant="outline" className="w-full" disabled>
                                                 Đã đánh giá
                                             </Button>
-                                        ) : checkRating?.data.status === 'success' ? null : (
+                                        ) : checkRating?.rating === 'allow' ? null : (
                                             <Button
                                                 variant="outline"
                                                 className="w-full"

@@ -2,7 +2,8 @@ import { useMutation, useQuery, useQueryClient, UseQueryOptions } from '@tanstac
 
 import { postsApi } from '@/app/services/posts'
 import { ICreatePost, IPosts } from '@/types/post'
-import { IComment, ICreateComment } from '@/types/comment'
+import { IComment, ICreateComment } from '@/types'
+
 
 export const useGetPosts = (options?: Omit<UseQueryOptions<IPosts[]>, 'queryKey' | 'queryFn'>) => {
     return useQuery<IPosts[]>({

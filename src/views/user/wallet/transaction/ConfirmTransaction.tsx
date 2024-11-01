@@ -12,7 +12,8 @@ import {
 
 import { IUser } from '@/types'
 import { Button } from '@/components/ui/button'
-import { usePostPayment } from '@/app/hooks/transactions/transaction'
+import { usePostPaymentClient } from '@/app/hooks/transactions/useTransaction'
+
 
 interface IConfirmTransaction {
     totalAmount: number
@@ -22,7 +23,7 @@ interface IConfirmTransaction {
 const ConfirmTransaction = ({ totalAmount, user }: IConfirmTransaction) => {
     const [selectedPayment, setSelectedPayment] = useState(null)
 
-    const { mutateAsync: paymentPost } = usePostPayment()
+    const { mutateAsync: paymentPost } = usePostPaymentClient()
 
     const handlePaymentChange = (method: any) => {
         setSelectedPayment(method)

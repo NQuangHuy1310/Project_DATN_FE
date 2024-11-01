@@ -1,6 +1,7 @@
 import { postUri } from '@/app/services/Uri/posts'
 import axiosClient from '@/configs/axiosClient'
-import { IComment, ICreateComment } from '@/types/comment'
+import { IComment, ICreateComment } from '@/types'
+
 import { ICreatePost, IPosts } from '@/types/post'
 
 export const postsApi = {

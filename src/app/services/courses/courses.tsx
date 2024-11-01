@@ -1,7 +1,7 @@
 import axiosClient from '@/configs/axiosClient'
 import { courseUri } from '@/app/services/Uri/courses/courses'
 import { CourseData, ICourse, ICourseCategory, ICourseDetail, IQuizDetail } from '@/types/course/course'
-import { IComment, ICreateComment } from '@/types/comment'
+import { IComment, ICreateComment } from '@/types'
 
 export const courseApi = {
     detailCourseLeaning: async (slug: string): Promise<CourseData> => {

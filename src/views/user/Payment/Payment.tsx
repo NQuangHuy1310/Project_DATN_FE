@@ -8,7 +8,7 @@ import { IoIosStar } from 'react-icons/io'
 import { TbCoinFilled } from 'react-icons/tb'
 import { IoArrowBackOutline } from 'react-icons/io5'
 import useGetUserProfile from '@/app/hooks/accounts/useGetUser'
-import { useTransactionById } from '@/app/hooks/transactions/transaction'
+import { useTransactionById } from '@/app/hooks/transactions/useTransaction'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
 import { toast } from 'sonner'

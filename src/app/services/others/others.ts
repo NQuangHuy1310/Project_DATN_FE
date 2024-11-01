@@ -1,6 +1,6 @@
 import axiosClient from '@/configs/axiosClient'
 import { bannerUri } from '../Uri/others/others'
-import { IBanner } from '@/types/banner'
+import { IBanner } from '@/types/others'
 
 export const bannerApi = {
     getBanners: async (): Promise<IBanner[]> => {

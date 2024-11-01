@@ -4,7 +4,7 @@ export interface IRating {
     user_avatar: string
     content: string
     created_at: number
-    rate: 5
+    rate: number
 }
 export interface IRatingCreate {
     id_user: number

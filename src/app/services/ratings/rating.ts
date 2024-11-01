@@ -1,7 +1,8 @@
-import { IRating, IRatingCreate } from '@/types/rating'
+import axios from 'axios'
+import { IRating, IRatingCreate } from '@/types/course/rating'
 import axiosClient from '@/configs/axiosClient'
 import { ratingUri } from '../Uri/ratings/rating'
-import axios from 'axios'
+import { backendUrl } from '@/configs/baseUrl'
 
 export const ratingsApi = {
     getRatingHome: async (): Promise<any> => {
@@ -15,7 +16,7 @@ export const ratingsApi = {
     },
     checkRatingUser: async (userId: number, courseId: number): Promise<any> => {
         const token = localStorage.getItem('access_token')
-        return axios.get(`http://127.0.0.1:8000/api/ratings/check-rating-course/${userId}/${courseId}`, {
+        return axios.get(`${backendUrl}ratings/check-rating-course/${userId}/${courseId}`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
@@ -23,7 +24,7 @@ export const ratingsApi = {
     },
     checkRated: async (userId: number, courseId: number): Promise<any> => {
         const token = localStorage.getItem('access_token')
-        return axios.get(`http://127.0.0.1:8000/api/ratings/check-rated/${userId}/${courseId}`, {
+        return axios.get(`${backendUrl}ratings/check-rated/${userId}/${courseId}`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }

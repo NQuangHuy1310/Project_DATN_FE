@@ -8,11 +8,11 @@ export const useTransactionById = (
 ) => {
     return useQuery<ITransaction>({
         ...options,
-        queryKey: ['transaction', { id }],
+        queryKey: ['transaction-user', { id }],
         queryFn: () => transactionsApi.getBalance(id)
     })
 }
-export const usePostPayment = () => {
+export const usePostPaymentClient = () => {
     const queryClient = useQueryClient()
 
     return useMutation<any, Error, [number, ITransaction]>({
@@ -20,11 +20,11 @@ export const usePostPayment = () => {
             return transactionsApi.addPayment(userId, paymentData)
         },
         onSuccess() {
-            queryClient.invalidateQueries({ queryKey: ['transaction'] })
+            queryClient.invalidateQueries({ queryKey: ['transaction-user'] })
         }
     })
 }
-export const useGetHistory = (id: number, options?: Omit<UseQueryOptions<IHistory[]>, 'queryKey' | 'queryFn'>) => {
+export const useGetHistoryClient = (id: number, options?: Omit<UseQueryOptions<IHistory[]>, 'queryKey' | 'queryFn'>) => {
     return useQuery<IHistory[]>({
         ...options,
         queryKey: ['history-transaction', { id }],

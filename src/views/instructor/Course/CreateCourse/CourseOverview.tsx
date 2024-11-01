@@ -92,7 +92,6 @@ const CourseOverview = memo(({ setIsDataComplete }: { setIsDataComplete: () => v
         }
 
         if (courseVideoPath && courseImagePath) {
-            console.log(1)
             return await createOverviewCourse([id!, payload])
         }
 

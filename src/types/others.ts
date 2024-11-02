@@ -29,3 +29,17 @@ export interface INotificationMessage {
     sentAt: string
     isRead: boolean
 }
+
+export interface IBank {
+    id: number
+    name: string
+    code: string
+    bin: string
+    shortName: string
+}
+
+export interface IBankData {
+    code: string
+    desc: string
+    data: IBank[]
+}

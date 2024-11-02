@@ -109,3 +109,8 @@ export const calculateTimeAgo = (createdAt: string) => {
 }
 
 export const formatPrice = (price: any) => (price ? parseFloat(price).toFixed(0) : '')
+
+export const convertToVnd = (value: number) => {
+    const convertedValue = value * 1000
+    return convertedValue.toLocaleString('vi-VN') + ' VNĐ'
+}

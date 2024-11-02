@@ -28,13 +28,14 @@ export interface ITeacherBalance {
 export interface IRequestWithDrawData {
     coin: number
     bank_name: string
-    account_number: number
+    account_number: string
     account_holder: string
 }
 
 export interface IHistoryDraw {
     id: number
-    coin: string
+    coin: number
+    amount: number
     back_name: string
     account_name: string
     account_holder: string

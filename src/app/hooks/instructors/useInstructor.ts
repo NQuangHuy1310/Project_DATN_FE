@@ -4,7 +4,6 @@ import { toast } from 'sonner'
 import { instructorApi } from '@/app/services/instructors'
 import {
     IChangeLessonTypeData,
-    IChangeLessonType,
     ICourses,
     ICreateCourseData,
     ILessonDetail,
@@ -318,19 +317,6 @@ export const useUpdatePositionLesson = () => {
     return useMutation<any, Error, [number, IUpdatePositionLessonData]>({
         mutationFn: async ([moduleId, lessonData]) => {
             return instructorApi.updatePositionLesson(moduleId, lessonData)
-        },
-        onSuccess: async () => {
-            await queryClient.invalidateQueries({ queryKey: ['modules'] })
-        }
-    })
-}
-
-export const useChangeLessonType = () => {
-    const queryClient = useQueryClient()
-
-    return useMutation<any, Error, [number, IChangeLessonType]>({
-        mutationFn: async ([lessonId, lessonData]) => {
-            return instructorApi.changeLessonType(lessonId, lessonData)
         },
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: ['modules'] })

@@ -16,15 +16,26 @@ import {
     SelectValue,
     SelectLabel
 } from '@/components/ui/select'
-import { useGetBalance } from '@/app/hooks/transactions/useTransaction.ts'
+import { useGetBalance, useGetHistoryWithDraw, useQuestWithdraw } from '@/app/hooks/transactions/useTransaction.ts'
+import Loading from '@/components/Common/Loading/Loading.tsx'
 
 const Wallet = () => {
     const { user } = useGetUserProfile()
     const { data: bankData } = useGetBanks()
     const { data: teacherBalanceData } = useGetBalance(user?.id ?? 0)
+    const { data: historyWithDraw, isLoading } = useGetHistoryWithDraw(user?.id ?? 0)
+    const { mutateAsync: createRequestWithDraw, isPending } = useQuestWithdraw()
 
     const [selectedBank, setSelectedBank] = useState<string>('')
-    const [point, setPoint] = useState<number | undefined>(undefined)
+    const [accountNumber, setAccountNumber] = useState<string>('')
+    const [accountHolder, setAccountHolder] = useState<string>('')
+    const [coin, setCoin] = useState<number | undefined>(undefined)
+    const isDisable =
+        coin === 0 ||
+        coin === undefined ||
+        (coin && coin >= 10000) ||
+        (teacherBalanceData?.balance !== undefined && coin >= +teacherBalanceData.balance) ||
+        isPending
 
     const handleChangeSelectedBank = (value: string) => {
         setSelectedBank(value)
@@ -35,19 +46,35 @@ const Wallet = () => {
         const numericValue = parseFloat(value)
 
         if (!isNaN(numericValue) && numericValue >= 0) {
-            setPoint(numericValue)
+            setCoin(numericValue)
         } else {
-            setPoint(undefined)
+            setCoin(undefined)
         }
     }
-    
+
+    const handleSubmitData = async () => {
+        const payload = {
+            coin: coin!,
+            bank_name: selectedBank,
+            account_number: accountNumber,
+            account_holder: accountHolder
+        }
+        if (payload && user) {
+            await createRequestWithDraw([user.id, payload])
+        }
+    }
+
+    console.log(historyWithDraw)
+
+    if (isLoading) return <Loading />
+
     return (
         <div className="flex flex-col gap-5 rounded-md bg-white p-7">
             <div className="flex justify-between gap-5">
                 <div className="flex w-3/12 flex-col gap-5">
                     <div className="rounded-md bg-secondary text-foreground">
                         <div className="flex items-center gap-3 p-5">
-                            <Avatar className="size-10 cursor-pointer">
+                            <Avatar className="cursor-coiner size-10">
                                 <AvatarImage
                                     className="object-cover"
                                     src={getImagesUrl(user?.avatar || '')}
@@ -120,15 +147,23 @@ const Wallet = () => {
                                 </SelectGroup>
                             </SelectContent>
                         </Select>
-                        <Input placeholder="Nhập số tài khoản" />
-                        <Input placeholder="Nhập tên tài khoản" />
+                        <Input
+                            placeholder="Nhập số tài khoản"
+                            value={accountNumber}
+                            onChange={(e) => setAccountNumber(e.target.value)}
+                        />
+                        <Input
+                            placeholder="Nhập tên tài khoản"
+                            value={accountHolder}
+                            onChange={(e) => setAccountHolder(e.target.value)}
+                        />
 
                         <div className="relative">
                             <Input
                                 min={0}
                                 placeholder="Nhập số tiền mà bạn muốn rút (bội số của 100)"
                                 className="w-full pr-12"
-                                value={point !== undefined ? point : ''}
+                                value={coin !== undefined ? coin : ''}
                                 onChange={handlePointChange}
                             />
                             <span className="absolute right-2 top-1/2 -translate-y-1/2 transform font-medium text-darkGrey">
@@ -137,20 +172,25 @@ const Wallet = () => {
                         </div>
 
                         <div className="flex flex-col gap-2">
-                            {point && point != 0 ? (
-                                <span className="text-sm text-foreground">
-                                    Số tiền nhận được {convertToVnd(point!)}
-                                </span>
+                            {coin && coin !== 0 ? (
+                                <span className="text-sm text-foreground">Số tiền nhận được {convertToVnd(coin)}</span>
                             ) : null}
-                            {point && point > 10000 ? (
+
+                            {coin && coin > 10000 ? (
                                 <span className="text-sm text-secondaryRed">
                                     Bạn không thể nhập số tiền lớn hơn 10000 Xu
+                                </span>
+                            ) : null}
+
+                            {coin && teacherBalanceData?.balance !== undefined && coin > +teacherBalanceData.balance ? (
+                                <span className="text-sm text-secondaryRed">
+                                    Bạn không thể nhập số tiền lớn hơn {teacherBalanceData.balance} Xu
                                 </span>
                             ) : null}
                         </div>
 
                         <div className="">
-                            <Button disabled={point === 0 || point === undefined || !!(point && point >= 10000)}>
+                            <Button disabled={isDisable} onClick={handleSubmitData}>
                                 Rút tiền
                             </Button>
                         </div>
@@ -167,17 +207,36 @@ const Wallet = () => {
                                 #
                             </th>
                             <th scope="col" className="px-6 py-3">
-                                Số tiền rút
+                                Số xu rút
                             </th>
                             <th scope="col" className="px-6 py-3">
-                                Thời gian rút
+                                Số tiền nhận được
                             </th>
                             <th scope="col" className="px-6 py-3">
                                 Trạng thái
                             </th>
                         </tr>
                     </thead>
-                    <tbody></tbody>
+                    <tbody>
+                        {historyWithDraw && historyWithDraw.length > 0 ? (
+                            historyWithDraw.map((item, index) => (
+                                <tr key={index} className="border-b bg-white hover:bg-gray-50">
+                                    <th scope="row" className="whitespace-nowrap px-6 py-4 font-medium text-gray-900">
+                                        {index + 1}
+                                    </th>
+                                    <td className="px-6 py-4">{parseFloat(item.coin.toString())} Xu</td>
+                                    <td className="px-6 py-4">{Math.floor(item.amount).toLocaleString('vi-VN')} VNĐ</td>
+                                    <td className="px-6 py-4">{item.status}</td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan={3} className="py-4 text-center">
+                                    Bạn chưa có giao dịch nào
+                                </td>
+                            </tr>
+                        )}
+                    </tbody>
                 </table>
             </div>
         </div>

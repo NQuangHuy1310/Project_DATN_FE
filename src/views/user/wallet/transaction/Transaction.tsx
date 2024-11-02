@@ -4,9 +4,8 @@ import { getImagesUrl } from '@/lib'
 import { IoIosWarning } from 'react-icons/io'
 import { TbCoinFilled } from 'react-icons/tb'
 import { transaction } from '@/constants/mockData'
-import ConfirmTransaction from './ConfirmTransaction'
+import ConfirmTransaction from './ConfirmTransaction.tsx'
 import useGetUserProfile from '@/app/hooks/accounts/useGetUser'
-
 
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -239,9 +238,7 @@ const Transaction = () => {
                                         {' '}
                                         {new Date(data.date_of_transaction).toLocaleDateString('vi-VN')}
                                     </td>
-                                    <td className="px-6 py-4">
-                                        {data.status}
-                                    </td>
+                                    <td className="px-6 py-4">{data.status}</td>
                                 </tr>
                             ))}
                         </tbody>

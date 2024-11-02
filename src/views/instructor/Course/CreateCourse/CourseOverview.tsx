@@ -91,7 +91,7 @@ const CourseOverview = memo(({ setIsDataComplete }: { setIsDataComplete: () => v
             _method: 'PUT'
         }
 
-        if (courseVideoPath && courseImagePath) {
+        if (courseVideoPath && courseImagePath && !courseImageFile && !courseVideoFile) {
             return await createOverviewCourse([id!, payload])
         }
 
@@ -100,12 +100,14 @@ const CourseOverview = memo(({ setIsDataComplete }: { setIsDataComplete: () => v
                 payload.thumbnail = courseImageFile
             }
         }
+
         if (courseVideoFile) {
             if (validateFileSize(courseVideoFile, 'video')) {
                 payload.trailer = courseVideoFile
             }
         }
-        if (!courseVideoFile || !courseImageFile) {
+
+        if (!courseVideoFile || !courseImageFile || !courseImagePath || !courseVideoPath) {
             toast.warning('Bạn cần tải lên hình ảnh và video để thêm vào khoá học')
             return
         }

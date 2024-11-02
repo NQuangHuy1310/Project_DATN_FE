@@ -12,6 +12,7 @@ interface LessonDocumentProps {
     courseId?: number
     moduleId?: number
     lessonId?: number
+    isSelectingLessonType?: boolean
     handleHiddenLesson?: Dispatch<SetStateAction<boolean>>
     setIsEditLesson?: Dispatch<SetStateAction<boolean>>
     setIsSelectingLessonType?: Dispatch<SetStateAction<boolean>>
@@ -19,10 +20,11 @@ interface LessonDocumentProps {
 
 const LessonDocument = ({
     moduleId,
-    handleHiddenLesson,
     courseId,
     lessonId,
     setIsEditLesson,
+    handleHiddenLesson,
+    isSelectingLessonType,
     setIsSelectingLessonType
 }: LessonDocumentProps) => {
     const {
@@ -52,6 +54,7 @@ const LessonDocument = ({
             }
             await updateLessonDoc([courseId!, payload])
             setIsEditLesson?.(false)
+        } else if (isSelectingLessonType) {
         } else {
             await createLessonDoc([moduleId!, data])
             handleHiddenLesson?.(false)

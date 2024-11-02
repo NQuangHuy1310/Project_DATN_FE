@@ -5,7 +5,7 @@ import axios from 'axios'
 import { transactionClientUri } from '../Uri/transaction'
 import { backendUrl } from '@/configs/baseUrl'
 
-export const transactionsApi = {
+export const transactionsClientApi = {
     getBalance: async (userId: number): Promise<any> => {
         return axiosClient.get(userUri.GET_BALANCE(userId))
     },

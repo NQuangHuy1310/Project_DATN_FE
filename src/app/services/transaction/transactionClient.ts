@@ -2,7 +2,7 @@ import axiosClient from '@/configs/axiosClient'
 import { userUri } from '../Uri/accounts'
 import { IHistory, ITransaction } from '@/types/transaction'
 import axios from 'axios'
-import { transactionUri } from '../Uri/transaction'
+import { transactionClientUri } from '../Uri/transaction'
 import { backendUrl } from '@/configs/baseUrl'
 
 export const transactionsApi = {
@@ -19,6 +19,6 @@ export const transactionsApi = {
         })
     },
     getHistory: async (userId: number): Promise<IHistory[]> => {
-        return axiosClient.get(transactionUri.GET_HISTORY(userId))
+        return axiosClient.get(transactionClientUri.GET_HISTORY(userId))
     }
 }

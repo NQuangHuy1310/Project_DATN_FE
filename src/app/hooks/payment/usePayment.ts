@@ -13,6 +13,7 @@ export const usePaymentCourseBySlug = (
         queryFn: () => paymentApi.getCourseForBuy(slug)
     })
 }
+
 export const useBuyCourse = () => {
     const queryClient = useQueryClient()
 

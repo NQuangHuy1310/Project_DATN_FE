@@ -9,6 +9,7 @@ export const useGetRatingHome = (options?: Omit<UseQueryOptions<IRating[]>, 'que
         queryFn: () => ratingsApi.getRatingHome()
     })
 }
+
 export const useGetRatingForCourse = (id: number, options?: Omit<UseQueryOptions<IRating[]>, 'queryKey' | 'queryFn'>) => {
     return useQuery<IRating[]>({
         ...options,
@@ -17,6 +18,7 @@ export const useGetRatingForCourse = (id: number, options?: Omit<UseQueryOptions
         queryFn: () => ratingsApi.getRatingForCourse(id)
     })
 }
+
 export const useCreateRating = () => {
     const queryClient = useQueryClient()
 
@@ -29,6 +31,7 @@ export const useCreateRating = () => {
         }
     })
 }
+
 export const useCheckRatingUser = (userId: number, courseId: number, options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>) => {
     return useQuery<any>({
         ...options,
@@ -37,6 +40,7 @@ export const useCheckRatingUser = (userId: number, courseId: number, options?: O
         queryFn: () => ratingsApi.checkRatingUser(userId, courseId)
     })
 }
+
 export const useCheckRated = (userId: number, courseId: number, options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>) => {
     return useQuery<any>({
         ...options,

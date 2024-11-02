@@ -12,6 +12,7 @@ export const useTransactionById = (
         queryFn: () => transactionsApi.getBalance(id)
     })
 }
+
 export const usePostPaymentClient = () => {
     const queryClient = useQueryClient()
 
@@ -24,7 +25,11 @@ export const usePostPaymentClient = () => {
         }
     })
 }
-export const useGetHistoryClient = (id: number, options?: Omit<UseQueryOptions<IHistory[]>, 'queryKey' | 'queryFn'>) => {
+
+export const useGetHistoryClient = (
+    id: number,
+    options?: Omit<UseQueryOptions<IHistory[]>, 'queryKey' | 'queryFn'>
+) => {
     return useQuery<IHistory[]>({
         ...options,
         queryKey: ['history-transaction', { id }],

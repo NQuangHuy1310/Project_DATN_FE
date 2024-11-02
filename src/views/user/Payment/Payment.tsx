@@ -8,14 +8,16 @@ import { IoIosStar } from 'react-icons/io'
 import { TbCoinFilled } from 'react-icons/tb'
 import { IoArrowBackOutline } from 'react-icons/io5'
 import useGetUserProfile from '@/app/hooks/accounts/useGetUser'
-import { useTransactionById } from '@/app/hooks/transactions/useTransaction'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+
 
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
+import Loading from '@/components/Common/Loading/Loading'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+
 import { useGetSlugParams } from '@/app/hooks/common/useCustomParams'
 import { useBuyCourse, usePaymentCourseBySlug } from '@/app/hooks/payment'
-import Loading from '@/components/Common/Loading/Loading'
+import { useTransactionById } from '@/app/hooks/transactions/useTransaction'
 import {
     AlertDialog,
     AlertDialogAction,
@@ -55,9 +57,9 @@ const Payment = () => {
                     user?.id,
                     courseData?.course_id,
                     {
-                        total_coin: courseData?.price,
+                        total_coin: (courseData.price_sale > 0 ? courseData.price_sale : courseData.price),
                         coin_discount: discount,
-                        total_coin_after_discount: (courseData.price_sale || courseData.price) - discount
+                        total_coin_after_discount: (courseData.price_sale > 0 ? courseData.price_sale : courseData.price) - discount
                     }
                 ])
                 navigate(routes.myCourses)
@@ -167,8 +169,8 @@ const Payment = () => {
                                 <div className="flex gap-1">
                                     <TbCoinFilled className="size-5 text-yellow-500" />
                                     <span className="font-medium">
-                                        {courseData?.price_sale
-                                            ? courseData?.price_sale - discount
+                                        {(courseData?.price_sale && courseData.price_sale > 0)
+                                            ? courseData.price_sale - discount
                                             : (courseData?.price || 0) - discount}
                                     </span>
                                 </div>

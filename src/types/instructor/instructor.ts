@@ -164,6 +164,15 @@ export interface IUpdatePositionLessonData {
     _method?: string
 }
 
+export interface IChangeLessonType {
+    new_type: 'video' | 'upload' | 'document'
+    check?: 'upload' | 'video'
+    video_youtube_id?: string
+    duration?: string
+    video?: File
+    content?: string
+}
+
 export interface IUpdateModulePosition {
     id: number
     position: number

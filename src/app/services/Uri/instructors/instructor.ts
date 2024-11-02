@@ -20,7 +20,7 @@ export const instructorUri = {
 
     GET_LESSON_DETAIL: (lessonId: number) => `${INSTRUCTOR_URL}lesson/${lessonId}/detail`,
     UPDATE_POSITION_LESSON: (moduleId: number) => `${INSTRUCTOR_URL}lesson/${moduleId}/update-lesson-position`,
-    CHANGE_LESSON_TYPE: (lessonId: number) => `${INSTRUCTOR_URL}lesson/${lessonId}/change-type`,
+    CHANGE_LESSON_TYPE: (lessonID: number) => `${INSTRUCTOR_URL}lesson/${lessonID}/change-type`,
 
     // Lesson type doc
     CREATE_LESSON_DOC: (moduleID: number) => `${INSTRUCTOR_URL}lesson/${moduleID}/add-text-lesson`,

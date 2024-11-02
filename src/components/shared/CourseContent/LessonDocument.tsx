@@ -26,10 +26,10 @@ interface LessonDocumentProps {
 
 const LessonDocument = ({
     moduleId,
-    handleHiddenLesson,
     courseId,
     lessonId,
     setIsEditLesson,
+    handleHiddenLesson,
     isSelectingLessonType,
     setIsSelectingLessonType
 }: LessonDocumentProps) => {

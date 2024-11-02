@@ -5,6 +5,7 @@ import CourseLayout from '@/app/layouts/AuthLayouts/CourseLayouts'
 import ProfileLayout from '@/app/layouts/UserLayouts/ProfileLayout'
 import UserDashboardLayout from '@/app/layouts/UserLayouts/Dashboard'
 import InstructorDashboardLayout from '@/app/layouts/InstructorLayouts/InstructorDashboard'
+import InstructorPerformance from '@/app/layouts/InstructorLayouts/InstructorPerformance'
 
 import Home from '@/views/user/Home'
 
@@ -50,7 +51,8 @@ import MyBookmarks from '@/views/user/Posts/MyBookmarks'
 import Payment from '@/views/user/Payment/Payment'
 import PostDetail from '@/views/user/Posts/PostDetail'
 import CourseDetailNoLogin from '@/views/user/Courses/CourseDetailNoLogin/CourseDetailNoLogin'
-import Transaction from '@/views/user/wallet/transaction'
+import Transaction from '@/views/user/wallet/Transaction'
+import PerformanceOverview from '@/views/instructor/Performance/PerformanceOverview'
 
 // Routes không cần đăng nhập
 export const publicRoutes = [
@@ -101,9 +103,14 @@ export const privateRoutes = [
         title: 'Quản lý khoá học'
     },
     { path: routes.createCourse, layout: InstructorDashboardLayout, element: CreateCourse, title: 'Tạo mới khoá học' },
-
     { path: routes.instructorQa, layout: InstructorCommunicate, element: CommunicateQa, title: 'Hỏi đáp' },
     { path: routes.instructorMessage, layout: InstructorCommunicate, element: CommunicateMessage, title: 'Tin nhắn' },
+    {
+        path: routes.instructorPerformanceOverview,
+        layout: InstructorPerformance,
+        element: PerformanceOverview,
+        title: 'Hiệu suất'
+    },
     {
         path: routes.instructorAnnouncements,
         layout: InstructorCommunicate,
@@ -116,7 +123,6 @@ export const privateRoutes = [
         element: CommunicateAssiment,
         title: 'Bài tập'
     },
-
     {
         path: routes.instructorWallet,
         layout: InstructorDashboardLayout,

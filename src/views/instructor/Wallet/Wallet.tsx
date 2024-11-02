@@ -64,8 +64,6 @@ const Wallet = () => {
         }
     }
 
-    console.log(historyWithDraw)
-
     if (isLoading) return <Loading />
 
     return (

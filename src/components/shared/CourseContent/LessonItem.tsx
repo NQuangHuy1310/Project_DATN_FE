@@ -137,11 +137,21 @@ const LessonItem = ({ lesson }: LessonItemProps) => {
             )}
 
             {selectedLessonType === 'document' && isSelectingLessonType && (
-                <LessonDocument lessonId={id} courseId={id} setIsSelectingLessonType={setIsSelectingLessonType} />
+                <LessonDocument
+                    lessonId={id}
+                    courseId={id}
+                    setIsSelectingLessonType={setIsSelectingLessonType}
+                    isSelectingLessonType={isSelectingLessonType}
+                />
             )}
 
             {selectedLessonType === 'video' && isSelectingLessonType && (
-                <LessonVideo lessonId={id} courseId={id} setIsSelectingLessonType={setIsSelectingLessonType} />
+                <LessonVideo
+                    lessonId={id}
+                    courseId={id}
+                    setIsSelectingLessonType={setIsSelectingLessonType}
+                    isSelectingLessonType={isSelectingLessonType}
+                />
             )}
 
             {/* Confirm dialog for delete */}

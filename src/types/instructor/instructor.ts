@@ -255,3 +255,13 @@ export interface IQuestionData {
     options: QuestionOptionData[]
     _method?: string
 }
+
+export interface IChangeLessonTypeData {
+    new_type: 'document' | 'video'
+    title: string
+    check?: 'url' | 'upload'
+    duration?: number
+    video?: File
+    content?: string
+    description?: string
+}

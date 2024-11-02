@@ -6,12 +6,19 @@ import { Button } from '@/components/ui/button'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { lessonDoc, lessonDocSchema } from '@/validations'
 import { Dispatch, SetStateAction, useEffect, useRef } from 'react'
-import { useCreateLessonDoc, useGetLessonDetail, useUpdateLessonDoc } from '@/app/hooks/instructors'
+import {
+    useChangeLessonType,
+    useCreateLessonDoc,
+    useGetLessonDetail,
+    useUpdateLessonDoc
+} from '@/app/hooks/instructors'
+import { IChangeLessonTypeData } from '@/types/instructor'
 
 interface LessonDocumentProps {
     courseId?: number
     moduleId?: number
     lessonId?: number
+    isSelectingLessonType?: boolean
     handleHiddenLesson?: Dispatch<SetStateAction<boolean>>
     setIsEditLesson?: Dispatch<SetStateAction<boolean>>
     setIsSelectingLessonType?: Dispatch<SetStateAction<boolean>>
@@ -23,6 +30,7 @@ const LessonDocument = ({
     courseId,
     lessonId,
     setIsEditLesson,
+    isSelectingLessonType,
     setIsSelectingLessonType
 }: LessonDocumentProps) => {
     const {
@@ -38,6 +46,8 @@ const LessonDocument = ({
     const { data: lessonData } = useGetLessonDetail(lessonId ? lessonId : 0)
     const { mutateAsync: createLessonDoc } = useCreateLessonDoc()
     const { mutateAsync: updateLessonDoc } = useUpdateLessonDoc()
+    const { mutateAsync: changeLessonType } = useChangeLessonType()
+
     const quillRef = useRef<ReactQuill | null>(null)
 
     const handleChangeValue = (value: string) => {
@@ -45,13 +55,20 @@ const LessonDocument = ({
     }
 
     const handleSubmitForm: SubmitHandler<lessonDoc> = async (data) => {
-        if (lessonData) {
+        if (lessonData && !isSelectingLessonType) {
             const payload = {
                 ...data,
                 _method: 'PUT'
             }
             await updateLessonDoc([courseId!, payload])
             setIsEditLesson?.(false)
+        } else if (isSelectingLessonType) {
+            const payload: IChangeLessonTypeData = {
+                new_type: 'document',
+                ...data
+            }
+            await changeLessonType([lessonId!, payload])
+            setIsSelectingLessonType?.(false)
         } else {
             await createLessonDoc([moduleId!, data])
             handleHiddenLesson?.(false)

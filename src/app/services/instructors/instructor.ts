@@ -3,7 +3,6 @@ import axiosClient from '@/configs/axiosClient'
 import { instructorUri } from '@/app/services/Uri/instructors'
 import {
     IChangeLessonTypeData,
-    IChangeLessonType,
     ICourses,
     ICreateCourse,
     ICreateCourseData,
@@ -86,7 +85,7 @@ export const instructorApi = {
     updatePositionLesson: async (moduleId: number, lessonData: IUpdatePositionLessonData): Promise<any> => {
         return axiosClient.post(instructorUri.UPDATE_POSITION_LESSON(moduleId), lessonData)
     },
-    changeLessonType: async (lessonId: number, lessonData: IChangeLessonType): Promise<any> => {
+    changeLessonType: async (lessonId: number, lessonData: IChangeLessonTypeData): Promise<any> => {
         return axiosClient.post(instructorUri.CHANGE_LESSON_TYPE(lessonId), lessonData)
     },
 

@@ -1,6 +1,7 @@
-import { IHistory, IRequestWithDrawData, ITeacherBalance, ITeacherHistoryDraw, ITransaction } from '@/types/transaction'
+import { IHistory, IRequestWithDrawData, ITeacherBalance, ITransaction } from '@/types/transaction'
 import { transactionsClientApi, transactionApi } from '@/app/services/transaction'
 import { useMutation, useQuery, useQueryClient, UseQueryOptions } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
 export const useTransactionById = (
     id: number,
@@ -43,6 +44,7 @@ export const useGetBalance = (
 ) => {
     return useQuery({
         ...options,
+        enabled: !!userId,
         queryKey: ['transaction-instructor', userId],
         queryFn: () => transactionApi.getBalance(userId)
     })
@@ -58,17 +60,19 @@ export const useQuestWithdraw = () => {
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: ['transaction-instructor'] })
             await queryClient.invalidateQueries({ queryKey: ['instructor-transaction-history'] })
+            toast.success('Yêu cầu của bạn đã được gửi đi thành công!')
         }
     })
 }
 
 export const useGetHistoryWithDraw = (
     userId: number,
-    options?: Omit<UseQueryOptions<ITeacherHistoryDraw>, 'queryKey' | 'queryFn'>
+    options?: Omit<UseQueryOptions<IHistoryDraw[]>, 'queryKey' | 'queryFn'>
 ) => {
     return useQuery({
         ...options,
-        queryKey: ['instructor-transaction-history', userId],
+        enabled: !!userId,
+        queryKey: ['instructor-transaction-history', { userId }],
         queryFn: () => transactionApi.getHistoryWithDraw(userId)
     })
 }

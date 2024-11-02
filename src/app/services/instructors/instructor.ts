@@ -2,6 +2,7 @@ import axiosClient from '@/configs/axiosClient'
 
 import { instructorUri } from '@/app/services/Uri/instructors'
 import {
+    IChangeLessonTypeData,
     IChangeLessonType,
     ICourses,
     ICreateCourse,

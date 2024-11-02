@@ -146,7 +146,12 @@ const LessonItem = ({ lesson }: LessonItemProps) => {
             )}
 
             {selectedLessonType === 'video' && isSelectingLessonType && (
-                <LessonVideo lessonId={id} courseId={id} setIsSelectingLessonType={setIsSelectingLessonType} />
+                <LessonVideo
+                    lessonId={id}
+                    courseId={id}
+                    setIsSelectingLessonType={setIsSelectingLessonType}
+                    isSelectingLessonType={isSelectingLessonType}
+                />
             )}
 
             {/* Confirm dialog for delete */}

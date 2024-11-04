@@ -1,6 +1,6 @@
 import { IUser } from '@/types/auth'
-import { ICategory } from '@/types/category'
 import { IQuestion } from '@/types/instructor'
+import { ICategory } from '@/types/others'
 
 export interface ICourse {
     id: number
@@ -99,7 +99,7 @@ export interface IQuizLeaning {
     id_module: number
     total_points: number
     title: string
-    is_complete: number
+    is_completed: number
     description: string
     questions: IQuestion[]
 }
@@ -183,4 +183,23 @@ export interface IQuizDetail {
 
 export interface ICourseCategory extends ICategory {
     courses: ICourse[]
+}
+
+export interface ICheckQuizLeaningPost {
+    course_id: number
+    user_id: number
+    quiz_id: number
+    total_score?: number
+    answers: { question_id: number; selected_options?: number[]; selected_option_id?: number[] }[]
+}
+
+export interface ICheckQuizLeaning {
+    user_id: number
+    quiz_id: number
+    total_score: number
+}
+
+export interface IQuizProCess {
+    is_completed: 0 | 1
+    _method?: string
 }

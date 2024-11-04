@@ -31,6 +31,9 @@ export const instructorApi = {
     submitCourse: async (courseID: string): Promise<any> => {
         return axiosClient.post(instructorUri.SUBMIT_COURSE(courseID), {})
     },
+    mangeMenu: async (courseID: string): Promise<any> => {
+        return axiosClient.get(instructorUri.MANAGE_MENU(courseID))
+    },
     disableCourse: async (courseID: string): Promise<any> => {
         return axiosClient.post(instructorUri.DISABLE_COURSE(courseID), {
             _method: 'PUT'

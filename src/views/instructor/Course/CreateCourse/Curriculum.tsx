@@ -1,6 +1,6 @@
 import { FiPlus } from 'react-icons/fi'
 import { useParams } from 'react-router-dom'
-import { memo, useEffect, useState } from 'react'
+import { memo, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
 import { useGetModule } from '@/app/hooks/instructors'
@@ -13,19 +13,11 @@ export interface selectedModule {
     id: string
 }
 
-const Curriculum = memo(({ setIsDataComplete }: { setIsDataComplete: () => void }) => {
+const Curriculum = memo(() => {
     const { id } = useParams()
     const { data: moduleData, isLoading } = useGetModule(id!)
     const [openDialog, setOpenDialog] = useState(false)
-    const [isComplete, setIsComplete] = useState(false)
     const [selectedItem, setSelectedItem] = useState<selectedModule>()
-
-    useEffect(() => {
-        if (moduleData && moduleData.modules.length >= 5 && !isComplete) {
-            setIsDataComplete()
-            setIsComplete(true)
-        }
-    }, [setIsDataComplete, moduleData, isComplete])
 
     if (isLoading) {
         return <Loading />

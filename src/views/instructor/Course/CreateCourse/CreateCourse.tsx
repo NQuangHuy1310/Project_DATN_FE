@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState } from 'react'
 import { FaCheckCircle } from 'react-icons/fa'
 
 import { Button } from '@/components/ui/button'
@@ -6,10 +6,10 @@ import CourseOverview from '@/views/instructor/Course/CreateCourse/CourseOvervie
 import Curriculum from '@/views/instructor/Course/CreateCourse/Curriculum'
 import StudentGoals from '@/views/instructor/Course/CreateCourse/StudentGoals'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
-import { useSubmitCourse } from '@/app/hooks/instructors'
+import { useGetManageMenu, useSubmitCourse } from '@/app/hooks/instructors'
 import routes from '@/configs/routes'
 
-type OptionKey = 'studentGoals' | 'curriculum' | 'courseOverview'
+type OptionKey = 'course_target' | 'course_curriculum' | 'course_overview'
 
 const CreateCourse = () => {
     const { id } = useParams()
@@ -18,38 +18,30 @@ const CreateCourse = () => {
     const queryParams = new URLSearchParams(location.search)
 
     const { mutateAsync: submitCourse, isPending } = useSubmitCourse()
+    const { data: manageMenu } = useGetManageMenu(id!)
 
-    const [isDataComplete, setIsDataComplete] = useState<Record<OptionKey, boolean>>({
-        studentGoals: false,
-        curriculum: false,
-        courseOverview: false
-    })
     const type = queryParams.get('type')
-
-    const handleSetDataComplete = useCallback((key: OptionKey) => {
-        setIsDataComplete((prev) => ({ ...prev, [key]: true }))
-    }, [])
 
     const options = [
         {
-            key: 'studentGoals' as OptionKey,
+            key: 'course_target' as OptionKey,
             label: 'Mục tiêu học viên',
-            component: <StudentGoals setIsDataComplete={() => handleSetDataComplete('studentGoals')} />
+            component: <StudentGoals />
         },
         {
-            key: 'curriculum' as OptionKey,
+            key: 'course_curriculum' as OptionKey,
             label: 'Chương trình giảng dạy',
-            component: <Curriculum setIsDataComplete={() => handleSetDataComplete('curriculum')} />
+            component: <Curriculum />
         },
         {
-            key: 'courseOverview' as OptionKey,
+            key: 'course_overview' as OptionKey,
             label: 'Tổng quan khoá học',
-            component: <CourseOverview setIsDataComplete={() => handleSetDataComplete('courseOverview')} />
+            component: <CourseOverview />
         }
     ]
 
-    const isAllComplete = Object.values(isDataComplete).every(Boolean)
     const [selectedKey, setSelectedKey] = useState<OptionKey>(options[0].key)
+    const isAllComplete = options.every((option) => manageMenu && manageMenu[option.key])
 
     const handleSubmit = async () => {
         await submitCourse(id!)
@@ -77,9 +69,7 @@ const CreateCourse = () => {
                         onClick={() => setSelectedKey(option.key)}
                     >
                         <p className="w-2/3 flex-shrink-0 text-sm font-medium">{option.label}</p>
-                        {type === 'draft' ? (
-                            isDataComplete[option.key] && <FaCheckCircle className="size-4 flex-1 text-primary" />
-                        ) : (
+                        {manageMenu && manageMenu[option.key] && (
                             <FaCheckCircle className="size-4 flex-1 text-primary" />
                         )}
                     </div>

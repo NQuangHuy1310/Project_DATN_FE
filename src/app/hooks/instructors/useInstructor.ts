@@ -11,6 +11,7 @@ import {
     ILessonQuiz,
     ILessonQuizData,
     ILessonVideoData,
+    IManageMenuCourse,
     IModule,
     IModuleData,
     IModules,
@@ -38,6 +39,16 @@ export const useSubmitCourse = () => {
         onSuccess() {
             toast.success('Bạn đã gửi thông tin khoá học đi thành công!')
         }
+    })
+}
+export const useGetManageMenu = (
+    courseId: string,
+    options?: Omit<UseQueryOptions<IManageMenuCourse>, 'queryKey' | 'queryFn'>
+) => {
+    return useQuery({
+        ...options,
+        queryKey: ['mange-menu', { courseId }],
+        queryFn: () => instructorApi.mangeMenu(courseId)
     })
 }
 
@@ -69,7 +80,7 @@ export const useEnableCourse = () => {
     })
 }
 
-export const usedeleteCourse = () => {
+export const useDeleteCourse = () => {
     const queryClient = useQueryClient()
 
     return useMutation({
@@ -92,6 +103,7 @@ export const useTargetCourse = () => {
         },
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: ['targetCourse'] })
+            await queryClient.invalidateQueries({ queryKey: ['mange-menu'] })
             toast.success('Cập nhật thông tin khoá học thành công thành công!')
         }
     })
@@ -106,6 +118,7 @@ export const useOverviewCourse = () => {
         },
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: ['overviewCourse'] })
+            await queryClient.invalidateQueries({ queryKey: ['mange-menu'] })
             toast.success('Cập nhật thông tin khoá học thành công!')
         }
     })
@@ -120,6 +133,7 @@ export const useCreateModule = () => {
         },
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: ['modules'] })
+            await queryClient.invalidateQueries({ queryKey: ['mange-menu'] })
         }
     })
 }
@@ -133,6 +147,7 @@ export const useDeleteModule = () => {
         },
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: ['modules'] })
+            await queryClient.invalidateQueries({ queryKey: ['mange-menu'] })
         }
     })
 }
@@ -160,6 +175,7 @@ export const useCreateLessonDoc = () => {
         },
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: ['modules'] })
+            await queryClient.invalidateQueries({ queryKey: ['mange-menu'] })
         }
     })
 }
@@ -187,6 +203,7 @@ export const useDeleteLessonDoc = () => {
         },
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: ['modules'] })
+            await queryClient.invalidateQueries({ queryKey: ['mange-menu'] })
         }
     })
 }
@@ -200,6 +217,7 @@ export const useCreateLessonVideo = () => {
         },
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: ['modules'] })
+            await queryClient.invalidateQueries({ queryKey: ['mange-menu'] })
         }
     })
 }
@@ -227,6 +245,7 @@ export const useDeleteLessonVideo = () => {
         },
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: ['modules'] })
+            await queryClient.invalidateQueries({ queryKey: ['mange-menu'] })
         }
     })
 }
@@ -240,6 +259,7 @@ export const useCreateLessonQuiz = () => {
         },
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: ['modules'] })
+            await queryClient.invalidateQueries({ queryKey: ['mange-menu'] })
         }
     })
 }
@@ -267,6 +287,7 @@ export const useDeleteLessonQuiz = () => {
         },
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: ['modules'] })
+            await queryClient.invalidateQueries({ queryKey: ['mange-menu'] })
         }
     })
 }

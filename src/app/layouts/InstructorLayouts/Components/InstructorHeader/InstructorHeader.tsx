@@ -22,7 +22,7 @@ function InstructorHeader({
                 <h2 className="text-xl font-medium">{title}</h2>
             </div>
             <div className="flex items-center gap-5">
-                <Link to={routes.notification}>
+                <Link to={routes.instructorNotifications}>
                     <FaRegBell className="size-5 cursor-pointer text-black" />
                 </Link>
                 <UserButton />

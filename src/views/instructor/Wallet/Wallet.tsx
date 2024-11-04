@@ -2,6 +2,7 @@ import { ChangeEvent, useState } from 'react'
 import { TbCoinFilled } from 'react-icons/tb'
 import { convertToVnd, getImagesUrl } from '@/lib'
 
+import NoContentImage from '@/assets/no-content.jpg'
 import { useGetBanks } from '@/app/hooks/others'
 import { Button } from '@/components/ui/button.tsx'
 import { Input } from '@/components/ui/input.tsx'
@@ -33,9 +34,12 @@ const Wallet = () => {
     const isDisable =
         coin === 0 ||
         coin === undefined ||
-        (coin && coin >= 10000) ||
-        (teacherBalanceData?.balance !== undefined && coin >= +teacherBalanceData.balance) ||
-        isPending
+        (coin && coin < 10000) ||
+        (teacherBalanceData !== undefined && coin >= +teacherBalanceData.balance) ||
+        isPending ||
+        !selectedBank ||
+        !accountHolder ||
+        teacherBalanceData === undefined
 
     const handleChangeSelectedBank = (value: string) => {
         setSelectedBank(value)
@@ -228,11 +232,10 @@ const Wallet = () => {
                                 </tr>
                             ))
                         ) : (
-                            <tr>
-                                <td colSpan={3} className="py-4 text-center">
-                                    Bạn chưa có giao dịch nào
-                                </td>
-                            </tr>
+                            <div className="flex w-full flex-col items-center justify-center text-center">
+                                <img alt="" src={NoContentImage} />
+                                <span className="text-base font-semibold">Bạn chưa có giao dịch nào</span>
+                            </div>
                         )}
                     </tbody>
                 </table>

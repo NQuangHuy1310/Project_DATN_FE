@@ -2,6 +2,7 @@ import { MdEdit } from 'react-icons/md'
 import { LuTrash } from 'react-icons/lu'
 import { FaCheck } from 'react-icons/fa6'
 import { IoMdClose } from 'react-icons/io'
+import { FaRegImage } from 'react-icons/fa6'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 
 import { Input } from '@/components/ui/input'
@@ -13,6 +14,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { lessonQuiz, lessonQuizSchema } from '@/validations'
 import { IQuestion } from '@/types/instructor'
 import DialogAddQuestion from '@/components/shared/CourseContent/Dialog/DialogAddQuestion'
+import PreviewImage from '@/components/shared/PreviewImage'
+import { getImagesUrl } from '@/lib'
 
 interface LessonQuizzesProps {
     moduleId: number
@@ -28,35 +31,43 @@ const LessonQuizzes = ({ handleHiddenLesson, moduleId }: LessonQuizzesProps) => 
     } = useForm<lessonQuiz>({
         resolver: zodResolver(lessonQuizSchema)
     })
+
+    const { data } = useGetLessonQuiz(moduleId)
     const { mutateAsync: createLessonQuiz } = useCreateLessonQuiz()
     const { mutateAsync: updateLessonQuiz } = useUpdateLessonQuiz()
     const { mutateAsync: deleteLessonQuiz } = useDeleteQuestion()
-    const { data } = useGetLessonQuiz(moduleId)
-    const [selectedQuestion, setSelectedQuestion] = useState<IQuestion>()
+
+    const [selectedQuestion, setSelectedQuestion] = useState<IQuestion | null>(null)
     const [openDialog, setOpenDialog] = useState(false)
+    const [openDialogPreview, setOpenDialogPreview] = useState(false)
+    const [imagePreview, setImagePreview] = useState<string>('')
 
     const handleSubmitForm: SubmitHandler<lessonQuiz> = async (formData) => {
-        if (formData && data?.quiz) {
-            const payload = {
-                ...formData,
-                _method: 'PUT'
-            }
-            await updateLessonQuiz([data?.quiz.id, payload])
-            handleHiddenLesson?.(false)
+        const payload = {
+            ...formData,
+            _method: data?.quiz ? 'PUT' : undefined
+        }
+        if (data?.quiz) {
+            await updateLessonQuiz([data.quiz.id, payload])
         } else {
             await createLessonQuiz([moduleId, formData])
-            handleHiddenLesson?.(false)
         }
+        handleHiddenLesson?.(false)
     }
 
     const handleDeleteQuiz = async (questionId: number) => {
         await deleteLessonQuiz(questionId)
     }
 
+    const handleImageClick = (url: string) => {
+        setImagePreview(getImagesUrl(url))
+        setOpenDialogPreview(true)
+    }
+
     useEffect(() => {
         if (data?.quiz) {
-            setValue('title', data?.quiz?.title ?? '')
-            setValue('description', data?.quiz?.description ?? '')
+            setValue('title', data.quiz.title ?? '')
+            setValue('description', data.quiz.description ?? '')
         }
     }, [data?.quiz, setValue])
 
@@ -81,16 +92,6 @@ const LessonQuizzes = ({ handleHiddenLesson, moduleId }: LessonQuizzesProps) => 
                                     <div className="text-sm text-secondaryRed">{errors.title.message}</div>
                                 )}
                             </div>
-                            <div className="space-y-1">
-                                <label className="text-xs text-muted-foreground">Tổng điển của bài tập</label>
-                                <Input
-                                    placeholder="Tổng số điểm bài tập"
-                                    className="w-[300px]"
-                                    type="number"
-                                    disabled
-                                    value={data?.quiz?.total_points ?? 0}
-                                />
-                            </div>
                         </div>
                         <div className="space-y-1">
                             <label className="text-xs text-muted-foreground">Bạn cần nhập mô tả cho bài tập</label>
@@ -99,7 +100,7 @@ const LessonQuizzes = ({ handleHiddenLesson, moduleId }: LessonQuizzesProps) => 
                                 className="w-[600px]"
                                 rows={3}
                                 {...register('description')}
-                            ></Textarea>
+                            />
                             {errors.description && (
                                 <div className="text-sm text-secondaryRed">{errors.description.message}</div>
                             )}
@@ -107,66 +108,68 @@ const LessonQuizzes = ({ handleHiddenLesson, moduleId }: LessonQuizzesProps) => 
                     </div>
 
                     <div className="flex flex-col gap-3">
-                        {data?.quiz &&
-                            data?.quiz?.questions.map((question, index) => {
-                                return (
-                                    <div
-                                        className="flex flex-col gap-4 rounded-md border-[1px] border-grey p-3"
-                                        key={index}
-                                    >
-                                        <div className="flex items-center justify-between">
-                                            <div className="flex items-center gap-4">
-                                                <h6 className="w-fit rounded-sm border-[1px] border-black/50 px-4 py-0.5 text-xs font-medium">
-                                                    {index + 1}. Multiple Choice
-                                                </h6>
-                                                <h6 className="w-fit rounded-sm border-[1px] border-black/50 px-4 py-0.5 text-xs font-medium">
-                                                    {question.points}. Point
-                                                </h6>
+                        {data?.quiz?.questions.map((question, index) => (
+                            <div
+                                className="flex flex-col gap-4 rounded-md border-[1px] border-grey p-3"
+                                key={question.id}
+                            >
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-4">
+                                        <h6 className="w-fit rounded-sm border-[1px] border-black/50 px-4 py-0.5 text-xs font-medium">
+                                            {index + 1}. Multiple Choice
+                                        </h6>
+                                        {question.image_url && (
+                                            <div onClick={() => handleImageClick(question.image_url!)}>
+                                                <FaRegImage className="size-4 text-secondaryYellow" />
                                             </div>
-                                            <div className="space-x-2">
-                                                <Button
-                                                    type="button"
-                                                    size="icon"
-                                                    variant="outline"
-                                                    className="h-[30px] w-[30px]"
-                                                    onClick={() => {
-                                                        setSelectedQuestion(question)
-                                                        setOpenDialog(true)
-                                                    }}
-                                                >
-                                                    <MdEdit />
-                                                </Button>
-                                                <Button
-                                                    type="button"
-                                                    size="icon"
-                                                    variant="outline"
-                                                    className="h-[30px] w-[30px]"
-                                                    onClick={() => handleDeleteQuiz(question.id)}
-                                                >
-                                                    <LuTrash />
-                                                </Button>
-                                            </div>
-                                        </div>
-                                        <div className="flex flex-col gap-1">
-                                            <h4 className="text-sm">
-                                                Câu hỏi: <strong>{question.question}</strong>
-                                            </h4>
-                                            {question.options.map((option, index) => {
-                                                return (
-                                                    <div key={index} className="flex items-center gap-2">
-                                                        {option.is_correct === 1 ? (
-                                                            <FaCheck className="size-4 text-primary" />
-                                                        ) : (
-                                                            <IoMdClose className="size-4 text-secondaryRed" />
-                                                        )}
-                                                        <span>{option.option}</span>
-                                                    </div>
-                                                )
-                                            })}
-                                        </div>
+                                        )}
                                     </div>
-                                )
-                            })}
+                                    <div className="space-x-2">
+                                        <Button
+                                            type="button"
+                                            size="icon"
+                                            variant="outline"
+                                            className="h-[30px] w-[30px]"
+                                            onClick={() => {
+                                                setSelectedQuestion(question)
+                                                setOpenDialog(true)
+                                            }}
+                                        >
+                                            <MdEdit />
+                                        </Button>
+                                        <Button
+                                            type="button"
+                                            size="icon"
+                                            variant="outline"
+                                            className="h-[30px] w-[30px]"
+                                            onClick={() => handleDeleteQuiz(question.id)}
+                                        >
+                                            <LuTrash />
+                                        </Button>
+                                    </div>
+                                </div>
+                                <div className="flex flex-col gap-1">
+                                    <h4 className="text-sm">
+                                        Câu hỏi: <strong>{question.question}</strong>
+                                    </h4>
+                                    {question.options.map((option, index) => (
+                                        <div key={index} className="flex items-center gap-2">
+                                            {option.is_correct === 1 ? (
+                                                <FaCheck className="size-4 text-primary" />
+                                            ) : (
+                                                <IoMdClose className="size-4 text-secondaryRed" />
+                                            )}
+                                            <span className="min-w-[50px] flex-shrink-0">{option.option}</span>
+                                            {option.image_url && (
+                                                <div onClick={() => handleImageClick(option.image_url)}>
+                                                    <FaRegImage className="size-4 text-secondaryYellow" />
+                                                </div>
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        ))}
                     </div>
 
                     <div className="space-x-4 text-end">
@@ -186,6 +189,7 @@ const LessonQuizzes = ({ handleHiddenLesson, moduleId }: LessonQuizzesProps) => 
 
             {/* Dialog */}
             <DialogAddQuestion openDialog={openDialog} setOpenDialog={setOpenDialog} question={selectedQuestion!} />
+            <PreviewImage imageSrc={imagePreview} open={openDialogPreview} onOpenChange={setOpenDialogPreview} />
         </>
     )
 }

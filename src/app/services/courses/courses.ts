@@ -43,5 +43,4 @@ export const courseApi = {
     checkBuyCourse: async (userId: number, courseId: number): Promise<any> => {
         return axiosClient.get(courseUri.CHECK_BUY_COURSE(userId, courseId))
     }
-
 }

@@ -1,5 +1,5 @@
 import { courseApi } from '@/app/services/courses/courses'
-import { IComment, ICreateComment } from '@/types/comment'
+import { IComment, ICreateComment } from '@/types/common'
 import { CourseData, ICourse, ICourseCategory, ICourseDetail, IQuizDetail } from '@/types/course/course'
 import { useMutation, useQuery, useQueryClient, UseQueryOptions } from '@tanstack/react-query'
 
@@ -76,7 +76,10 @@ export const useCoursePopulate = (options?: Omit<UseQueryOptions<ICourse[]>, 'qu
 }
 
 //COMMENT
-export const useGetCommentCourse = (id: number, options?: Omit<UseQueryOptions<IComment[]>, 'queryKey' | 'queryFn'>) => {
+export const useGetCommentCourse = (
+    id: number,
+    options?: Omit<UseQueryOptions<IComment[]>, 'queryKey' | 'queryFn'>
+) => {
     return useQuery({
         ...options,
         queryKey: ['comments-course'],
@@ -95,7 +98,11 @@ export const useAddCommentCourse = () => {
     })
 }
 //CHECK BUY COURSE
-export const useCheckBuyCourse = (userId: number, courseId: number, options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>) => {
+export const useCheckBuyCourse = (
+    userId: number,
+    courseId: number,
+    options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
+) => {
     return useQuery<any>({
         ...options,
         enabled: !!userId && !!courseId,

@@ -4,7 +4,7 @@ import InstructorHeader from '@/app/layouts/InstructorLayouts/Components/Instruc
 import InstructorSidebar from '@/app/layouts/InstructorLayouts/Components/InstructorSidebar/InstructorSidebar'
 import InstructorAside from '@/app/layouts/InstructorLayouts/Components/InstructorAside/InstructorAside'
 
-const InstructorCommunicate = ({ children, title }: { children: ReactNode; title: string }) => {
+const InstructorPerformance = ({ children, title }: { children: ReactNode; title: string }) => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false)
     const [sidebar, setSidebar] = useState<boolean>(false)
 
@@ -33,7 +33,7 @@ const InstructorCommunicate = ({ children, title }: { children: ReactNode; title
             <article className={`w-full ${sidebar ? 'lg:ps-64' : 'lg:ps-24'}`}>
                 <InstructorHeader isSidebar={sidebar} toggleSidebar={toggleSidebar} title={title} />
                 <main className="mt-headerHight flex w-full flex-wrap items-start gap-4 bg-softGrey p-4 lg:min-h-[89vh] lg:flex-nowrap">
-                    <InstructorAside />
+                    <InstructorAside performanceAside={true} />
                     <div className="card w-full">{children}</div>
                 </main>
             </article>
@@ -44,4 +44,4 @@ const InstructorCommunicate = ({ children, title }: { children: ReactNode; title
     )
 }
 
-export default InstructorCommunicate
+export default InstructorPerformance

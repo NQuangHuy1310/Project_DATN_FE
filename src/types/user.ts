@@ -1,6 +1,6 @@
 import { IUser } from '@/types/auth'
-import { ICategory } from '@/types/category'
 import { ICourse } from '@/types/course/course'
+import { ICategory } from './others'
 
 export interface ICourseMyBought extends IUser {
     user_courses: ICourseUser[]

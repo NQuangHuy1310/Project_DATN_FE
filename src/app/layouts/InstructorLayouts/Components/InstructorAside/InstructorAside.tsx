@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
-import { instructorAside } from '@/constants'
+import { instructorAside, instructorPerformanceAside } from '@/constants'
 import { Button } from '@/components/ui/button'
 import { FaChevronDown } from 'react-icons/fa'
 import { IAccountAside } from '@/types'
 import { LuUserCircle } from 'react-icons/lu'
 
-const InstructorAside = () => {
+const InstructorAside = ({ performanceAside }: { performanceAside?: boolean }) => {
     const [isMenuVisible, setMenuVisible] = useState<boolean>(false)
     const [selectedItem, setSelectedItem] = useState<IAccountAside>({
-        title: instructorAside[0].title,
+        title: performanceAside ? instructorPerformanceAside[0].title : instructorAside[0].title,
         icon: LuUserCircle
     })
     const [isSmallScreen, setIsSmallScreen] = useState<boolean>(window.innerWidth <= 1024)
@@ -32,6 +32,8 @@ const InstructorAside = () => {
     const handleClickOutside = () => {
         setMenuVisible(false)
     }
+
+    const asideItems = performanceAside ? instructorPerformanceAside : instructorAside
 
     return (
         <>
@@ -57,14 +59,14 @@ const InstructorAside = () => {
                             }`}
                         >
                             <div className="flex flex-col gap-4 p-5">
-                                {instructorAside.map((item, index) => (
+                                {asideItems.map((item, index) => (
                                     <NavLink
                                         to={item.path}
                                         key={index}
                                         onClick={() => handleSelect(item)}
                                         className="flex items-center gap-5 rounded-lg px-5 py-3 hover:bg-gray-100"
                                     >
-                                        <item.icon className="size-6 text-darkGrey" />
+                                        {item.icon && <item.icon className="size-6 text-darkGrey" />}
                                         <p className="text-base font-medium text-black">{item.title}</p>
                                     </NavLink>
                                 ))}
@@ -74,12 +76,12 @@ const InstructorAside = () => {
                 </>
             ) : (
                 <aside className="card flex w-full max-w-full flex-shrink-0 flex-col gap-7 lg:max-w-[270px]">
-                    <h3 className="text-xl font-bold">Hỏi đáp và giao tiếp</h3>
+                    <h3 className="text-xl font-bold">{!performanceAside ? 'Hỏi đáp và giao tiếp' : 'Thống kê'}</h3>
                     <div className="flex flex-col gap-5">
-                        {instructorAside.map((item, index) => (
+                        {asideItems.map((item, index) => (
                             <NavLink to={item.path} key={index}>
                                 <div className="hover:active flex items-center gap-5 rounded-lg px-5 py-3.5 hover:transition-all">
-                                    <item.icon className="size-6 text-darkGrey" />
+                                    {item.icon && <item.icon className="size-6 text-darkGrey" />}
                                     <p className="text-base font-medium text-black">{item.title}</p>
                                 </div>
                             </NavLink>

@@ -1,7 +1,7 @@
 import { toast } from 'sonner'
 import ReactQuill from 'react-quill'
 import { useParams } from 'react-router-dom'
-import { memo, useEffect, useRef, useState } from 'react'
+import { ChangeEvent, memo, useEffect, useRef, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import placeholder from '@/assets/placeholder.jpg'
 import { CourseLevel, MessageErrors } from '@/constants'
-import { getImagesUrl, readFileAsDataUrl, validateFileSize } from '@/lib'
+import { formatPrice, getImagesUrl, readFileAsDataUrl, validateFileSize } from '@/lib'
 import { courseOverview, courseOverviewSchema } from '@/validations'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useGetCategories } from '@/app/hooks/categories'
@@ -28,7 +28,7 @@ const CourseOverview = memo(({ setIsDataComplete }: { setIsDataComplete: () => v
 
     const { id } = useParams()
     const { data: categories } = useGetCategories()
-    const { data, isPending: loadingOverviewCourse } = useGetOverviewCourse(id!)
+    const { data: courseData, isPending: loadingOverviewCourse } = useGetOverviewCourse(id!)
     const { mutateAsync: createOverviewCourse, isPending } = useOverviewCourse()
 
     const [courseImageFile, setCourseImageFile] = useState<File>()
@@ -55,7 +55,7 @@ const CourseOverview = memo(({ setIsDataComplete }: { setIsDataComplete: () => v
         setValue('description', value)
     }
 
-    const handleUploadImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleUploadImage = async (e: ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]
         if (file && validateFileSize(file, 'image')) {
             try {
@@ -69,7 +69,7 @@ const CourseOverview = memo(({ setIsDataComplete }: { setIsDataComplete: () => v
         }
     }
 
-    const handleUploadVideo = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleUploadVideo = async (e: ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]
         if (file && validateFileSize(file, 'video')) {
             try {
@@ -86,13 +86,30 @@ const CourseOverview = memo(({ setIsDataComplete }: { setIsDataComplete: () => v
     const handleSubmitForm: SubmitHandler<courseOverview> = async (data) => {
         const payload: IOverviewCourseData = {
             ...data,
+            price: +data.price,
+            price_sale: +data.price_sale,
             _method: 'PUT'
         }
 
+        if (courseVideoPath && courseImagePath && !courseImageFile && !courseVideoFile) {
+            return await createOverviewCourse([id!, payload])
+        }
+
         if (courseImageFile) {
-            payload.thumbnail = courseImageFile
-        } else if (courseVideoFile) {
-            payload.trailer = courseVideoFile
+            if (validateFileSize(courseImageFile, 'image')) {
+                payload.thumbnail = courseImageFile
+            }
+        }
+
+        if (courseVideoFile) {
+            if (validateFileSize(courseVideoFile, 'video')) {
+                payload.trailer = courseVideoFile
+            }
+        }
+
+        if (!courseVideoFile || !courseImageFile || !courseImagePath || !courseVideoPath) {
+            toast.warning('Bạn cần tải lên hình ảnh và video để thêm vào khoá học')
+            return
         }
 
         await createOverviewCourse([id!, payload])
@@ -100,20 +117,23 @@ const CourseOverview = memo(({ setIsDataComplete }: { setIsDataComplete: () => v
     }
 
     useEffect(() => {
-        if (data) {
-            const imagePath = data?.thumbnail ? getImagesUrl(data?.thumbnail ?? '') : placeholder
-            const videoPath = data?.trailer ? getImagesUrl(data?.trailer ?? '') : undefined
+        if (courseData) {
+            const imagePath = courseData?.thumbnail && getImagesUrl(courseData.thumbnail)
+            const videoPath = courseData?.trailer && getImagesUrl(courseData.trailer)
 
-            setValue('name', data.name)
-            setValue('description', data.description ?? '')
-            setValue('level', data.level ?? '')
-            setValue('id_category', data.category.id.toString())
-            setValue('price', data.price ? data.price.toString() : '')
-            setValue('price_sale', data.price_sale ? data.price_sale.toString() : '')
+            const formattedPrice = formatPrice(courseData.price)
+            const formattedPriceSale = formatPrice(courseData.price_sale)
+
+            setValue('name', courseData.name)
+            setValue('description', courseData.description ?? '')
+            setValue('level', courseData.level ?? '')
+            setValue('id_category', courseData.category.id.toString())
+            setValue('price', formattedPrice)
+            setValue('price_sale', formattedPriceSale)
             setCourseImagePath(imagePath)
             setCourseVideoPath(videoPath)
         }
-    }, [data, setValue])
+    }, [courseData, setValue])
 
     if (loadingOverviewCourse) {
         return <Loading />
@@ -280,7 +300,11 @@ const CourseOverview = memo(({ setIsDataComplete }: { setIsDataComplete: () => v
                     <h5 className="text-base font-bold">Hình ảnh khoá học</h5>
                     <div className="flex items-start gap-8">
                         <div className="h-[300px] w-[450px] flex-shrink-0 overflow-hidden rounded-md border-[1px]">
-                            <img src={courseImagePath} alt="Course image" className="h-full w-full object-cover" />
+                            <img
+                                src={courseImagePath ?? placeholder}
+                                alt="Course image"
+                                className="h-full w-full object-cover"
+                            />
                         </div>
                         <div className="flex w-[450px] flex-col gap-3">
                             <p className="text-sm leading-6">
@@ -294,6 +318,7 @@ const CourseOverview = memo(({ setIsDataComplete }: { setIsDataComplete: () => v
                                     className="flex h-full cursor-pointer items-start justify-center rounded-e-none"
                                     placeholder="Tải lên hình ảnh"
                                     ref={courseImage}
+                                    accept="image/jpeg, image/png, image/gif"
                                     onChange={(e) => handleUploadImage(e)}
                                 />
                                 <Button

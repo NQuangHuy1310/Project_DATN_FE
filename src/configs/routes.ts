@@ -61,7 +61,11 @@ const routes = {
     instructorAnnouncements: '/instructor/communication/announcements/',
 
     // Instructor performance
-    instructorPerformance: '/instructor/performance'
+    instructorPerformanceOverview: '/instructor/performance/overview',
+    instructorPerformanceStudent: '/instructor/performance/students',
+
+    // Instructor wallet
+    instructorWallet: '/instructor/wallet'
 }
 
 export default routes

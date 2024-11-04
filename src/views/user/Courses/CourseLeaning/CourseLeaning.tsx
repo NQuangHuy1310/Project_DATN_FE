@@ -20,7 +20,7 @@ import Loading from '@/components/Common/Loading/Loading'
 import { Button } from '@/components/ui/button'
 import useFormatTime from '@/app/hooks/common/useFomatTime'
 import AllNoteCourse from '@/components/shared/CourseLeaning/Sheet/AllNoteCourse'
-import { useCourseData } from '@/app/hooks/courses/useLesson'
+import { useLessonById, useQuizLessonById } from '@/app/hooks/courses/useLesson'
 import LeaningCourseQuiz from '@/components/shared/CourseLeaning/LeaningCourseQuiz'
 import LeaningCourseVideo from '@/components/shared/CourseLeaning/LeaningCourseVideo'
 import LeaningCourseDocument from '@/components/shared/CourseLeaning/LeaningCourseDocument'
@@ -36,37 +36,47 @@ const CourseLearning = () => {
     const [checkButton, setCheckButton] = useState<boolean>(true)
     const [searchParams, setSearchParams] = useSearchParams()
     const courseListRef = useRef<HTMLDivElement | null>(null)
-    const idLesson = useGetIdParams('id')
-
     const [pauseVideoCallback, setPauseVideoCallback] = useState<() => void>(() => {})
     const [playVideoCallback, setPlayVideoCallback] = useState<() => void>(() => {})
 
+    const [checkQuizLeaning, setCheckQuizLeaning] = useState<boolean>()
+
+    const idLesson = useGetIdParams('id')
     const slug = useGetSlugParams('slug')
 
     // Danh sách bài học theo khóa học
     const { data: courseModule, isLoading, refetch } = useCourseLeaningBySlug(slug!)
 
-    const quizArray: any =
-        courseModule?.modules.reduce<any>((acc, cur) => {
-            if (cur.quiz) {
-                console.log(cur.quiz)
-                acc.push({
-                    id: cur.quiz.id,
-                    id_module: cur.quiz.id_module
-                })
-            }
-            return acc
-        }, []) || []
+    const quizArray = useMemo(() => {
+        return (
+            courseModule?.modules.reduce<any[]>((acc, cur) => {
+                if (cur.quiz) {
+                    acc.push({
+                        id: cur.quiz.id,
+                        id_module: cur.quiz.id_module,
+                        is_completed: cur.quiz.is_completed
+                    })
+                }
+                return acc
+            }, []) || []
+        )
+    }, [courseModule])
 
-    const isLessonQuiz = quizArray.every((quiz: any) => {
-        return quiz.id === idLesson
-    })
+    const isQuiz = quizArray.some((quiz: any) => quiz.id === idLesson)
 
-    const { data: courseLesson } = useCourseData(idLesson!, isLessonQuiz ? isLessonQuiz : 0)
+    const { data: courseLesson } = useLessonById(idLesson!, isQuiz)
+    const { data: quizLesson } = useQuizLessonById(idLesson!, isQuiz)
 
     const lessons = courseModule?.modules?.flatMap((module) => module.lessons) || []
     const isLessonInModule = lessons.some((lesson) => lesson.id === idLesson)
     const nextLessonId = courseModule?.next_lesson?.id
+
+    useEffect(() => {
+        const currentQuiz = quizArray.find((quiz) => quiz.id === idLesson)
+        if (currentQuiz && currentQuiz.is_completed == 1) {
+            setCheckQuizLeaning(true)
+        }
+    }, [idLesson, quizArray])
 
     useEffect(() => {
         if (courseModule && !isLessonInModule && nextLessonId) {
@@ -127,10 +137,18 @@ const CourseLearning = () => {
             const currentLesson = courseModule?.modules
                 .flatMap((module) => module.lessons)
                 .find((lesson) => lesson.id === Number(idLesson))
-
+            const currentQuiz = quizArray.find((quiz: any) => quiz.id === Number(idLesson))
             if (currentLesson) {
                 if (currentLesson.is_completed === 1) {
                     setSearchParams({ id: currentLesson.id.toString() })
+                    setCheckButton(false)
+                } else {
+                    setSearchParams({ id: nextLessonId?.toString()! })
+                    setCheckButton(true)
+                }
+            } else if (currentQuiz) {
+                if (currentQuiz.is_completed === 1) {
+                    setSearchParams({ id: currentQuiz.id.toString() })
                     setCheckButton(false)
                 } else {
                     setSearchParams({ id: nextLessonId?.toString()! })
@@ -144,7 +162,12 @@ const CourseLearning = () => {
         if (courseModule && nextLessonId !== undefined && idLesson !== undefined) {
             const quizModuleIndex = courseModule.modules.findIndex((module) => module.quiz?.id === idLesson)
             if (quizModuleIndex !== -1) {
-                setActiveModules((prev) => [...new Set([...prev, quizModuleIndex])])
+                const isLastModule = quizModuleIndex === courseModule.modules.length - 1
+                if (!isLastModule) {
+                    setActiveModules((prev) => [...new Set([...prev, quizModuleIndex])])
+                } else {
+                    setActiveModules((prev) => [...new Set([...prev, quizModuleIndex + 1])])
+                }
             } else {
                 const lessonModuleIndex = courseModule.modules.findIndex((module) =>
                     module.lessons.some((lesson) => lesson.id === idLesson)
@@ -256,7 +279,10 @@ const CourseLearning = () => {
         () =>
             courseModule?.modules.map((module: IModuleLeaning, index: number) => {
                 // Tính số bài học đã hoàn thành trong module
-                const completedCount = module.lessons.filter((lesson) => lesson.is_completed === 1).length
+                const completedCount =
+                    module.lessons.filter((lesson) => lesson.is_completed === 1).length +
+                    (module.quiz && module.quiz.is_completed === 1 ? 1 : 0)
+
                 return (
                     <div key={index} className="sticky top-10 my-1">
                         <div
@@ -335,28 +361,37 @@ const CourseLearning = () => {
                                     <div
                                         className={`flex items-center justify-between border-b px-7 py-2 ${module.quiz.id === idLesson ? 'bg-primary/15' : ''} ${
                                             courseModule.next_lesson.id === module.quiz.id ||
-                                            module.quiz?.is_complete == 1
+                                            module.quiz?.is_completed == 1
                                                 ? 'cursor-pointer'
                                                 : 'cursor-not-allowed'
                                         }`}
                                         onClick={() => {
                                             if (
                                                 courseModule.next_lesson.id === module.quiz.id ||
-                                                module.quiz?.is_complete == 1
+                                                module.quiz?.is_completed == 1
                                             ) {
                                                 handleQuizClick(module.quiz.id)
                                             }
                                         }}
                                     >
                                         <div className="flex max-w-44 flex-col gap-3">
-                                            <h4 className="lg:text-md text-sm font-medium">
-                                                {index + 1}. {module.quiz.title}
-                                            </h4>
-                                            <HiQuestionMarkCircle className="size-4 text-primary" />
+                                            <div>
+                                                <h4 className="lg:text-md text-sm font-medium">
+                                                    {index + 1}. {module.quiz.title}
+                                                </h4>
+                                            </div>
+                                            <div className="flex gap-2">
+                                                <HiQuestionMarkCircle className="size-4 text-primary" />
+                                                <span className="text-xs">
+                                                    <p>2:00</p>
+                                                </span>
+                                            </div>
                                         </div>
                                         {/* Kiểm tra trạng thái mở khóa cho quiz */}
-                                        {courseModule.next_lesson.id === module.quiz.id ? (
-                                            <></>
+                                        {module.quiz.is_completed === 1 ? (
+                                            <FaCheckCircle className="size-3 text-primary" />
+                                        ) : module.quiz.id === courseModule.next_lesson.id ? (
+                                            <div></div>
                                         ) : (
                                             <FaLock className="size-3 text-darkGrey" />
                                         )}
@@ -438,17 +473,22 @@ const CourseLearning = () => {
                                     onPlayVideo={(playVideo) => setPlayVideoCallback(() => playVideo)}
                                 />
                             )}
-                            {courseLesson.content_type === 'quiz' && (
-                                <LeaningCourseQuiz dataLesson={courseLesson} setCheckButton={setCheckButton} />
-                            )}
                         </>
+                    )}
+                    {isQuiz == true && quizLesson && (
+                        <LeaningCourseQuiz
+                            checkQuiz={checkQuizLeaning}
+                            dataLesson={quizLesson}
+                            setCheckButton={setCheckButton}
+                            idCourse={courseModule?.modules[0].id_course!}
+                        />
                     )}
                 </section>
 
                 {/* Sidebar */}
                 <aside
                     ref={courseListRef}
-                    className={`absolute top-0 z-50 h-screen w-full overflow-y-auto bg-white px-2 md:w-[50vw] lg:fixed lg:bottom-0 lg:right-0 lg:top-[60px] lg:h-[619px] lg:w-[23%] lg:border-l lg:px-1 ${
+                    className={`absolute top-0 z-50 h-screen w-full overflow-y-auto bg-white px-2 md:w-[50vw] lg:fixed lg:bottom-0 lg:right-0 lg:top-[60px] lg:h-[680px] lg:w-[23%] lg:border-l lg:px-1 ${
                         toggleTab ? 'block' : 'hidden'
                     }`}
                 >

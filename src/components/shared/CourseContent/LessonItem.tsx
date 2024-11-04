@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { CSS } from '@dnd-kit/utilities'
 import { IoIosDocument } from 'react-icons/io'
 import { useSortable } from '@dnd-kit/sortable'
+import { FaExchangeAlt } from 'react-icons/fa'
 import { FaPen, FaRegTrashAlt } from 'react-icons/fa'
 import { FaBars, FaRegCirclePlay } from 'react-icons/fa6'
 
@@ -11,6 +12,7 @@ import ConfirmDialog from '@/components/shared/ConfirmDialog/ConfirmDialog.tsx'
 import { useDeleteLessonDoc, useDeleteLessonVideo } from '@/app/hooks/instructors'
 import LessonDocument from '@/components/shared/CourseContent/LessonDocument'
 import LessonVideo from '@/components/shared/CourseContent/LessonVideo'
+import { Select, SelectContent, SelectGroup, SelectTrigger, SelectItem } from '@/components/ui/select'
 
 interface LessonItemProps {
     lesson: ILesson
@@ -25,10 +27,13 @@ const LessonItem = ({ lesson }: LessonItemProps) => {
     })
     const { mutateAsync: deleteLessonDoc, isPending } = useDeleteLessonDoc()
     const { mutateAsync: deleteLessonVideo } = useDeleteLessonVideo()
+
     const [lessonId, setLessonId] = useState<number>(id)
     const [isOpenDialog, setIsOpenDialog] = useState(false)
-    const [isEditLessonDoc, setIsEditLesson] = useState(false)
-    const [isEditLessonVideo, setIsEditLessonVideo] = useState(false)
+    const [isEditingDocument, setIsEditingDocument] = useState(false)
+    const [isEditingVideo, setIsEditingVideo] = useState(false)
+    const [isSelectingLessonType, setIsSelectingLessonType] = useState(false)
+    const [selectedLessonType, setSelectedLessonType] = useState<'document' | 'quiz' | 'video'>(content_type)
 
     const dndKitColumnStyles = {
         transform: CSS.Translate.toString(transform),
@@ -47,10 +52,27 @@ const LessonItem = ({ lesson }: LessonItemProps) => {
         setIsOpenDialog(false)
     }
 
+    const handleChangeSelectedLessonType = (value: 'document' | 'quiz' | 'video') => {
+        setSelectedLessonType(value)
+        if (selectedLessonType !== content_type) {
+            setIsSelectingLessonType(false)
+            if (value === 'document') setIsEditingDocument(true)
+            if (value === 'video') setIsEditingVideo(true)
+        } else {
+            setIsSelectingLessonType(true)
+        }
+    }
+
+    useEffect(() => {
+        if (!isEditingDocument && !isEditingVideo) {
+            setSelectedLessonType(content_type)
+        }
+    }, [isEditingDocument, isEditingVideo, content_type])
+
     return (
         <>
             <div
-                className="flex items-center justify-between gap-4 rounded-lg bg-white px-4 py-2.5"
+                className="flex items-center justify-between gap-1 rounded-lg bg-white px-4 py-2.5"
                 ref={setNodeRef}
                 style={dndKitColumnStyles}
                 {...attributes}
@@ -63,13 +85,27 @@ const LessonItem = ({ lesson }: LessonItemProps) => {
                             Bài giảng: <strong>{title}</strong>
                         </h4>
                     </div>
-                    <div className="block gap-2">
+                    <div className="flex items-center gap-2">
+                        <Select value={selectedLessonType} onValueChange={handleChangeSelectedLessonType}>
+                            <SelectTrigger className="flex h-[36px] w-[36px] items-center justify-center gap-0 border-none">
+                                <Button size="icon" variant="ghost">
+                                    <FaExchangeAlt className="size-4" />
+                                </Button>
+                            </SelectTrigger>
+                            <SelectContent align="end" className="p-1">
+                                <SelectGroup>
+                                    <SelectItem value="document">Tài liệu</SelectItem>
+                                    <SelectItem value="video">Video bài giảng</SelectItem>
+                                </SelectGroup>
+                            </SelectContent>
+                        </Select>
+
                         <Button
                             size="icon"
                             variant="ghost"
                             onClick={() => {
-                                if (content_type === 'document') setIsEditLesson(!isEditLessonDoc)
-                                if (content_type === 'video') setIsEditLessonVideo(!isEditLessonVideo)
+                                if (content_type === 'document') setIsEditingDocument(!isEditingDocument)
+                                if (content_type === 'video') setIsEditingVideo(!isEditingVideo)
                                 setLessonId(id)
                             }}
                         >
@@ -91,14 +127,34 @@ const LessonItem = ({ lesson }: LessonItemProps) => {
             </div>
 
             {/* Handle edit lesson doc */}
-            {isEditLessonDoc && <LessonDocument lessonId={lessonId} courseId={id} setIsEditLesson={setIsEditLesson} />}
-
-            {/* Handle edit lesson video */}
-            {isEditLessonVideo && (
-                <LessonVideo lessonId={lessonId} courseId={id} setIsEditLesson={setIsEditLessonVideo} />
+            {isEditingDocument && !isSelectingLessonType && (
+                <LessonDocument lessonId={lessonId} courseId={id} setIsEditLesson={setIsEditingDocument} />
             )}
 
-            {/* Confirm dialog */}
+            {/* Handle edit lesson video */}
+            {isEditingVideo && !isSelectingLessonType && (
+                <LessonVideo lessonId={lessonId} courseId={id} setIsEditLesson={setIsEditingVideo} />
+            )}
+
+            {selectedLessonType === 'document' && isSelectingLessonType && (
+                <LessonDocument
+                    lessonId={id}
+                    courseId={id}
+                    setIsSelectingLessonType={setIsSelectingLessonType}
+                    isSelectingLessonType={isSelectingLessonType}
+                />
+            )}
+
+            {selectedLessonType === 'video' && isSelectingLessonType && (
+                <LessonVideo
+                    lessonId={id}
+                    courseId={id}
+                    setIsSelectingLessonType={setIsSelectingLessonType}
+                    isSelectingLessonType={isSelectingLessonType}
+                />
+            )}
+
+            {/* Confirm dialog for delete */}
             <ConfirmDialog
                 isPending={isPending}
                 confirmDialog={isOpenDialog}

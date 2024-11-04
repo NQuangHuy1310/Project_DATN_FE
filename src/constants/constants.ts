@@ -2,6 +2,7 @@
 import { BiBook } from 'react-icons/bi'
 import { BsPlayBtn } from 'react-icons/bs'
 import { LuUserCircle } from 'react-icons/lu'
+import { PiStudentBold } from 'react-icons/pi'
 import { IoWalletSharp } from 'react-icons/io5'
 import { PiArticleMediumLight } from 'react-icons/pi'
 import { MdSecurity, MdArticle } from 'react-icons/md'
@@ -92,7 +93,12 @@ export const sidebarListInstructor = [
     {
         title: 'Hiệu xuất',
         icon: FaChartSimple,
-        path: routes.instructorPerformance
+        path: routes.instructorPerformanceOverview
+    },
+    {
+        title: 'Quản lý ví',
+        icon: IoWalletSharp,
+        path: routes.instructorWallet
     }
 ]
 
@@ -139,6 +145,19 @@ export const instructorAside = [
         title: 'Thông báo',
         icon: FaRegBell,
         path: routes.instructorAnnouncements
+    }
+]
+
+export const instructorPerformanceAside = [
+    {
+        title: 'Tổng quan',
+        icon: HiOutlineTemplate,
+        path: routes.instructorPerformanceOverview
+    },
+    {
+        title: 'Học viên',
+        icon: PiStudentBold,
+        path: routes.instructorPerformanceStudent
     }
 ]
 

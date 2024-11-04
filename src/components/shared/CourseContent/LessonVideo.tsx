@@ -1,28 +1,43 @@
 import { toast } from 'sonner'
 import ReactQuill from 'react-quill'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
+import { ChangeEvent, Dispatch, RefObject, SetStateAction, useEffect, useRef, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { MessageErrors } from '@/constants'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import placeholder from '@/assets/placeholder.jpg'
-import { ILessonVideoData } from '@/types/instructor'
+import { IChangeLessonTypeData, ILessonVideoData } from '@/types/instructor'
 import { getImagesUrl, readFileAsDataUrl, validateFileSize } from '@/lib'
 import { lessonVideo, lessonVideoSchema } from '@/validations'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { useCreateLessonVideo, useGetLessonDetail, useUpdateLessonVideo } from '@/app/hooks/instructors'
+import {
+    useChangeLessonType,
+    useCreateLessonVideo,
+    useGetLessonDetail,
+    useUpdateLessonVideo
+} from '@/app/hooks/instructors'
 
 interface LessonVideoProps {
     moduleId?: number
     courseId?: number
     lessonId?: number
+    isSelectingLessonType?: boolean
     setIsEditLesson?: Dispatch<SetStateAction<boolean>>
     handleHiddenLesson?: Dispatch<SetStateAction<boolean>>
+    setIsSelectingLessonType?: Dispatch<SetStateAction<boolean>>
 }
 
-const LessonVideo = ({ moduleId, handleHiddenLesson, lessonId, setIsEditLesson, courseId }: LessonVideoProps) => {
+const LessonVideo = ({
+    moduleId,
+    courseId,
+    lessonId,
+    setIsEditLesson,
+    handleHiddenLesson,
+    isSelectingLessonType,
+    setIsSelectingLessonType
+}: LessonVideoProps) => {
     const {
         reset,
         register,
@@ -37,21 +52,29 @@ const LessonVideo = ({ moduleId, handleHiddenLesson, lessonId, setIsEditLesson, 
     const { data: lessonData } = useGetLessonDetail(lessonId ? lessonId : 0)
     const { mutateAsync: createLessonVideo } = useCreateLessonVideo()
     const { mutateAsync: updateLessonVideo } = useUpdateLessonVideo()
+    const { mutateAsync: changeTypeLesson } = useChangeLessonType()
 
     const [selectedVideoType, setSelectedVideoType] = useState<string>('')
     const [courseVideoFile, setCourseVideoFile] = useState<File | undefined>(undefined)
     const [courseVideoPath, setCourseVideoPath] = useState<string | undefined>(undefined)
     const [videoUrl, setVideoUrl] = useState<string | undefined>(undefined)
+    const [videoDuration, setVideoDuration] = useState<number | null>(null)
     const courseVideo = useRef<HTMLInputElement | null>(null)
     const quillRef = useRef<ReactQuill>(null)
 
-    const handleUploadVideo = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleUploadVideoLesson = async (e: ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]
         if (file && validateFileSize(file, 'video')) {
             try {
                 setCourseVideoFile(file)
                 const videoUrl = await readFileAsDataUrl(file)
                 setCourseVideoPath(videoUrl)
+
+                const videoElement = document.createElement('video')
+                videoElement.src = videoUrl
+                videoElement.onloadedmetadata = () => {
+                    setVideoDuration(Math.floor(videoElement.duration))
+                }
             } catch (error) {
                 const errorMessage = error instanceof Error ? error.message : MessageErrors.uploadFile
                 toast.error(errorMessage)
@@ -59,7 +82,7 @@ const LessonVideo = ({ moduleId, handleHiddenLesson, lessonId, setIsEditLesson, 
         }
     }
 
-    const handleButtonClick = (inputRef: React.RefObject<HTMLInputElement>) => {
+    const handleButtonClick = (inputRef: RefObject<HTMLInputElement>) => {
         if (inputRef.current) {
             inputRef.current.click()
         }
@@ -88,13 +111,20 @@ const LessonVideo = ({ moduleId, handleHiddenLesson, lessonId, setIsEditLesson, 
         if (courseVideoFile) {
             payload.check = 'upload'
             payload.video = courseVideoFile
-            payload.duration = 0
+            payload.duration = videoDuration!
         }
 
-        if (lessonData) {
+        if (lessonData && !isSelectingLessonType) {
             payload._method = 'PUT'
             await updateLessonVideo([courseId!, payload])
             setIsEditLesson?.(false)
+        } else if (isSelectingLessonType) {
+            const updateLessonType: IChangeLessonTypeData = {
+                new_type: 'video',
+                ...payload
+            }
+            await changeTypeLesson([lessonId!, updateLessonType])
+            setIsSelectingLessonType?.(false)
         } else {
             await createLessonVideo([moduleId!, payload])
             handleHiddenLesson?.(false)
@@ -105,6 +135,7 @@ const LessonVideo = ({ moduleId, handleHiddenLesson, lessonId, setIsEditLesson, 
     const handleClose = () => {
         if (lessonData) setIsEditLesson?.(false)
         else handleHiddenLesson?.(false)
+        setIsSelectingLessonType?.(false)
     }
 
     useEffect(() => {
@@ -197,7 +228,7 @@ const LessonVideo = ({ moduleId, handleHiddenLesson, lessonId, setIsEditLesson, 
                                                 accept="video/*"
                                                 ref={courseVideo}
                                                 placeholder="Tải lên hình ảnh"
-                                                onChange={(e) => handleUploadVideo(e)}
+                                                onChange={(e) => handleUploadVideoLesson(e)}
                                                 className="flex h-full !w-[500px] cursor-pointer items-start justify-center rounded-e-none"
                                             />
                                             <Button

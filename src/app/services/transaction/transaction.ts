@@ -1,23 +1,15 @@
-import axiosClient from '@/configs/axiosClient'
-import { userUri } from '../Uri/accounts'
-import { IHistory, ITransaction } from '@/types/transaction'
-import axios from 'axios'
-import { transactionUri } from '../Uri/transaction'
+import axiosClient from '@/configs/axiosClient.ts'
+import { transactionInstructorUri } from '@/app/services/Uri/transaction'
+import { IRequestWithDrawData, ITeacherBalance } from '@/types/transaction.ts'
 
-export const transactionsApi = {
-    getBalance: async (userId: number): Promise<any> => {
-        return axiosClient.get(userUri.GET_BALANCE(userId))
+export const transactionApi = {
+    getBalance: async (userId: number): Promise<ITeacherBalance> => {
+        return axiosClient.get(transactionInstructorUri.GET_BALANCE(userId))
     },
-
-    addPayment: async (userId: number, paymentData: ITransaction): Promise<any> => {
-        const token = localStorage.getItem('access_token')
-        return axios.post(`http://localhost:8000/api/transactions/payment/${userId}`, paymentData, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
+    requestWithdraw: async (userId: number, data: IRequestWithDrawData): Promise<any> => {
+        return axiosClient.post(transactionInstructorUri.REQUEST_WITHDRAW(userId), data)
     },
-    getHistory: async (userId: number): Promise<IHistory[]> => {
-        return axiosClient.get(transactionUri.GET_HISTORY(userId))
+    getHistoryWithDraw: async (userId: number): Promise<any> => {
+        return axiosClient.get(transactionInstructorUri.HISTORY_WITHDRAW(userId))
     }
 }

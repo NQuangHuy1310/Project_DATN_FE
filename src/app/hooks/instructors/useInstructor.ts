@@ -3,6 +3,7 @@ import { toast } from 'sonner'
 
 import { instructorApi } from '@/app/services/instructors'
 import {
+    IChangeLessonTypeData,
     ICourses,
     ICreateCourseData,
     ILessonDetail,
@@ -332,6 +333,21 @@ export const useUpdatePositionModule = () => {
         },
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: ['modules'] })
+        }
+    })
+}
+
+export const useChangeLessonType = () => {
+    const queryClient = useQueryClient()
+
+    return useMutation<any, Error, [number, IChangeLessonTypeData]>({
+        mutationFn: async ([lessonId, lessonData]) => {
+            return instructorApi.changeLessonType(lessonId, lessonData)
+        },
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['modules'] })
+            await queryClient.invalidateQueries({ queryKey: ['lesson'] })
+            toast.success('Bạn đã thay đổi loại bài học thành công!.')
         }
     })
 }

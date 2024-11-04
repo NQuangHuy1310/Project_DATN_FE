@@ -164,6 +164,15 @@ export interface IUpdatePositionLessonData {
     _method?: string
 }
 
+export interface IChangeLessonType {
+    new_type: 'video' | 'upload' | 'document'
+    check?: 'upload' | 'video'
+    video_youtube_id?: string
+    duration?: string
+    video?: File
+    content?: string
+}
+
 export interface IUpdateModulePosition {
     id: number
     position: number
@@ -198,12 +207,12 @@ export interface ITargetCourse {
 export interface IOverviewCourseData {
     name: string
     description: string | null
-    thumbnail?: File
-    trailer?: File
+    thumbnail?: File | string
+    trailer?: File | string
     level: string
     id_category: string
-    price?: string
-    price_sale?: string
+    price?: number
+    price_sale?: number
     is_active?: string
     tags?: string[]
     _method?: 'PUT'
@@ -254,4 +263,14 @@ export interface IQuestionData {
     question: QuestionData
     options: QuestionOptionData[]
     _method?: string
+}
+
+export interface IChangeLessonTypeData {
+    new_type: 'document' | 'video'
+    title: string
+    check?: 'url' | 'upload'
+    duration?: number
+    video?: File
+    content?: string
+    description?: string
 }

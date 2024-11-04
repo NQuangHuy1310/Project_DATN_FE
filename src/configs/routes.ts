@@ -47,8 +47,10 @@ const routes = {
 
     //Rating
     rating: '/rating',
+
     // Instructor dashboard
     instructorDashboard: '/instructor/dashboard',
+    instructorNotifications: '/instructor/notifications',
 
     // Course instructor routes
     instructorCourses: '/instructor/courses',

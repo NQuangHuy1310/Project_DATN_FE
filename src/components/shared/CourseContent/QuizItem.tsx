@@ -5,7 +5,7 @@ import { FaRegCircleQuestion } from 'react-icons/fa6'
 import { ILessonQuiz } from '@/types/instructor'
 import { Button } from '@/components/ui/button'
 import ConfirmDialog from '@/components/shared/ConfirmDialog'
-import { useDeleteLessonQuiz } from '@/app/hooks/instructors'
+import { useDeleteLessonQuiz, useGetLessonQuiz } from '@/app/hooks/instructors'
 import DialogAddQuestion from '@/components/shared/CourseContent/Dialog/DialogAddQuestion'
 import LessonQuizzes from '@/components/shared/CourseContent/LessonQuizzes'
 
@@ -16,10 +16,12 @@ interface QuizItemProps {
 
 const QuizItem = ({ lesson, moduleId }: QuizItemProps) => {
     const { title } = lesson
+    const { data } = useGetLessonQuiz(moduleId)
+    const { mutateAsync: deleteLessonQuiz, isPending } = useDeleteLessonQuiz()
+
     const [isOpenDialog, setIsOpenDialog] = useState(false)
     const [isOpenAddDialog, setIsOpenAddDialog] = useState(false)
     const [isEditQuiz, setIsEditQuiz] = useState(false)
-    const { mutateAsync: deleteLessonQuiz, isPending } = useDeleteLessonQuiz()
 
     const handleDeleteLesson = async () => {
         await deleteLessonQuiz(lesson.id)
@@ -32,9 +34,15 @@ const QuizItem = ({ lesson, moduleId }: QuizItemProps) => {
                 <div className="flex w-full items-start justify-between gap-4">
                     <div className="flex h-[36px] items-center justify-start gap-2">
                         <FaRegCircleQuestion className="size-5 text-primary" />
-                        <h4 className="text-base font-medium">
-                            Bài tập: <strong>{title}</strong>
-                        </h4>
+                        <div className="flex items-center gap-2 text-base font-medium">
+                            <h4>
+                                Bài tập: <strong>{title}</strong>
+                            </h4>
+                            {'-'}
+                            <h4>
+                                Số lượng câu hỏi: <strong>{data?.quiz?.questions.length}</strong>
+                            </h4>
+                        </div>
                     </div>
                     <div className="flex items-center gap-2">
                         <Button size="sm" variant="outline" onClick={() => setIsOpenAddDialog(true)}>

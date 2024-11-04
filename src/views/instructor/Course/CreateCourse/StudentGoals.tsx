@@ -11,7 +11,7 @@ import Loading from '@/components/Common/Loading/Loading'
 import { toast } from 'sonner'
 import routes from '@/configs/routes.ts'
 
-const StudentGoals = memo(({ setIsDataComplete }: { setIsDataComplete: () => void }) => {
+const StudentGoals = memo(() => {
     const { id } = useParams()
     const navigate = useNavigate()
     const { mutateAsync: createTargetCourse, isPending } = useTargetCourse()
@@ -80,7 +80,6 @@ const StudentGoals = memo(({ setIsDataComplete }: { setIsDataComplete: () => voi
         }
 
         await createTargetCourse([id!, result])
-        setIsDataComplete()
         return result
     }
 
@@ -127,7 +126,7 @@ const StudentGoals = memo(({ setIsDataComplete }: { setIsDataComplete: () => voi
         } else {
             handleReset()
         }
-    }, [data, setIsDataComplete])
+    }, [data])
 
     useEffect(() => {
         if (error) {

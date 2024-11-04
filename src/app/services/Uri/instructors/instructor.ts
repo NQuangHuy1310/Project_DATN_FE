@@ -6,6 +6,7 @@ export const instructorUri = {
     GET_COURSES: 'teacher/course',
     SUBMIT_COURSE: (courseID: string) => `${INSTRUCTOR_URL}${courseID}/submit`,
     DISABLE_COURSE: (courseID: string) => `${INSTRUCTOR_URL}${courseID}/disable-course`,
+    MANAGE_MENU: (courseID: string) => `${INSTRUCTOR_URL}${courseID}/manage-menu`,
     ENABLE_COURSE: (courseID: string) => `${INSTRUCTOR_URL}${courseID}/enable-course`,
     DELETE_COURSE: (courseID: string) => `${INSTRUCTOR_URL}${courseID}/delete-course`,
     TARGET_COURSE: (courseId: string) => `${INSTRUCTOR_URL}${courseId}/target-student`,

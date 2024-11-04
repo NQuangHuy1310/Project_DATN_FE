@@ -8,11 +8,11 @@ import { getImagesUrl } from '@/lib'
 import { ICourseItem } from '@/types/instructor'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import ConfirmDialog from '@/components/shared/ConfirmDialog'
-import { usedeleteCourse, useDisableCourse, useEnableCourse } from '@/app/hooks/instructors'
+import { useDeleteCourse, useDisableCourse, useEnableCourse } from '@/app/hooks/instructors'
 
 const CourseCard = ({ name, id, status, thumbnail, submited_at: submittedAt, category, is_active }: ICourseItem) => {
     const navigate = useNavigate()
-    const { mutateAsync: deleteCourse, isPending } = usedeleteCourse()
+    const { mutateAsync: deleteCourse, isPending } = useDeleteCourse()
     const { mutateAsync: disableCourse } = useDisableCourse()
     const { mutateAsync: enableCourse } = useEnableCourse()
     const [isShowConfirm, setIsShowConfirm] = useState<boolean>(false)

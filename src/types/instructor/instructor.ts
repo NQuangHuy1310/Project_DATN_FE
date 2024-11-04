@@ -11,6 +11,12 @@ export interface ICreateCourse {
     category: ICourseCategory
 }
 
+export interface IManageMenuCourse {
+    course_target: boolean
+    course_curriculum: boolean
+    course_overview: boolean
+}
+
 export interface ICourseItem {
     id: number
     id_user: number

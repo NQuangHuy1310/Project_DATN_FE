@@ -17,7 +17,7 @@ import { useGetOverviewCourse, useOverviewCourse } from '@/app/hooks/instructors
 import { IOverviewCourseData } from '@/types/instructor'
 import Loading from '@/components/Common/Loading/Loading'
 
-const CourseOverview = memo(({ setIsDataComplete }: { setIsDataComplete: () => void }) => {
+const CourseOverview = memo(() => {
     const {
         register,
         handleSubmit,
@@ -113,7 +113,6 @@ const CourseOverview = memo(({ setIsDataComplete }: { setIsDataComplete: () => v
         }
 
         await createOverviewCourse([id!, payload])
-        setIsDataComplete()
     }
 
     useEffect(() => {

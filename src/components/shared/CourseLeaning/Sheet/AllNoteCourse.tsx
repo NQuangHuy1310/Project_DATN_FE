@@ -49,8 +49,8 @@ const AllNoteCourse = ({
     }
 
     const handleLessonClick = useCallback(
-        (lessonId: number) => {
-            setSearchParams({ id: lessonId.toString() })
+        (lessonId: number, duration: number) => {
+            setSearchParams({ id: lessonId.toString(), time: duration.toString() })
             isOpen(false)
         },
         [setSearchParams, isOpen]
@@ -91,7 +91,7 @@ const AllNoteCourse = ({
                             {useFormatTime(item.duration)}
                         </span>
                         <h2
-                            onClick={() => handleLessonClick(item.id_lesson)}
+                            onClick={() => handleLessonClick(item.id_lesson, item.duration)}
                             className="cursor-pointer text-base font-medium text-primary"
                         >
                             {item.lesson_title}

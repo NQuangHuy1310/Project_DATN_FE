@@ -25,7 +25,6 @@ import MyCourse from '@/views/user/Courses/MyCourse'
 import CourseExplore from '@/views/user/Courses/CourseExplore'
 import CourseMyCourses from '@/views/user/Courses/CourseSearch'
 import CourseDetail from '@/views/user/Courses/CourseDetail'
-import CourseLearning from '@/views/user/Courses/CourseLeaning'
 
 import UserDashboard from '@/views/user/Dashboard'
 import Instructor from '@/views/user/Instructors'
@@ -53,6 +52,7 @@ import PostDetail from '@/views/user/Posts/PostDetail'
 import CourseDetailNoLogin from '@/views/user/Courses/CourseDetailNoLogin/CourseDetailNoLogin'
 import Transaction from '@/views/user/wallet/Transaction'
 import PerformanceOverview from '@/views/instructor/Performance/PerformanceOverview'
+import CourseLearning from '@/views/user/Courses/CourseLearning'
 
 // Routes không cần đăng nhập
 export const publicRoutes = [

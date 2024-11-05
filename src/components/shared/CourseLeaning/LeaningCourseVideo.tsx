@@ -21,7 +21,7 @@ const LeaningCourseVideo = ({
 }: {
     toggleTab: boolean
     dataLesson: ILessonLeaning
-    durationNote?: string
+    durationNote?: number
     setCheckButton: Dispatch<SetStateAction<boolean>>
     setCheckNote: Dispatch<SetStateAction<boolean>>
     onPauseVideo: (pause: () => void) => void

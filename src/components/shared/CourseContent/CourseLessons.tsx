@@ -1,39 +1,34 @@
 import { FiPlus } from 'react-icons/fi'
 import { horizontalListSortingStrategy, SortableContext } from '@dnd-kit/sortable'
 import { closestCorners, DndContext } from '@dnd-kit/core'
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { ILesson, ILessonQuiz } from '@/types/instructor'
 import { Button } from '@/components/ui/button.tsx'
 import QuizItem from '@/components/shared/CourseContent/QuizItem.tsx'
 import LessonItem from '@/components/shared/CourseContent/LessonItem.tsx'
 import LessonOptions from '@/components/shared/CourseContent/LessonOptions.tsx'
-import { useDeleteModule, useUpdatePositionLesson } from '@/app/hooks/instructors'
-import ConfirmDialog from '@/components/shared/ConfirmDialog'
+import { useUpdatePositionLesson } from '@/app/hooks/instructors'
+import { checkEditPermission } from '@/lib'
 
 interface CourseModuleProps {
     id: number
+    canEdit: boolean
     isShowContent: boolean
-    confirmDialog: boolean
-    setConfirmDialog: Dispatch<SetStateAction<boolean>>
     lessons: ILesson[]
     quiz: ILessonQuiz
 }
 
-const CourseLessons = ({ id, lessons, quiz, isShowContent, confirmDialog, setConfirmDialog }: CourseModuleProps) => {
-    const { mutateAsync: deleteModule, isPending } = useDeleteModule()
+const CourseLessons = ({ id, lessons, quiz, isShowContent, canEdit }: CourseModuleProps) => {
     const { mutateAsync: updatePosition } = useUpdatePositionLesson()
 
     const [isAddNew, setIsAddNew] = useState(false)
     const [originalLessonData, setOriginalLessonData] = useState<ILesson[]>(lessons)
     const [lessonData, setLessonData] = useState<ILesson[]>(lessons)
 
-    const handleDeleteModule = async () => {
-        await deleteModule(id.toString())
-        // setConfirmDialog(false)
-    }
-
     const handleDragEnd = async (event: any) => {
+        if (checkEditPermission(canEdit!)) return
+
         const { active, over } = event
         const moduleId: number = active.data.current.id_module
 
@@ -82,10 +77,10 @@ const CourseLessons = ({ id, lessons, quiz, isShowContent, confirmDialog, setCon
                             lessonData &&
                             lessonData.length > 0 &&
                             lessonData.map((item) => {
-                                return <LessonItem key={item.id} lesson={item} moduleId={id} />
+                                return <LessonItem key={item.id} lesson={item} moduleId={id} canEdit={canEdit} />
                             })}
 
-                        {isShowContent && quiz && <QuizItem lesson={quiz} moduleId={id} />}
+                        {isShowContent && quiz && <QuizItem lesson={quiz} moduleId={id} canEdit={canEdit} />}
 
                         {/* Hiển thị LessonOptions nếu đang thêm mới */}
                         {isAddNew && <LessonOptions handleClose={setIsAddNew} moduleId={id} />}
@@ -99,6 +94,7 @@ const CourseLessons = ({ id, lessons, quiz, isShowContent, confirmDialog, setCon
                                     onClick={() => {
                                         setIsAddNew(true)
                                     }}
+                                    disabled={!canEdit}
                                 >
                                     <FiPlus />
                                     Mục trong chương trình
@@ -108,16 +104,6 @@ const CourseLessons = ({ id, lessons, quiz, isShowContent, confirmDialog, setCon
                     </div>
                 </SortableContext>
             </DndContext>
-
-            {/* Confirm dialog */}
-            <ConfirmDialog
-                isPending={isPending}
-                confirmDialog={confirmDialog}
-                setConfirmDialog={setConfirmDialog}
-                handleDelete={handleDeleteModule}
-                title="Xoá chương trong khoá học"
-                description="Bạn sắp xóa một chương trình giảng dạy. Bạn có chắc chắn muốn tiếp tục không?"
-            />
         </>
     )
 }

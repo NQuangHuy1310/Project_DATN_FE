@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import placeholder from '@/assets/placeholder.jpg'
 import { IChangeLessonTypeData, ILessonVideoData } from '@/types/instructor'
-import { getImagesUrl, readFileAsDataUrl, validateFileSize } from '@/lib'
+import { checkEditPermission, getImagesUrl, readFileAsDataUrl, validateFileSize } from '@/lib'
 import { lessonVideo, lessonVideoSchema } from '@/validations'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import {
@@ -23,6 +23,7 @@ interface LessonVideoProps {
     moduleId?: number
     courseId?: number
     lessonId?: number
+    canEdit?: boolean
     isSelectingLessonType?: boolean
     setIsEditLesson?: Dispatch<SetStateAction<boolean>>
     handleHiddenLesson?: Dispatch<SetStateAction<boolean>>
@@ -30,6 +31,7 @@ interface LessonVideoProps {
 }
 
 const LessonVideo = ({
+    canEdit,
     moduleId,
     courseId,
     lessonId,
@@ -93,6 +95,8 @@ const LessonVideo = ({
     }
 
     const handleSubmitForm: SubmitHandler<lessonVideo> = async (data) => {
+        if (checkEditPermission(canEdit!)) return
+
         if (!videoUrl && !courseVideoFile) {
             toast.error('Vui lòng tải lên video dạng file, hoặc link youtube!')
             return

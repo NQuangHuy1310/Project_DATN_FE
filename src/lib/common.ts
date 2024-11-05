@@ -3,6 +3,7 @@ import { MessageErrors } from '@/constants'
 import { placeholders } from '@/constants/placeholders'
 import { differenceInDays, differenceInHours, differenceInMinutes } from 'date-fns'
 import { toast } from 'sonner'
+import { ICourseStatus } from '@/types/instructor'
 
 const maxImageSizeInMB = 2
 const maxImageSizeInBytes = maxImageSizeInMB * 1024 * 1024
@@ -121,4 +122,16 @@ export const formatPrice = (price: any) => (price ? parseFloat(price).toFixed(0)
 export const convertToVnd = (value: number) => {
     const convertedValue = value * 1000
     return convertedValue.toLocaleString('vi-VN') + ' VNĐ'
+}
+
+export const canEditCourse = (status: ICourseStatus): boolean => {
+    return status === 'draft' || status === 'rejected'
+}
+
+export const checkEditPermission = (canEdit: boolean) => {
+    if (!canEdit) {
+        toast.error(MessageErrors.canEdit, { description: MessageErrors.descriptionCanEdit })
+        return true
+    }
+    return false
 }

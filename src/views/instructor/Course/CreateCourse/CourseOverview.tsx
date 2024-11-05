@@ -9,15 +9,22 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import placeholder from '@/assets/placeholder.jpg'
 import { CourseLevel, MessageErrors } from '@/constants'
-import { formatPrice, getImagesUrl, readFileAsDataUrl, validateFileSize } from '@/lib'
+import {
+    canEditCourse,
+    checkEditPermission,
+    formatPrice,
+    getImagesUrl,
+    readFileAsDataUrl,
+    validateFileSize
+} from '@/lib'
 import { courseOverview, courseOverviewSchema } from '@/validations'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useGetCategories } from '@/app/hooks/categories'
 import { useGetOverviewCourse, useOverviewCourse } from '@/app/hooks/instructors/useInstructor'
-import { IOverviewCourseData } from '@/types/instructor'
+import { ICourseStatus, IOverviewCourseData } from '@/types/instructor'
 import Loading from '@/components/Common/Loading/Loading'
 
-const CourseOverview = memo(() => {
+const CourseOverview = memo(({ status }: { status: ICourseStatus }) => {
     const {
         register,
         handleSubmit,
@@ -91,6 +98,9 @@ const CourseOverview = memo(() => {
             _method: 'PUT'
         }
 
+        const canEdit = canEditCourse(status)
+        if (checkEditPermission(canEdit!)) return
+
         if (courseVideoPath && courseImagePath && !courseImageFile && !courseVideoFile) {
             return await createOverviewCourse([id!, payload])
         }
@@ -98,21 +108,27 @@ const CourseOverview = memo(() => {
         if (courseImageFile) {
             if (validateFileSize(courseImageFile, 'image')) {
                 payload.thumbnail = courseImageFile
+            } else {
+                toast.warning('Kích thước hình ảnh không hợp lệ')
+                return
             }
         }
 
         if (courseVideoFile) {
             if (validateFileSize(courseVideoFile, 'video')) {
                 payload.trailer = courseVideoFile
+            } else {
+                toast.warning('Kích thước video không hợp lệ')
+                return
             }
         }
 
-        if (!courseVideoFile || !courseImageFile || !courseImagePath || !courseVideoPath) {
+        if (!courseVideoFile || !courseImageFile || !courseVideoPath || !courseImagePath) {
             toast.warning('Bạn cần tải lên hình ảnh và video để thêm vào khoá học')
             return
         }
 
-        await createOverviewCourse([id!, payload])
+        return await createOverviewCourse([id!, payload])
     }
 
     useEffect(() => {
@@ -134,16 +150,16 @@ const CourseOverview = memo(() => {
         }
     }, [courseData, setValue])
 
-    if (loadingOverviewCourse) {
-        return <Loading />
-    }
+    const isDisabled = status === 'pending' || status === 'approved'
+
+    if (loadingOverviewCourse) return <Loading />
 
     return (
         <form onSubmit={handleSubmit(handleSubmitForm)} className="rounded-lg p-5">
             <div className="flex items-center justify-between border-b-2 border-gray-300 pb-5">
                 <h4 className="text-2xl font-semibold capitalize">Tổng quan khóa học</h4>
                 <div className="flex gap-3">
-                    <Button size="default" variant="destructive" disabled={isPending}>
+                    <Button size="default" variant="destructive" disabled={isPending || isDisabled}>
                         Nhập lại
                     </Button>
                     <Button type="submit" size="default" disabled={isPending}>
@@ -166,9 +182,10 @@ const CourseOverview = memo(() => {
                         autoFocus
                         type="text"
                         maxLength={60}
-                        placeholder="Chèn tiêu đề khoá học"
+                        readOnly={isDisabled}
                         className="max-w-[80%]"
                         {...register('name')}
+                        placeholder="Chèn tiêu đề khoá học"
                     />{' '}
                     {errors.name ? (
                         <div className="text-sm text-red-500">{errors.name.message}</div>
@@ -185,9 +202,10 @@ const CourseOverview = memo(() => {
                     <h5 className="text-base font-bold">Mô tả khoá học</h5>
                     <ReactQuill
                         ref={quillRef}
-                        value={getValues('description')}
+                        readOnly={isDisabled}
                         onChange={handleChangeContent}
                         placeholder="Chèn mô tả khoá học"
+                        value={getValues('description')}
                         style={{ height: '100%', width: '80%' }}
                     />
                     {errors.description ? (
@@ -251,10 +269,10 @@ const CourseOverview = memo(() => {
 
                         <div className="flex flex-col gap-1">
                             <Select
-                                onValueChange={(value) => handleChangeSelect(value, 'is_active')}
-                                value={getValues('is_active')}
-                                name="is_active"
                                 defaultValue="1"
+                                name="is_active"
+                                value={getValues('is_active')}
+                                onValueChange={(value) => handleChangeSelect(value, 'is_active')}
                             >
                                 <SelectTrigger className="flex w-[290px] items-center justify-between">
                                     <SelectValue placeholder="-- Trạng thái --" />
@@ -277,7 +295,13 @@ const CourseOverview = memo(() => {
                     <h5 className="text-base font-bold">Giá khoá học</h5>
                     <div className="flex items-center gap-5">
                         <div className="flex h-[60px] w-[350px] flex-col gap-1">
-                            <Input placeholder="Giá khoá học" className="h-full" {...register('price')} type="number" />
+                            <Input
+                                placeholder="Giá khoá học"
+                                className="h-full"
+                                {...register('price')}
+                                type="number"
+                                readOnly={isDisabled}
+                            />
                             {errors.price ? (
                                 <div className="text-sm text-red-500">{errors.price.message}</div>
                             ) : (
@@ -287,7 +311,12 @@ const CourseOverview = memo(() => {
                             )}
                         </div>
                         <div className="flex h-[60px] w-[350px] flex-col gap-1">
-                            <Input placeholder="Giá khuyến mãi" className="h-full" {...register('price_sale')} />
+                            <Input
+                                placeholder="Giá khuyến mãi"
+                                className="h-full"
+                                {...register('price_sale')}
+                                readOnly={isDisabled}
+                            />
 
                             <span className="text-xs text-darkGrey">Giá khuyến mãi của khoá học</span>
                         </div>
@@ -314,17 +343,17 @@ const CourseOverview = memo(() => {
                             <div className="flex h-[44px] items-center">
                                 <Input
                                     type="file"
-                                    className="flex h-full cursor-pointer items-start justify-center rounded-e-none"
-                                    placeholder="Tải lên hình ảnh"
                                     ref={courseImage}
+                                    placeholder="Tải lên hình ảnh"
                                     accept="image/jpeg, image/png, image/gif"
                                     onChange={(e) => handleUploadImage(e)}
+                                    className="flex h-full cursor-pointer items-start justify-center rounded-e-none"
                                 />
                                 <Button
+                                    type="button"
                                     variant="outline"
                                     className="h-full rounded-s-none"
                                     onClick={() => handleButtonClick(courseImage)}
-                                    type="button"
                                 >
                                     Tải file lên
                                 </Button>
@@ -355,6 +384,7 @@ const CourseOverview = memo(() => {
                                     type="file"
                                     accept="video/*"
                                     ref={courseVideo}
+                                    readOnly={isDisabled}
                                     placeholder="Tải lên hình ảnh"
                                     onChange={(e) => handleUploadVideo(e)}
                                     className="flex h-full cursor-pointer items-start justify-center rounded-e-none"

@@ -6,6 +6,8 @@ import { Button } from '@/components/ui/button'
 import { useGetModule } from '@/app/hooks/instructors'
 import Loading from '@/components/Common/Loading/Loading'
 import CourseContent from '@/components/shared/CourseContent'
+import { ICourseStatus } from '@/types/instructor'
+import { canEditCourse } from '@/lib'
 
 export interface selectedModule {
     name: string
@@ -13,15 +15,14 @@ export interface selectedModule {
     id: string
 }
 
-const Curriculum = memo(() => {
+const Curriculum = memo(({ status }: { status: ICourseStatus }) => {
     const { id } = useParams()
     const { data: moduleData, isLoading } = useGetModule(id!)
     const [openDialog, setOpenDialog] = useState(false)
     const [selectedItem, setSelectedItem] = useState<selectedModule>()
+    const canEdit = canEditCourse(status)
 
-    if (isLoading) {
-        return <Loading />
-    }
+    if (isLoading) return <Loading />
 
     return (
         <div className="flex flex-col gap-5 rounded-lg p-5">
@@ -36,12 +37,14 @@ const Curriculum = memo(() => {
                     setOpenDialog={setOpenDialog}
                     selectedItem={selectedItem!}
                     setSelectedItem={setSelectedItem}
+                    canEdit={canEdit}
                 />
 
                 <div>
                     <Button
-                        className="flex items-center gap-1 text-muted-foreground"
+                        disabled={!canEdit}
                         variant="outline"
+                        className="flex items-center gap-1 text-muted-foreground"
                         onClick={() => {
                             setOpenDialog(true)
                             setSelectedItem(undefined)

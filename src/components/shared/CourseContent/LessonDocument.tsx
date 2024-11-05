@@ -13,11 +13,13 @@ import {
     useUpdateLessonDoc
 } from '@/app/hooks/instructors'
 import { IChangeLessonTypeData } from '@/types/instructor'
+import { checkEditPermission } from '@/lib'
 
 interface LessonDocumentProps {
     courseId?: number
     moduleId?: number
     lessonId?: number
+    canEdit?: boolean
     isSelectingLessonType?: boolean
     handleHiddenLesson?: Dispatch<SetStateAction<boolean>>
     setIsEditLesson?: Dispatch<SetStateAction<boolean>>
@@ -28,6 +30,7 @@ const LessonDocument = ({
     moduleId,
     courseId,
     lessonId,
+    canEdit,
     setIsEditLesson,
     handleHiddenLesson,
     isSelectingLessonType,
@@ -55,6 +58,8 @@ const LessonDocument = ({
     }
 
     const handleSubmitForm: SubmitHandler<lessonDoc> = async (data) => {
+        if (checkEditPermission(canEdit!)) return
+
         if (lessonData && !isSelectingLessonType) {
             const payload = {
                 ...data,

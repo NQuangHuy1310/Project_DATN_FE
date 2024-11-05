@@ -7,16 +7,19 @@ import { closestCorners, DndContext } from '@dnd-kit/core'
 import { horizontalListSortingStrategy, SortableContext } from '@dnd-kit/sortable'
 import CourseModules from '@/components/shared/CourseContent/CourseModules.tsx'
 import { useUpdatePositionModule } from '@/app/hooks/instructors'
+import { checkEditPermission } from '@/lib'
 
 interface CourseContentProps {
     moduleData: IModules
     openDialog: boolean
+    canEdit: boolean
     selectedItem: selectedModule
     setSelectedItem: Dispatch<SetStateAction<selectedModule | undefined>>
     setOpenDialog: Dispatch<SetStateAction<boolean>>
 }
 
 const CourseContent = ({
+    canEdit,
     moduleData,
     openDialog,
     setOpenDialog,
@@ -26,7 +29,6 @@ const CourseContent = ({
     const { id } = useParams()
     const { mutateAsync: updatePositionModule } = useUpdatePositionModule()
 
-    const [confirmDialog, setConfirmDialog] = useState(false)
     const [showContent, setShowContent] = useState<{ [key: string]: boolean }>({})
     const [originalModuleData, setOriginalModuleData] = useState<IModule[]>(moduleData.modules)
     const [modules, setModules] = useState<IModule[]>(moduleData.modules)
@@ -44,8 +46,9 @@ const CourseContent = ({
     }
 
     const handleDragEnd = async (event: any) => {
-        const { active, over } = event
+        if (checkEditPermission(canEdit!)) return
 
+        const { active, over } = event
         if (active.data.current.position !== over.data.current.position) {
             const newItems = [...modules]
             const activeIndex = modules.findIndex((item) => item.position === active.data.current.position)
@@ -69,7 +72,6 @@ const CourseContent = ({
                     })),
                     _method: 'PUT'
                 }
-
                 await updatePositionModule([id!, payload])
             }
         }
@@ -102,10 +104,9 @@ const CourseContent = ({
                                         key={module.id}
                                         module={module}
                                         isShowContent={isShowContent}
-                                        setConfirmDialog={setConfirmDialog}
                                         toggleContentVisibility={toggleContentVisibility}
                                         handleSetSelectedData={handleSetSelectedData}
-                                        confirmDialog={confirmDialog}
+                                        canEdit={canEdit}
                                     />
                                 )
                             })}

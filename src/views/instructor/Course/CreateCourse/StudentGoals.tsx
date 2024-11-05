@@ -5,13 +5,14 @@ import { useNavigate, useParams } from 'react-router-dom'
 
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { getInputCoursePlaceholder } from '@/lib'
+import { canEditCourse, checkEditPermission, getInputCoursePlaceholder } from '@/lib'
 import { useGetTargetCourse, useTargetCourse } from '@/app/hooks/instructors/useInstructor'
 import Loading from '@/components/Common/Loading/Loading'
 import { toast } from 'sonner'
 import routes from '@/configs/routes.ts'
+import { ICourseStatus } from '@/types/instructor'
 
-const StudentGoals = memo(() => {
+const StudentGoals = memo(({ status }: { status: ICourseStatus }) => {
     const { id } = useParams()
     const navigate = useNavigate()
     const { mutateAsync: createTargetCourse, isPending } = useTargetCourse()
@@ -79,8 +80,10 @@ const StudentGoals = memo(() => {
             _method: 'PUT'
         }
 
-        await createTargetCourse([id!, result])
-        return result
+        const canEdit = canEditCourse(status)
+        if (checkEditPermission(canEdit!)) return
+
+        return await createTargetCourse([id!, result])
     }
 
     const handleReset = () => {
@@ -93,6 +96,8 @@ const StudentGoals = memo(() => {
             audiences: [{ placeholder: getInputCoursePlaceholder('audiences'), value: '' }]
         })
     }
+
+    const isDisabled = status === 'pending' || status === 'approved'
 
     useEffect(() => {
         if (data && data.goals.length > 0 && data.audiences.length > 0 && data.requirements.length > 0) {
@@ -137,16 +142,19 @@ const StudentGoals = memo(() => {
         }
     }, [error, navigate])
 
-    if (loadingTargetCourse) {
-        return <Loading />
-    }
+    if (loadingTargetCourse) return <Loading />
 
     return (
         <div className="rounded-lg p-5">
             <div className="flex items-center justify-between border-b-2 border-gray-300 pb-5">
                 <h4 className="text-2xl font-semibold capitalize">Mục tiêu học viên</h4>
                 <div className="flex gap-3">
-                    <Button size="default" variant="destructive" onClick={() => handleReset()} disabled={isPending}>
+                    <Button
+                        size="default"
+                        variant="destructive"
+                        onClick={() => handleReset()}
+                        disabled={isPending || isDisabled}
+                    >
                         Nhập lại
                     </Button>
                     <Button size="default" onClick={() => handleSave()} disabled={isAnyFieldEmpty() || isPending}>
@@ -174,12 +182,13 @@ const StudentGoals = memo(() => {
                         {inputs.goals.map((input, index) => (
                             <div className="group relative max-w-[80%]" key={index}>
                                 <Input
-                                    placeholder={input.placeholder}
+                                    type="text"
                                     maxLength={160}
                                     value={input.value}
-                                    onChange={(e) => handleChange(e.target.value, index, 'goals')}
-                                    type="text"
+                                    readOnly={isDisabled}
                                     className="w-full pr-[50px]"
+                                    placeholder={input.placeholder}
+                                    onChange={(e) => handleChange(e.target.value, index, 'goals')}
                                 />
                                 {!!input.value && (
                                     <Button
@@ -227,6 +236,7 @@ const StudentGoals = memo(() => {
                                     onChange={(e) => handleChange(e.target.value, index, 'conditions')}
                                     type="text"
                                     className="w-full pr-[50px]"
+                                    readOnly={isDisabled}
                                 />
                                 {!!input.value && (
                                     <Button
@@ -272,6 +282,7 @@ const StudentGoals = memo(() => {
                                     onChange={(e) => handleChange(e.target.value, index, 'audiences')}
                                     type="text"
                                     className="w-full pr-[50px]"
+                                    readOnly={isDisabled}
                                 />
                                 {!!input.value && (
                                     <Button

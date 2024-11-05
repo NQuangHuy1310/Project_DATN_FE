@@ -49,7 +49,7 @@ const Dashboard = () => {
     const handleSubmitForm: SubmitHandler<createNewCourse> = async (formData) => {
         const response = await createNewCourse(formData)
         const courseId = response.id
-        const goalsUrl = routes.createCourse.replace(':id', courseId.toString()).concat('?type=draft')
+        const goalsUrl = routes.createCourse.replace(':id', courseId.toString())
         navigate(goalsUrl)
     }
 

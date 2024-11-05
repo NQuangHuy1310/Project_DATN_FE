@@ -34,12 +34,11 @@ const Wallet = () => {
     const isDisable =
         coin === 0 ||
         coin === undefined ||
-        (coin && coin < 10000) ||
+        (coin && coin > 10000) ||
         (teacherBalanceData !== undefined && coin >= +teacherBalanceData.balance) ||
         isPending ||
         !selectedBank ||
-        !accountHolder ||
-        teacherBalanceData === undefined
+        !accountHolder
 
     const handleChangeSelectedBank = (value: string) => {
         setSelectedBank(value)
@@ -67,6 +66,8 @@ const Wallet = () => {
             await createRequestWithDraw([user.id, payload])
         }
     }
+
+    console.log(isDisable, coin, teacherBalanceData, selectedBank, accountHolder)
 
     if (isLoading) return <Loading />
 
@@ -153,16 +154,20 @@ const Wallet = () => {
                             placeholder="Nhập số tài khoản"
                             value={accountNumber}
                             onChange={(e) => setAccountNumber(e.target.value)}
+                            type="number"
                         />
                         <Input
                             placeholder="Nhập tên tài khoản"
                             value={accountHolder}
                             onChange={(e) => setAccountHolder(e.target.value)}
+                            type="text"
                         />
 
                         <div className="relative">
                             <Input
                                 min={0}
+                                maxLength={5}
+                                type="number"
                                 placeholder="Nhập số tiền mà bạn muốn rút (bội số của 100)"
                                 className="w-full pr-12"
                                 value={coin !== undefined ? coin : ''}

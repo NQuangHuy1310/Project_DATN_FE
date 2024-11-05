@@ -18,7 +18,6 @@ import logo from '@/assets/Union.svg'
 
 import Loading from '@/components/Common/Loading/Loading'
 import { Button } from '@/components/ui/button'
-import useFormatTime from '@/app/hooks/common/useFomatTime'
 import AllNoteCourse from '@/components/shared/CourseLeaning/Sheet/AllNoteCourse'
 import { useLessonById, useQuizLessonById } from '@/app/hooks/courses/useLesson'
 import LeaningCourseQuiz from '@/components/shared/CourseLeaning/LeaningCourseQuiz'
@@ -27,6 +26,7 @@ import LeaningCourseDocument from '@/components/shared/CourseLeaning/LeaningCour
 import { useCourseLeaningBySlug } from '@/app/hooks/courses/useCourse'
 import { ILessonLeaning, IModuleLeaning } from '@/types/course/course'
 import { useGetIdParams, useGetSlugParams } from '@/app/hooks/common/useCustomParams'
+import { formatDurationSecond } from '@/lib/common'
 
 const CourseLearning = () => {
     const [toggleTab, setToggleTab] = useState<boolean>(true)
@@ -131,7 +131,6 @@ const CourseLearning = () => {
     useEffect(() => {
         const nextLessonId = courseModule?.next_lesson?.id
         if (!searchParams.get('id') && nextLessonId) {
-            console.log(1)
             setSearchParams({ id: nextLessonId.toString() })
         } else if (searchParams.get('id')) {
             const currentLesson = courseModule?.modules
@@ -337,7 +336,7 @@ const CourseLearning = () => {
                                                     </div>
                                                     <span className="text-xs">
                                                         {lesson.content_type === 'video' && (
-                                                            <p>{useFormatTime(lesson.duration!)}</p>
+                                                            <p>{formatDurationSecond(lesson.duration!)}</p>
                                                         )}
                                                         {lesson.content_type === 'document' && <p>2:00</p>}
                                                     </span>

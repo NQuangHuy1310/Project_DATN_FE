@@ -90,6 +90,14 @@ export const formatDuration = (totalDurationInSeconds: number): string => {
     return formattedParts.join(', ')
 }
 
+export const formatDurationSecond = (seconds: number) => {
+    const hours = Math.floor(seconds / 3600)
+    const minutes = Math.floor((seconds % 3600) / 60)
+    const remainingSeconds = seconds % 60
+
+    return `${hours > 0 ? `${hours}:` : ''}${hours > 0 && minutes < 10 ? '0' : ''}${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`
+}
+
 // Tính thời gian
 export const calculateTimeAgo = (createdAt: string) => {
     const createdDate = new Date(createdAt)

@@ -5,12 +5,12 @@ import { toast } from 'sonner'
 import ReactQuill from 'react-quill'
 
 import { Button } from '@/components/ui/button'
-import useFormatTime from '@/app/hooks/common/useFomatTime'
 import { useDeleteNote, useGetAllNote, useUpdateNote } from '@/app/hooks/courses/useNote'
 import { Sheet, SheetContent, SheetDescription, SheetTitle } from '@/components/ui/sheet'
 
 import { FaPen } from 'react-icons/fa'
 import { MdDelete } from 'react-icons/md'
+import { formatDurationSecond } from '@/lib/common'
 
 const AllNoteCourse = ({
     open,
@@ -25,7 +25,7 @@ const AllNoteCourse = ({
 }) => {
     const [updateContent, setUpdateContent] = useState<{ [key: number]: boolean }>({})
     const [content, setContent] = useState<{ [key: number]: string }>({})
-    const [searchParams, setSearchParams] = useSearchParams()
+    const [, setSearchParams] = useSearchParams()
 
     // State cho popup xác nhận xóa
     const [confirmDelete, setConfirmDelete] = useState<{ open: boolean; noteId: number | null }>({
@@ -88,7 +88,7 @@ const AllNoteCourse = ({
                 <div className="flex justify-between">
                     <div className="flex gap-2">
                         <span className="block rounded-full bg-primary px-3 py-1 text-xs text-white">
-                            {useFormatTime(item.duration)}
+                            {formatDurationSecond(item.duration)}
                         </span>
                         <h2
                             onClick={() => handleLessonClick(item.id_lesson, item.duration)}

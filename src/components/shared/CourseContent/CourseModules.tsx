@@ -1,28 +1,29 @@
 /* eslint-disable no-unused-vars */
 import { CSS } from '@dnd-kit/utilities'
 import { useSortable } from '@dnd-kit/sortable'
-import { Dispatch, SetStateAction } from 'react'
+import { useState } from 'react'
 import { FaAngleDown, FaAngleUp, FaBars, FaPen, FaRegTrashAlt } from 'react-icons/fa'
 
 import { IModule } from '@/types/instructor'
 import { Button } from '@/components/ui/button.tsx'
 import { selectedModule } from '@/views/instructor/Course/CreateCourse/Curriculum.tsx'
 import CourseLessons from '@/components/shared/CourseContent/CourseLessons.tsx'
+import ConfirmDialog from '@/components/shared/ConfirmDialog'
+import { useDeleteModule } from '@/app/hooks/instructors'
+import { checkEditPermission } from '@/lib'
 
 interface CourseModulesProps {
     module: IModule
+    canEdit: boolean
     isShowContent: boolean
-    confirmDialog: boolean
-    setConfirmDialog: Dispatch<SetStateAction<boolean>>
     toggleContentVisibility: (moduleId: number) => void
     handleSetSelectedData: (selectedData: selectedModule) => void
 }
 
 const CourseModules = ({
     module,
+    canEdit,
     isShowContent,
-    setConfirmDialog,
-    confirmDialog,
     toggleContentVisibility,
     handleSetSelectedData
 }: CourseModulesProps) => {
@@ -30,6 +31,9 @@ const CourseModules = ({
         id: module.position,
         data: { ...module }
     })
+    const [confirmDialog, setConfirmDialog] = useState<boolean>(false)
+    const [selectedId, setSelectedId] = useState<string>('')
+    const { mutateAsync: deleteModule, isPending } = useDeleteModule()
 
     const dndKitColumnStyles = {
         transform: CSS.Translate.toString(transform),
@@ -37,6 +41,13 @@ const CourseModules = ({
         height: '100%',
         opacity: isDragging ? 0.5 : undefined,
         willChange: 'transform, opacity'
+    }
+
+    const handleDeleteModule = async () => {
+        if (checkEditPermission(canEdit!)) return
+
+        await deleteModule(selectedId.toString())
+        setConfirmDialog(false)
     }
 
     return (
@@ -49,23 +60,28 @@ const CourseModules = ({
             <div className="group flex items-center justify-between">
                 <div className="flex items-center gap-5">
                     <h5 className="text-base font-semibold">Tên chương: {module.title}</h5>
-                    <div className="hidden gap-4 group-hover:flex">
-                        <div
-                            onClick={() =>
+                    <div className="hidden gap-2 group-hover:flex">
+                        <Button
+                            size="icon"
+                            variant="outline"
+                            onClick={() => {
                                 handleSetSelectedData({
                                     name: module.title,
                                     description: module.title,
                                     id: module.id.toString()
                                 })
-                            }
+                                setSelectedId(module.id.toString())
+                            }}
                         >
                             <FaPen className="size-4 cursor-pointer" />
-                        </div>
+                        </Button>
 
-                        <FaRegTrashAlt
-                            className="size-4 cursor-pointer hover:text-black"
-                            onClick={() => setConfirmDialog(true)}
-                        />
+                        <Button size="icon" variant="outline">
+                            <FaRegTrashAlt
+                                className="size-4 cursor-pointer hover:text-black"
+                                onClick={() => setConfirmDialog(true)}
+                            />
+                        </Button>
                     </div>
                 </div>
 
@@ -87,10 +103,19 @@ const CourseModules = ({
             <CourseLessons
                 id={module.id}
                 isShowContent={isShowContent}
-                confirmDialog={confirmDialog}
-                setConfirmDialog={setConfirmDialog}
                 lessons={module.lessons}
                 quiz={module.quiz}
+                canEdit={canEdit}
+            />
+
+            {/* Confirm dialog */}
+            <ConfirmDialog
+                isPending={isPending}
+                confirmDialog={confirmDialog}
+                setConfirmDialog={setConfirmDialog}
+                handleDelete={handleDeleteModule}
+                title="Xoá chương trong khoá học"
+                description="Bạn sắp xóa một chương trình giảng dạy. Bạn có chắc chắn muốn tiếp tục không?"
             />
         </div>
     )

@@ -11,10 +11,13 @@ export interface ICreateCourse {
     category: ICourseCategory
 }
 
+export type ICourseStatus = 'draft' | 'pending' | 'approved' | 'rejected' | undefined
+
 export interface IManageMenuCourse {
     course_target: boolean
     course_curriculum: boolean
     course_overview: boolean
+    course_status: ICourseStatus
 }
 
 export interface ICourseItem {
@@ -193,6 +196,10 @@ export interface IUpdatePositionModuleData {
 export interface ICreateCourseData {
     name: string
     id_category: string
+}
+
+export interface ICourseStatusData {
+    status: 'draft' | 'pending' | 'approved' | 'rejected'
 }
 
 export interface ITargetCourse {

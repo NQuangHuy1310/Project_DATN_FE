@@ -5,6 +5,7 @@ import { instructorApi } from '@/app/services/instructors'
 import {
     IChangeLessonTypeData,
     ICourses,
+    ICourseStatusData,
     ICreateCourseData,
     ILessonDetail,
     ILessonDocData,
@@ -32,12 +33,16 @@ export const useCreateCourse = () => {
 }
 
 export const useSubmitCourse = () => {
-    return useMutation({
-        mutationFn: async (courseID: string) => {
-            return instructorApi.submitCourse(courseID)
+    const queryClient = useQueryClient()
+
+    return useMutation<any, Error, [string, ICourseStatusData]>({
+        mutationFn: async ([courseId, courseStatus]) => {
+            return instructorApi.submitCourse(courseId, courseStatus)
         },
-        onSuccess() {
-            toast.success('Bạn đã gửi thông tin khoá học đi thành công!')
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['mange-menu'] })
+            await queryClient.invalidateQueries({ queryKey: ['instructorCourse'] })
+            toast.success('Yêu cầu của bạn đã được gửi đi thành công!')
         }
     })
 }

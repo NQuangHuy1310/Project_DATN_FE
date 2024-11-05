@@ -15,14 +15,15 @@ import { lessonQuiz, lessonQuizSchema } from '@/validations'
 import { IQuestion } from '@/types/instructor'
 import DialogAddQuestion from '@/components/shared/CourseContent/Dialog/DialogAddQuestion'
 import PreviewImage from '@/components/shared/PreviewImage'
-import { getImagesUrl } from '@/lib'
+import { checkEditPermission, getImagesUrl } from '@/lib'
 
 interface LessonQuizzesProps {
     moduleId: number
+    canEdit?: boolean
     handleHiddenLesson?: Dispatch<SetStateAction<boolean>>
 }
 
-const LessonQuizzes = ({ handleHiddenLesson, moduleId }: LessonQuizzesProps) => {
+const LessonQuizzes = ({ handleHiddenLesson, moduleId, canEdit }: LessonQuizzesProps) => {
     const {
         register,
         handleSubmit,
@@ -43,6 +44,8 @@ const LessonQuizzes = ({ handleHiddenLesson, moduleId }: LessonQuizzesProps) => 
     const [imagePreview, setImagePreview] = useState<string>('')
 
     const handleSubmitForm: SubmitHandler<lessonQuiz> = async (formData) => {
+        if (checkEditPermission(canEdit!)) return
+
         const payload = {
             ...formData,
             _method: data?.quiz ? 'PUT' : undefined
@@ -56,10 +59,14 @@ const LessonQuizzes = ({ handleHiddenLesson, moduleId }: LessonQuizzesProps) => 
     }
 
     const handleDeleteQuiz = async (questionId: number) => {
+        if (checkEditPermission(canEdit!)) return
+
         await deleteLessonQuiz(questionId)
     }
 
     const handleImageClick = (url: string) => {
+        if (checkEditPermission(canEdit!)) return
+
         setImagePreview(getImagesUrl(url))
         setOpenDialogPreview(true)
     }
@@ -134,6 +141,7 @@ const LessonQuizzes = ({ handleHiddenLesson, moduleId }: LessonQuizzesProps) => 
                                                 setSelectedQuestion(question)
                                                 setOpenDialog(true)
                                             }}
+                                            disabled={!canEdit}
                                         >
                                             <MdEdit />
                                         </Button>
@@ -174,6 +182,7 @@ const LessonQuizzes = ({ handleHiddenLesson, moduleId }: LessonQuizzesProps) => 
 
                     <div className="space-x-4 text-end">
                         <Button
+                            type="button"
                             variant="destructive"
                             onClick={() => handleHiddenLesson?.(false)}
                             disabled={isSubmitting}

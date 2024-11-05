@@ -13,13 +13,15 @@ import { useDeleteLessonDoc, useDeleteLessonVideo } from '@/app/hooks/instructor
 import LessonDocument from '@/components/shared/CourseContent/LessonDocument'
 import LessonVideo from '@/components/shared/CourseContent/LessonVideo'
 import { Select, SelectContent, SelectGroup, SelectTrigger, SelectItem } from '@/components/ui/select'
+import { checkEditPermission } from '@/lib'
 
 interface LessonItemProps {
     lesson: ILesson
+    canEdit: boolean
     moduleId: number
 }
 
-const LessonItem = ({ lesson }: LessonItemProps) => {
+const LessonItem = ({ lesson, canEdit }: LessonItemProps) => {
     const { id, content_type, title } = lesson
     const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
         id: lesson.position,
@@ -44,6 +46,8 @@ const LessonItem = ({ lesson }: LessonItemProps) => {
     }
 
     const handleDeleteLesson = async () => {
+        if (checkEditPermission(canEdit)) return
+
         if (content_type === 'document') {
             await deleteLessonDoc(id)
         } else if (content_type === 'video') {
@@ -53,12 +57,13 @@ const LessonItem = ({ lesson }: LessonItemProps) => {
     }
 
     const handleChangeSelectedLessonType = (value: 'document' | 'quiz' | 'video') => {
-        setSelectedLessonType(value)
         if (selectedLessonType !== content_type) {
             setIsSelectingLessonType(false)
             if (value === 'document') setIsEditingDocument(true)
             if (value === 'video') setIsEditingVideo(true)
         } else {
+            if (checkEditPermission(canEdit)) return
+            setSelectedLessonType(value)
             setIsSelectingLessonType(true)
         }
     }
@@ -128,12 +133,17 @@ const LessonItem = ({ lesson }: LessonItemProps) => {
 
             {/* Handle edit lesson doc */}
             {isEditingDocument && !isSelectingLessonType && (
-                <LessonDocument lessonId={lessonId} courseId={id} setIsEditLesson={setIsEditingDocument} />
+                <LessonDocument
+                    lessonId={lessonId}
+                    courseId={id}
+                    setIsEditLesson={setIsEditingDocument}
+                    canEdit={canEdit}
+                />
             )}
 
             {/* Handle edit lesson video */}
             {isEditingVideo && !isSelectingLessonType && (
-                <LessonVideo lessonId={lessonId} courseId={id} setIsEditLesson={setIsEditingVideo} />
+                <LessonVideo lessonId={lessonId} courseId={id} setIsEditLesson={setIsEditingVideo} canEdit={canEdit} />
             )}
 
             {selectedLessonType === 'document' && isSelectingLessonType && (
@@ -142,6 +152,7 @@ const LessonItem = ({ lesson }: LessonItemProps) => {
                     courseId={id}
                     setIsSelectingLessonType={setIsSelectingLessonType}
                     isSelectingLessonType={isSelectingLessonType}
+                    canEdit={canEdit}
                 />
             )}
 
@@ -151,6 +162,7 @@ const LessonItem = ({ lesson }: LessonItemProps) => {
                     courseId={id}
                     setIsSelectingLessonType={setIsSelectingLessonType}
                     isSelectingLessonType={isSelectingLessonType}
+                    canEdit={canEdit}
                 />
             )}
 

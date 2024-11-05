@@ -8,13 +8,15 @@ import ConfirmDialog from '@/components/shared/ConfirmDialog'
 import { useDeleteLessonQuiz, useGetLessonQuiz } from '@/app/hooks/instructors'
 import DialogAddQuestion from '@/components/shared/CourseContent/Dialog/DialogAddQuestion'
 import LessonQuizzes from '@/components/shared/CourseContent/LessonQuizzes'
+import { checkEditPermission } from '@/lib'
 
 interface QuizItemProps {
     lesson: ILessonQuiz
+    canEdit: boolean
     moduleId: number
 }
 
-const QuizItem = ({ lesson, moduleId }: QuizItemProps) => {
+const QuizItem = ({ lesson, moduleId, canEdit }: QuizItemProps) => {
     const { title } = lesson
     const { data } = useGetLessonQuiz(moduleId)
     const { mutateAsync: deleteLessonQuiz, isPending } = useDeleteLessonQuiz()
@@ -24,6 +26,8 @@ const QuizItem = ({ lesson, moduleId }: QuizItemProps) => {
     const [isEditQuiz, setIsEditQuiz] = useState(false)
 
     const handleDeleteLesson = async () => {
+        if (checkEditPermission(canEdit!)) return
+
         await deleteLessonQuiz(lesson.id)
         setIsOpenDialog(false)
     }
@@ -45,7 +49,12 @@ const QuizItem = ({ lesson, moduleId }: QuizItemProps) => {
                         </div>
                     </div>
                     <div className="flex items-center gap-2">
-                        <Button size="sm" variant="outline" onClick={() => setIsOpenAddDialog(true)}>
+                        <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => setIsOpenAddDialog(true)}
+                            disabled={!canEdit}
+                        >
                             Thêm câu hỏi
                         </Button>
                         <Button size="icon" variant="ghost" onClick={() => setIsEditQuiz(!isEditQuiz)}>
@@ -72,7 +81,7 @@ const QuizItem = ({ lesson, moduleId }: QuizItemProps) => {
             <DialogAddQuestion openDialog={isOpenAddDialog} setOpenDialog={setIsOpenAddDialog} quizId={lesson.id!} />
 
             {/* LessonQuizzes */}
-            {isEditQuiz && <LessonQuizzes moduleId={moduleId!} />}
+            {isEditQuiz && <LessonQuizzes moduleId={moduleId!} canEdit={canEdit} />}
         </>
     )
 }

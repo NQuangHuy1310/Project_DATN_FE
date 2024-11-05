@@ -4,6 +4,7 @@ import { instructorUri } from '@/app/services/Uri/instructors'
 import {
     IChangeLessonTypeData,
     ICourses,
+    ICourseStatusData,
     ICreateCourse,
     ICreateCourseData,
     ILessonDetail,
@@ -28,8 +29,8 @@ export const instructorApi = {
     getCourses: async (): Promise<ICourses> => {
         return axiosClient.get(instructorUri.GET_COURSES)
     },
-    submitCourse: async (courseID: string): Promise<any> => {
-        return axiosClient.post(instructorUri.SUBMIT_COURSE(courseID), {})
+    submitCourse: async (courseID: string, courseStatus: ICourseStatusData): Promise<any> => {
+        return axiosClient.post(instructorUri.SUBMIT_COURSE(courseID), courseStatus)
     },
     mangeMenu: async (courseID: string): Promise<any> => {
         return axiosClient.get(instructorUri.MANAGE_MENU(courseID))

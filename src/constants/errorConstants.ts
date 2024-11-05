@@ -18,7 +18,9 @@ export const MessageErrors = {
     limitAnswers: 'Bạn chỉ có thể thêm tối đa 5 đáp án cho câu hỏi.',
     minAnswers: 'Bạn cần giữ lại ít nhất 2 câu trả lời.',
     invalidValue: 'Giá trị không hợp lệ.',
-    invalidDate: 'Ngày không hợp lệ. Ngày phải là ngày hiện tại hoặc trong quá khứ.'
+    invalidDate: 'Ngày không hợp lệ. Ngày phải là ngày hiện tại hoặc trong quá khứ.',
+    canEdit: 'Bạn không có quyền chỉnh sửa thông tin khoá học.',
+    descriptionCanEdit: 'Xin vui lòng xác nhận lại trạng thái của khoá học.'
 }
 
 export const ApiMessages = {

@@ -19,8 +19,8 @@ const CourseCard = ({ name, id, status, thumbnail, submited_at: submittedAt, cat
     const thumbnailImage = getImagesUrl(thumbnail ?? '')
     const formatDate = submittedAt ? format(new Date(submittedAt), 'dd/MM/yyyy') : 'Chưa đăng ký'
 
-    const redirectToCourse = (type: string) => {
-        const courseRoute = routes.createCourse.replace(':id', id.toString()).concat(`?type=${type}`)
+    const redirectToCourse = () => {
+        const courseRoute = routes.createCourse.replace(':id', id.toString())
         navigate(courseRoute)
     }
 
@@ -76,9 +76,7 @@ const CourseCard = ({ name, id, status, thumbnail, submited_at: submittedAt, cat
                             <BsThreeDots className="size-5" />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" sideOffset={5}>
-                            <DropdownMenuItem onClick={() => redirectToCourse(status)}>
-                                Chỉnh sửa khoá học
-                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={redirectToCourse}>Chỉnh sửa khoá học</DropdownMenuItem>
                             <DropdownMenuItem>Xem trước khoá học</DropdownMenuItem>
                             {status === 'approved' ? (
                                 <DropdownMenuItem onClick={handleActiveCourse}>

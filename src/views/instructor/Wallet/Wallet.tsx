@@ -2,6 +2,7 @@ import { ChangeEvent, useState } from 'react'
 import { TbCoinFilled } from 'react-icons/tb'
 import { convertToVnd, getImagesUrl } from '@/lib'
 
+import NoContentImage from '@/assets/no-content.jpg'
 import { useGetBanks } from '@/app/hooks/others'
 import { Button } from '@/components/ui/button.tsx'
 import { Input } from '@/components/ui/input.tsx'
@@ -33,9 +34,11 @@ const Wallet = () => {
     const isDisable =
         coin === 0 ||
         coin === undefined ||
-        (coin && coin >= 10000) ||
-        (teacherBalanceData?.balance !== undefined && coin >= +teacherBalanceData.balance) ||
-        isPending
+        (coin && coin > 10000) ||
+        (teacherBalanceData !== undefined && coin >= +teacherBalanceData.balance) ||
+        isPending ||
+        !selectedBank ||
+        !accountHolder
 
     const handleChangeSelectedBank = (value: string) => {
         setSelectedBank(value)
@@ -63,6 +66,8 @@ const Wallet = () => {
             await createRequestWithDraw([user.id, payload])
         }
     }
+
+    console.log(isDisable, coin, teacherBalanceData, selectedBank, accountHolder)
 
     if (isLoading) return <Loading />
 
@@ -149,16 +154,20 @@ const Wallet = () => {
                             placeholder="Nhập số tài khoản"
                             value={accountNumber}
                             onChange={(e) => setAccountNumber(e.target.value)}
+                            type="number"
                         />
                         <Input
                             placeholder="Nhập tên tài khoản"
                             value={accountHolder}
                             onChange={(e) => setAccountHolder(e.target.value)}
+                            type="text"
                         />
 
                         <div className="relative">
                             <Input
                                 min={0}
+                                maxLength={5}
+                                type="number"
                                 placeholder="Nhập số tiền mà bạn muốn rút (bội số của 100)"
                                 className="w-full pr-12"
                                 value={coin !== undefined ? coin : ''}
@@ -228,11 +237,10 @@ const Wallet = () => {
                                 </tr>
                             ))
                         ) : (
-                            <tr>
-                                <td colSpan={3} className="py-4 text-center">
-                                    Bạn chưa có giao dịch nào
-                                </td>
-                            </tr>
+                            <div className="flex w-full flex-col items-center justify-center text-center">
+                                <img alt="" src={NoContentImage} />
+                                <span className="text-base font-semibold">Bạn chưa có giao dịch nào</span>
+                            </div>
                         )}
                     </tbody>
                 </table>

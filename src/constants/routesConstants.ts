@@ -23,6 +23,7 @@ import AccountNotifications from '@/views/user/Account/AccountNotifications'
 // course
 import MyCourse from '@/views/user/Courses/MyCourse'
 import CourseExplore from '@/views/user/Courses/CourseExplore'
+import CourseLearning from '@/views/user/Courses/CourseLearning'
 import CourseMyCourses from '@/views/user/Courses/CourseSearch'
 import CourseDetail from '@/views/user/Courses/CourseDetail'
 
@@ -52,7 +53,7 @@ import PostDetail from '@/views/user/Posts/PostDetail'
 import CourseDetailNoLogin from '@/views/user/Courses/CourseDetailNoLogin/CourseDetailNoLogin'
 import Transaction from '@/views/user/wallet/Transaction'
 import PerformanceOverview from '@/views/instructor/Performance/PerformanceOverview'
-import CourseLearning from '@/views/user/Courses/CourseLearning'
+import InstructorNotifications from '@/views/instructor/InstructorNotifications'
 
 // Routes không cần đăng nhập
 export const publicRoutes = [
@@ -101,6 +102,12 @@ export const privateRoutes = [
         layout: InstructorDashboardLayout,
         element: InstructorDashboard,
         title: 'Quản lý khoá học'
+    },
+    {
+        path: routes.instructorNotifications,
+        layout: InstructorDashboardLayout,
+        element: InstructorNotifications,
+        title: 'Thông báo của tôi'
     },
     { path: routes.createCourse, layout: InstructorDashboardLayout, element: CreateCourse, title: 'Tạo mới khoá học' },
     { path: routes.instructorQa, layout: InstructorCommunicate, element: CommunicateQa, title: 'Hỏi đáp' },

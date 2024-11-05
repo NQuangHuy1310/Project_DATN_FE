@@ -40,11 +40,11 @@ const CourseCard = ({ name, id, status, thumbnail, submited_at: submittedAt, cat
     return (
         <>
             <div className="flex max-w-[1200px] items-center gap-4 overflow-hidden rounded-md border-[1px]">
-                <div className="h-[120px] w-[120px] flex-shrink-0">
+                <div className="h-[140px] w-[140px] flex-shrink-0">
                     <img
                         src={thumbnail ? thumbnailImage : 'https://s.udemycdn.com/course/200_H/placeholder.jpg'}
                         alt={name}
-                        className="h-full w-full object-cover"
+                        className="h-full w-full rounded-md object-cover"
                     />
                 </div>
                 <div className="flex h-[120px] w-full flex-1 items-start justify-between gap-20">

@@ -42,6 +42,7 @@ const CourseLearning = () => {
     const [checkQuizLeaning, setCheckQuizLeaning] = useState<boolean>()
 
     const idLesson = useGetIdParams('id')
+    const timeNote = useGetIdParams('time')
     const slug = useGetSlugParams('slug')
 
     // Danh sách bài học theo khóa học
@@ -139,18 +140,14 @@ const CourseLearning = () => {
             const currentQuiz = quizArray.find((quiz: any) => quiz.id === Number(idLesson))
             if (currentLesson) {
                 if (currentLesson.is_completed === 1) {
-                    setSearchParams({ id: currentLesson.id.toString() })
                     setCheckButton(false)
                 } else {
-                    setSearchParams({ id: nextLessonId?.toString()! })
                     setCheckButton(true)
                 }
             } else if (currentQuiz) {
                 if (currentQuiz.is_completed === 1) {
-                    setSearchParams({ id: currentQuiz.id.toString() })
                     setCheckButton(false)
                 } else {
-                    setSearchParams({ id: nextLessonId?.toString()! })
                     setCheckButton(true)
                 }
             }
@@ -453,6 +450,7 @@ const CourseLearning = () => {
                                     setCheckNote={setCheckNote}
                                     toggleTab={toggleTab}
                                     dataLesson={courseLesson}
+                                    durationNote={timeNote!}
                                     setCheckButton={setCheckButton}
                                     onPauseVideo={(pauseVideo) => setPauseVideoCallback(() => pauseVideo)}
                                     onPlayVideo={(playVideo) => setPlayVideoCallback(() => playVideo)}

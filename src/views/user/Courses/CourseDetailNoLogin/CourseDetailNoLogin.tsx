@@ -10,7 +10,7 @@ import Tools from '@/views/user/Courses/CourseDetail/Tools'
 import routes from '@/configs/routes'
 import Reviews from '@/views/user/Courses/CourseDetail/Reviews'
 import Loading from '@/components/Common/Loading/Loading'
-import Assignment from '@/views/user/Courses/CourseDetail/Assignment'
+import Content from '@/views/user/Courses/CourseDetail/Content.tsx'
 import { Button } from '@/components/ui/button'
 import CourseToday from '@/components/shared/Course/CourseToday'
 import { CourseLevel } from '@/components/shared/Course/CourseLevel'
@@ -29,15 +29,14 @@ import {
 } from '@/components/ui/breadcrumb'
 
 const CourseDetailNoLogin = () => {
-    const [toggleCourse, setToggleCourse] = useState<boolean>(false)
-
-    const handleToggleCourse = () => setToggleCourse(!toggleCourse)
-
     const slug = useGetSlugParams('slug')
+    const [toggleCourse, setToggleCourse] = useState<boolean>(false)
 
     const { data: courseDetail, isLoading } = useCourseDetailNoLoginBySlug(slug!)
 
+    const handleToggleCourse = () => setToggleCourse(!toggleCourse)
     const totalTime = formatDuration((courseDetail?.total_duration_video as unknown as number) || 0)
+
     if (isLoading) return <Loading />
 
     return (
@@ -85,17 +84,19 @@ const CourseDetailNoLogin = () => {
                                             </Avatar>
                                             <h6 className="md:text-base">{courseDetail?.user.name}</h6>
                                         </div>
-                                        <div className="flex items-center gap-1">
-                                            <IoIosStar className="size-5 text-primary" />
-                                            <span> 4,5 (500 Reviews)</span>
-                                        </div>
+                                        <Button
+                                            className="bg-transparent text-primary hover:text-primary/80"
+                                            variant="outline"
+                                            size="sm"
+                                        >
+                                            + Theo dõi
+                                        </Button>
                                     </div>
-                                    <Button
-                                        className="bg-transparent text-primary hover:text-primary/80"
-                                        variant="outline"
-                                    >
-                                        + Theo dõi
-                                    </Button>
+                                    <div className="flex items-center gap-1">
+                                        <IoIosStar className="size-5 text-primary" />
+                                        <span> 4,5 (500 Đánh giá)</span>
+                                    </div>
+
                                     <div className="block md:hidden">
                                         <CourseLevel courseLevel={courseDetail?.level || ''} />
                                     </div>
@@ -148,14 +149,15 @@ const CourseDetailNoLogin = () => {
                                 <div className="p-4">
                                     <TabsContent value="about">
                                         <About
-                                            goals={courseDetail?.goals || []}
-                                            description={courseDetail?.description || ''}
-                                            requirements={courseDetail?.requirements || []}
+                                            goals={courseDetail?.goals ?? []}
+                                            description={courseDetail?.description ?? ''}
+                                            requirements={courseDetail?.requirements ?? []}
+                                            audiences={courseDetail?.audiences ?? []}
                                         />
                                     </TabsContent>
 
                                     <TabsContent value="assignment">
-                                        <Assignment />
+                                        <Content modules={courseDetail?.modules ?? []} />
                                     </TabsContent>
 
                                     <TabsContent value="tool">
@@ -172,22 +174,25 @@ const CourseDetailNoLogin = () => {
 
                     <div className="col-span-12 w-full lg:col-span-4">
                         <div className="hidden w-full flex-shrink-0 transition-transform duration-500 lg:block">
-                            <CourseToday
-                                id={courseDetail?.id!}
-                                total_student={courseDetail?.total_student!}
-                                lessons_count={courseDetail?.lessons_count!}
-                                total_lessons={courseDetail?.total_lessons!}
-                                total_duration_video={courseDetail?.total_duration_video!}
-                                price_sale={courseDetail?.price_sale || 0}
-                                name={courseDetail?.name || ''}
-                                module={courseDetail?.modules || []}
-                                slug={courseDetail?.slug || ''}
-                                user={courseDetail?.user!}
-                                thumbnail={courseDetail?.thumbnail || ''}
-                                price={courseDetail?.price || 0}
-                                level={courseDetail?.level || ''}
-                                page={routes.courseDetailNoLogin || routes.courseDetail}
-                            />
+                            {courseDetail && (
+                                <CourseToday
+                                    id={courseDetail.id!}
+                                    total_student={courseDetail.total_student!}
+                                    lessons_count={courseDetail.lessons_count!}
+                                    total_lessons={courseDetail.total_lessons!}
+                                    total_duration_video={courseDetail.total_duration_video!}
+                                    price_sale={courseDetail?.price_sale || 0}
+                                    name={courseDetail?.name || ''}
+                                    module={courseDetail?.modules || []}
+                                    slug={courseDetail?.slug || ''}
+                                    user={courseDetail.user!}
+                                    thumbnail={courseDetail?.thumbnail || ''}
+                                    trailer={courseDetail.trailer}
+                                    price={courseDetail?.price || 0}
+                                    level={courseDetail?.level || ''}
+                                    page={routes.courseDetailNoLogin || routes.courseDetail}
+                                />
+                            )}
                         </div>
                         <div className="card flex w-full flex-col gap-4 lg:hidden">
                             <div className="flex items-center justify-between">
@@ -203,22 +208,25 @@ const CourseDetailNoLogin = () => {
                         <div
                             className={`fixed inset-x-0 bottom-0 z-50 w-full bg-white transition-transform duration-500 ease-in-out lg:hidden ${toggleCourse ? 'translate-y-0' : 'translate-y-full'}`}
                         >
-                            <CourseToday
-                                id={courseDetail?.id!}
-                                total_student={courseDetail?.total_student!}
-                                lessons_count={courseDetail?.lessons_count!}
-                                total_lessons={courseDetail?.total_lessons!}
-                                total_duration_video={courseDetail?.total_duration_video!}
-                                price_sale={courseDetail?.price_sale || 0}
-                                name={courseDetail?.name || ''}
-                                module={courseDetail?.modules || []}
-                                slug={courseDetail?.slug || ''}
-                                user={courseDetail?.user!}
-                                thumbnail={courseDetail?.thumbnail || ''}
-                                price={courseDetail?.price || 0}
-                                level={courseDetail?.level || ''}
-                                page={routes.courseDetailNoLogin || routes.courseDetail}
-                            />
+                            {courseDetail && (
+                                <CourseToday
+                                    id={courseDetail.id!}
+                                    total_student={courseDetail.total_student!}
+                                    lessons_count={courseDetail.lessons_count!}
+                                    total_lessons={courseDetail.total_lessons!}
+                                    total_duration_video={courseDetail.total_duration_video!}
+                                    price_sale={courseDetail?.price_sale || 0}
+                                    name={courseDetail?.name || ''}
+                                    module={courseDetail?.modules || []}
+                                    slug={courseDetail?.slug || ''}
+                                    user={courseDetail.user!}
+                                    thumbnail={courseDetail?.thumbnail || ''}
+                                    trailer={courseDetail?.trailer}
+                                    price={courseDetail?.price || 0}
+                                    level={courseDetail?.level || ''}
+                                    page={routes.courseDetailNoLogin || routes.courseDetail}
+                                />
+                            )}
                         </div>
                     </div>
                 </div>

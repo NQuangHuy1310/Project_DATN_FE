@@ -8,7 +8,7 @@ export const courseApi = {
         return axiosClient.get(courseUri.DETAIL_COURSE_LEANING(slug))
     },
 
-    detailCourse: async (slug: string): Promise<ICourseDetail[]> => {
+    detailCourse: async (slug: string): Promise<ICourseDetail> => {
         return axiosClient.get(courseUri.DETAIL_COURSE(slug))
     },
 

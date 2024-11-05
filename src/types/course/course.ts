@@ -9,7 +9,7 @@ export interface ICourse {
     code?: string
     name: string
     thumbnail: string
-    trailer?: string
+    trailer: string
     description?: string
     learned?: boolean | null
     slug: string
@@ -34,16 +34,25 @@ export interface ICourse {
     total_duration?: number
     user: IUser
 }
+
 export interface ICourseToday extends ICourse {
     module?: IModule[]
     page?: string
 }
 
 export interface ILesson {
+    description: string
+    duration: number
+    id: number
+    id_module: number
+    lessonable_id: number
+    lessonable_type: string
+    position: number
+    thumbnail: string | null
     title: string
-    time: number
-    type: 'video' | 'docs' | 'quiz'
+    content_type: 'video' | 'document' | 'quiz'
 }
+
 export interface IModule {
     title: string
     time: number
@@ -94,6 +103,7 @@ export interface IModuleLeaning {
     quiz: IQuizLeaning
     lessons: ILessonLeaning[]
 }
+
 export interface IQuizLeaning {
     id: number
     id_module: number
@@ -103,6 +113,7 @@ export interface IQuizLeaning {
     description: string
     questions: IQuestion[]
 }
+
 export interface NextLessonLeaning {
     id: number
     id_module: number

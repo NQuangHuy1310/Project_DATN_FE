@@ -1,5 +1,5 @@
 import { courseApi } from '@/app/services/courses/courses'
-import { IComment, ICreateComment } from '@/types/comment'
+import { IComment, ICreateComment } from '@/types'
 import { CourseData, ICourse, ICourseCategory, ICourseDetail, IQuizDetail } from '@/types/course/course'
 import { useMutation, useQuery, useQueryClient, UseQueryOptions } from '@tanstack/react-query'
 

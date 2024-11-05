@@ -13,6 +13,7 @@ import { HiOutlineChatAlt2, HiPlusSm } from 'react-icons/hi'
 const LeaningCourseVideo = ({
     toggleTab,
     dataLesson,
+    durationNote,
     setCheckButton,
     setCheckNote,
     onPauseVideo,
@@ -20,6 +21,7 @@ const LeaningCourseVideo = ({
 }: {
     toggleTab: boolean
     dataLesson: ILessonLeaning
+    durationNote?: string
     setCheckButton: Dispatch<SetStateAction<boolean>>
     setCheckNote: Dispatch<SetStateAction<boolean>>
     onPauseVideo: (pause: () => void) => void
@@ -34,10 +36,8 @@ const LeaningCourseVideo = ({
     const videoRef = useRef<HTMLVideoElement | null>(null)
     const hasUpdatedProgress = useRef<boolean>(false)
 
-    // Api cập nhật tiến độ
     const { mutateAsync: lessonProcessUpdate } = useUpdateLessonProCess()
 
-    // Kiểm tra nếu lessonable là video thì mới lấy thuộc tính 'url'
     const isYouTubeVideo = dataLesson.lessonable?.type === 'url'
     const videoUrl = isYouTubeVideo
         ? `https://www.youtube.com/embed/${dataLesson.lessonable?.video_youtube_id}`
@@ -61,7 +61,6 @@ const LeaningCourseVideo = ({
 
     const saveLastVideoTime = () => {
         const lastVideoTime = isYouTubeVideo && videoUrl ? currentVideoTime : videoRef.current?.currentTime
-
         if (lastVideoTime !== undefined) {
             localStorage.setItem(`last-time-video&${dataLesson.id}`, lastVideoTime.toString())
         }
@@ -72,52 +71,56 @@ const LeaningCourseVideo = ({
             saveLastVideoTime()
         }
         window.addEventListener('beforeunload', handleBeforeUnload)
-
         return () => {
             window.removeEventListener('beforeunload', handleBeforeUnload)
         }
-    }, [dataLesson.id, isYouTubeVideo, videoUrl, currentVideoTime])
+    }, [dataLesson.id, isYouTubeVideo, currentVideoTime])
 
     useEffect(() => {
         const lastVideoTime = localStorage.getItem(`last-time-video&${dataLesson.id}`)
         if (lastVideoTime) {
             const time = Number(lastVideoTime)
             setCurrentVideoTime(time)
-
             if (isYouTubeVideo && player) {
                 player.seekTo(time, true)
             } else if (videoRef.current) {
                 videoRef.current.currentTime = time
-                // Bug time video
-                console.log(videoRef.current.currentTime)
             }
         }
-    }, [isYouTubeVideo, player])
-    // Hàm khởi tạo YouTube Player API
+    }, [player, isYouTubeVideo])
 
     const createYouTubePlayer = () => {
         new window.YT.Player('youtube-player', {
             events: {
                 onReady: (event: any) => setPlayer(event.target),
-                onStateChange: (event: any) => handlePlayerStateChange(event)
+                onStateChange: handlePlayerStateChange
             }
         })
     }
+
+    useEffect(() => {
+        if (durationNote && !isNaN(Number(durationNote)) && player && typeof player.seekTo === 'function') {
+            const time = Number(durationNote)
+            setCurrentVideoTime(time)
+            if (isYouTubeVideo) {
+                player.seekTo(time, true)
+            } else if (videoRef.current) {
+                videoRef.current.currentTime = time
+            }
+        }
+    }, [durationNote, player])
+
     const initYouTubePlayer = () => {
         if (!window.YT) {
             const script = document.createElement('script')
             script.src = 'https://www.youtube.com/iframe_api'
-            window.onYouTubeIframeAPIReady = () => {
-                createYouTubePlayer()
-            }
-
+            window.onYouTubeIframeAPIReady = createYouTubePlayer
             document.body.appendChild(script)
         } else {
             createYouTubePlayer()
         }
     }
 
-    // Hàm dừng video
     const pauseVideo = () => {
         if (isYouTubeVideo && player) {
             player.pauseVideo()
@@ -126,7 +129,6 @@ const LeaningCourseVideo = ({
         }
     }
 
-    // Hàm phát lại video
     const playVideo = () => {
         if (isYouTubeVideo && player) {
             player.playVideo()
@@ -138,27 +140,22 @@ const LeaningCourseVideo = ({
     useEffect(() => {
         onPauseVideo(pauseVideo)
         onPlayVideo(playVideo)
-    }, [player, videoRef])
+    }, [player])
 
-    // Hàm tạo YouTube Player khi API đã sẵn sàng
     const handlePlayerStateChange = (event: any) => {
         const playerInstance = event.target
         if (event.data === window.YT.PlayerState.PLAYING) {
             intervalRef.current = setInterval(() => {
-                if (playerInstance && typeof playerInstance.playerInfo.currentTime) {
-                    const time = playerInstance.playerInfo.currentTime
-                    setCurrentVideoTime(time.toFixed(0))
-                }
-                if (playerInstance.playerInfo.currentTime / dataLesson.lessonable!.duration! >= 0.8) {
+                const time = playerInstance.playerInfo.currentTime
+                setCurrentVideoTime(Math.floor(time))
+                if (time / dataLesson.lessonable!.duration! >= 0.8) {
                     updateProgress()
                 }
             }, 500)
         }
         if (event.data === window.YT.PlayerState.PAUSED || event.data === window.YT.PlayerState.ENDED) {
-            if (intervalRef.current) {
-                clearInterval(intervalRef.current)
-                intervalRef.current = null
-            }
+            clearInterval(intervalRef.current!)
+            intervalRef.current = null
         }
     }
 
@@ -166,9 +163,7 @@ const LeaningCourseVideo = ({
         if (isYouTubeVideo && videoUrl) {
             initYouTubePlayer()
             return () => {
-                if (player) {
-                    player.destroy()
-                }
+                player?.destroy()
             }
         } else if (videoRef.current) {
             const videoElement = videoRef.current
@@ -180,14 +175,12 @@ const LeaningCourseVideo = ({
                     updateProgress()
                 }
             }
-
             videoElement.addEventListener('timeupdate', handleTimeUpdate)
-
             return () => {
                 videoElement.removeEventListener('timeupdate', handleTimeUpdate)
             }
         }
-    }, [videoWatched, dataLesson.lessonable, videoUrl, isYouTubeVideo, player])
+    }, [isYouTubeVideo, videoUrl])
 
     return (
         <>
@@ -216,7 +209,7 @@ const LeaningCourseVideo = ({
             <div className="mx-auto max-w-5xl overflow-hidden px-10">
                 <div className="mt-10 flex flex-wrap justify-between gap-4">
                     <div className="flex flex-col gap-4">
-                        <h2 className="max-w-xl text-2xl font-semibold md:text-4xl">{dataLesson.lessonable!.title}</h2>
+                        <h2 className="max-w-xl text-xl font-semibold md:text-2xl">{dataLesson.lessonable!.title}</h2>
                         <span className="md:text-md text-sm">Cập nhật tháng 10 năm 2024</span>
                     </div>
                     <Button

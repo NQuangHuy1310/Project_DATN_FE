@@ -18,7 +18,6 @@ import logo from '@/assets/Union.svg'
 
 import Loading from '@/components/Common/Loading/Loading'
 import { Button } from '@/components/ui/button'
-import useFormatTime from '@/app/hooks/common/useFomatTime'
 import AllNoteCourse from '@/components/shared/CourseLeaning/Sheet/AllNoteCourse'
 import { useLessonById, useQuizLessonById } from '@/app/hooks/courses/useLesson'
 import LeaningCourseQuiz from '@/components/shared/CourseLeaning/LeaningCourseQuiz'
@@ -27,6 +26,7 @@ import LeaningCourseDocument from '@/components/shared/CourseLeaning/LeaningCour
 import { useCourseLeaningBySlug } from '@/app/hooks/courses/useCourse'
 import { ILessonLeaning, IModuleLeaning } from '@/types/course/course'
 import { useGetIdParams, useGetSlugParams } from '@/app/hooks/common/useCustomParams'
+import { formatDurationSecond } from '@/lib/common'
 
 const CourseLearning = () => {
     const [toggleTab, setToggleTab] = useState<boolean>(true)
@@ -42,6 +42,7 @@ const CourseLearning = () => {
     const [checkQuizLeaning, setCheckQuizLeaning] = useState<boolean>()
 
     const idLesson = useGetIdParams('id')
+    const duration = searchParams.get('time')
     const slug = useGetSlugParams('slug')
 
     // Danh sách bài học theo khóa học
@@ -67,8 +68,6 @@ const CourseLearning = () => {
     const { data: courseLesson } = useLessonById(idLesson!, isQuiz)
     const { data: quizLesson } = useQuizLessonById(idLesson!, isQuiz)
 
-    const lessons = courseModule?.modules?.flatMap((module) => module.lessons) || []
-    const isLessonInModule = lessons.some((lesson) => lesson.id === idLesson)
     const nextLessonId = courseModule?.next_lesson?.id
 
     useEffect(() => {
@@ -79,12 +78,12 @@ const CourseLearning = () => {
     }, [idLesson, quizArray])
 
     useEffect(() => {
-        if (courseModule && !isLessonInModule && nextLessonId) {
-            if (idLesson !== nextLessonId) {
+        if (courseModule && nextLessonId) {
+            if (!idLesson) {
                 setSearchParams({ id: nextLessonId.toString() })
             }
         }
-    }, [courseModule, isLessonInModule, idLesson, nextLessonId, setSearchParams])
+    }, [courseModule, idLesson, nextLessonId, setSearchParams])
 
     // Chi tiết bài học theo id
 
@@ -140,18 +139,14 @@ const CourseLearning = () => {
             const currentQuiz = quizArray.find((quiz: any) => quiz.id === Number(idLesson))
             if (currentLesson) {
                 if (currentLesson.is_completed === 1) {
-                    setSearchParams({ id: currentLesson.id.toString() })
                     setCheckButton(false)
                 } else {
-                    setSearchParams({ id: nextLessonId?.toString()! })
                     setCheckButton(true)
                 }
             } else if (currentQuiz) {
                 if (currentQuiz.is_completed === 1) {
-                    setSearchParams({ id: currentQuiz.id.toString() })
                     setCheckButton(false)
                 } else {
-                    setSearchParams({ id: nextLessonId?.toString()! })
                     setCheckButton(true)
                 }
             }
@@ -341,7 +336,7 @@ const CourseLearning = () => {
                                                     </div>
                                                     <span className="text-xs">
                                                         {lesson.content_type === 'video' && (
-                                                            <p>{useFormatTime(lesson.duration!)}</p>
+                                                            <p>{formatDurationSecond(lesson.duration!)}</p>
                                                         )}
                                                         {lesson.content_type === 'document' && <p>2:00</p>}
                                                     </span>
@@ -414,7 +409,7 @@ const CourseLearning = () => {
                 <div className="flex items-center gap-4">
                     <HiChevronLeft className="size-8 text-white" />
                     <img src={logo} className="hidden rounded-md md:block" alt="Logo" />
-                    <h2 className="md:text-md text-sm font-semibold lg:text-lg">Kiến thức nhập môn IT</h2>
+                    <h2 className="md:text-md text-sm font-semibold lg:text-lg">{courseModule?.course_name}</h2>
                 </div>
                 <div className="flex items-center gap-5">
                     <div className="flex items-center gap-2">
@@ -466,6 +461,7 @@ const CourseLearning = () => {
                             {courseLesson.content_type === 'video' && (
                                 <LeaningCourseVideo
                                     setCheckNote={setCheckNote}
+                                    durationNote={duration!}
                                     toggleTab={toggleTab}
                                     dataLesson={courseLesson}
                                     setCheckButton={setCheckButton}

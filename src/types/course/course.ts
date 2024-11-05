@@ -122,6 +122,7 @@ export interface NextLessonLeaning {
 }
 
 export interface CourseData {
+    course_name: string
     progress_percent: number
     total_lessons: number
     completed_lessons: number

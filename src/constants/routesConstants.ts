@@ -23,9 +23,9 @@ import AccountNotifications from '@/views/user/Account/AccountNotifications'
 // course
 import MyCourse from '@/views/user/Courses/MyCourse'
 import CourseExplore from '@/views/user/Courses/CourseExplore'
+import CourseLearning from '@/views/user/Courses/CourseLearning'
 import CourseMyCourses from '@/views/user/Courses/CourseSearch'
 import CourseDetail from '@/views/user/Courses/CourseDetail'
-import CourseLearning from '@/views/user/Courses/CourseLeaning'
 
 import UserDashboard from '@/views/user/Dashboard'
 import Instructor from '@/views/user/Instructors'

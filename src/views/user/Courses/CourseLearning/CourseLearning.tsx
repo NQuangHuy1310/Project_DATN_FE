@@ -42,12 +42,10 @@ const CourseLearning = () => {
     const [checkQuizLeaning, setCheckQuizLeaning] = useState<boolean>()
 
     const idLesson = useGetIdParams('id')
-    const duration = searchParams.get('time')
     const slug = useGetSlugParams('slug')
 
     // Danh sách bài học theo khóa học
     const { data: courseModule, isLoading, refetch } = useCourseLeaningBySlug(slug!)
-
     const quizArray = useMemo(() => {
         return (
             courseModule?.modules.reduce<any[]>((acc, cur) => {
@@ -68,6 +66,8 @@ const CourseLearning = () => {
     const { data: courseLesson } = useLessonById(idLesson!, isQuiz)
     const { data: quizLesson } = useQuizLessonById(idLesson!, isQuiz)
 
+    const lessons = courseModule?.modules?.flatMap((module) => module.lessons) || []
+    const isLessonInModule = lessons.some((lesson) => lesson.id === idLesson)
     const nextLessonId = courseModule?.next_lesson?.id
 
     useEffect(() => {
@@ -78,12 +78,12 @@ const CourseLearning = () => {
     }, [idLesson, quizArray])
 
     useEffect(() => {
-        if (courseModule && nextLessonId) {
-            if (!idLesson) {
+        if (courseModule && !isLessonInModule && nextLessonId) {
+            if (idLesson !== nextLessonId) {
                 setSearchParams({ id: nextLessonId.toString() })
             }
         }
-    }, [courseModule, idLesson, nextLessonId, setSearchParams])
+    }, [courseModule, isLessonInModule, idLesson, nextLessonId, setSearchParams])
 
     // Chi tiết bài học theo id
 
@@ -139,14 +139,18 @@ const CourseLearning = () => {
             const currentQuiz = quizArray.find((quiz: any) => quiz.id === Number(idLesson))
             if (currentLesson) {
                 if (currentLesson.is_completed === 1) {
+                    setSearchParams({ id: currentLesson.id.toString() })
                     setCheckButton(false)
                 } else {
+                    setSearchParams({ id: nextLessonId?.toString()! })
                     setCheckButton(true)
                 }
             } else if (currentQuiz) {
                 if (currentQuiz.is_completed === 1) {
+                    setSearchParams({ id: currentQuiz.id.toString() })
                     setCheckButton(false)
                 } else {
+                    setSearchParams({ id: nextLessonId?.toString()! })
                     setCheckButton(true)
                 }
             }
@@ -178,7 +182,6 @@ const CourseLearning = () => {
         (direction: 'next' | 'previous') => {
             if (!courseModule || !idLesson) return
 
-            // Tìm module hiện tại dựa trên bài học hoặc quiz
             const currentModuleIndex = courseModule.modules.findIndex(
                 (module) =>
                     module.lessons.some((lesson) => lesson.id === Number(idLesson)) ||
@@ -188,69 +191,56 @@ const CourseLearning = () => {
             if (currentModuleIndex === -1) return
 
             const currentModule = courseModule.modules[currentModuleIndex]
-            const currentLesson = currentModule.lessons.find((lesson) => lesson.id === Number(idLesson))
+            const currentLessonIndex = currentModule.lessons.findIndex((lesson) => lesson.id === Number(idLesson))
             const isQuiz = currentModule.quiz && currentModule.quiz.id === Number(idLesson)
-
-            // Lấy vị trí của bài học hiện tại (nếu có) hoặc 0 nếu là quiz
-            const currentLessonPosition = currentLesson ? currentLesson.position : 0
             const hasQuiz = currentModule.quiz !== null
 
             if (direction === 'next') {
-                const nextModuleIndex = currentModuleIndex + 1
-                const isLastLesson =
-                    currentLesson &&
-                    currentLessonPosition === currentModule.lessons[currentModule.lessons.length - 1].position
+                // Nếu bài học cuối cùng trong module
+                if (currentLessonIndex === currentModule.lessons.length - 1 || isQuiz) {
+                    const nextModuleIndex = currentModuleIndex + 1
 
-                if (isLastLesson) {
-                    if (hasQuiz) {
+                    if (hasQuiz && !isQuiz) {
+                        // Nếu có quiz và chưa ở quiz, chuyển tới quiz
                         handleQuizClick(currentModule.quiz.id)
                         return
                     } else if (nextModuleIndex < courseModule.modules.length) {
+                        // Chuyển sang bài học đầu tiên của module kế tiếp
                         const nextModule = courseModule.modules[nextModuleIndex]
                         const firstLessonOfNextModule = nextModule.lessons[0]
                         setActiveModules((prev) => [...new Set([...prev, nextModuleIndex])])
                         handleLessonClick(firstLessonOfNextModule.id)
                         return
                     }
-                }
-
-                const nextLesson = currentModule.lessons.find((lesson) => lesson.position === currentLessonPosition + 1)
-                if (nextLesson) {
-                    handleLessonClick(nextLesson.id)
-                } else if (hasQuiz && nextModuleIndex < courseModule.modules.length) {
-                    const nextModule = courseModule.modules[nextModuleIndex]
-                    if (!nextModule.quiz) {
-                        const firstLessonOfNextModule = nextModule.lessons[0]
-                        setActiveModules((prev) => [...new Set([...prev, nextModuleIndex])])
-                        handleLessonClick(firstLessonOfNextModule.id)
+                } else {
+                    // Chuyển tới bài học tiếp theo trong module hiện tại
+                    const nextLesson = currentModule.lessons[currentLessonIndex + 1]
+                    if (nextLesson) {
+                        handleLessonClick(nextLesson.id)
                     }
                 }
             }
 
             if (direction === 'previous') {
                 if (isQuiz) {
-                    // Nếu đang ở quiz, quay lại bài học cuối của module hiện tại
+                    // Nếu đang ở quiz, quay về bài học cuối cùng của module
                     const lastLessonOfCurrentModule = currentModule.lessons[currentModule.lessons.length - 1]
                     handleLessonClick(lastLessonOfCurrentModule.id)
                     return
-                }
-
-                const previousLesson = currentModule.lessons.find(
-                    (lesson) => lesson.position === currentLessonPosition - 1
-                )
-
-                if (previousLesson) {
+                } else if (currentLessonIndex > 0) {
+                    // Quay lại bài học trước trong cùng module
+                    const previousLesson = currentModule.lessons[currentLessonIndex - 1]
                     handleLessonClick(previousLesson.id)
                 } else if (currentModuleIndex > 0) {
+                    // Quay lại module trước nếu hết bài học trong module hiện tại
                     const previousModuleIndex = currentModuleIndex - 1
                     const previousModule = courseModule.modules[previousModuleIndex]
-                    const lastLessonOfPreviousModule = previousModule.lessons[previousModule.lessons.length - 1]
-
                     setActiveModules((prev) => [...new Set([...prev, previousModuleIndex])])
 
                     if (previousModule.quiz) {
                         handleQuizClick(previousModule.quiz.id)
                     } else {
+                        const lastLessonOfPreviousModule = previousModule.lessons[previousModule.lessons.length - 1]
                         handleLessonClick(lastLessonOfPreviousModule.id)
                     }
                 }
@@ -461,7 +451,6 @@ const CourseLearning = () => {
                             {courseLesson.content_type === 'video' && (
                                 <LeaningCourseVideo
                                     setCheckNote={setCheckNote}
-                                    durationNote={duration!}
                                     toggleTab={toggleTab}
                                     dataLesson={courseLesson}
                                     setCheckButton={setCheckButton}

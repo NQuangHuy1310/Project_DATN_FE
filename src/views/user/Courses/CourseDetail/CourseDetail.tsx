@@ -12,21 +12,21 @@ import { RiMoneyDollarCircleFill } from 'react-icons/ri'
 import { toast } from 'sonner'
 import routes from '@/configs/routes'
 import { formatDuration, getImagesUrl } from '@/lib/common'
-import { CourseLevel as CourseLevelType } from '@/constants'
 
 import useGetUserProfile from '@/app/hooks/accounts/useGetUser'
 import { useGetSlugParams } from '@/app/hooks/common/useCustomParams'
 import { useCheckRated, useCheckRatingUser, useCreateRating } from '@/app/hooks/ratings/useRating'
-import { useCheckBuyCourse, useCourseDetailNoLoginBySlug } from '@/app/hooks/courses/useCourse'
+import { useCheckBuyCourse, useCourseDetailBySlug } from '@/app/hooks/courses/useCourse'
 
 import Tools from '@/views/user/Courses/CourseDetail/Tools'
 import About from '@/views/user/Courses/CourseDetail/About'
 import Reviews from '@/views/user/Courses/CourseDetail/Reviews'
-import Assignment from '@/views/user/Courses/CourseDetail/Assignment'
+import Content from '@/views/user/Courses/CourseDetail/Content'
 
 import { Button } from '@/components/ui/button'
 import Loading from '@/components/Common/Loading/Loading'
 import CourseToday from '@/components/shared/Course/CourseToday'
+import { CourseLevel as level } from '@/constants'
 import { CourseLevel } from '@/components/shared/Course/CourseLevel'
 import { Dialog, DialogContent, DialogFooter } from '@/components/ui/dialog'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -46,28 +46,23 @@ const CourseDetail = () => {
         }
     })
 
+    const navigate = useNavigate()
+    const slug = useGetSlugParams('slug')
     const [isOpen, setIsOpen] = useState<boolean>(false)
+    const handleToggleCourse = () => setToggleCourse(!toggleCourse)
     const [toggleCourse, setToggleCourse] = useState<boolean>(false)
 
-    const handleToggleCourse = () => setToggleCourse(!toggleCourse)
-
-    const navigate = useNavigate()
-
-    const slug = useGetSlugParams('slug')
     const { user } = useGetUserProfile()
-
-    const { data: courseDetail, isLoading: LoadingCourse } = useCourseDetailNoLoginBySlug(slug!)
-
-    const { data: isPurchased, isLoading: LoadingPurchased } = useCheckBuyCourse(user?.id || 0, courseDetail?.id || 0)
-
+    const { mutateAsync: addRating } = useCreateRating()
+    const { data: courseDetail, isLoading: LoadingCourse } = useCourseDetailBySlug(slug!)
+    const { data: isPurchased } = useCheckBuyCourse(user?.id || 0, courseDetail?.id || 0)
     const { data: checkRating } = useCheckRatingUser(user?.id || 0, courseDetail?.id || 0)
-    const { data: checkRated, refetch } = useCheckRated(user?.id || 0, courseDetail?.id || 0)
+    const { data: checkRated } = useCheckRated(user?.id || 0, courseDetail?.id || 0)
 
     const totalTime = formatDuration((courseDetail?.total_duration_video as unknown as number) || 0)
     const rating = watch('rate')
 
-    const { mutateAsync: addRating } = useCreateRating()
-    const onSubmit = async (data) => {
+    const onSubmit = async (data: any) => {
         if (checkRating?.rating === 'block') {
             toast.error('Bạn chưa hoàn thành khóa học')
         } else if (user?.id) {
@@ -77,11 +72,12 @@ const CourseDetail = () => {
                 id_course: courseDetail?.id
             }
             await addRating(payload)
-            refetch()
             setIsOpen(false)
         }
     }
-    if (LoadingCourse || LoadingPurchased) return <Loading />
+    if (LoadingCourse) return <Loading />
+
+    console.log(isPurchased)
 
     return (
         <div className="grid w-full grid-cols-12 gap-5">
@@ -91,7 +87,7 @@ const CourseDetail = () => {
                 </Link>
                 <div className="h-[300px] w-full md:h-[400px] lg:h-[500px]">
                     <video
-                        src={getImagesUrl(courseDetail?.trailer!) || ''}
+                        src={getImagesUrl(courseDetail ? courseDetail.trailer : '')}
                         title="YouTube video player"
                         className="h-full w-full rounded-lg"
                         controls
@@ -100,29 +96,38 @@ const CourseDetail = () => {
                 <div className="flex flex-col gap-7 px-2">
                     <div className="flex flex-col gap-5">
                         <h4 className="text-lg font-bold md:text-xl lg:text-2xl">{courseDetail?.name}</h4>
+
                         <div className="flex flex-wrap items-center justify-between gap-5">
-                            <div className="flex items-center gap-2.5">
-                                <Avatar className="size-8">
-                                    <AvatarImage
-                                        src={getImagesUrl(courseDetail?.user.avatar || '')}
-                                        alt={courseDetail?.user.name}
-                                        className="h-full w-full object-cover"
-                                    />
-                                    <AvatarFallback>{courseDetail?.user.name.slice(0, 2)}</AvatarFallback>
-                                </Avatar>
-                                <h6 className="md:text-base">{courseDetail?.user.name}</h6>
+                            <div className="flex gap-5">
+                                <div className="flex items-center gap-2.5">
+                                    <Avatar className="size-8">
+                                        <AvatarImage
+                                            src={getImagesUrl(courseDetail?.user.avatar || '')}
+                                            alt={courseDetail?.user.name}
+                                            className="h-full w-full object-cover"
+                                        />
+                                        <AvatarFallback>{courseDetail?.user?.name?.slice(0, 2)}</AvatarFallback>
+                                    </Avatar>
+                                    <h6 className="md:text-base">{courseDetail?.user.name}</h6>
+                                </div>
+                                <Button
+                                    className="bg-transparent text-primary hover:text-primary/80"
+                                    variant="outline"
+                                    size="sm"
+                                >
+                                    + Theo dõi
+                                </Button>
                             </div>
-                            <Button className="bg-transparent text-primary hover:text-primary/80" variant="outline">
-                                + Follow Mentor
-                            </Button>
                             <div className="flex items-center gap-1">
                                 <IoIosStar className="size-5 text-primary" />
-                                <span> 4,5 (500 Reviews)</span>
+                                <span> 4,5 (500 Đánh giá)</span>
                             </div>
+
                             <div className="block md:hidden">
-                                <CourseLevel courseLevel={courseDetail?.level!} />
+                                <CourseLevel courseLevel={courseDetail?.level || ''} />
                             </div>
                         </div>
+
                         <div className="flex items-center justify-between">
                             <div className="flex w-full items-center justify-between gap-5 md:w-auto">
                                 <div className="flex items-center gap-1.5">
@@ -145,18 +150,18 @@ const CourseDetail = () => {
                                 </div>
                             </div>
                             <div className="hidden md:block">
-                                <CourseLevel courseLevel={CourseLevelType.Beginner} />
+                                <CourseLevel courseLevel={courseDetail?.level ?? level.Beginner} />
                             </div>
                         </div>
                     </div>
                     {/* Tabs */}
-                    <Tabs defaultValue="about" className="flex flex-col gap-6">
+                    <Tabs defaultValue="about" className="flex flex-col gap-4">
                         <TabsList className="scrollbar-hide flex w-full items-start justify-start gap-2 overflow-x-auto">
                             <TabsTrigger value="about" className="min-w-max shrink-0 px-4 py-2">
                                 Thông tin
                             </TabsTrigger>
-                            <TabsTrigger value="assignment" className="min-w-max shrink-0 px-4 py-2">
-                                Bài tập
+                            <TabsTrigger value="content" className="min-w-max shrink-0 px-4 py-2">
+                                Nội dung
                             </TabsTrigger>
                             <TabsTrigger value="tool" className="min-w-max shrink-0 px-4 py-2">
                                 Công cụ
@@ -168,13 +173,14 @@ const CourseDetail = () => {
                         <div className="p-4">
                             <TabsContent value="about">
                                 <About
-                                    goals={courseDetail?.goals!}
-                                    description={courseDetail?.description!}
-                                    requirements={courseDetail?.requirements!}
+                                    goals={courseDetail?.goals ?? []}
+                                    description={courseDetail?.description ?? ''}
+                                    requirements={courseDetail?.requirements ?? []}
+                                    audiences={courseDetail?.audiences ?? []}
                                 />
                             </TabsContent>
-                            <TabsContent value="assignment">
-                                <Assignment />
+                            <TabsContent value="content">
+                                <Content modules={courseDetail?.modules ?? []} />
                             </TabsContent>
                             <TabsContent value="tool">
                                 <Tools />
@@ -191,12 +197,12 @@ const CourseDetail = () => {
                     <div className="card flex w-full max-w-full cursor-text flex-col gap-4 p-4 hover:shadow-[0px_40px_100px_0px_#0000000d] hover:transition-all lg:max-w-[360px] xl:max-w-[400px] xl:p-7 2xl:max-w-[400px]">
                         <div className="relative h-[160px] flex-shrink-0 cursor-pointer">
                             <img
-                                src={getImagesUrl(courseDetail?.thumbnail)}
+                                src={getImagesUrl(courseDetail?.thumbnail ?? '')}
                                 alt={courseDetail?.name}
                                 className="h-full w-full rounded-lg object-cover"
                             />
                             <div className="absolute bottom-2.5 left-2.5">
-                                <CourseLevel courseLevel={courseDetail?.level!} />
+                                <CourseLevel courseLevel={courseDetail?.level ?? level.Beginner} />
                             </div>
                         </div>
 
@@ -280,7 +286,7 @@ const CourseDetail = () => {
                                     <div className="flex w-full gap-2">
                                         <Button
                                             className="w-full"
-                                            onClick={() => navigate(routes.courseLeaning.replace(':slug', slug))}
+                                            onClick={() => navigate(routes.courseLeaning.replace(':slug', slug!))}
                                         >
                                             Vào học
                                         </Button>
@@ -308,7 +314,8 @@ const CourseDetail = () => {
                                 )}
                             </div>
                         )}
-                        <Dialog open={isOpen} onOpenChange={() => setIsOpen(!isOpen)}>
+
+                        <Dialog open={isOpen} onOpenChange={setIsOpen}>
                             <DialogContent className="max-h-[90vh] max-w-[50vw] overflow-y-scroll p-10">
                                 <form onSubmit={handleSubmit(onSubmit)}>
                                     <h1 className="text-center text-xl font-bold md:text-left md:text-3xl">Đánh giá</h1>
@@ -369,21 +376,24 @@ const CourseDetail = () => {
                 <div
                     className={`fixed inset-x-0 bottom-0 z-50 w-full bg-white transition-transform duration-500 ease-in-out lg:hidden ${toggleCourse ? 'translate-y-0' : 'translate-y-full'}`}
                 >
-                    <CourseToday
-                        id={courseDetail?.id!}
-                        total_student={courseDetail?.total_student!}
-                        page={routes.courseDetail}
-                        total_lessons={courseDetail?.total_lessons!}
-                        total_duration_video={courseDetail?.total_duration_video!}
-                        price_sale={courseDetail?.price_sale!}
-                        name={courseDetail?.name!}
-                        module={courseDetail?.modules!}
-                        slug={courseDetail?.slug!}
-                        user={courseDetail?.user!}
-                        thumbnail={courseDetail?.thumbnail!}
-                        price={courseDetail?.price!}
-                        level={courseDetail?.level!}
-                    />
+                    {courseDetail && (
+                        <CourseToday
+                            id={courseDetail.id!}
+                            total_student={courseDetail.total_student!}
+                            page={routes.courseDetail}
+                            total_lessons={courseDetail.total_lessons!}
+                            total_duration_video={courseDetail.total_duration_video!}
+                            price_sale={courseDetail.price_sale!}
+                            name={courseDetail.name!}
+                            module={courseDetail.modules!}
+                            slug={courseDetail.slug!}
+                            user={courseDetail.user!}
+                            trailer={courseDetail.trailer!}
+                            thumbnail={courseDetail.thumbnail!}
+                            price={courseDetail.price!}
+                            level={courseDetail.level!}
+                        />
+                    )}
                 </div>
             </div>
         </div>

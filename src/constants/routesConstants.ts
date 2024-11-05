@@ -75,7 +75,7 @@ export const privateRoutes = [
     { path: routes.myCourses, layout: UserDashboardLayout, element: MyCourse, title: 'Khoá học của tôi' },
     { path: routes.course, layout: UserDashboardLayout, element: CourseExplore, title: 'Khám phá khoá học' },
     { path: routes.searchCourses, layout: UserDashboardLayout, element: CourseMyCourses, title: 'Tìm kiếm khoá học' },
-    { path: routes.courseDetail, layout: UserDashboardLayout, element: CourseDetail, title: 'Chi tiết ...' },
+    { path: routes.courseDetail, layout: UserDashboardLayout, element: CourseDetail, title: 'Chi tiết khoá học' },
     { path: routes.courseLeaning, layout: CourseLayout, element: CourseLearning },
 
     { path: routes.userDashboard, layout: UserDashboardLayout, element: UserDashboard, title: 'Xin chào ...' },

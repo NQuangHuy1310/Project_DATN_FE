@@ -6,7 +6,6 @@ import { IoTimeOutline } from 'react-icons/io5'
 import { FaRegCirclePlay } from 'react-icons/fa6'
 
 import About from '@/views/user/Courses/CourseDetail/About'
-import Tools from '@/views/user/Courses/CourseDetail/Tools'
 import routes from '@/configs/routes'
 import Reviews from '@/views/user/Courses/CourseDetail/Reviews'
 import Loading from '@/components/Common/Loading/Loading'
@@ -138,9 +137,6 @@ const CourseDetailNoLogin = () => {
                                     <TabsTrigger value="assignment" className="min-w-max shrink-0 px-4 py-2">
                                         Bài tập
                                     </TabsTrigger>
-                                    <TabsTrigger value="tool" className="min-w-max shrink-0 px-4 py-2">
-                                        Công cụ
-                                    </TabsTrigger>
                                     <TabsTrigger value="review" className="min-w-max shrink-0 px-4 py-2">
                                         Đánh giá
                                     </TabsTrigger>
@@ -155,15 +151,9 @@ const CourseDetailNoLogin = () => {
                                             audiences={courseDetail?.audiences ?? []}
                                         />
                                     </TabsContent>
-
                                     <TabsContent value="assignment">
                                         <Content modules={courseDetail?.modules ?? []} />
                                     </TabsContent>
-
-                                    <TabsContent value="tool">
-                                        <Tools />
-                                    </TabsContent>
-
                                     <TabsContent value="review">
                                         <Reviews />
                                     </TabsContent>

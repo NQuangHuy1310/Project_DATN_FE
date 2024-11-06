@@ -54,6 +54,7 @@ import CourseDetailNoLogin from '@/views/user/Courses/CourseDetailNoLogin/Course
 import Transaction from '@/views/user/wallet/Transaction'
 import PerformanceOverview from '@/views/instructor/Performance/PerformanceOverview'
 import InstructorNotifications from '@/views/instructor/InstructorNotifications'
+import LatestPost from '@/views/user/Posts/LatestPosts'
 
 // Routes không cần đăng nhập
 export const publicRoutes = [
@@ -89,6 +90,7 @@ export const privateRoutes = [
     { path: routes.myPosts, layout: UserDashboardLayout, element: MyPosts, title: 'Bài viết của tôi' },
     { path: routes.myBookmarks, layout: UserDashboardLayout, element: MyBookmarks, title: 'Bài viết đã lưu' },
     { path: routes.postsDetail, layout: UserDashboardLayout, element: PostDetail, title: 'Chi tiết bài viết' },
+    { path: routes.latestPost, layout: UserDashboardLayout, element: LatestPost, title: 'Bài viết mới nhất' },
 
     // wallet
     { path: routes.wallet, layout: UserDashboardLayout, element: Transaction, title: 'Nạp tiền vào tài khoản' },

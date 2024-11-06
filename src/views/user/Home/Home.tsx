@@ -15,6 +15,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useCourseCategoryHome, useCourseSaleHome } from '@/app/hooks/courses/useCourse'
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
+import { BsDot } from 'react-icons/bs'
 
 const Home = () => {
     const { data: ratings, isLoading: loadingRating } = useGetRatingHome()
@@ -126,6 +127,43 @@ const Home = () => {
                     ))}
                 </div>
             </Tabs>
+
+            <div className="container-main pb-10">
+                <h3 className="pb-7 text-xl font-medium md:text-2xl">Bài viết nổi bật</h3>
+
+                <div className="flex w-full max-w-[360px] cursor-pointer flex-col gap-4 rounded-lg border p-4 shadow-md">
+                    <div className="h-[170px] w-full overflow-hidden rounded-lg">
+                        <img
+                            src="https://files.fullstack.edu.vn/f8-prod/blog_posts/65/6139fe28a9844.png"
+                            alt=""
+                            className="h-full w-full object-cover"
+                        />
+                    </div>
+                    <div className="flex flex-col gap-3">
+                        <div className="flex flex-col gap-1">
+                            {' '}
+                            <h3 className="truncate text-lg font-semibold">
+                                Tổng hợp các sản phẩm của học viên tại F8
+                            </h3>
+                        </div>
+                        <div className="flex items-center justify-between gap-2 text-xs text-gray-500">
+                            <div className="flex items-center gap-2">
+                                <img
+                                    src="https://artena.vn/wp-content/uploads/2024/10/anh-meme-cute-hai-huoc-15.jpg"
+                                    alt=""
+                                    className="h-10 w-10 rounded-full"
+                                />
+                                <span className="text-xs font-semibold">Lê Thị Thùy Linh</span>
+                            </div>
+                            <div className="gap flex items-center">
+                                <BsDot className="text-darkGrey" />
+                                <span className="text-darkGrey">6 phút đọc</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div className="container-main pb-10">
                 <h3 className="pb-7 text-xl font-medium md:text-2xl">Đánh giá</h3>
                 <div className="flex flex-wrap gap-3">
@@ -158,6 +196,7 @@ const Home = () => {
                     ))}
                 </div>
             </div>
+
             <div className="container-main rounded-md pb-10">
                 <div
                     className="relative h-[250px] w-full overflow-hidden rounded-md bg-cover bg-center md:h-[350px] lg:h-[419px]"

@@ -13,8 +13,18 @@ export interface IPayment {
     user_name: string
 }
 export interface IBuyData {
-    id_voucher?: number
+    voucher_code?: string
     total_coin: number
     coin_discount: number
     total_coin_after_discount: number
+}
+
+export interface IVoucher {
+    voucher: Voucher[]
+}
+
+interface Voucher {
+    code: string
+    start_time: string
+    end_time: string
 }

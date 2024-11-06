@@ -5,7 +5,7 @@ const HomeLayout = ({ children }: { children: React.ReactNode }) => {
     return (
         <div>
             <Header />
-            <main className="mt-[120px] min-h-screen">
+            <main className="min-h-screen">
                 <div className="flex-1">{children}</div>
             </main>
             <Footer />

@@ -16,21 +16,20 @@ import { formatDuration, getImagesUrl } from '@/lib/common'
 import useGetUserProfile from '@/app/hooks/accounts/useGetUser'
 import { useGetSlugParams } from '@/app/hooks/common/useCustomParams'
 import { useCheckRated, useCheckRatingUser, useCreateRating } from '@/app/hooks/ratings/useRating'
-import { useCheckBuyCourse, useCourseDetailBySlug } from '@/app/hooks/courses/useCourse'
+import { useCheckBuyCourse, useCourseDetailNoLoginBySlug } from '@/app/hooks/courses/useCourse'
 
-import Tools from '@/views/user/Courses/CourseDetail/Tools'
 import About from '@/views/user/Courses/CourseDetail/About'
 import Reviews from '@/views/user/Courses/CourseDetail/Reviews'
 import Content from '@/views/user/Courses/CourseDetail/Content'
 
 import { Button } from '@/components/ui/button'
 import Loading from '@/components/Common/Loading/Loading'
-import CourseToday from '@/components/shared/Course/CourseToday'
 import { CourseLevel as level } from '@/constants'
 import { CourseLevel } from '@/components/shared/Course/CourseLevel'
 import { Dialog, DialogContent, DialogFooter } from '@/components/ui/dialog'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { useBuyCourse } from '@/app/hooks/payment'
 
 const CourseDetail = () => {
     const {
@@ -54,10 +53,11 @@ const CourseDetail = () => {
 
     const { user } = useGetUserProfile()
     const { mutateAsync: addRating } = useCreateRating()
-    const { data: courseDetail, isLoading: LoadingCourse } = useCourseDetailBySlug(slug!)
+    const { data: courseDetail, isLoading: LoadingCourse } = useCourseDetailNoLoginBySlug(slug!)
     const { data: isPurchased } = useCheckBuyCourse(user?.id || 0, courseDetail?.id || 0)
     const { data: checkRating } = useCheckRatingUser(user?.id || 0, courseDetail?.id || 0)
     const { data: checkRated } = useCheckRated(user?.id || 0, courseDetail?.id || 0)
+    const { mutateAsync: handleByCourse } = useBuyCourse()
 
     const totalTime = formatDuration((courseDetail?.total_duration_video as unknown as number) || 0)
     const rating = watch('rate')
@@ -75,9 +75,22 @@ const CourseDetail = () => {
             setIsOpen(false)
         }
     }
-    if (LoadingCourse) return <Loading />
 
-    console.log(isPurchased)
+    const handleLearnNow = async () => {
+        if (user && courseDetail)
+            await handleByCourse([
+                user?.id,
+                courseDetail?.id,
+                {
+                    total_coin: 0,
+                    coin_discount: 0,
+                    total_coin_after_discount: 0
+                }
+            ])
+        toast.success('Đăng ký khóa học thành công')
+    }
+
+    if (LoadingCourse) return <Loading />
 
     return (
         <div className="grid w-full grid-cols-12 gap-5">
@@ -163,9 +176,6 @@ const CourseDetail = () => {
                             <TabsTrigger value="content" className="min-w-max shrink-0 px-4 py-2">
                                 Nội dung
                             </TabsTrigger>
-                            <TabsTrigger value="tool" className="min-w-max shrink-0 px-4 py-2">
-                                Công cụ
-                            </TabsTrigger>
                             <TabsTrigger value="review" className="min-w-max shrink-0 px-4 py-2">
                                 Đánh giá
                             </TabsTrigger>
@@ -182,9 +192,6 @@ const CourseDetail = () => {
                             <TabsContent value="content">
                                 <Content modules={courseDetail?.modules ?? []} />
                             </TabsContent>
-                            <TabsContent value="tool">
-                                <Tools />
-                            </TabsContent>
                             <TabsContent value="review">
                                 <Reviews idDetailCourse={courseDetail?.id || 0} />
                             </TabsContent>
@@ -192,7 +199,7 @@ const CourseDetail = () => {
                     </Tabs>
                 </div>
             </div>
-            <div className="col-span-12 w-full lg:col-span-4 xl2:col-span-3">
+            <div className="sticky top-[80px] col-span-12 h-fit w-full lg:col-span-4 xl2:col-span-3">
                 <div className="hidden w-full flex-shrink-0 transition-transform duration-500 lg:block">
                     <div className="card flex w-full max-w-full cursor-text flex-col gap-4 p-4 hover:shadow-[0px_40px_100px_0px_#0000000d] hover:transition-all lg:max-w-[360px] xl:max-w-[400px] xl:p-7 2xl:max-w-[400px]">
                         <div className="relative h-[160px] flex-shrink-0 cursor-pointer">
@@ -210,7 +217,10 @@ const CourseDetail = () => {
                             <h3 className="text-overflow cursor-pointer text-base font-bold text-black xl2:text-lg">
                                 {courseDetail?.name}
                             </h3>
-                            {courseDetail?.price && courseDetail?.price_sale ? (
+                            {courseDetail?.price &&
+                            courseDetail?.price_sale &&
+                            courseDetail.price != 0 &&
+                            courseDetail.price_sale != 0 ? (
                                 <div className="flex items-center gap-3">
                                     <div className="flex items-center gap-1">
                                         <RiMoneyDollarCircleFill className="size-4 text-orange-500" />
@@ -255,29 +265,6 @@ const CourseDetail = () => {
                                     <p className="font-medium text-black">{courseDetail?.total_lessons}</p>
                                 </div>
                             </div>
-                            <div className="flex w-full flex-col gap-3">
-                                <div className="flex items-center justify-between">
-                                    <h3 className="text-sm font-semibold xl2:text-base">
-                                        {courseDetail?.modules?.length} Chương
-                                    </h3>
-                                    <span className="text-sm text-darkGrey xl2:text-base">
-                                        0/{courseDetail?.modules?.length} hoàn thành
-                                    </span>
-                                </div>
-                                <ul className="flex flex-col gap-3">
-                                    {courseDetail?.modules?.map((item, index) => (
-                                        <li key={index} className="flex items-center justify-between">
-                                            <div className="flex items-center gap-3">
-                                                <span className="h-8 w-8 rounded-md border bg-darkGrey/20 text-center font-semibold leading-8">
-                                                    {index + 1}
-                                                </span>
-                                                <h4 className="text-darkGrey">{item.title}</h4>
-                                            </div>
-                                            <span className="text-darkGrey">{item.time}</span>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
                         </div>
 
                         {user?.id !== courseDetail?.id_user && (
@@ -304,10 +291,20 @@ const CourseDetail = () => {
                                             </Button>
                                         )}
                                     </div>
+                                ) : courseDetail?.price == 0 ||
+                                  courseDetail?.price_sale == 0 ||
+                                  !courseDetail?.price ||
+                                  !courseDetail?.price_sale ? (
+                                    <Button
+                                        className="block w-full rounded-md bg-primary py-2 text-center text-white"
+                                        onClick={handleLearnNow}
+                                    >
+                                        Đăng ký học
+                                    </Button>
                                 ) : (
                                     <Link
                                         className="block w-full rounded-md bg-primary py-2 text-center text-white"
-                                        to={`/payment/course/${slug}`}
+                                        to={routes.payment.replace(':slug', slug!)}
                                     >
                                         Mua khoá học
                                     </Link>
@@ -377,22 +374,159 @@ const CourseDetail = () => {
                     className={`fixed inset-x-0 bottom-0 z-50 w-full bg-white transition-transform duration-500 ease-in-out lg:hidden ${toggleCourse ? 'translate-y-0' : 'translate-y-full'}`}
                 >
                     {courseDetail && (
-                        <CourseToday
-                            id={courseDetail.id!}
-                            total_student={courseDetail.total_student!}
-                            page={routes.courseDetail}
-                            total_lessons={courseDetail.total_lessons!}
-                            total_duration_video={courseDetail.total_duration_video!}
-                            price_sale={courseDetail.price_sale!}
-                            name={courseDetail.name!}
-                            module={courseDetail.modules!}
-                            slug={courseDetail.slug!}
-                            user={courseDetail.user!}
-                            trailer={courseDetail.trailer!}
-                            thumbnail={courseDetail.thumbnail!}
-                            price={courseDetail.price!}
-                            level={courseDetail.level!}
-                        />
+                        <div className="card flex w-full max-w-full cursor-text flex-col gap-4 p-4 hover:shadow-[0px_40px_100px_0px_#0000000d] hover:transition-all lg:max-w-[360px] xl:max-w-[400px] xl:p-7 2xl:max-w-[400px]">
+                            <div className="relative h-[160px] flex-shrink-0 cursor-pointer">
+                                <img
+                                    src={getImagesUrl(courseDetail?.thumbnail ?? '')}
+                                    alt={courseDetail?.name}
+                                    className="h-full w-full rounded-lg object-cover"
+                                />
+                                <div className="absolute bottom-2.5 left-2.5">
+                                    <CourseLevel courseLevel={courseDetail?.level ?? level.Beginner} />
+                                </div>
+                            </div>
+
+                            <div className="sticky top-0 flex flex-col gap-4">
+                                <h3 className="text-overflow cursor-pointer text-base font-bold text-black xl2:text-lg">
+                                    {courseDetail?.name}
+                                </h3>
+                                {courseDetail?.price && courseDetail?.price_sale ? (
+                                    <div className="flex items-center gap-3">
+                                        <div className="flex items-center gap-1">
+                                            <RiMoneyDollarCircleFill className="size-4 text-orange-500" />
+                                            <del>{Math.floor(courseDetail?.price)} xu</del>
+                                        </div>
+                                        <p className="font-semibold text-red-600">
+                                            {Math.floor(courseDetail?.price_sale)} xu
+                                        </p>
+                                    </div>
+                                ) : (
+                                    <span className="text-sm text-orange-500 lg:text-base">Miễn phí</span>
+                                )}
+
+                                <div className="flex items-center gap-2">
+                                    <Link to="" className="flex w-full items-center gap-2.5">
+                                        <Avatar className="size-8 flex-shrink-0">
+                                            <AvatarImage
+                                                src={getImagesUrl(user?.avatar as string) || ''}
+                                                alt={user?.name}
+                                            />
+                                            <AvatarFallback className="flex size-8 items-center justify-center bg-slate-500/50 font-semibold">
+                                                {user?.name.charAt(0)}
+                                            </AvatarFallback>
+                                        </Avatar>
+                                        <p className="w-fit text-sm font-medium xl2:text-base">{user?.name}</p>
+                                    </Link>
+                                </div>
+
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-1.5">
+                                        <FaRegUser className="size-4 text-darkGrey" />
+                                        <p className="font-medium text-black">{courseDetail?.total_student}</p>
+                                    </div>
+                                    <div className="flex items-center gap-1.5">
+                                        <IoTimeOutline className="size-4 text-darkGrey" />
+                                        <p className="font-medium text-black">{courseDetail?.total_duration_video}</p>
+                                    </div>
+                                    <div className="flex items-center gap-1.5">
+                                        <FaRegCirclePlay className="size-4 text-darkGrey" />
+                                        <p className="font-medium text-black">{courseDetail?.total_lessons}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {user?.id !== courseDetail?.id_user && (
+                                <div className="w-full">
+                                    {isPurchased?.status === 'error' ? (
+                                        <div className="flex w-full gap-2">
+                                            <Button
+                                                className="w-full"
+                                                onClick={() => navigate(routes.courseLeaning.replace(':slug', slug!))}
+                                            >
+                                                Vào học
+                                            </Button>
+                                            {checkRated?.data.status === 'error' ? (
+                                                <Button variant="outline" className="w-full" disabled>
+                                                    Đã đánh giá
+                                                </Button>
+                                            ) : checkRating?.data.status === 'success' ? null : (
+                                                <Button
+                                                    variant="outline"
+                                                    className="w-full"
+                                                    onClick={() => setIsOpen(true)}
+                                                >
+                                                    Đánh giá
+                                                </Button>
+                                            )}
+                                        </div>
+                                    ) : courseDetail?.price == 0 ||
+                                      courseDetail.price_sale == 0 ||
+                                      !courseDetail.price ||
+                                      !courseDetail.price_sale ? (
+                                        <Button
+                                            className="block w-full rounded-md bg-primary py-2 text-center text-white"
+                                            onClick={handleLearnNow}
+                                        >
+                                            Đăng ký học
+                                        </Button>
+                                    ) : (
+                                        <Link
+                                            className="block w-full rounded-md bg-primary py-2 text-center text-white"
+                                            to={routes.payment.replace(':slug', slug!)}
+                                        >
+                                            Mua khoá học
+                                        </Link>
+                                    )}
+                                </div>
+                            )}
+
+                            <Dialog open={isOpen} onOpenChange={setIsOpen}>
+                                <DialogContent className="max-h-[90vh] max-w-[50vw] overflow-y-scroll p-10">
+                                    <form onSubmit={handleSubmit(onSubmit)}>
+                                        <h1 className="text-center text-xl font-bold md:text-left md:text-3xl">
+                                            Đánh giá
+                                        </h1>
+                                        <div className="flex flex-col gap-5">
+                                            <span className="text-md text-center md:text-left md:text-lg">
+                                                Bạn có hài lòng với khóa học?
+                                            </span>
+
+                                            <div className="flex justify-center gap-2 md:justify-start">
+                                                {[1, 2, 3, 4, 5].map((star) => (
+                                                    <FaStar
+                                                        key={star}
+                                                        onClick={() => setValue('rate', star)}
+                                                        className={`cursor-pointer ${
+                                                            star <= rating ? 'text-yellow-500' : 'text-gray-300'
+                                                        } h-6 w-6 md:h-8 md:w-8`}
+                                                    />
+                                                ))}
+                                            </div>
+
+                                            <div className="mx-auto flex w-full flex-col gap-4 md:mx-0">
+                                                <h3 className="text-md md:text-lg">Đánh giá của bạn</h3>
+                                                <textarea
+                                                    {...register('content', { required: 'Vui lòng nhập nội dung' })}
+                                                    className="w-full resize-none rounded-md border-2 border-gray-300 p-3 md:p-4"
+                                                    rows={6}
+                                                    placeholder="Viết đánh giá của bạn ở đây..."
+                                                />
+                                                {errors.content && (
+                                                    <span className="text-red-500">{errors.content.message}</span>
+                                                )}
+                                            </div>
+
+                                            {/* Submit Button */}
+                                            <div className="flex justify-center md:justify-start">
+                                                <DialogFooter>
+                                                    <Button type="submit">Gửi đánh giá</Button>
+                                                </DialogFooter>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </DialogContent>
+                            </Dialog>
+                        </div>
                     )}
                 </div>
             </div>

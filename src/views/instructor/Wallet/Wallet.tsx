@@ -35,6 +35,7 @@ const Wallet = () => {
         coin === 0 ||
         coin === undefined ||
         (coin && coin > 10000) ||
+        (coin && coin < 10) ||
         (teacherBalanceData !== undefined && coin >= +teacherBalanceData.balance) ||
         isPending ||
         !selectedBank ||
@@ -64,10 +65,12 @@ const Wallet = () => {
         }
         if (payload && user) {
             await createRequestWithDraw([user.id, payload])
+            setSelectedBank('')
+            setAccountHolder('')
+            setAccountHolder('')
+            setCoin(0)
         }
     }
-
-    console.log(isDisable, coin, teacherBalanceData, selectedBank, accountHolder)
 
     if (isLoading) return <Loading />
 
@@ -179,13 +182,15 @@ const Wallet = () => {
                         </div>
 
                         <div className="flex flex-col gap-2">
-                            {coin && coin !== 0 ? (
+                            {coin && coin > 10 && coin < 10000 ? (
                                 <span className="text-sm text-foreground">Số tiền nhận được {convertToVnd(coin)}</span>
                             ) : null}
 
-                            {coin && coin > 10000 ? (
+                            {coin && (coin > 10000 || coin < 10) ? (
                                 <span className="text-sm text-secondaryRed">
-                                    Bạn không thể nhập số tiền lớn hơn 10000 Xu
+                                    {coin > 10000
+                                        ? 'Bạn không thể nhập số tiền lớn hơn 10000 Xu'
+                                        : 'Bạn không thể nhập số tiền nhỏ hơn 10 Xu'}
                                 </span>
                             ) : null}
 

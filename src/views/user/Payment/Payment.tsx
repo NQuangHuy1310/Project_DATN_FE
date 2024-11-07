@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 import routes from '@/configs/routes'
 import { FaClock } from 'react-icons/fa'
@@ -28,6 +28,7 @@ import {
     AlertDialogFooter,
     AlertDialogHeader
 } from '@/components/ui/alert-dialog'
+import { IBuyData } from '@/types'
 
 const Payment = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false)
@@ -35,7 +36,7 @@ const Payment = () => {
     const [discountValue, setDiscountValue] = useState<number>(0)
 
     const slug = useGetSlugParams('slug')
-    const navigate = useNavigate()
+
 
     const { data: courseData, isLoading } = usePaymentCourseBySlug(slug!)
     const { user } = useGetUserProfile()
@@ -51,19 +52,13 @@ const Payment = () => {
     const handleApplyVoucher = async () => {
         if (user && voucherCode) {
             const data = await applyVoucher([user?.id, voucherCode])
+            const voucher = data.voucher
+            if (voucher) {
+                const calculatedDiscount =
+                    voucher.type === 'percent' ? (totalPrice * voucher.discount) / 100 : voucher.discount
 
-            if (data?.status === 'error') {
-                toast.error(data.message)
-            } else if (data?.voucher) {
-                let calculatedDiscount = 0
-                if (data.voucher.type === 'percent') {
-                    calculatedDiscount = (totalPrice * data.voucher.discount) / 100
-                } else if (data.voucher.type === 'fixed') {
-                    calculatedDiscount = data.voucher.discount
-                }
                 const finalDiscount = Math.min(calculatedDiscount, totalPrice)
                 setDiscountValue(finalDiscount)
-                toast.success(data.message)
             }
         } else {
             toast.error('Vui lòng nhập mã giảm giá')
@@ -77,7 +72,7 @@ const Payment = () => {
             if (totalCoinAfterDiscount > 0 && balance < totalCoinAfterDiscount) {
                 toast.error('Số dư ví không đủ, vui lòng nạp thêm tiền')
             } else {
-                const response = await confirmPayment([
+                const payload: [number, number, IBuyData] = [
                     user?.id,
                     courseData?.course_id,
                     {
@@ -86,12 +81,8 @@ const Payment = () => {
                         coin_discount: discountValue,
                         total_coin_after_discount: totalCoinAfterDiscount
                     }
-                ])
-                if (response.status === 'success') {
-                    navigate(routes.myCourses)
-                } else if (response.status === 'error') {
-                    toast.error(response.message)
-                }
+                ]
+                await confirmPayment(payload)
             }
         }
     }

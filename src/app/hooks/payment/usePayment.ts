@@ -1,6 +1,9 @@
 import { paymentApi } from '@/app/services/payment'
+import routes from '@/configs/routes'
 import { IBuyData, IPayment, IVoucher } from '@/types/payment'
 import { useMutation, useQuery, useQueryClient, UseQueryOptions } from '@tanstack/react-query'
+import { useNavigate } from 'react-router-dom'
+import { toast } from 'sonner'
 
 export const usePaymentCourseBySlug = (
     slug: string,
@@ -16,12 +19,17 @@ export const usePaymentCourseBySlug = (
 
 export const useBuyCourse = () => {
     const queryClient = useQueryClient()
-
+    const navigate = useNavigate()
     return useMutation<any, Error, [number, number, IBuyData]>({
         mutationFn: async ([userId, courseId, buyData]) => {
             return paymentApi.buyCourse(userId, courseId, buyData)
         },
-        onSuccess() {
+        onSuccess(data) {
+            if (data.status === 'success') {
+                navigate(routes.myCourses)
+            } else if (data.status === 'error') {
+                toast.error(data.message)
+            }
             queryClient.invalidateQueries({ queryKey: ['buy-course'] })
         }
     })
@@ -31,7 +39,7 @@ export const useGetNewVoucher = (options?: Omit<UseQueryOptions<IVoucher>, 'quer
     return useQuery<IVoucher>({
         ...options,
         queryKey: ['voucher'],
-        queryFn: () => paymentApi.getNewVoucher()
+        queryFn: paymentApi.getNewVoucher
     })
 }
 
@@ -42,8 +50,13 @@ export const useApplyVoucher = () => {
         mutationFn: async ([userId, voucher]) => {
             return paymentApi.applyVoucher(userId, voucher)
         },
-        onSuccess() {
+        onSuccess(data) {
             queryClient.invalidateQueries({ queryKey: ['buy-course'] })
+            if (data?.status === 'error') {
+                toast.error(data.message)
+            } else if (data?.message) {
+                toast.success(data.message)
+            }
         }
     })
 }

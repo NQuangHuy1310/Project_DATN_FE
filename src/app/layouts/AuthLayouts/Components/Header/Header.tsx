@@ -45,14 +45,14 @@ const Header = () => {
     }, [menuOpen, openSearch])
 
     return (
-        <div>
+        <header>
             {voucher ? (
                 <TopBar
                     endTime={voucher.end_time}
                     voucherCode={voucher.code}
                 />
             ) : null}
-            <header className="z-50 h-[120px] border-b-[1px] bg-white shadow-sm">
+            <div className="z-50 h-[120px] border-b-[1px] bg-white shadow-sm">
                 <div className="mx-auto h-full max-w-[1200px] px-5 py-3 lg:px-2">
                     <div className="flex items-center justify-between gap-2">
                         <div className="flex items-center gap-4 md:gap-10">
@@ -219,9 +219,8 @@ const Header = () => {
                     </nav>
                     {menuOpen && <div className="fixed inset-0 z-40 bg-black opacity-50" onClick={toggleMenu}></div>}
                 </div>
-            </header>
-        </div>
-
+            </div>
+        </header>
     )
 }
 

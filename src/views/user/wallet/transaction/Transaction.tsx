@@ -4,8 +4,8 @@ import { getImagesUrl } from '@/lib'
 import { IoIosWarning } from 'react-icons/io'
 import { TbCoinFilled } from 'react-icons/tb'
 import { transaction } from '@/constants/mockData'
-import ConfirmTransaction from './ConfirmTransaction.tsx'
 import useGetUserProfile from '@/app/hooks/accounts/useGetUser'
+import ConfirmTransaction from '@/views/user/wallet/transaction/ConfirmTransaction'
 
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -17,12 +17,14 @@ const Transaction = () => {
     const [totalAmount, setTotalAmount] = useState<number>(0)
     const [inputValue, setInputValue] = useState<string>('')
     const [error, setError] = useState<string>('')
+
     const { user } = useGetUserProfile()
 
+    const { data: history } = useGetHistoryClient(user?.id || 0)
     const { data: transactionData, isLoading } = useTransactionById(user?.id || 0)
+
     const balance = Math.floor(transactionData?.balance ?? 0)
 
-    const { data: history } = useGetHistoryClient(user?.id || 0)
     const handleSelect = (cash: number) => {
         setTotalAmount(cash)
         setInputValue('')
@@ -31,14 +33,16 @@ const Transaction = () => {
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value
-        // Kiểm tra nếu nhập chỉ chứa số
         if (/^\d*$/.test(value)) {
             const numericValue = Number(value)
-            // Kiểm tra nếu giá trị không vượt quá 5 triệu
             if (numericValue <= 5000000) {
                 setTotalAmount(numericValue)
                 setInputValue(value)
-                setError('')
+                if (numericValue > 0 && numericValue < 50000) {
+                    setError('Số tiền phải từ 50.000 VNĐ trở lên.')
+                } else {
+                    setError('')
+                }
             } else {
                 setError('Giá trị không được vượt quá 5 triệu.')
             }
@@ -138,11 +142,10 @@ const Transaction = () => {
                                 Tại đây bạn có thể nạp tiền vào tài khoản cá nhân để sử dụng thanh toán cho các lần chi
                                 trả mua khóa học.
                             </p>
-
                             <div className="flex flex-col gap-3">
                                 <span className="text-lg font-medium">Chọn mệnh giá</span>
                                 <div className="mx-auto flex flex-col gap-5">
-                                    <div className="flex flex-wrap justify-between gap-5">
+                                    <div className="flex flex-wrap justify-center gap-5">
                                         {transaction.map((transaction, index) => (
                                             <div
                                                 key={index}
@@ -182,7 +185,7 @@ const Transaction = () => {
                                             Tổng : <b>{totalAmount.toLocaleString('vi-VN')} VNĐ</b>
                                         </span>
                                         <div>
-                                            {totalAmount > 0 && user ? (
+                                            {totalAmount > 50000 && user ? (
                                                 <ConfirmTransaction totalAmount={totalAmount} user={user} />
                                             ) : (
                                                 <Button disabled>Nạp tiền</Button>
@@ -194,7 +197,6 @@ const Transaction = () => {
                         </div>
                     </div>
                 </div>
-
                 <div className="flex flex-col gap-5 sm:rounded-lg">
                     <h3 className="text-2xl font-bold">Lịch sử nạp tiền</h3>
                     <table className="w-full text-left text-sm text-darkGrey rtl:text-right">

@@ -34,6 +34,7 @@ const Payment = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const [voucherCode, setVoucherCode] = useState<string>('')
     const [discountValue, setDiscountValue] = useState<number>(0)
+    const [isVoucherApplied, setIsVoucherApplied] = useState<boolean>(false)
 
     const slug = useGetSlugParams('slug')
 
@@ -50,7 +51,11 @@ const Payment = () => {
     const totalPrice = Math.floor(courseData?.price_sale || courseData?.price || 0)
 
     const handleApplyVoucher = async () => {
-        if (user && voucherCode) {
+        if (isVoucherApplied) {
+            setIsVoucherApplied(false)
+            setVoucherCode('')
+            setDiscountValue(0)
+        } else if (user && voucherCode) {
             const data = await applyVoucher([user?.id, voucherCode])
             const voucher = data.voucher
             if (voucher) {
@@ -59,12 +64,12 @@ const Payment = () => {
 
                 const finalDiscount = Math.min(calculatedDiscount, totalPrice)
                 setDiscountValue(finalDiscount)
+                setIsVoucherApplied(true)
             }
         } else {
             toast.error('Vui lòng nhập mã giảm giá')
         }
     }
-
     const handlePayment = async () => {
         if (user && courseData) {
             const totalCoinAfterDiscount =
@@ -196,9 +201,11 @@ const Payment = () => {
                                         type="text"
                                         className="w-[78%] rounded-md border ps-2 outline-none md:w-[90%] lg:w-[70%]"
                                         placeholder="Nhập mã giảm giá"
+                                        value={voucherCode}
                                         onChange={(e) => setVoucherCode(e.target.value)}
+                                        readOnly={isVoucherApplied}
                                     />
-                                    <Button onClick={handleApplyVoucher}>Áp dụng</Button>
+                                    <Button onClick={handleApplyVoucher}>{isVoucherApplied ? 'Đổi mã' : 'Áp dụng'}</Button>
                                 </div>
                             </div>
                             <div className="flex flex-col gap-3">

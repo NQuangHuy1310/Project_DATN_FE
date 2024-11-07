@@ -63,7 +63,7 @@ const LatestPost = () => {
                         <div className="flex flex-col gap-3">
                             <div className="flex flex-col gap-1">
                                 <h3 className="text-lg font-semibold">
-                                    Tổng hợp các sản phẩm của học viên tại Coursea 👏👏 
+                                    Tổng hợp các sản phẩm của học viên tại Coursea 👏👏
                                 </h3>
                                 <p className="text-base">
                                     Bài viết này nhằm tổng hợp lại các dự án mà học viên F8 đã hoàn thành và chia sẻ

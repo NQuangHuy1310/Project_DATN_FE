@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient, UseQueryOptions } from '@tanstack/react-query'
 
 import { postsApi } from '@/app/services/posts'
-import { ICreatePost, IPosts } from '@/types/post'
+import { ICreatePost, IFeaturedPost, IPosts } from '@/types/post'
 import { IComment, ICreateComment } from '@/types'
 
 
@@ -88,5 +88,13 @@ export const useAddCommentPost = () => {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['comments-post'] })
         }
+    })
+}
+
+export const useGetFeaturedPosts = (options?: Omit<UseQueryOptions<IFeaturedPost[]>, 'queryKey' | 'queryFn'>) => {
+    return useQuery({
+        ...options,
+        queryKey: ['featuredPosts'],
+        queryFn: postsApi.getFeaturedPost
     })
 }

@@ -39,5 +39,9 @@ export const postsApi = {
 
     addComment: async (commentData: ICreateComment): Promise<ICreateComment> => {
         return axiosClient.post(postUri.ADD_COMMENT, commentData)
+    },
+
+    getFeaturedPost:async (): Promise<any> => {
+        return axiosClient.get(postUri.FEATURED_POST)
     }
 }

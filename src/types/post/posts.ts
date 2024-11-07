@@ -32,3 +32,13 @@ export interface ICreatePost {
     tags: string[]
     thumbnail: File
 }
+
+export interface IFeaturedPost {
+    title: string
+    slug: string
+    thumbnail: string
+    views: number
+    name: string
+    avatar: string
+
+}

@@ -196,7 +196,7 @@ const Header = () => {
                         </li>
                         <li>
                             <NavLink
-                                to={'home-posts'}
+                                to={routes.latestPost}
                                 className={({ isActive }) =>
                                     `px-2 pb-5 lg:pb-[18px] ${isActive ? 'border-b-[3px] border-primary font-semibold' : ''}`
                                 }

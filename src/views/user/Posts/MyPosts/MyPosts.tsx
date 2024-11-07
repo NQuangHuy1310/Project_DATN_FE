@@ -51,7 +51,11 @@ const MyPosts = () => {
                                     key={index}
                                 >
                                     <div className="flex gap-3">
-                                        <img className="h-20 w-20 rounded border"  src={getImagesUrl(post.thumbnail)} alt="" />
+                                        <img
+                                            className="h-20 w-20 rounded border"
+                                            src={getImagesUrl(post.thumbnail)}
+                                            alt=""
+                                        />
                                         <div className="flex flex-col gap-2">
                                             <h3 className="cursor-pointer text-lg" onClick={handleNavigate(post.slug)}>
                                                 {post.title}

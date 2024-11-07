@@ -44,7 +44,6 @@ const routes = {
     editPost: '/posts/:slug/edit',
     myPosts: '/posts/me',
     myBookmarks: '/posts/bookmarks/me',
-    latestPost: '/posts/latest',
 
     //Rating
     rating: '/rating',

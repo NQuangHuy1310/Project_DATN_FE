@@ -15,13 +15,15 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useCourseCategoryHome, useCourseSaleHome } from '@/app/hooks/courses/useCourse'
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
-import PostFeatured from '@/components/shared/Post/PostFeatured'
+import { useGetFeaturedPosts } from '@/app/hooks/posts'
+import Post from '@/components/shared/Post'
 
 const Home = () => {
     const { data: ratings, isLoading: loadingRating } = useGetRatingHome()
     const { data: course_sales, isLoading: loadingSaleHome } = useCourseSaleHome()
     const { data: course_category = [], isLoading: loadingCourseCategory } = useCourseCategoryHome()
     const { data: banners, isLoading: loadingBanner } = useGetBanners()
+    const { data: postFeatured } = useGetFeaturedPosts()
 
     if (loadingRating || loadingSaleHome || loadingCourseCategory || loadingBanner) return <Loading />
 
@@ -127,7 +129,23 @@ const Home = () => {
                     ))}
                 </div>
             </Tabs>
-            <PostFeatured />
+            <div className="container-main pb-10">
+                <h3 className="pb-7 text-xl font-medium md:text-2xl">Bài viết nổi bật</h3>
+
+                <div className="flex flex-wrap gap-7">
+                    {postFeatured?.map((post, index) => (
+                        <Post
+                            key={index}
+                            image={post.thumbnail}
+                            title={post.title}
+                            avatar={post.avatar}
+                            userName={post.name}
+                            slug={post.slug}
+                            views={post.views}
+                        />
+                    ))}
+                </div>
+            </div>
 
             <div className="container-main pb-10">
                 <h3 className="pb-7 text-xl font-medium md:text-2xl">Đánh giá</h3>

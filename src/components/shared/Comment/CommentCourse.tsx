@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 import ReactQuill from 'react-quill'
 
 import { getImagesUrl } from '@/lib'
@@ -18,10 +18,9 @@ interface IComment {
     isOpen: boolean
     setIsOpen: Dispatch<SetStateAction<boolean>>
     commentId: number
-    onUpdateTotalComments?: (total: number) => void | undefined
 }
 
-const CommentCourse = ({ isOpen, setIsOpen, commentId, onUpdateTotalComments }: IComment) => {
+const CommentCourse = ({ isOpen, setIsOpen, commentId }: IComment) => {
     const [contentMap, setContentMap] = useState<{ [key: number]: string }>({})
     const [isOpenComment, setIsOpenComment] = useState<boolean>(false)
     const [activeReply, setActiveReply] = useState<number | null>(null)
@@ -41,7 +40,7 @@ const CommentCourse = ({ isOpen, setIsOpen, commentId, onUpdateTotalComments }: 
         setParentCommentId(rootParentId)
         setContentMap((prevContent) => ({
             ...prevContent,
-            [commentId]: `<span>@${name} </span>`
+            [commentId]: `<span>@${name} </span> `
         }))
     }
 
@@ -84,14 +83,8 @@ const CommentCourse = ({ isOpen, setIsOpen, commentId, onUpdateTotalComments }: 
         }))
     }
 
-    useEffect(() => {
-        if (comments) {
-            onUpdateTotalComments?.(comments.length!)
-        }
-    }, [comments, onUpdateTotalComments])
-
     return (
-        <Sheet open={isOpen} onOpenChange={() => setIsOpen(!isOpen)}>
+        <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetContent>
                 <div className="flex gap-3 p-3">
                     {isOpenComment ? (

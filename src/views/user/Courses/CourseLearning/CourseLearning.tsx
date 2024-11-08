@@ -475,7 +475,7 @@ const CourseLearning = () => {
                 {/* Sidebar */}
                 <aside
                     ref={courseListRef}
-                    className={`absolute top-0 z-50 h-screen w-full overflow-y-auto bg-white px-2 md:w-[50vw] lg:fixed lg:bottom-0 lg:right-0 lg:top-[60px] lg:h-[680px] lg:w-[23%] lg:border-l lg:px-1 ${
+                    className={`absolute top-0 z-50 h-[89vh] w-full overflow-y-auto bg-white px-2 md:w-[50vw] lg:fixed lg:bottom-0 lg:right-0 lg:top-[60px] lg:w-[23%] lg:border-l lg:px-1 ${
                         toggleTab ? 'block' : 'hidden'
                     }`}
                 >

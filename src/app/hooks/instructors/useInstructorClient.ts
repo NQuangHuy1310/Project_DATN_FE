@@ -1,6 +1,6 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query'
 
-import { ITeacherAll, ITeacherDetail } from '@/types'
+import { ITeacher, ITeacherAll, ITeacherDetail } from '@/types'
 import { instructorClientApi } from '@/app/services/instructors'
 
 export const useInstructor = (
@@ -21,7 +21,15 @@ export const useInstructorById = (
 ) => {
     return useQuery<ITeacherDetail>({
         ...options,
-        queryKey: ['instructor', { id }],
+        queryKey: ['instructor-detail', id],
         queryFn: () => instructorClientApi.getInstructorById(id)
+    })
+}
+
+export const useInstructorMonth = (options?: Omit<UseQueryOptions<ITeacher[]>, 'queryKey' | 'queryFn'>) => {
+    return useQuery<ITeacher[]>({
+        ...options,
+        queryKey: ['teacher-month'],
+        queryFn: instructorClientApi.getTeacherMonth
     })
 }

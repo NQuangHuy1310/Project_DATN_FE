@@ -214,8 +214,7 @@ export enum CourseLevel {
 
 export enum TeacherStatus {
     follow = 'Theo dõi',
-    followed = 'Đã theo dõi',
-    unFollow = 'Huỷ theo dõi'
+    unFollow = 'Đã theo dõi'
 }
 
 export enum notificationTypes {

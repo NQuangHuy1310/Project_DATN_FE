@@ -1,13 +1,13 @@
-import { TeacherStatus } from '@/constants'
 import { ICourse } from '@/types/course/course'
 export interface ITeacher {
-    user_id: number
-    user_avatar: string
-    user_name: string
+    id: number
+    avatar: string
+    name: string
     total_courses: number
-    average_rating: number
     total_ratings: number
-    status?: TeacherStatus
+    total_comments?: number
+    average_rating: number
+    follow?: boolean
 }
 
 export interface ITeacherAll {

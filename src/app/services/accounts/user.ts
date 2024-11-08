@@ -2,7 +2,7 @@ import { userUri } from '@/app/services/Uri/accounts'
 import axiosClient from '@/configs/axiosClient'
 
 import { IChangePassword, IResponse, IUpdateProfile, IUserProfile } from '@/types'
-import { ICourseMyBought } from '@/types/user'
+import { CheckFlow, Flow, ICourseMyBought } from '@/types/user'
 
 export const userApis = {
     getProfile: async (): Promise<IUserProfile> => {
@@ -20,5 +20,14 @@ export const userApis = {
     },
     getMyCourseBought: async (): Promise<ICourseMyBought> => {
         return axiosClient.get(userUri.GET_MY_COURSE_BOUGHT)
+    },
+    flowTeacher: async (teacher: Flow): Promise<Flow> => {
+        return axiosClient.post(userUri.FLOW_TEACHER, teacher)
+    },
+    unFlowTeacher: async (teacher: Flow): Promise<Flow> => {
+        return axiosClient.post(userUri.UN_FOLLOW_TEACHER, teacher)
+    },
+    checkFollow: async (userId: number, teacherId: number): Promise<CheckFlow> => {
+        return axiosClient.get(userUri.CHECK_FOLLOW_TEACHER(userId, teacherId))
     }
 }

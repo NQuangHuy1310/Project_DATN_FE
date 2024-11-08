@@ -42,3 +42,11 @@ interface Pivot {
     id_user: number
     id_course: number
 }
+
+export interface Flow {
+    following_id: number
+}
+
+export interface CheckFlow {
+    action: 'follow' | 'unfollow'
+}

@@ -46,7 +46,7 @@ const Course = ({ data, progressLesson, page }: { data: ICourse; progressLesson?
 
                 <div className="flex items-center justify-between">
                     {data.user && (
-                        <div className="flex items-center gap-2">
+                        <div className="flex w-fit items-center gap-2">
                             <Avatar className="size-8 flex-shrink-0">
                                 <AvatarImage src={getImagesUrl(data.user?.avatar || '')} alt={data.user.name} />
                                 <AvatarFallback className="flex size-8 items-center justify-center bg-slate-500/50 font-semibold">

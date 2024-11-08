@@ -4,12 +4,12 @@ import Loading from '@/components/Common/Loading/Loading'
 import Teacher from '@/components/shared/Teacher'
 import { useCoursePopulate } from '@/app/hooks/courses/useCourse'
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
-
-import { coursesToday, mockTeachers } from '@/constants/mockData'
 import CourseToday from '@/components/shared/Course/CourseToday'
+import { useInstructorMonth } from '@/app/hooks/instructors'
 
 const Dashboard = () => {
     const { data: coursePopulate, isLoading } = useCoursePopulate()
+    const { data: instructorMonth } = useInstructorMonth()
 
     if (isLoading) return <Loading />
 
@@ -33,15 +33,15 @@ const Dashboard = () => {
                     </div>
                     <div className="w-full">
                         <CarouselContent className="w-full gap-4">
-                            {mockTeachers.map((item, index) => (
+                            {instructorMonth?.map((item, index) => (
                                 <CarouselItem key={index} className="w-full min-w-0 basis-full md:basis-[367px]">
                                     <Teacher
                                         key={index}
-                                        user_id={item.user_id}
-                                        user_name={item.user_name}
-                                        user_avatar={item.user_avatar}
+                                        id={item.id}
+                                        name={item.name}
+                                        avatar={item.avatar!}
                                         average_rating={item.average_rating}
-                                        status={item.status}
+                                        follow={item.follow}
                                         total_courses={item.total_courses}
                                         total_ratings={item.total_ratings}
                                     />

@@ -251,6 +251,7 @@ const LeaningCourseVideo = ({
                 </Button>
             </div>
             <AddQA
+                commentId={dataLesson?.id}
                 open={qaSheet}
                 isOpen={(isOpen) => {
                     setQASheet(isOpen)

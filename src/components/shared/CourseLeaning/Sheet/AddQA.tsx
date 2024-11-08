@@ -1,15 +1,9 @@
-import { Sheet, SheetContent, SheetDescription, SheetTitle } from '@/components/ui/sheet'
+import CommentCourse from '../../Comment/CommentCourse';
+import { Dispatch, SetStateAction } from 'react';
 
-const AddQA = ({ open, isOpen }: { open: boolean; isOpen: (open: boolean) => void }) => {
+const AddQA = ({ commentId, open, isOpen, }: { commentId: number; open: boolean; isOpen: Dispatch<SetStateAction<boolean>> }) => {
     return (
-        <Sheet open={open} onOpenChange={() => isOpen(false)}>
-            <SheetContent>
-                <SheetTitle>Thêm ghi chú mới</SheetTitle>
-                <SheetDescription className="max-h-screen overflow-y-auto">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Id placeat earum reiciendis harum ratione
-                </SheetDescription>
-            </SheetContent>
-        </Sheet>
+        <CommentCourse commentId={commentId} isOpen={open} setIsOpen={isOpen} />
     )
 }
 

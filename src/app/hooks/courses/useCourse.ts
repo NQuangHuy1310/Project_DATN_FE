@@ -82,10 +82,11 @@ export const useGetCommentCourse = (
 ) => {
     return useQuery({
         ...options,
-        queryKey: ['comments-course'],
+        queryKey: ['comments-course', id],
         queryFn: () => courseApi.getComment(id)
     })
 }
+
 export const useAddCommentCourse = () => {
     const queryClient = useQueryClient()
     return useMutation({

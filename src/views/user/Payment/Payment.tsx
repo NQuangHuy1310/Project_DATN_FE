@@ -1,7 +1,6 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
-import { formatDuration, getImagesUrl } from '@/lib'
 import routes from '@/configs/routes'
 import { FaClock } from 'react-icons/fa'
 import { IoIosStar } from 'react-icons/io'
@@ -9,15 +8,17 @@ import { TbCoinFilled } from 'react-icons/tb'
 import { IoArrowBackOutline } from 'react-icons/io5'
 import useGetUserProfile from '@/app/hooks/accounts/useGetUser'
 
-
 import { toast } from 'sonner'
+import confirm from '@/assets/confirmPayment.png'
+import { formatDuration, getImagesUrl } from '@/lib'
+
+import { useGetSlugParams } from '@/app/hooks/common/useCustomParams'
+import { useTransactionById } from '@/app/hooks/transactions/useTransaction'
+import { useApplyVoucher, useBuyCourse, usePaymentCourseBySlug } from '@/app/hooks/payment'
+
 import { Button } from '@/components/ui/button'
 import Loading from '@/components/Common/Loading/Loading'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-
-import { useGetSlugParams } from '@/app/hooks/common/useCustomParams'
-import { useBuyCourse, usePaymentCourseBySlug } from '@/app/hooks/payment'
-import { useTransactionById } from '@/app/hooks/transactions/useTransaction'
 import {
     AlertDialog,
     AlertDialogAction,
@@ -25,47 +26,70 @@ import {
     AlertDialogContent,
     AlertDialogDescription,
     AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle
+    AlertDialogHeader
 } from '@/components/ui/alert-dialog'
+import { IBuyData } from '@/types'
 
 const Payment = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false)
-    const slug = useGetSlugParams('slug')
-    const navigate = useNavigate()
-    // Lấy dữ liệu khóa học theo slug
-    const { data: courseData, isLoading } = usePaymentCourseBySlug(slug!)
-    // Lấy thông tin người dùng
-    const { user } = useGetUserProfile()
-    // Lấy dữ liệu giao dịch
-    const { data: transactionData } = useTransactionById(user?.id || 0)
-    // Tính toán số dư và giảm giá
-    const balance = Math.floor(transactionData?.balance ?? 0)
-    const discount = 0
-    // Xử lý hành động thanh toán
+    const [voucherCode, setVoucherCode] = useState<string>('')
+    const [discountValue, setDiscountValue] = useState<number>(0)
+    const [isVoucherApplied, setIsVoucherApplied] = useState<boolean>(false)
 
-    const totalTime = formatDuration((courseData?.course_duration as unknown as number) || 0)
+    const slug = useGetSlugParams('slug')
+
+
+    const { data: courseData, isLoading } = usePaymentCourseBySlug(slug!)
+    const { user } = useGetUserProfile()
+    const { data: transactionData } = useTransactionById(user?.id || 0)
 
     const { mutateAsync: confirmPayment } = useBuyCourse()
+    const { mutateAsync: applyVoucher } = useApplyVoucher()
 
+    const balance = Math.floor(transactionData?.balance ?? 0)
+    const totalTime = formatDuration((courseData?.course_duration as unknown as number) || 0)
+    const totalPrice = Math.floor(courseData?.price_sale || courseData?.price || 0)
+
+    const handleApplyVoucher = async () => {
+        if (isVoucherApplied) {
+            setIsVoucherApplied(false)
+            setVoucherCode('')
+            setDiscountValue(0)
+        } else if (user && voucherCode) {
+            const data = await applyVoucher([user?.id, voucherCode])
+            const voucher = data.voucher
+            if (voucher) {
+                const calculatedDiscount =
+                    voucher.type === 'percent' ? (totalPrice * voucher.discount) / 100 : voucher.discount
+
+                const finalDiscount = Math.min(calculatedDiscount, totalPrice)
+                setDiscountValue(finalDiscount)
+                setIsVoucherApplied(true)
+            }
+        } else {
+            toast.error('Vui lòng nhập mã giảm giá')
+        }
+    }
     const handlePayment = async () => {
         if (user && courseData) {
-            if (balance < (courseData.price_sale || courseData.price) - discount) {
+            const totalCoinAfterDiscount =
+                (courseData.price_sale > 0 ? courseData.price_sale : courseData.price) - discountValue
+            if (totalCoinAfterDiscount > 0 && balance < totalCoinAfterDiscount) {
                 toast.error('Số dư ví không đủ, vui lòng nạp thêm tiền')
             } else {
-                await confirmPayment([
+                const payload: [number, number, IBuyData] = [
                     user?.id,
                     courseData?.course_id,
                     {
-                        total_coin: (courseData.price_sale > 0 ? courseData.price_sale : courseData.price),
-                        coin_discount: discount,
-                        total_coin_after_discount: (courseData.price_sale > 0 ? courseData.price_sale : courseData.price) - discount
+                        voucher_code: voucherCode,
+                        total_coin: courseData.price_sale > 0 ? courseData.price_sale : courseData.price,
+                        coin_discount: discountValue,
+                        total_coin_after_discount: totalCoinAfterDiscount
                     }
-                ])
-                navigate(routes.myCourses)
+                ]
+                await confirmPayment(payload)
             }
         }
-
     }
 
     if (isLoading) return <Loading />
@@ -86,7 +110,6 @@ const Payment = () => {
                                         alt=""
                                     />
                                 </div>
-
                                 <div className="flex flex-col gap-4">
                                     <h3 className="text-lg font-bold md:text-2xl">{courseData?.course_name}</h3>
 
@@ -115,7 +138,7 @@ const Payment = () => {
                                                 alt={user?.name}
                                             />
                                             <AvatarFallback className="bg-slate-500/50 text-xl font-semibold text-white">
-                                                {courseData?.user_avatar}
+                                                {courseData?.user_name.charAt(0)}
                                             </AvatarFallback>
                                         </Avatar>
                                         <p className="text-[16px] font-medium md:text-lg">{courseData?.user_name}</p>
@@ -135,7 +158,6 @@ const Payment = () => {
                         </div>
                     </div>
                 </div>
-
                 {/* Phần bên phải */}
                 <div className="w-full rounded-md bg-white p-5 md:w-4/12">
                     <div className="flex flex-col gap-4">
@@ -152,16 +174,14 @@ const Payment = () => {
                                 <span className="text-[15px] font-medium">Giá gốc:</span>
                                 <div className="flex gap-1">
                                     <TbCoinFilled className="size-5 text-yellow-500" />
-                                    <span className="font-medium">
-                                        {Math.floor(courseData?.price_sale || 0) || Math.floor(courseData?.price || 0)}
-                                    </span>
+                                    <span className="font-medium">{totalPrice}</span>
                                 </div>
                             </div>
                             <div className="flex items-center justify-between border-b pb-2">
                                 <span className="text-[15px] font-medium">Giảm giá:</span>
                                 <div className="flex gap-1">
                                     <TbCoinFilled className="size-5 text-yellow-500" />
-                                    <span className="font-medium">{discount}</span>
+                                    <span className="font-medium">{discountValue}</span>
                                 </div>
                             </div>
                             <div className="flex items-center justify-between">
@@ -169,19 +189,24 @@ const Payment = () => {
                                 <div className="flex gap-1">
                                     <TbCoinFilled className="size-5 text-yellow-500" />
                                     <span className="font-medium">
-                                        {(courseData?.price_sale && courseData.price_sale > 0)
-                                            ? courseData.price_sale - discount
-                                            : (courseData?.price || 0) - discount}
+                                        {courseData?.price_sale && courseData.price_sale > 0
+                                            ? courseData.price_sale - discountValue
+                                            : (courseData?.price || 0) - discountValue}
                                     </span>
                                 </div>
                             </div>
-                            <div className="flex w-full justify-between border-b border-t py-4">
-                                <input
-                                    type="text"
-                                    className="w-[78%] rounded-md border ps-2 outline-none md:w-[90%] lg:w-[70%]"
-                                    placeholder="Nhập mã giảm giá"
-                                />
-                                <Button>Áp dụng</Button>
+                            <div className="flex flex-col gap-2 border-b border-t py-3">
+                                <div className="flex w-full justify-between">
+                                    <input
+                                        type="text"
+                                        className="w-[78%] rounded-md border ps-2 outline-none md:w-[90%] lg:w-[70%]"
+                                        placeholder="Nhập mã giảm giá"
+                                        value={voucherCode}
+                                        onChange={(e) => setVoucherCode(e.target.value)}
+                                        readOnly={isVoucherApplied}
+                                    />
+                                    <Button onClick={handleApplyVoucher}>{isVoucherApplied ? 'Đổi mã' : 'Áp dụng'}</Button>
+                                </div>
                             </div>
                             <div className="flex flex-col gap-3">
                                 <Button className="w-full" onClick={() => setIsOpen(true)}>
@@ -201,16 +226,25 @@ const Payment = () => {
                                     </Link>
                                 </div>
                             </div>
-                            <AlertDialog open={isOpen} onOpenChange={() => setIsOpen(false)}>
+                            <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
                                 <AlertDialogContent>
                                     <AlertDialogHeader>
-                                        <AlertDialogTitle>Bạn có chắc chắn muốn mua khóa học không?</AlertDialogTitle>
                                         <AlertDialogDescription>
-                                            Sau khi mua khóa học bạn có thể xem chi tiết được toàn bộ bài học, giúp bạn
-                                            học tập dễ dàng hơn
+                                            <div className="flex flex-col gap-5">
+                                                <div className="mx-auto">
+                                                    <img
+                                                        src={confirm}
+                                                        alt="xác nhận mua"
+                                                        className="w-52 object-contain"
+                                                    />
+                                                </div>
+                                                <span className="text-center text-lg font-medium">
+                                                    Bạn chắc chắn muốn mua khóa học này?
+                                                </span>
+                                            </div>
                                         </AlertDialogDescription>
                                     </AlertDialogHeader>
-                                    <AlertDialogFooter>
+                                    <AlertDialogFooter className="mx-auto">
                                         <AlertDialogCancel>Hủy</AlertDialogCancel>
                                         <AlertDialogAction onClick={handlePayment}>Xác nhận</AlertDialogAction>
                                     </AlertDialogFooter>

@@ -29,5 +29,8 @@ export const userApis = {
     },
     checkFollow: async (userId: number, teacherId: number): Promise<CheckFlow> => {
         return axiosClient.get(userUri.CHECK_FOLLOW_TEACHER(userId, teacherId))
+    },
+    registerTeacher: async (): Promise<any> => {
+        return axiosClient.post(userUri.REGISTER_TEACHER)
     }
 }

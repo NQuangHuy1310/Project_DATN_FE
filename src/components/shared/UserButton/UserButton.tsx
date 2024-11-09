@@ -44,9 +44,9 @@ const UserButton = () => {
                         </AvatarFallback>
                     </Avatar>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-52">
+                <DropdownMenuContent align="end" className="w-60">
                     <DropdownMenuGroup className="flex flex-col gap-1.5 p-2">
-                        {location.pathname.includes(routes.userDashboard) ? (
+                        {location.pathname.includes(routes.userDashboard) && user?.user_type === 'teacher' ? (
                             <Link to={routes.instructorDashboard}>
                                 <DropdownMenuItem className="flex items-center gap-2">
                                     <TbUserHexagon className="size-4" />
@@ -58,6 +58,14 @@ const UserButton = () => {
                                 <DropdownMenuItem className="flex items-center gap-2">
                                     <TbUserHexagon className="size-4" />
                                     <span className="text-base font-medium">Học viên</span>
+                                </DropdownMenuItem>
+                            </Link>
+                        )}
+                        {user?.user_type !== 'teacher' && (
+                            <Link to={routes.instructorRegister}>
+                                <DropdownMenuItem className="flex items-center gap-2">
+                                    <TbUserHexagon className="size-4" />
+                                    <span className="max-w-40 text-base font-medium">Đăng ký trở thành giảng viên</span>
                                 </DropdownMenuItem>
                             </Link>
                         )}

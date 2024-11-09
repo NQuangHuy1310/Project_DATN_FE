@@ -15,7 +15,7 @@ import { formatDuration, getImagesUrl } from '@/lib/common'
 
 import useGetUserProfile from '@/app/hooks/accounts/useGetUser'
 import { useGetSlugParams } from '@/app/hooks/common/useCustomParams'
-import { useCheckRated, useCheckRatingUser, useCreateRating } from '@/app/hooks/ratings/useRating'
+import { useCheckRatingUser, useCreateRating } from '@/app/hooks/ratings/useRating.ts'
 import { useCheckBuyCourse, useCourseDetailNoLoginBySlug } from '@/app/hooks/courses/useCourse'
 
 import About from '@/views/user/Courses/CourseDetail/About'
@@ -55,15 +55,15 @@ const CourseDetail = () => {
     const { mutateAsync: addRating } = useCreateRating()
     const { data: courseDetail, isLoading: LoadingCourse } = useCourseDetailNoLoginBySlug(slug!)
     const { data: isPurchased } = useCheckBuyCourse(user?.id || 0, courseDetail?.id || 0)
-    const { data: checkRating } = useCheckRatingUser(user?.id || 0, courseDetail?.id || 0)
-    const { data: checkRated } = useCheckRated(user?.id || 0, courseDetail?.id || 0)
+    const { data: checkRating, isLoading: LoadingCheck } = useCheckRatingUser(user?.id || 0, courseDetail?.id || 0)
+    // const { data: checkRated } = useCheckRated(user?.id || 0, courseDetail?.id || 0)
     const { mutateAsync: handleByCourse } = useBuyCourse()
 
     const totalTime = formatDuration((courseDetail?.total_duration_video as unknown as number) || 0)
     const rating = watch('rate')
 
     const onSubmit = async (data: any) => {
-        if (checkRating?.rating === 'block') {
+        if (checkRating?.data?.rating === 'block') {
             toast.error('Bạn chưa hoàn thành khóa học')
         } else if (user?.id) {
             const payload = {
@@ -90,7 +90,7 @@ const CourseDetail = () => {
         toast.success('Đăng ký khóa học thành công')
     }
 
-    if (LoadingCourse) return <Loading />
+    if (LoadingCheck || LoadingCourse) return <Loading />
 
     return (
         <div className="grid w-full grid-cols-12 gap-5">
@@ -100,7 +100,7 @@ const CourseDetail = () => {
                 </Link>
                 <div className="h-[300px] w-full md:h-[400px] lg:h-[500px]">
                     <video
-                        src={getImagesUrl(courseDetail ? courseDetail.trailer : '')}
+                        src={getImagesUrl(courseDetail ? courseDetail.trailer! : '')}
                         title="YouTube video player"
                         className="h-full w-full rounded-lg"
                         controls
@@ -115,13 +115,13 @@ const CourseDetail = () => {
                                 <div className="flex items-center gap-2.5">
                                     <Avatar className="size-8">
                                         <AvatarImage
-                                            src={getImagesUrl(courseDetail?.user.avatar || '')}
-                                            alt={courseDetail?.user.name}
+                                            src={getImagesUrl(courseDetail?.user?.avatar || '')}
+                                            alt={courseDetail?.user?.name}
                                             className="h-full w-full object-cover"
                                         />
                                         <AvatarFallback>{courseDetail?.user?.name?.slice(0, 2)}</AvatarFallback>
                                     </Avatar>
-                                    <h6 className="md:text-base">{courseDetail?.user.name}</h6>
+                                    <h6 className="md:text-base">{courseDetail?.user?.name}</h6>
                                 </div>
                                 <Button
                                     className="bg-transparent text-primary hover:text-primary/80"
@@ -140,7 +140,6 @@ const CourseDetail = () => {
                                 <CourseLevel courseLevel={courseDetail?.level || ''} />
                             </div>
                         </div>
-
                         <div className="flex items-center justify-between">
                             <div className="flex w-full items-center justify-between gap-5 md:w-auto">
                                 <div className="flex items-center gap-1.5">
@@ -277,22 +276,26 @@ const CourseDetail = () => {
                                         >
                                             Vào học
                                         </Button>
-                                        {checkRated?.data.status === 'error' ? (
-                                            <Button variant="outline" className="w-full" disabled>
-                                                Đã đánh giá
-                                            </Button>
-                                        ) : checkRating?.data.status === 'success' ? null : (
-                                            <Button
-                                                variant="outline"
-                                                className="w-full"
-                                                onClick={() => setIsOpen(true)}
-                                            >
-                                                Đánh giá
-                                            </Button>
+                                        {checkRating?.data?.status !== 'pending' && (
+                                            <>
+                                                {checkRating?.data?.status === 'completed' ? (
+                                                    <Button variant="outline" className="w-full" disabled>
+                                                        Đã đánh giá
+                                                    </Button>
+                                                ) : checkRating?.data?.status === 'allow' ? (
+                                                    <Button
+                                                        variant="outline"
+                                                        className="w-full"
+                                                        onClick={() => setIsOpen(true)}
+                                                    >
+                                                        Đánh giá
+                                                    </Button>
+                                                ) : null}
+                                            </>
                                         )}
                                     </div>
-                                ) : courseDetail?.price == 0 ||
-                                  courseDetail?.price_sale == 0 ||
+                                ) : courseDetail?.price === 0 ||
+                                  courseDetail?.price_sale === 0 ||
                                   !courseDetail?.price ||
                                   !courseDetail?.price_sale ? (
                                     <Button
@@ -313,11 +316,11 @@ const CourseDetail = () => {
                         )}
 
                         <Dialog open={isOpen} onOpenChange={setIsOpen}>
-                            <DialogContent className="max-h-[90vh] max-w-[50vw] overflow-y-scroll p-10">
+                            <DialogContent className="max-h-[90vh] w-[90vw] max-w-full overflow-y-scroll p-5 md:max-w-[50vw] md:p-10">
                                 <form onSubmit={handleSubmit(onSubmit)}>
-                                    <h1 className="text-center text-xl font-bold md:text-left md:text-3xl">Đánh giá</h1>
+                                    <h1 className="text-center text-lg font-bold md:text-left md:text-3xl">Đánh giá</h1>
                                     <div className="flex flex-col gap-5">
-                                        <span className="text-md text-center md:text-left md:text-lg">
+                                        <span className="text-center text-sm md:text-left md:text-lg">
                                             Bạn có hài lòng với khóa học?
                                         </span>
 
@@ -328,17 +331,17 @@ const CourseDetail = () => {
                                                     onClick={() => setValue('rate', star)}
                                                     className={`cursor-pointer ${
                                                         star <= rating ? 'text-yellow-500' : 'text-gray-300'
-                                                    } h-6 w-6 md:h-8 md:w-8`}
+                                                    } h-5 w-5 md:h-8 md:w-8`}
                                                 />
                                             ))}
                                         </div>
 
                                         <div className="mx-auto flex w-full flex-col gap-4 md:mx-0">
-                                            <h3 className="text-md md:text-lg">Đánh giá của bạn</h3>
+                                            <h3 className="text-sm md:text-lg">Đánh giá của bạn</h3>
                                             <textarea
                                                 {...register('content', { required: 'Vui lòng nhập nội dung' })}
-                                                className="w-full resize-none rounded-md border-2 border-gray-300 p-3 md:p-4"
-                                                rows={6}
+                                                className="w-full resize-none rounded-md border-2 border-gray-300 p-2 md:p-4"
+                                                rows={4}
                                                 placeholder="Viết đánh giá của bạn ở đây..."
                                             />
                                             {errors.content && (
@@ -346,7 +349,6 @@ const CourseDetail = () => {
                                             )}
                                         </div>
 
-                                        {/* Submit Button */}
                                         <div className="flex justify-center md:justify-start">
                                             <DialogFooter>
                                                 <Button type="submit">Gửi đánh giá</Button>
@@ -434,98 +436,6 @@ const CourseDetail = () => {
                                     </div>
                                 </div>
                             </div>
-
-                            {user?.id !== courseDetail?.id_user && (
-                                <div className="w-full">
-                                    {isPurchased?.status === 'error' ? (
-                                        <div className="flex w-full gap-2">
-                                            <Button
-                                                className="w-full"
-                                                onClick={() => navigate(routes.courseLeaning.replace(':slug', slug!))}
-                                            >
-                                                Vào học
-                                            </Button>
-                                            {checkRated?.data.status === 'error' ? (
-                                                <Button variant="outline" className="w-full" disabled>
-                                                    Đã đánh giá
-                                                </Button>
-                                            ) : checkRating?.data.status === 'success' ? null : (
-                                                <Button
-                                                    variant="outline"
-                                                    className="w-full"
-                                                    onClick={() => setIsOpen(true)}
-                                                >
-                                                    Đánh giá
-                                                </Button>
-                                            )}
-                                        </div>
-                                    ) : courseDetail?.price == 0 ||
-                                      courseDetail.price_sale == 0 ||
-                                      !courseDetail.price ||
-                                      !courseDetail.price_sale ? (
-                                        <Button
-                                            className="block w-full rounded-md bg-primary py-2 text-center text-white"
-                                            onClick={handleLearnNow}
-                                        >
-                                            Đăng ký học
-                                        </Button>
-                                    ) : (
-                                        <Link
-                                            className="block w-full rounded-md bg-primary py-2 text-center text-white"
-                                            to={routes.payment.replace(':slug', slug!)}
-                                        >
-                                            Mua khoá học
-                                        </Link>
-                                    )}
-                                </div>
-                            )}
-
-                            <Dialog open={isOpen} onOpenChange={setIsOpen}>
-                                <DialogContent className="max-h-[90vh] max-w-[50vw] overflow-y-scroll p-10">
-                                    <form onSubmit={handleSubmit(onSubmit)}>
-                                        <h1 className="text-center text-xl font-bold md:text-left md:text-3xl">
-                                            Đánh giá
-                                        </h1>
-                                        <div className="flex flex-col gap-5">
-                                            <span className="text-md text-center md:text-left md:text-lg">
-                                                Bạn có hài lòng với khóa học?
-                                            </span>
-
-                                            <div className="flex justify-center gap-2 md:justify-start">
-                                                {[1, 2, 3, 4, 5].map((star) => (
-                                                    <FaStar
-                                                        key={star}
-                                                        onClick={() => setValue('rate', star)}
-                                                        className={`cursor-pointer ${
-                                                            star <= rating ? 'text-yellow-500' : 'text-gray-300'
-                                                        } h-6 w-6 md:h-8 md:w-8`}
-                                                    />
-                                                ))}
-                                            </div>
-
-                                            <div className="mx-auto flex w-full flex-col gap-4 md:mx-0">
-                                                <h3 className="text-md md:text-lg">Đánh giá của bạn</h3>
-                                                <textarea
-                                                    {...register('content', { required: 'Vui lòng nhập nội dung' })}
-                                                    className="w-full resize-none rounded-md border-2 border-gray-300 p-3 md:p-4"
-                                                    rows={6}
-                                                    placeholder="Viết đánh giá của bạn ở đây..."
-                                                />
-                                                {errors.content && (
-                                                    <span className="text-red-500">{errors.content.message}</span>
-                                                )}
-                                            </div>
-
-                                            {/* Submit Button */}
-                                            <div className="flex justify-center md:justify-start">
-                                                <DialogFooter>
-                                                    <Button type="submit">Gửi đánh giá</Button>
-                                                </DialogFooter>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </DialogContent>
-                            </Dialog>
                         </div>
                     )}
                 </div>

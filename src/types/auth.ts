@@ -5,7 +5,7 @@ export interface IUser {
     email: string
     avatar: string | null
     is_active: boolean
-    user_type: 'member' | 'admin'
+    user_type: 'member' | 'admin' | 'teacher'
 }
 
 export interface IProfile {

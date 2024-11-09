@@ -67,7 +67,11 @@ const routes = {
     instructorPerformanceStudent: '/instructor/performance/students',
 
     // Instructor wallet
-    instructorWallet: '/instructor/wallet'
+    instructorWallet: '/instructor/wallet',
+
+    //Instructor register
+    instructorRegister: '/instructor/register',
+    instructorRegisterQuestion: '/instructor/register/question'
 }
 
 export default routes

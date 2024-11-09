@@ -40,7 +40,7 @@ import CommunicateQa from '@/views/instructor/Communicate/CommunicateQa'
 import CommunicateMessage from '@/views/instructor/Communicate/CommunicateMessage'
 import CommunicateAnnoucement from '@/views/instructor/Communicate/CommunicateAnnoucement'
 import CommunicateAssiment from '@/views/instructor/Communicate/CommunicateAssiment'
-import InsstructorWallet from '@/views/instructor/Wallet'
+import InstructorWallet from '@/views/instructor/Wallet'
 
 // Post
 import Posts from '@/views/user/Posts/Posts'
@@ -49,11 +49,14 @@ import NewPost from '@/views/user/Posts/NewPosts'
 import MyBookmarks from '@/views/user/Posts/MyBookmarks'
 
 import Payment from '@/views/user/Payment/Payment'
+import Transaction from '@/views/user/wallet/transaction/Transaction'
 import PostDetail from '@/views/user/Posts/PostDetail'
 import CourseDetailNoLogin from '@/views/user/Courses/CourseDetailNoLogin/CourseDetailNoLogin'
-import Transaction from '@/views/user/wallet/Transaction'
 import PerformanceOverview from '@/views/instructor/Performance/PerformanceOverview'
 import InstructorNotifications from '@/views/instructor/InstructorNotifications'
+
+import InstructorRegis from '@/views/user/InstructorRegis/InstrcutorRegisTeacher/InstructorRegisTeacher'
+import InstructorRegisQuestion from '@/views/user/InstructorRegis/InstructorRegisQuestion/InstructorRegisQuestion'
 
 // Routes không cần đăng nhập
 export const publicRoutes = [
@@ -90,6 +93,19 @@ export const privateRoutes = [
     { path: routes.myBookmarks, layout: UserDashboardLayout, element: MyBookmarks, title: 'Bài viết đã lưu' },
     { path: routes.postsDetail, layout: UserDashboardLayout, element: PostDetail, title: 'Chi tiết bài viết' },
 
+    // Instructor register
+    {
+        path: routes.instructorRegister,
+        layout: UserDashboardLayout,
+        element: InstructorRegis,
+        title: 'Đăng kí trở thành giảng viên'
+    },
+    {
+        path: routes.instructorRegisterQuestion,
+        layout: UserDashboardLayout,
+        element: InstructorRegisQuestion,
+        title: 'Khảo sát'
+    },
     // wallet
     { path: routes.wallet, layout: UserDashboardLayout, element: Transaction, title: 'Nạp tiền vào tài khoản' },
 
@@ -133,7 +149,7 @@ export const privateRoutes = [
     {
         path: routes.instructorWallet,
         layout: InstructorDashboardLayout,
-        element: InsstructorWallet,
+        element: InstructorWallet,
         title: 'Ví của tôi'
     }
 ]

@@ -43,3 +43,11 @@ export interface IBankData {
     desc: string
     data: IBank[]
 }
+
+export interface QuestionTeacher {
+    id: number
+    title: string
+    description: string
+    question: string
+    options: string[]
+}

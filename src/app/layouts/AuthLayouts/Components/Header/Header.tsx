@@ -182,42 +182,43 @@ const Header = () => {
                                 />
                             </div>
                         </div>
-                )}
-                <nav className="flex pt-5">
-                    <ul className="flex gap-5 *:text-sm lg:text-base lg:*:text-base">
-                        <li>
-                            <NavLink
-                                to={routes.home}
-                                className={({ isActive }) =>
-                                    `px-2 pb-5 lg:pb-[18px] ${isActive ? 'border-b-[3px] border-primary font-semibold' : ''}`
-                                }
-                            >
-                                Trang chủ
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink
-                                to={'/home-courses'}
-                                className={({ isActive }) =>
-                                    `px-2 pb-5 lg:pb-[18px] ${isActive ? 'border-b-[3px] border-primary font-semibold' : ''}`
-                                }
-                            >
-                                Khóa học
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink
-                                to={routes.latestPost}
-                                className={({ isActive }) =>
-                                    `px-2 pb-5 lg:pb-[18px] ${isActive ? 'border-b-[3px] border-primary font-semibold' : ''}`
-                                }
-                            >
-                                Bài viết
-                            </NavLink>
-                        </li>
-                    </ul>
-                </nav>
-                {menuOpen && <div className="fixed inset-0 z-40 bg-black opacity-50" onClick={toggleMenu}></div>}
+                    )}
+                    <nav className="flex pt-5">
+                        <ul className="flex gap-5 *:text-sm lg:text-base lg:*:text-base">
+                            <li>
+                                <NavLink
+                                    to={routes.home}
+                                    className={({ isActive }) =>
+                                        `px-2 pb-5 lg:pb-[18px] ${isActive ? 'border-b-[3px] border-primary font-semibold' : ''}`
+                                    }
+                                >
+                                    Trang chủ
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink
+                                    to={'/home-courses'}
+                                    className={({ isActive }) =>
+                                        `px-2 pb-5 lg:pb-[18px] ${isActive ? 'border-b-[3px] border-primary font-semibold' : ''}`
+                                    }
+                                >
+                                    Khóa học
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink
+                                    to={'home-posts'}
+                                    className={({ isActive }) =>
+                                        `px-2 pb-5 lg:pb-[18px] ${isActive ? 'border-b-[3px] border-primary font-semibold' : ''}`
+                                    }
+                                >
+                                    Bài viết
+                                </NavLink>
+                            </li>
+                        </ul>
+                    </nav>
+                    {menuOpen && <div className="fixed inset-0 z-40 bg-black opacity-50" onClick={toggleMenu}></div>}
+                </div>
             </div>
         </header>
     )

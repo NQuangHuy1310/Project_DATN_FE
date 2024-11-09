@@ -95,45 +95,47 @@ const LessonVideo = ({
     }
 
     const handleSubmitForm: SubmitHandler<lessonVideo> = async (data) => {
-        if (checkEditPermission(canEdit!)) return
-
-        if (!videoUrl && !courseVideoFile) {
-            toast.error('Vui lòng tải lên video dạng file, hoặc link youtube!')
-            return
-        }
-
-        const payload: ILessonVideoData = {
-            ...data,
-            check: undefined
-        }
-
-        if (videoUrl) {
-            payload.check = 'url'
-            payload.video_youtube_id = videoUrl
-        }
-
-        if (courseVideoFile) {
-            payload.check = 'upload'
-            payload.video = courseVideoFile
-            payload.duration = videoDuration!
-        }
-
-        if (lessonData && !isSelectingLessonType) {
-            payload._method = 'PUT'
-            await updateLessonVideo([courseId!, payload])
-            setIsEditLesson?.(false)
-        } else if (isSelectingLessonType) {
-            const updateLessonType: IChangeLessonTypeData = {
-                new_type: 'video',
-                ...payload
-            }
-            await changeTypeLesson([lessonId!, updateLessonType])
-            setIsSelectingLessonType?.(false)
+        if (canEdit) {
+            return checkEditPermission(canEdit!)
         } else {
-            await createLessonVideo([moduleId!, payload])
-            handleHiddenLesson?.(false)
+            if (!videoUrl && !courseVideoFile) {
+                toast.error('Vui lòng tải lên video dạng file, hoặc link youtube!')
+                return
+            }
+
+            const payload: ILessonVideoData = {
+                ...data,
+                check: undefined
+            }
+
+            if (videoUrl) {
+                payload.check = 'url'
+                payload.video_youtube_id = videoUrl
+            }
+
+            if (courseVideoFile) {
+                payload.check = 'upload'
+                payload.video = courseVideoFile
+                payload.duration = videoDuration!
+            }
+
+            if (lessonData && !isSelectingLessonType) {
+                payload._method = 'PUT'
+                await updateLessonVideo([courseId!, payload])
+                setIsEditLesson?.(false)
+            } else if (isSelectingLessonType) {
+                const updateLessonType: IChangeLessonTypeData = {
+                    new_type: 'video',
+                    ...payload
+                }
+                await changeTypeLesson([lessonId!, updateLessonType])
+                setIsSelectingLessonType?.(false)
+            } else {
+                await createLessonVideo([moduleId!, payload])
+                handleHiddenLesson?.(false)
+            }
+            reset()
         }
-        reset()
     }
 
     const handleClose = () => {

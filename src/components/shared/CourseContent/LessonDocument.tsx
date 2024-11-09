@@ -58,27 +58,29 @@ const LessonDocument = ({
     }
 
     const handleSubmitForm: SubmitHandler<lessonDoc> = async (data) => {
-        if (checkEditPermission(canEdit!)) return
-
-        if (lessonData && !isSelectingLessonType) {
-            const payload = {
-                ...data,
-                _method: 'PUT'
-            }
-            await updateLessonDoc([courseId!, payload])
-            setIsEditLesson?.(false)
-        } else if (isSelectingLessonType) {
-            const payload: IChangeLessonTypeData = {
-                new_type: 'document',
-                ...data
-            }
-            await changeLessonType([lessonId!, payload])
-            setIsSelectingLessonType?.(false)
+        if (canEdit) {
+            return checkEditPermission(canEdit!)
         } else {
-            await createLessonDoc([moduleId!, data])
-            handleHiddenLesson?.(false)
+            if (lessonData && !isSelectingLessonType) {
+                const payload = {
+                    ...data,
+                    _method: 'PUT'
+                }
+                await updateLessonDoc([courseId!, payload])
+                setIsEditLesson?.(false)
+            } else if (isSelectingLessonType) {
+                const payload: IChangeLessonTypeData = {
+                    new_type: 'document',
+                    ...data
+                }
+                await changeLessonType([lessonId!, payload])
+                setIsSelectingLessonType?.(false)
+            } else {
+                await createLessonDoc([moduleId!, data])
+                handleHiddenLesson?.(false)
+            }
+            reset()
         }
-        reset()
     }
 
     const handleClose = () => {

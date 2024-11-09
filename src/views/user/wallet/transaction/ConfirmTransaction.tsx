@@ -14,7 +14,6 @@ import { IUser } from '@/types'
 import { Button } from '@/components/ui/button'
 import { usePostPaymentClient } from '@/app/hooks/transactions/useTransaction'
 
-
 interface IConfirmTransaction {
     totalAmount: number
     user: IUser
@@ -41,7 +40,6 @@ const ConfirmTransaction = ({ totalAmount, user }: IConfirmTransaction) => {
             if (vnpayUrl) {
                 window.location.href = vnpayUrl
             }
-
         }
     }
     return (
@@ -49,12 +47,12 @@ const ConfirmTransaction = ({ totalAmount, user }: IConfirmTransaction) => {
             <DialogTrigger asChild>
                 <Button>Nạp tiền</Button>
             </DialogTrigger>
-            <DialogContent className="max-h-[90vh] max-w-[40vw]">
+            <DialogContent className="max-h-[90vh] w-full max-w-[90%] sm:max-w-[40vw]">
                 <DialogHeader>
                     <DialogTitle>Xác nhận thông tin</DialogTitle>
                     <DialogDescription>Thông tin của bạn được bảo mật an toàn</DialogDescription>
                 </DialogHeader>
-                <div className="flex justify-between border-b-2 p-3">
+                <div className="flex justify-between border-b-2 p-3 sm:flex-col sm:gap-2">
                     <span className="font-bold">Tài khoản</span>
                     <span>{user?.name}</span>
                 </div>
@@ -69,7 +67,6 @@ const ConfirmTransaction = ({ totalAmount, user }: IConfirmTransaction) => {
                 </div>
                 <div className="flex flex-col gap-2">
                     <span className="font-bold">Phương thức thanh toán</span>
-
                     <label
                         className="flex cursor-pointer items-center justify-between rounded-md border-2 px-3 py-2"
                         htmlFor="vnpay"
@@ -127,7 +124,7 @@ const ConfirmTransaction = ({ totalAmount, user }: IConfirmTransaction) => {
                         <img
                             src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnV4cUM7jBauINof35Yn_unOz976Iz5okV8A&s"
                             alt="MoMo"
-                            className="h-11 w-11"
+                            className="h-10 w-10"
                         />
                     </label>
                     <p>
@@ -139,7 +136,7 @@ const ConfirmTransaction = ({ totalAmount, user }: IConfirmTransaction) => {
                     <Button
                         type="submit"
                         onClick={handlePayment}
-                        className={`mt-4 rounded px-4 py-2 text-white ${selectedPayment === 'VNPAY' ? 'bg-blue-500' : 'cursor-not-allowed bg-darkGrey'}`}
+                        className={`mt-4 rounded px-4 py-2 text-white ${selectedPayment === 'VNPAY' ? 'bg-primary' : 'cursor-not-allowed bg-darkGrey'}`}
                         disabled={selectedPayment !== 'VNPAY'}
                     >
                         Thanh toán ngay

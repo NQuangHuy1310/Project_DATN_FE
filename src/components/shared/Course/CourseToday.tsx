@@ -12,14 +12,12 @@ import { formatDuration, getImagesUrl } from '@/lib'
 import { RiMoneyDollarCircleFill } from 'react-icons/ri'
 import useGetUserProfile from '@/app/hooks/accounts/useGetUser'
 
-
 const CourseToday = ({
     thumbnail,
     name,
     slug,
     user,
     level,
-    module,
     total_student,
     total_duration_video,
     price,
@@ -79,25 +77,6 @@ const CourseToday = ({
                         <p className="font-medium text-black">{total_lessons}</p>
                     </div>
                 </div>
-                <div className="flex w-full flex-col gap-3">
-                    <div className="flex items-center justify-between">
-                        <h3 className="text-sm font-semibold xl2:text-base">{module?.length} Chương</h3>
-                        <span className="text-sm text-darkGrey xl2:text-base">0/{module?.length} hoàn thành</span>
-                    </div>
-                    <ul className="flex flex-col gap-3">
-                        {module?.map((item, index) => (
-                            <li key={index} className="flex items-center justify-between">
-                                <div className="flex items-center gap-3">
-                                    <span className="h-8 w-8 rounded-md border bg-darkGrey/20 text-center font-semibold leading-8">
-                                        {index + 1}
-                                    </span>
-                                    <h4 className="text-darkGrey">{item.title}</h4>
-                                </div>
-                                <span className="text-darkGrey">{item.time}</span>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
             </div>
 
             {user?.id !== currentUser?.id && (
@@ -112,7 +91,7 @@ const CourseToday = ({
                             Mua khoá học
                         </Link>
                     ) : (
-                        <Button>Xem chi tiết</Button>
+                        <Button className="w-full">Xem chi tiết</Button>
                     )}
                 </div>
             )}

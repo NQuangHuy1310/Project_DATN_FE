@@ -2,7 +2,7 @@ import { postUri } from '@/app/services/Uri/posts'
 import axiosClient from '@/configs/axiosClient'
 import { IComment, ICreateComment } from '@/types'
 
-import { ICreatePost, IPosts } from '@/types/post'
+import { ICreatePost, IFeaturedPost, IPosts } from '@/types/post'
 
 export const postsApi = {
     getAllPost: async (): Promise<IPosts[]> => {
@@ -39,5 +39,9 @@ export const postsApi = {
 
     addComment: async (commentData: ICreateComment): Promise<ICreateComment> => {
         return axiosClient.post(postUri.ADD_COMMENT, commentData)
+    },
+
+    getFeaturedPost:async (): Promise<IFeaturedPost[]> => {
+        return axiosClient.get(postUri.FEATURED_POST)
     }
 }

@@ -27,7 +27,7 @@ export const useCreateRating = () => {
             return ratingsApi.addRatingCourse(data)
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['ratings'] })
+            queryClient.invalidateQueries({ queryKey: ['rating-check'] })
         }
     })
 }
@@ -38,14 +38,5 @@ export const useCheckRatingUser = (userId: number, courseId: number, options?: O
         enabled: !!userId && !!courseId,
         queryKey: ['rating-check', userId, courseId],
         queryFn: () => ratingsApi.checkRatingUser(userId, courseId)
-    })
-}
-
-export const useCheckRated = (userId: number, courseId: number, options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>) => {
-    return useQuery<any>({
-        ...options,
-        enabled: !!userId && !!courseId,
-        queryKey: ['check-rated', userId, courseId],
-        queryFn: () => ratingsApi.checkRated(userId, courseId)
     })
 }

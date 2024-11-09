@@ -1,6 +1,6 @@
 import axiosClient from '@/configs/axiosClient'
 
-import { ITeacherAll, ITeacherDetail } from '@/types'
+import { ITeacher, ITeacherAll, ITeacherDetail } from '@/types'
 import { instructorClientUri } from '@/app/services/Uri/instructors'
 
 export const instructorClientApi = {
@@ -9,5 +9,8 @@ export const instructorClientApi = {
     },
     getInstructorById: async (instructorId: number): Promise<ITeacherDetail> => {
         return axiosClient.get(instructorClientUri.DETAIL_INSTRUCTOR(instructorId))
+    },
+    getTeacherMonth: async (): Promise<ITeacher[]> => {
+        return axiosClient.get(instructorClientUri.GET_TEACHER_MONTH)
     }
 }

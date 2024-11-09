@@ -80,7 +80,7 @@ const CourseLearning = () => {
 
     useEffect(() => {
         if (courseModule && !isLessonInModule && nextLessonId) {
-            if (idLesson !== nextLessonId) {
+            if (!idLesson) {
                 setSearchParams({ id: nextLessonId.toString() })
             }
         }
@@ -266,10 +266,10 @@ const CourseLearning = () => {
                     (module.quiz && module.quiz.is_completed === 1 ? 1 : 0)
 
                 return (
-                    <div key={index} className="sticky top-10 my-1">
+                    <div key={index} className="my-1">
                         <div
                             onClick={() => handleToggleModule(index)}
-                            className="flex cursor-pointer items-center justify-between rounded bg-[#f7f8fa] px-5 py-2 duration-200 hover:bg-[#f0f4fa]"
+                            className="sticky top-10 z-10 flex cursor-pointer items-center justify-between rounded bg-[#f7f8fa] px-5 py-2 duration-200 hover:bg-[#f0f4fa]"
                         >
                             <div className="items-center gap-2">
                                 <h4 className="text-base font-semibold">
@@ -286,7 +286,7 @@ const CourseLearning = () => {
                             )}
                         </div>
                         {activeModules.includes(index) && (
-                            <div className="sticky top-0 z-10 bg-gray-100">
+                            <div className="bg-gray-100">
                                 {module.lessons.map((lesson: ILessonLeaning, indexLesson) => (
                                     <div
                                         key={lesson.id}
@@ -443,7 +443,11 @@ const CourseLearning = () => {
                     {courseLesson && 'content_type' in courseLesson && (
                         <>
                             {courseLesson.content_type === 'document' && (
-                                <LeaningCourseDocument dataLesson={courseLesson} setCheckButton={setCheckButton} />
+                                <LeaningCourseDocument
+                                    dataLesson={courseLesson}
+                                    setCheckButton={setCheckButton}
+                                    toggleTab={toggleTab}
+                                />
                             )}
                             {courseLesson.content_type === 'video' && (
                                 <LeaningCourseVideo
@@ -471,7 +475,7 @@ const CourseLearning = () => {
                 {/* Sidebar */}
                 <aside
                     ref={courseListRef}
-                    className={`absolute top-0 z-50 h-screen w-full overflow-y-auto bg-white px-2 md:w-[50vw] lg:fixed lg:bottom-0 lg:right-0 lg:top-[60px] lg:h-[680px] lg:w-[23%] lg:border-l lg:px-1 ${
+                    className={`absolute top-0 z-50 h-[89vh] w-full overflow-y-auto bg-white px-2 md:w-[50vw] lg:fixed lg:bottom-0 lg:right-0 lg:top-[60px] lg:w-[23%] lg:border-l lg:px-1 ${
                         toggleTab ? 'block' : 'hidden'
                     }`}
                 >

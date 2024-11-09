@@ -67,9 +67,9 @@ const Instructor = () => {
                                 data.teachers.map((item, index) => (
                                     <Teacher
                                         key={index}
-                                        user_id={item.user_id}
-                                        user_name={item.user_name}
-                                        user_avatar={item.user_avatar}
+                                        id={item.id}
+                                        name={item.name}
+                                        avatar={item.avatar}
                                         average_rating={item.average_rating}
                                         total_ratings={item.total_ratings}
                                         total_courses={item.total_courses}

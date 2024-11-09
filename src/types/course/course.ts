@@ -9,7 +9,7 @@ export interface ICourse {
     code?: string
     name: string
     thumbnail: string
-    trailer: string
+    trailer?: string
     description?: string
     learned?: boolean | null
     slug: string
@@ -32,7 +32,8 @@ export interface ICourse {
     total_lessons: number
     total_duration_video: number
     total_duration?: number
-    user: IUser
+    user?: IUser
+    average_rating?: number
 }
 
 export interface ICourseToday extends ICourse {

@@ -10,7 +10,7 @@ export const courseUri = {
     COURSE_CATEGORY_HOME: `${COURSE_URL}category-course`,
     COURSE_POPULATE: `${COURSE_URL}popular-course`,
     CHECK_BUY_COURSE: (userId: number, courseId: number) => `${COURSE_URL}check-buy-course/${userId}/${courseId}`,
-
+    REGISTER_COURSE: (userId: number, courseId: number) => `transactions/register-course/${userId}/${courseId}`,
     //COMMENT COURSE
     ADD_COMMENT_COURSE: 'comments/add-comment-lesson',
     GET_COMMENT: (id: number) => `comments/comment-lesson/${id}`

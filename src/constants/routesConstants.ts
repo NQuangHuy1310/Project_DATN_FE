@@ -57,6 +57,7 @@ import InstructorNotifications from '@/views/instructor/InstructorNotifications'
 
 import InstructorRegis from '@/views/user/InstructorRegis/InstrcutorRegisTeacher/InstructorRegisTeacher'
 import InstructorRegisQuestion from '@/views/user/InstructorRegis/InstructorRegisQuestion/InstructorRegisQuestion'
+import CourseOutstanding from '@/views/user/Courses/CourseOutstanding'
 
 // Routes không cần đăng nhập
 export const publicRoutes = [
@@ -64,7 +65,8 @@ export const publicRoutes = [
     { path: routes.login, layout: HomeLayout, element: Login },
     { path: routes.register, layout: HomeLayout, element: Register },
     { path: routes.forgotPassword, layout: HomeLayout, element: ForgotPassword },
-    { path: routes.courseDetailNoLogin, layout: HomeLayout, element: CourseDetailNoLogin }
+    { path: routes.courseDetailNoLogin, layout: HomeLayout, element: CourseDetailNoLogin },
+    { path: routes.courseOutstanding, layout: HomeLayout, element: CourseOutstanding }
 ]
 
 // Routes cần đăng nhập

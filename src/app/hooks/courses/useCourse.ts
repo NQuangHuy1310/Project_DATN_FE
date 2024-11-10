@@ -1,4 +1,5 @@
 import { courseApi } from '@/app/services/courses/courses'
+import { IBuyData } from '@/types'
 import { IComment, ICreateComment } from '@/types/common'
 import { CourseData, ICourse, ICourseCategory, ICourseDetail, IQuizDetail } from '@/types/course/course'
 import { useMutation, useQuery, useQueryClient, UseQueryOptions } from '@tanstack/react-query'
@@ -109,5 +110,18 @@ export const useCheckBuyCourse = (
         enabled: !!userId && !!courseId,
         queryKey: ['check-buy-course', userId, courseId],
         queryFn: () => courseApi.checkBuyCourse(userId, courseId)
+    })
+}
+
+export const useRegisterCourse = () => {
+    const queryClient = useQueryClient()
+
+    return useMutation<any, Error, [number, number, IBuyData]>({
+        mutationFn: async ([userId, courseId, data]) => {
+            return courseApi.registerCourse(userId, courseId, data)
+        },
+        onSuccess() {
+            queryClient.invalidateQueries({ queryKey: ['register-course'] })
+        }
     })
 }

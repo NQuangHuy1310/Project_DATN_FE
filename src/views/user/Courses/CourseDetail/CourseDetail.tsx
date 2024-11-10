@@ -16,7 +16,7 @@ import { formatDuration, getImagesUrl } from '@/lib/common'
 import useGetUserProfile from '@/app/hooks/accounts/useGetUser'
 import { useGetSlugParams } from '@/app/hooks/common/useCustomParams'
 import { useCheckRatingUser, useCreateRating } from '@/app/hooks/ratings/useRating.ts'
-import { useCheckBuyCourse, useCourseDetailNoLoginBySlug } from '@/app/hooks/courses/useCourse'
+import { useCheckBuyCourse, useCourseDetailNoLoginBySlug, useRegisterCourse } from '@/app/hooks/courses/useCourse'
 
 import About from '@/views/user/Courses/CourseDetail/About'
 import Reviews from '@/views/user/Courses/CourseDetail/Reviews'
@@ -29,7 +29,7 @@ import { CourseLevel } from '@/components/shared/Course/CourseLevel'
 import { Dialog, DialogContent, DialogFooter } from '@/components/ui/dialog'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { useBuyCourse } from '@/app/hooks/payment'
+import { IBuyData } from '@/types'
 
 const CourseDetail = () => {
     const {
@@ -44,7 +44,6 @@ const CourseDetail = () => {
             content: ''
         }
     })
-
     const navigate = useNavigate()
     const slug = useGetSlugParams('slug')
     const [isOpen, setIsOpen] = useState<boolean>(false)
@@ -56,14 +55,14 @@ const CourseDetail = () => {
     const { data: courseDetail, isLoading: LoadingCourse } = useCourseDetailNoLoginBySlug(slug!)
     const { data: isPurchased } = useCheckBuyCourse(user?.id || 0, courseDetail?.id || 0)
     const { data: checkRating, isLoading: LoadingCheck } = useCheckRatingUser(user?.id || 0, courseDetail?.id || 0)
-    // const { data: checkRated } = useCheckRated(user?.id || 0, courseDetail?.id || 0)
-    const { mutateAsync: handleByCourse } = useBuyCourse()
+
+    const { mutateAsync: registerCourse } = useRegisterCourse()
 
     const totalTime = formatDuration((courseDetail?.total_duration_video as unknown as number) || 0)
     const rating = watch('rate')
 
     const onSubmit = async (data: any) => {
-        if (checkRating?.data?.rating === 'block') {
+        if (checkRating?.data?.status === 'pending') {
             toast.error('Bạn chưa hoàn thành khóa học')
         } else if (user?.id) {
             const payload = {
@@ -77,17 +76,19 @@ const CourseDetail = () => {
     }
 
     const handleLearnNow = async () => {
-        if (user && courseDetail)
-            await handleByCourse([
-                user?.id,
-                courseDetail?.id,
+        if (user && courseDetail) {
+            const payload: [number, number, IBuyData] = [
+                user.id,
+                courseDetail.id,
                 {
                     total_coin: 0,
                     coin_discount: 0,
                     total_coin_after_discount: 0
                 }
-            ])
-        toast.success('Đăng ký khóa học thành công')
+            ]
+            await registerCourse(payload)
+        }
+        navigate(routes.myCourses)
     }
 
     if (LoadingCheck || LoadingCourse) return <Loading />
@@ -216,19 +217,24 @@ const CourseDetail = () => {
                             <h3 className="text-overflow cursor-pointer text-base font-bold text-black xl2:text-lg">
                                 {courseDetail?.name}
                             </h3>
-                            {courseDetail?.price &&
-                            courseDetail?.price_sale &&
-                            courseDetail.price != 0 &&
-                            courseDetail.price_sale != 0 ? (
-                                <div className="flex items-center gap-3">
-                                    <div className="flex items-center gap-1">
-                                        <RiMoneyDollarCircleFill className="size-4 text-orange-500" />
-                                        <del>{Math.floor(courseDetail?.price)} xu</del>
+                            {(courseDetail?.price && courseDetail.price > 0) || (courseDetail?.price_sale && courseDetail.price_sale > 0) ? (
+                                courseDetail?.price_sale && courseDetail.price_sale > 0 ? (
+                                    <div className="flex items-center gap-3">
+                                        <div className="flex items-center gap-1">
+                                            <RiMoneyDollarCircleFill className="size-5 text-orange-500" />
+                                            <del>{Math.floor(courseDetail.price)}</del>
+                                        </div>
+                                        <div className="font-semibold text-orange-500 flex items-center gap-1">
+                                            <RiMoneyDollarCircleFill className="size-5 text-orange-500" />
+                                            <span>{Math.floor(courseDetail.price_sale)}</span>
+                                        </div>
                                     </div>
-                                    <p className="font-semibold text-red-600">
-                                        {Math.floor(courseDetail?.price_sale)} xu
-                                    </p>
-                                </div>
+                                ) : (
+                                    <div className="font-semibold text-orange-500 flex items-center gap-1">
+                                        <RiMoneyDollarCircleFill className="size-5 text-orange-500" />
+                                        <span>{Math.floor(courseDetail.price)}</span>
+                                    </div>
+                                )
                             ) : (
                                 <span className="text-sm text-orange-500 lg:text-base">Miễn phí</span>
                             )}
@@ -294,10 +300,8 @@ const CourseDetail = () => {
                                             </>
                                         )}
                                     </div>
-                                ) : courseDetail?.price === 0 ||
-                                  courseDetail?.price_sale === 0 ||
-                                  !courseDetail?.price ||
-                                  !courseDetail?.price_sale ? (
+                                ) : (!courseDetail?.price && !courseDetail?.price_sale) ||
+                                    (courseDetail?.price == 0 && courseDetail?.price_sale == 0) ? (
                                     <Button
                                         className="block w-full rounded-md bg-primary py-2 text-center text-white"
                                         onClick={handleLearnNow}
@@ -315,6 +319,7 @@ const CourseDetail = () => {
                             </div>
                         )}
 
+
                         <Dialog open={isOpen} onOpenChange={setIsOpen}>
                             <DialogContent className="max-h-[90vh] w-[90vw] max-w-full overflow-y-scroll p-5 md:max-w-[50vw] md:p-10">
                                 <form onSubmit={handleSubmit(onSubmit)}>
@@ -329,9 +334,8 @@ const CourseDetail = () => {
                                                 <FaStar
                                                     key={star}
                                                     onClick={() => setValue('rate', star)}
-                                                    className={`cursor-pointer ${
-                                                        star <= rating ? 'text-yellow-500' : 'text-gray-300'
-                                                    } h-5 w-5 md:h-8 md:w-8`}
+                                                    className={`cursor-pointer ${star <= rating ? 'text-yellow-500' : 'text-gray-300'
+                                                        } h-5 w-5 md:h-8 md:w-8`}
                                                 />
                                             ))}
                                         </div>

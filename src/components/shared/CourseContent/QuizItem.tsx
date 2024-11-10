@@ -8,7 +8,6 @@ import ConfirmDialog from '@/components/shared/ConfirmDialog'
 import { useDeleteLessonQuiz, useGetLessonQuiz } from '@/app/hooks/instructors'
 import DialogAddQuestion from '@/components/shared/CourseContent/Dialog/DialogAddQuestion'
 import LessonQuizzes from '@/components/shared/CourseContent/LessonQuizzes'
-import { checkEditPermission } from '@/lib'
 
 interface QuizItemProps {
     lesson: ILessonQuiz
@@ -26,8 +25,6 @@ const QuizItem = ({ lesson, moduleId, canEdit }: QuizItemProps) => {
     const [isEditQuiz, setIsEditQuiz] = useState(false)
 
     const handleDeleteLesson = async () => {
-        if (checkEditPermission(canEdit!)) return
-
         await deleteLessonQuiz(lesson.id)
         setIsOpenDialog(false)
     }

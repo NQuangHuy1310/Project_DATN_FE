@@ -10,7 +10,7 @@ import { selectedModule } from '@/views/instructor/Course/CreateCourse/Curriculu
 import CourseLessons from '@/components/shared/CourseContent/CourseLessons.tsx'
 import ConfirmDialog from '@/components/shared/ConfirmDialog'
 import { useDeleteModule } from '@/app/hooks/instructors'
-import { checkEditPermission } from '@/lib'
+import { showMessage } from '@/lib'
 
 interface CourseModulesProps {
     module: IModule
@@ -44,10 +44,10 @@ const CourseModules = ({
     }
 
     const handleDeleteModule = async () => {
-        if (checkEditPermission(canEdit!)) return
-
-        await deleteModule(selectedId.toString())
-        setConfirmDialog(false)
+        if (canEdit) {
+            await deleteModule(selectedId.toString())
+            setConfirmDialog(false)
+        } else showMessage()
     }
 
     return (
@@ -59,7 +59,10 @@ const CourseModules = ({
         >
             <div className="group flex items-center justify-between">
                 <div className="flex items-center gap-5">
-                    <h5 className="text-base font-semibold">Tên chương: {module.title}</h5>
+                    <div className="flex items-center gap-2">
+                        <h5 className="text-base font-semibold">Tên chương: {module.title}</h5>
+                        <h6 className="text-base font-semibold">Có: {module.total_lessons} bài học</h6>
+                    </div>
                     <div className="hidden gap-2 group-hover:flex">
                         <Button
                             size="icon"
@@ -79,7 +82,10 @@ const CourseModules = ({
                         <Button size="icon" variant="outline">
                             <FaRegTrashAlt
                                 className="size-4 cursor-pointer hover:text-black"
-                                onClick={() => setConfirmDialog(true)}
+                                onClick={() => {
+                                    setSelectedId(module.id.toString())
+                                    setConfirmDialog(true)
+                                }}
                             />
                         </Button>
                     </div>

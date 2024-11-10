@@ -9,14 +9,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import placeholder from '@/assets/placeholder.jpg'
 import { CourseLevel, MessageErrors } from '@/constants'
-import {
-    canEditCourse,
-    checkEditPermission,
-    formatPrice,
-    getImagesUrl,
-    readFileAsDataUrl,
-    validateFileSize
-} from '@/lib'
+import { canEditCourse, formatPrice, getImagesUrl, readFileAsDataUrl, showMessage, validateFileSize } from '@/lib'
 import { courseOverview, courseOverviewSchema } from '@/validations'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useGetCategories } from '@/app/hooks/categories'
@@ -91,44 +84,44 @@ const CourseOverview = memo(({ status }: { status: ICourseStatus }) => {
     }
 
     const handleSubmitForm: SubmitHandler<courseOverview> = async (data) => {
-        const payload: IOverviewCourseData = {
-            ...data,
-            price: +data.price,
-            price_sale: +data.price_sale,
-            _method: 'PUT'
-        }
+        const isEdit = canEditCourse(status)
+        if (isEdit) {
+            const payload: IOverviewCourseData = {
+                ...data,
+                price: +data.price,
+                price_sale: +data.price_sale,
+                _method: 'PUT'
+            }
 
-        const canEdit = canEditCourse(status)
-        if (checkEditPermission(canEdit!)) return
+            if (courseVideoPath && courseImagePath && !courseImageFile && !courseVideoFile) {
+                return await createOverviewCourse([id!, payload])
+            }
 
-        if (courseVideoPath && courseImagePath && !courseImageFile && !courseVideoFile) {
+            if (courseImageFile) {
+                if (validateFileSize(courseImageFile, 'image')) {
+                    payload.thumbnail = courseImageFile
+                } else {
+                    toast.warning('Kích thước hình ảnh không hợp lệ')
+                    return
+                }
+            }
+
+            if (courseVideoFile) {
+                if (validateFileSize(courseVideoFile, 'video')) {
+                    payload.trailer = courseVideoFile
+                } else {
+                    toast.warning('Kích thước video không hợp lệ')
+                    return
+                }
+            }
+
+            if (!courseVideoFile || !courseImageFile || !courseVideoPath || !courseImagePath) {
+                toast.warning('Bạn cần tải lên hình ảnh và video để thêm vào khoá học')
+                return
+            }
+
             return await createOverviewCourse([id!, payload])
-        }
-
-        if (courseImageFile) {
-            if (validateFileSize(courseImageFile, 'image')) {
-                payload.thumbnail = courseImageFile
-            } else {
-                toast.warning('Kích thước hình ảnh không hợp lệ')
-                return
-            }
-        }
-
-        if (courseVideoFile) {
-            if (validateFileSize(courseVideoFile, 'video')) {
-                payload.trailer = courseVideoFile
-            } else {
-                toast.warning('Kích thước video không hợp lệ')
-                return
-            }
-        }
-
-        if (!courseVideoFile || !courseImageFile || !courseVideoPath || !courseImagePath) {
-            toast.warning('Bạn cần tải lên hình ảnh và video để thêm vào khoá học')
-            return
-        }
-
-        return await createOverviewCourse([id!, payload])
+        } else showMessage()
     }
 
     useEffect(() => {

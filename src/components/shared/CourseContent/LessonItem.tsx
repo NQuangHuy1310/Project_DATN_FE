@@ -13,7 +13,7 @@ import { useDeleteLessonDoc, useDeleteLessonVideo } from '@/app/hooks/instructor
 import LessonDocument from '@/components/shared/CourseContent/LessonDocument'
 import LessonVideo from '@/components/shared/CourseContent/LessonVideo'
 import { Select, SelectContent, SelectGroup, SelectTrigger, SelectItem } from '@/components/ui/select'
-import { checkEditPermission } from '@/lib'
+import { showMessage } from '@/lib'
 
 interface LessonItemProps {
     lesson: ILesson
@@ -46,26 +46,27 @@ const LessonItem = ({ lesson, canEdit }: LessonItemProps) => {
     }
 
     const handleDeleteLesson = async () => {
-        if (checkEditPermission(canEdit)) return
-
-        if (content_type === 'document') {
-            await deleteLessonDoc(id)
-        } else if (content_type === 'video') {
-            await deleteLessonVideo(id)
-        }
-        setIsOpenDialog(false)
+        if (canEdit) {
+            if (content_type === 'document') {
+                await deleteLessonDoc(id)
+            } else if (content_type === 'video') {
+                await deleteLessonVideo(id)
+            }
+            setIsOpenDialog(false)
+        } else showMessage()
     }
 
     const handleChangeSelectedLessonType = (value: 'document' | 'quiz' | 'video') => {
-        if (selectedLessonType !== content_type) {
-            setIsSelectingLessonType(false)
-            if (value === 'document') setIsEditingDocument(true)
-            if (value === 'video') setIsEditingVideo(true)
-        } else {
-            if (checkEditPermission(canEdit)) return
-            setSelectedLessonType(value)
-            setIsSelectingLessonType(true)
-        }
+        if (canEdit) {
+            if (selectedLessonType !== content_type) {
+                setIsSelectingLessonType(false)
+                if (value === 'document') setIsEditingDocument(true)
+                if (value === 'video') setIsEditingVideo(true)
+            } else {
+                setSelectedLessonType(value)
+                setIsSelectingLessonType(true)
+            }
+        } else showMessage()
     }
 
     useEffect(() => {

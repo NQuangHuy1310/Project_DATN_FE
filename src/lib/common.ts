@@ -128,10 +128,6 @@ export const canEditCourse = (status: ICourseStatus): boolean => {
     return status === 'draft' || status === 'rejected'
 }
 
-export const checkEditPermission = (canEdit: boolean) => {
-    if (!canEdit) {
-        toast.error(MessageErrors.canEdit, { description: MessageErrors.descriptionCanEdit })
-        return true
-    }
-    return false
+export const showMessage = () => {
+    toast.error(MessageErrors.canEdit, { description: MessageErrors.descriptionCanEdit })
 }

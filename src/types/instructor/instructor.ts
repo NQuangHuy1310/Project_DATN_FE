@@ -90,6 +90,7 @@ export interface IModule {
     position: number
     title: string
     description: string
+    total_lessons: number
     lessons: ILesson[]
     quiz: ILessonQuiz
 }

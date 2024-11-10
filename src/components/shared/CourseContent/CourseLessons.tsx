@@ -9,7 +9,7 @@ import QuizItem from '@/components/shared/CourseContent/QuizItem.tsx'
 import LessonItem from '@/components/shared/CourseContent/LessonItem.tsx'
 import LessonOptions from '@/components/shared/CourseContent/LessonOptions.tsx'
 import { useUpdatePositionLesson } from '@/app/hooks/instructors'
-import { checkEditPermission } from '@/lib'
+import { showMessage } from '@/lib'
 
 interface CourseModuleProps {
     id: number
@@ -27,37 +27,36 @@ const CourseLessons = ({ id, lessons, quiz, isShowContent, canEdit }: CourseModu
     const [lessonData, setLessonData] = useState<ILesson[]>(lessons)
 
     const handleDragEnd = async (event: any) => {
-        if (checkEditPermission(canEdit!)) return
-
         const { active, over } = event
         const moduleId: number = active.data.current.id_module
+        if (canEdit) {
+            if (active.data.current.position !== over.data.current.position) {
+                const newItems = [...lessonData]
+                const activeIndex = lessonData.findIndex((item) => item.position === active.data.current.position)
+                const overIndex = lessonData.findIndex((item) => item.position === over.data.current.position)
 
-        if (active.data.current.position !== over.data.current.position) {
-            const newItems = [...lessonData]
-            const activeIndex = lessonData.findIndex((item) => item.position === active.data.current.position)
-            const overIndex = lessonData.findIndex((item) => item.position === over.data.current.position)
+                if (activeIndex !== -1 && overIndex !== -1) {
+                    const temp = newItems[activeIndex]
+                    newItems[activeIndex] = newItems[overIndex]
+                    newItems[overIndex] = temp
 
-            if (activeIndex !== -1 && overIndex !== -1) {
-                const temp = newItems[activeIndex]
-                newItems[activeIndex] = newItems[overIndex]
-                newItems[overIndex] = temp
+                    newItems.forEach((item, index) => {
+                        item.position = index + 1
+                    })
 
-                newItems.forEach((item, index) => {
-                    item.position = index + 1
-                })
+                    setLessonData(newItems)
 
-                setLessonData(newItems)
-
-                const payload = {
-                    lessons: newItems.map((item) => ({
-                        id: item.id,
-                        position: item.position
-                    })),
-                    _method: 'PUT'
+                    const payload = {
+                        lessons: newItems.map((item) => ({
+                            id: item.id,
+                            position: item.position
+                        })),
+                        _method: 'PUT'
+                    }
+                    await updatePosition([moduleId, payload])
                 }
-                await updatePosition([moduleId, payload])
             }
-        }
+        } else showMessage()
     }
 
     useEffect(() => {

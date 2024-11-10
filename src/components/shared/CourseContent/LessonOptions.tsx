@@ -47,12 +47,14 @@ const LessonOptions = ({ handleClose, moduleId }: LessonOptionsProps) => {
 
             {isShowLesson && (
                 <>
-                    {lessonType === 'video' && <LessonVideo moduleId={moduleId} handleHiddenLesson={setIsShowLesson} />}
+                    {lessonType === 'video' && (
+                        <LessonVideo moduleId={moduleId} handleHiddenLesson={setIsShowLesson} canEdit={true} />
+                    )}
                     {lessonType === 'document' && (
-                        <LessonDocument moduleId={moduleId} handleHiddenLesson={setIsShowLesson} />
+                        <LessonDocument moduleId={moduleId} handleHiddenLesson={setIsShowLesson} canEdit={true} />
                     )}
                     {lessonType === 'quizzes' && (
-                        <LessonQuizzes moduleId={moduleId} handleHiddenLesson={setIsShowLesson} />
+                        <LessonQuizzes moduleId={moduleId} handleHiddenLesson={setIsShowLesson} canEdit={true} />
                     )}
                     {lessonType === 'coding' && <LessonCoding />}
                 </>

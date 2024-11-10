@@ -5,7 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { canEditCourse, checkEditPermission, getInputCoursePlaceholder } from '@/lib'
+import { canEditCourse, getInputCoursePlaceholder, showMessage } from '@/lib'
 import { useGetTargetCourse, useTargetCourse } from '@/app/hooks/instructors/useInstructor'
 import Loading from '@/components/Common/Loading/Loading'
 import { toast } from 'sonner'
@@ -80,10 +80,9 @@ const StudentGoals = memo(({ status }: { status: ICourseStatus }) => {
             _method: 'PUT'
         }
 
-        const canEdit = canEditCourse(status)
-        if (checkEditPermission(canEdit!)) return
-
-        return await createTargetCourse([id!, result])
+        const isEdit = canEditCourse(status)
+        if (isEdit) return await createTargetCourse([id!, result])
+        else showMessage()
     }
 
     const handleReset = () => {

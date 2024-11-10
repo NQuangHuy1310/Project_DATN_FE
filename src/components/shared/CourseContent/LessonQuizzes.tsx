@@ -15,7 +15,7 @@ import { lessonQuiz, lessonQuizSchema } from '@/validations'
 import { IQuestion } from '@/types/instructor'
 import DialogAddQuestion from '@/components/shared/CourseContent/Dialog/DialogAddQuestion'
 import PreviewImage from '@/components/shared/PreviewImage'
-import { checkEditPermission, getImagesUrl } from '@/lib'
+import { getImagesUrl, showMessage } from '@/lib'
 
 interface LessonQuizzesProps {
     moduleId: number
@@ -44,29 +44,26 @@ const LessonQuizzes = ({ handleHiddenLesson, moduleId, canEdit }: LessonQuizzesP
     const [imagePreview, setImagePreview] = useState<string>('')
 
     const handleSubmitForm: SubmitHandler<lessonQuiz> = async (formData) => {
-        if (checkEditPermission(canEdit!)) return
-
-        const payload = {
-            ...formData,
-            _method: data?.quiz ? 'PUT' : undefined
-        }
-        if (data?.quiz) {
-            await updateLessonQuiz([data.quiz.id, payload])
-        } else {
-            await createLessonQuiz([moduleId, formData])
-        }
-        handleHiddenLesson?.(false)
+        if (canEdit) {
+            const payload = {
+                ...formData,
+                _method: data?.quiz ? 'PUT' : undefined
+            }
+            if (data?.quiz) {
+                await updateLessonQuiz([data.quiz.id, payload])
+            } else {
+                await createLessonQuiz([moduleId, formData])
+            }
+            handleHiddenLesson?.(false)
+        } else showMessage()
     }
 
     const handleDeleteQuiz = async (questionId: number) => {
-        if (checkEditPermission(canEdit!)) return
-
-        await deleteLessonQuiz(questionId)
+        if (canEdit) await deleteLessonQuiz(questionId)
+        else showMessage()
     }
 
     const handleImageClick = (url: string) => {
-        if (checkEditPermission(canEdit!)) return
-
         setImagePreview(getImagesUrl(url))
         setOpenDialogPreview(true)
     }

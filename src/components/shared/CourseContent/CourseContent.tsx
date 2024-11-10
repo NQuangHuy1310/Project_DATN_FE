@@ -7,7 +7,7 @@ import { closestCorners, DndContext } from '@dnd-kit/core'
 import { horizontalListSortingStrategy, SortableContext } from '@dnd-kit/sortable'
 import CourseModules from '@/components/shared/CourseContent/CourseModules.tsx'
 import { useUpdatePositionModule } from '@/app/hooks/instructors'
-import { checkEditPermission } from '@/lib'
+import { showMessage } from '@/lib'
 
 interface CourseContentProps {
     moduleData: IModules
@@ -46,35 +46,36 @@ const CourseContent = ({
     }
 
     const handleDragEnd = async (event: any) => {
-        if (checkEditPermission(canEdit!)) return
-
         const { active, over } = event
-        if (active.data.current.position !== over.data.current.position) {
-            const newItems = [...modules]
-            const activeIndex = modules.findIndex((item) => item.position === active.data.current.position)
-            const overIndex = modules.findIndex((item) => item.position === over.data.current.position)
+        if (canEdit) {
+            if (active.data.current.position !== over.data.current.position) {
+                const newItems = [...modules]
+                const activeIndex = modules.findIndex((item) => item.position === active.data.current.position)
+                const overIndex = modules.findIndex((item) => item.position === over.data.current.position)
 
-            if (activeIndex !== -1 && overIndex !== -1) {
-                const temp = newItems[activeIndex]
-                newItems[activeIndex] = newItems[overIndex]
-                newItems[overIndex] = temp
+                if (activeIndex !== -1 && overIndex !== -1) {
+                    const temp = newItems[activeIndex]
+                    newItems[activeIndex] = newItems[overIndex]
+                    newItems[overIndex] = temp
 
-                newItems.forEach((item, index) => {
-                    item.position = index + 1
-                })
+                    newItems.forEach((item, index) => {
+                        item.position = index + 1
+                    })
 
-                setModules(newItems)
+                    setModules(newItems)
 
-                const payload = {
-                    modules: newItems.map((item) => ({
-                        id: item.id,
-                        position: item.position
-                    })),
-                    _method: 'PUT'
+                    const payload = {
+                        modules: newItems.map((item) => ({
+                            id: item.id,
+                            position: item.position
+                        })),
+                        _method: 'PUT'
+                    }
+
+                    await updatePositionModule([id!, payload])
                 }
-                await updatePositionModule([id!, payload])
             }
-        }
+        } else showMessage()
     }
 
     useEffect(() => {

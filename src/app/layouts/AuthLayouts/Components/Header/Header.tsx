@@ -46,12 +46,7 @@ const Header = () => {
 
     return (
         <header>
-            {voucher ? (
-                <TopBar
-                    endTime={voucher.end_time}
-                    voucherCode={voucher.code}
-                />
-            ) : null}
+            {voucher ? <TopBar endTime={voucher.end_time} voucherCode={voucher.code} /> : null}
             <div className="z-50 h-[120px] border-b-[1px] bg-white shadow-sm">
                 <div className="mx-auto h-full max-w-[1200px] px-5 py-3 lg:px-2">
                     <div className="flex items-center justify-between gap-2">
@@ -136,7 +131,10 @@ const Header = () => {
                                     </div>
                                     <p className="text-xl font-semibold">Coursea</p>
                                 </Link>
-                                <div className="flex w-full cursor-pointer justify-between px-3" onClick={toggleDropdown}>
+                                <div
+                                    className="flex w-full cursor-pointer justify-between px-3"
+                                    onClick={toggleDropdown}
+                                >
                                     <p className="text-base">Danh mục</p> <IoIosArrowDown className="size-4" />
                                 </div>
                                 {isOpen && (
@@ -207,7 +205,7 @@ const Header = () => {
                             </li>
                             <li>
                                 <NavLink
-                                    to={'home-posts'}
+                                    to={routes.postFeatured}
                                     className={({ isActive }) =>
                                         `px-2 pb-5 lg:pb-[18px] ${isActive ? 'border-b-[3px] border-primary font-semibold' : ''}`
                                     }

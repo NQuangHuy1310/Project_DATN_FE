@@ -45,6 +45,7 @@ const routes = {
     editPost: '/posts/:slug/edit',
     myPosts: '/posts/me',
     myBookmarks: '/posts/bookmarks/me',
+    postFeatured: '/posts-featured',
 
     // Instructor dashboard
     instructorDashboard: '/instructor/dashboard',

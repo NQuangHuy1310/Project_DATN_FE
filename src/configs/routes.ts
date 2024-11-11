@@ -18,6 +18,7 @@ const routes = {
     courseDetail: '/courses/:slug',
     courseLeaning: '/leaning/:slug',
     courseDetailNoLogin: '/course/:slug',
+    courseOutstanding: '/course-outstanding',
 
     // Instructor routes
     instructor: '/instructors',

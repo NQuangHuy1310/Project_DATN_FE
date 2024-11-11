@@ -92,7 +92,7 @@ export const sidebarListInstructor = [
         path: routes.instructorQa
     },
     {
-        title: 'Hiệu xuất',
+        title: 'Hiệu suất',
         icon: FaChartSimple,
         path: routes.instructorPerformanceOverview
     },

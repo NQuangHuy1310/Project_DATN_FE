@@ -58,11 +58,13 @@ const Register = () => {
     const handleOtpSubmit = async (otp_code: string) => {
         const email = getValues('email')
         const response = await authApis.verifyOtp({ email, otp_code })
-        setUser(response.user)
-        setProfile(response.profile)
-        setAccessToken(response.access_token)
-        navigate(routes.userDashboard)
-        reset()
+        if (response) {
+            setUser(response.user)
+            setProfile(response.profile)
+            setAccessToken(response.access_token)
+            navigate(routes.userDashboard)
+            reset()
+        }
     }
 
     const handleResendOtp = async () => {

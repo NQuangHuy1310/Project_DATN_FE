@@ -97,6 +97,7 @@ const StudentGoals = memo(({ status }: { status: ICourseStatus }) => {
     }
 
     const isDisabled = status === 'pending' || status === 'approved'
+    const anyFieldsEmpty = isAnyFieldEmpty()
 
     useEffect(() => {
         if (data && data.goals.length > 0 && data.audiences.length > 0 && data.requirements.length > 0) {
@@ -140,6 +141,20 @@ const StudentGoals = memo(({ status }: { status: ICourseStatus }) => {
             navigate(routes.instructorDashboard)
         }
     }, [error, navigate])
+
+    useEffect(() => {
+        const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+            if (anyFieldsEmpty) {
+                event.preventDefault()
+            }
+        }
+
+        window.addEventListener('beforeunload', handleBeforeUnload)
+
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload)
+        }
+    }, [anyFieldsEmpty])
 
     if (loadingTargetCourse) return <Loading />
 

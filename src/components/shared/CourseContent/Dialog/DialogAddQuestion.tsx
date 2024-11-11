@@ -34,7 +34,6 @@ const DialogAddQuestion = ({ openDialog, setOpenDialog, quizId, question }: Dial
     const [questionText, setQuestionText] = useState<string>('')
     const [questionImage, setQuestionImage] = useState<File | string | undefined>(undefined)
     const [questionType, setQuestionType] = useState<'one_choice' | 'multiple_choice'>('one_choice')
-    const [points, setPoints] = useState<number>(1)
     const [answers, setAnswers] = useState<Answer[]>([
         { text: '', image: undefined, remove_image: false },
         { text: '', image: undefined, remove_image: false },
@@ -142,7 +141,6 @@ const DialogAddQuestion = ({ openDialog, setOpenDialog, quizId, question }: Dial
             question: {
                 question: questionText,
                 type: questionType,
-                points,
                 correct_answer: correct_answer,
                 image: questionImage
             },
@@ -169,7 +167,6 @@ const DialogAddQuestion = ({ openDialog, setOpenDialog, quizId, question }: Dial
             { text: '', image: undefined },
             { text: '', image: undefined }
         ])
-        setPoints(1)
         setCorrectAnswers([])
     }
 
@@ -184,7 +181,6 @@ const DialogAddQuestion = ({ openDialog, setOpenDialog, quizId, question }: Dial
 
             setQuestionText(question.question)
             setQuestionType(question.type)
-            setPoints(question.points)
             setAnswers(
                 question.options.map((option) => ({
                     text: option.option,
@@ -377,21 +373,6 @@ const DialogAddQuestion = ({ openDialog, setOpenDialog, quizId, question }: Dial
                                     <SelectGroup>
                                         <SelectItem value="one_choice">Một đáp án</SelectItem>
                                         <SelectItem value="multiple_choice">Nhiều đáp án</SelectItem>
-                                    </SelectGroup>
-                                </SelectContent>
-                            </Select>
-
-                            <Select value={points.toString()} onValueChange={(e) => setPoints(Number(e))}>
-                                <SelectTrigger className="flex h-[36px] w-[136px] items-center justify-between">
-                                    <SelectValue placeholder="Chọn điểm" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectGroup>
-                                        {[...Array(20).keys()].map((item) => (
-                                            <SelectItem key={item + 1} value={(item + 1).toString()}>
-                                                {item + 1} Điểm
-                                            </SelectItem>
-                                        ))}
                                     </SelectGroup>
                                 </SelectContent>
                             </Select>

@@ -16,6 +16,7 @@ import { IQuestion } from '@/types/instructor'
 import DialogAddQuestion from '@/components/shared/CourseContent/Dialog/DialogAddQuestion'
 import PreviewImage from '@/components/shared/PreviewImage'
 import { getImagesUrl, showMessage } from '@/lib'
+import ConfirmDialog from '@/components/shared/ConfirmDialog'
 
 interface LessonQuizzesProps {
     moduleId: number
@@ -36,12 +37,14 @@ const LessonQuizzes = ({ handleHiddenLesson, moduleId, canEdit }: LessonQuizzesP
     const { data } = useGetLessonQuiz(moduleId)
     const { mutateAsync: createLessonQuiz } = useCreateLessonQuiz()
     const { mutateAsync: updateLessonQuiz } = useUpdateLessonQuiz()
-    const { mutateAsync: deleteLessonQuiz } = useDeleteQuestion()
+    const { mutateAsync: deleteLessonQuiz, isPending } = useDeleteQuestion()
 
     const [selectedQuestion, setSelectedQuestion] = useState<IQuestion | null>(null)
-    const [openDialog, setOpenDialog] = useState(false)
-    const [openDialogPreview, setOpenDialogPreview] = useState(false)
+    const [openDialog, setOpenDialog] = useState<boolean>(false)
+    const [openDialogPreview, setOpenDialogPreview] = useState<boolean>(false)
+    const [confirmDeleteQuestion, setConfirmDeleteQuestion] = useState<boolean>(false)
     const [imagePreview, setImagePreview] = useState<string>('')
+    const [questionID, setQuestionID] = useState<number>(0)
 
     const handleSubmitForm: SubmitHandler<lessonQuiz> = async (formData) => {
         if (canEdit) {
@@ -58,9 +61,11 @@ const LessonQuizzes = ({ handleHiddenLesson, moduleId, canEdit }: LessonQuizzesP
         } else showMessage()
     }
 
-    const handleDeleteQuiz = async (questionId: number) => {
-        if (canEdit) await deleteLessonQuiz(questionId)
-        else showMessage()
+    const handleDeleteQuiz = async () => {
+        if (canEdit) {
+            await deleteLessonQuiz(questionID)
+            setConfirmDeleteQuestion(!confirmDeleteQuestion)
+        } else showMessage()
     }
 
     const handleImageClick = (url: string) => {
@@ -147,7 +152,10 @@ const LessonQuizzes = ({ handleHiddenLesson, moduleId, canEdit }: LessonQuizzesP
                                             size="icon"
                                             variant="outline"
                                             className="h-[30px] w-[30px]"
-                                            onClick={() => handleDeleteQuiz(question.id)}
+                                            onClick={() => {
+                                                setQuestionID(question.id)
+                                                setConfirmDeleteQuestion(true)
+                                            }}
                                         >
                                             <LuTrash />
                                         </Button>
@@ -196,6 +204,14 @@ const LessonQuizzes = ({ handleHiddenLesson, moduleId, canEdit }: LessonQuizzesP
             {/* Dialog */}
             <DialogAddQuestion openDialog={openDialog} setOpenDialog={setOpenDialog} question={selectedQuestion!} />
             <PreviewImage imageSrc={imagePreview} open={openDialogPreview} onOpenChange={setOpenDialogPreview} />
+            <ConfirmDialog
+                title="Xác nhận xóa câu hỏi"
+                isPending={isPending}
+                description="Bạn có chắc chắn muốn xóa câu hỏi này? Hành động này sẽ không thể hoàn tác và câu hỏi sẽ bị xóa khỏi bài tập trong chương học."
+                confirmDialog={confirmDeleteQuestion}
+                setConfirmDialog={setConfirmDeleteQuestion}
+                handleDelete={handleDeleteQuiz}
+            />
         </>
     )
 }

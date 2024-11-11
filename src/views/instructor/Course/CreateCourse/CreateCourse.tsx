@@ -47,6 +47,7 @@ const alertMessages = {
 const CreateCourse = () => {
     const { id } = useParams()
     const navigate = useNavigate()
+    const [selectedKey, setSelectedKey] = useState<OptionKey>('course_target')
 
     const { mutateAsync: submitCourse, isPending } = useSubmitCourse()
     const { data: manageMenu } = useGetManageMenu(id!)
@@ -70,7 +71,6 @@ const CreateCourse = () => {
         }
     ]
 
-    const [selectedKey, setSelectedKey] = useState<OptionKey>(options[0].key)
     const isAllComplete = options.every((option) => manageMenu && manageMenu[option.key])
 
     const handleSubmit = async () => {
@@ -82,15 +82,23 @@ const CreateCourse = () => {
     }
 
     useEffect(() => {
-        const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-            event.preventDefault()
+        const storedKey = localStorage.getItem('selectedTab')
+        if (storedKey) {
+            setSelectedKey(storedKey as OptionKey)
         }
+    }, [])
+
+    useEffect(() => {
+        const handleBeforeUnload = () => {
+            localStorage.setItem('selectedTab', selectedKey)
+        }
+
         window.addEventListener('beforeunload', handleBeforeUnload)
 
         return () => {
             window.removeEventListener('beforeunload', handleBeforeUnload)
         }
-    }, [])
+    }, [selectedKey])
 
     useEffect(() => {
         if (manageMenu?.course_status === 'pending' || manageMenu?.course_status === 'approved') {

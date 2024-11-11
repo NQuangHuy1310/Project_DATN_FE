@@ -83,6 +83,11 @@ const CourseOverview = memo(({ status }: { status: ICourseStatus }) => {
         }
     }
 
+    const hasIncompleteFields = () => {
+        const values = getValues()
+        return !values.name || !values.description || !values.level || !values.id_category || !values.price
+    }
+
     const handleSubmitForm: SubmitHandler<courseOverview> = async (data) => {
         const isEdit = canEditCourse(status)
         if (isEdit) {
@@ -142,6 +147,20 @@ const CourseOverview = memo(({ status }: { status: ICourseStatus }) => {
             setCourseVideoPath(videoPath)
         }
     }, [courseData, setValue])
+
+    useEffect(() => {
+        const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+            if (hasIncompleteFields()) {
+                event.preventDefault()
+            }
+        }
+
+        window.addEventListener('beforeunload', handleBeforeUnload)
+
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload)
+        }
+    }, [getValues])
 
     const isDisabled = status === 'pending' || status === 'approved'
 

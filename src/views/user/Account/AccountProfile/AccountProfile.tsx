@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useEffect, useRef, useState } from 'react'
+import { ChangeEvent, useEffect, useRef, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { FiPlus } from 'react-icons/fi'
 import { toast } from 'sonner'
@@ -13,7 +13,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { MessageErrors } from '@/constants'
+import { ApiMessages, MessageErrors } from '@/constants'
 import { getImagesUrl, readFileAsDataUrl } from '@/lib'
 import { ProfileFormFields, profileSchema } from '@/validations'
 
@@ -43,7 +43,7 @@ const AccountProfile = () => {
         }
     }
 
-    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]
         if (file) {
             if (file.size > maxSizeInBytes) {
@@ -70,6 +70,7 @@ const AccountProfile = () => {
         const response = await userApis.updateProfile(payload)
         setUser(response.user)
         setProfile(response.profile)
+        toast.success(ApiMessages.success.updated)
     }
 
     useEffect(() => {

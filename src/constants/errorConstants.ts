@@ -26,7 +26,8 @@ export const MessageErrors = {
 export const ApiMessages = {
     success: {
         getData: 'Dữ liệu đã được tải thành công.',
-        created: 'Tài liệu đã được tạo thành công.'
+        created: 'Tài liệu đã được tạo thành công.',
+        updated: 'Cập nhật dữ liệu thành công'
     },
     error: {
         notFound: 'Không tìm thấy tài nguyên yêu cầu.',

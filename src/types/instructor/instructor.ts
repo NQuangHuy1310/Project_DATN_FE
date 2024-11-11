@@ -268,7 +268,6 @@ interface QuestionOptionData {
 interface QuestionData {
     question: string
     type: 'one_choice' | 'multiple_choice'
-    points: number
     image?: File | string
     correct_answer: number[] | number
 }

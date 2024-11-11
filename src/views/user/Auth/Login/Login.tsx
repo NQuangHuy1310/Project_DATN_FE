@@ -35,10 +35,12 @@ const Login = () => {
     const onSubmit: SubmitHandler<LoginFormFields> = async (data) => {
         try {
             const response = await authApis.login(data)
-            setUser(response.user)
-            setProfile(response.profile)
-            setAccessToken(response.access_token)
-            navigate(routes.userDashboard)
+            if (response) {
+                navigate(routes.userDashboard)
+                setUser(response.user)
+                setProfile(response.profile)
+                setAccessToken(response.access_token)
+            }
         } catch (error: any) {
             if (error.data && error.data.errors) {
                 error.data.errors.forEach((errorItem: any) => {

@@ -333,6 +333,7 @@ export const useDeleteQuestion = () => {
         },
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: ['quiz'] })
+            toast.success('Xoá câu hỏi thành công!')
         }
     })
 }
@@ -346,6 +347,7 @@ export const useUpdatePositionLesson = () => {
         },
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: ['modules'] })
+            toast.success('Bạn đã thay đổi vị trí bài học thành công!')
         }
     })
 }
@@ -359,6 +361,7 @@ export const useUpdatePositionModule = () => {
         },
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: ['modules'] })
+            toast.success('Bạn đã thay đổi vị trí chương học thành công!')
         }
     })
 }

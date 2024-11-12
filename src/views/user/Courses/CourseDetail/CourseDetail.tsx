@@ -24,12 +24,13 @@ import Content from '@/views/user/Courses/CourseDetail/Content'
 
 import { Button } from '@/components/ui/button'
 import Loading from '@/components/Common/Loading/Loading'
-import { CourseLevel as level } from '@/constants'
+import { CourseLevel as level, TeacherStatus } from '@/constants'
 import { CourseLevel } from '@/components/shared/Course/CourseLevel'
 import { Dialog, DialogContent, DialogFooter } from '@/components/ui/dialog'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { IBuyData } from '@/types'
+import { useCheckFlowTeacher, useFlowTeacher, useUnFlowTeacher } from '@/app/hooks/accounts/useFlowTeacher'
 
 const CourseDetail = () => {
     const {
@@ -57,6 +58,9 @@ const CourseDetail = () => {
     const { data: checkRating, isLoading: LoadingCheck } = useCheckRatingUser(user?.id || 0, courseDetail?.id || 0)
 
     const { mutateAsync: registerCourse } = useRegisterCourse()
+    const { mutateAsync: flowTeacher } = useFlowTeacher()
+    const { mutateAsync: unFlowTeacher } = useUnFlowTeacher()
+    const { data: checkFollow } = useCheckFlowTeacher(user?.id!, courseDetail?.user?.id!)
 
     const totalTime = formatDuration((courseDetail?.total_duration_video as unknown as number) || 0)
     const rating = watch('rate')
@@ -91,6 +95,18 @@ const CourseDetail = () => {
         navigate(routes.myCourses)
     }
 
+    const handleFlowTeacher = async () => {
+        if (courseDetail?.user) {
+            await flowTeacher([{ following_id: courseDetail?.user?.id! }])
+        }
+    }
+
+    const handleUnFlowTeacher = async () => {
+        if (courseDetail?.user) {
+            await unFlowTeacher([{ following_id: courseDetail?.user?.id! }])
+        }
+    }
+
     if (LoadingCheck || LoadingCourse) return <Loading />
 
     return (
@@ -112,7 +128,7 @@ const CourseDetail = () => {
                         <h4 className="text-lg font-bold md:text-xl lg:text-2xl">{courseDetail?.name}</h4>
 
                         <div className="flex flex-wrap items-center justify-between gap-5">
-                            <div className="flex gap-5">
+                            <div className="flex items-center gap-5">
                                 <div className="flex items-center gap-2.5">
                                     <Avatar className="size-8">
                                         <AvatarImage
@@ -122,15 +138,22 @@ const CourseDetail = () => {
                                         />
                                         <AvatarFallback>{courseDetail?.user?.name?.slice(0, 2)}</AvatarFallback>
                                     </Avatar>
-                                    <h6 className="md:text-base">{courseDetail?.user?.name}</h6>
+                                    <h6 className="whitespace-nowrap md:text-base">{courseDetail?.user?.name}</h6>
                                 </div>
-                                <Button
-                                    className="bg-transparent text-primary hover:text-primary/80"
-                                    variant="outline"
-                                    size="sm"
-                                >
-                                    + Theo dõi
-                                </Button>
+                                {checkFollow && checkFollow?.action == 'follow' && (
+                                    <Button variant="default" className="w-full py-3" onClick={handleFlowTeacher}>
+                                        {TeacherStatus.follow}
+                                    </Button>
+                                )}
+                                {checkFollow && checkFollow?.action == 'unfollow' && (
+                                    <Button
+                                        variant="outline"
+                                        className="w-full py-3 duration-500 hover:bg-red-400 hover:text-white"
+                                        onClick={handleUnFlowTeacher}
+                                    >
+                                        {TeacherStatus.unFollow}
+                                    </Button>
+                                )}
                             </div>
                             <div className="flex items-center gap-1">
                                 <IoIosStar className="size-5 text-primary" />
@@ -217,26 +240,24 @@ const CourseDetail = () => {
                             <h3 className="text-overflow cursor-pointer text-base font-bold text-black xl2:text-lg">
                                 {courseDetail?.name}
                             </h3>
-                            {(courseDetail?.price && courseDetail.price > 0) || (courseDetail?.price_sale && courseDetail.price_sale > 0) ? (
-                                courseDetail?.price_sale && courseDetail.price_sale > 0 ? (
-                                    <div className="flex items-center gap-3">
-                                        <div className="flex items-center gap-1">
-                                            <RiMoneyDollarCircleFill className="size-5 text-orange-500" />
-                                            <del>{Math.floor(courseDetail.price)}</del>
-                                        </div>
-                                        <div className="font-semibold text-orange-500 flex items-center gap-1">
-                                            <RiMoneyDollarCircleFill className="size-5 text-orange-500" />
-                                            <span>{Math.floor(courseDetail.price_sale)}</span>
-                                        </div>
+                            {courseDetail?.price && courseDetail?.price != 0 ? (
+                                <div className="flex items-center gap-3">
+                                    <div className="flex items-center gap-1">
+                                        <RiMoneyDollarCircleFill className="size-4 text-orange-500" />
+                                        {courseDetail?.price_sale && courseDetail?.price_sale != 0 ? (
+                                            <del>{Math.floor(courseDetail?.price)}</del>
+                                        ) : (
+                                            <p>{Math.floor(courseDetail?.price)}</p>
+                                        )}
                                     </div>
-                                ) : (
-                                    <div className="font-semibold text-orange-500 flex items-center gap-1">
-                                        <RiMoneyDollarCircleFill className="size-5 text-orange-500" />
-                                        <span>{Math.floor(courseDetail.price)}</span>
-                                    </div>
-                                )
+                                    {courseDetail?.price_sale && courseDetail?.price_sale != 0 && (
+                                        <p className="font-semibold text-red-600">
+                                            {Math.floor(courseDetail?.price_sale)}
+                                        </p>
+                                    )}
+                                </div>
                             ) : (
-                                <span className="text-sm text-orange-500 lg:text-base">Miễn phí</span>
+                                <span className="text-orange-500">Miễn phí</span>
                             )}
 
                             <div className="flex items-center gap-2">
@@ -301,7 +322,7 @@ const CourseDetail = () => {
                                         )}
                                     </div>
                                 ) : (!courseDetail?.price && !courseDetail?.price_sale) ||
-                                    (courseDetail?.price == 0 && courseDetail?.price_sale == 0) ? (
+                                  (courseDetail?.price == 0 && courseDetail?.price_sale == 0) ? (
                                     <Button
                                         className="block w-full rounded-md bg-primary py-2 text-center text-white"
                                         onClick={handleLearnNow}
@@ -319,7 +340,6 @@ const CourseDetail = () => {
                             </div>
                         )}
 
-
                         <Dialog open={isOpen} onOpenChange={setIsOpen}>
                             <DialogContent className="max-h-[90vh] w-[90vw] max-w-full overflow-y-scroll p-5 md:max-w-[50vw] md:p-10">
                                 <form onSubmit={handleSubmit(onSubmit)}>
@@ -334,8 +354,9 @@ const CourseDetail = () => {
                                                 <FaStar
                                                     key={star}
                                                     onClick={() => setValue('rate', star)}
-                                                    className={`cursor-pointer ${star <= rating ? 'text-yellow-500' : 'text-gray-300'
-                                                        } h-5 w-5 md:h-8 md:w-8`}
+                                                    className={`cursor-pointer ${
+                                                        star <= rating ? 'text-yellow-500' : 'text-gray-300'
+                                                    } h-5 w-5 md:h-8 md:w-8`}
                                                 />
                                             ))}
                                         </div>

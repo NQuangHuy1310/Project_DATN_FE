@@ -31,13 +31,19 @@ const CourseMyBought = ({ data, progressLesson }: { data: ICourseUser; progressL
             </div>
             <div className="flex flex-col gap-2.5">
                 <h3 className="text-overflow cursor-pointer text-base font-bold text-black md:text-lg">{data.name}</h3>
-                {data.price || data.price_sale ? (
+                {data.price && data.price != 0 ? (
                     <div className="flex items-center gap-3">
                         <div className="flex items-center gap-1">
                             <RiMoneyDollarCircleFill className="size-4 text-orange-500" />
-                            <del>{Math.floor(data.price)} xu</del>
+                            {data.price_sale && data.price_sale != 0 ? (
+                                <del>{Math.floor(data.price)}</del>
+                            ) : (
+                                <p>{Math.floor(data.price)}</p>
+                            )}
                         </div>
-                        <p className="font-semibold text-red-600">{Math.floor(data.price_sale)} xu</p>
+                        {data.price_sale && data.price_sale != 0 && (
+                            <p className="font-semibold text-red-600">{Math.floor(data.price_sale)}</p>
+                        )}
                     </div>
                 ) : (
                     <span className="text-orange-500">Miễn phí</span>

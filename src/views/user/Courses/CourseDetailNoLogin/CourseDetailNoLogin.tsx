@@ -75,13 +75,13 @@ const CourseDetailNoLogin = () => {
                                         <div className="flex items-center gap-2.5">
                                             <Avatar className="size-8">
                                                 <AvatarImage
-                                                    src={getImagesUrl(courseDetail?.user.avatar || '')}
-                                                    alt={courseDetail?.user.name}
+                                                    src={getImagesUrl(courseDetail?.user?.avatar || '')}
+                                                    alt={courseDetail?.user?.name}
                                                     className="h-full w-full object-cover"
                                                 />
                                                 <AvatarFallback>{courseDetail?.user?.name?.slice(0, 2)}</AvatarFallback>
                                             </Avatar>
-                                            <h6 className="md:text-base">{courseDetail?.user.name}</h6>
+                                            <h6 className="md:text-base">{courseDetail?.user?.name}</h6>
                                         </div>
                                         <Button
                                             className="bg-transparent text-primary hover:text-primary/80"

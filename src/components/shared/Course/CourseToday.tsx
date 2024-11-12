@@ -39,16 +39,22 @@ const CourseToday = ({
 
             <div className="flex flex-col gap-4">
                 <h3 className="text-overflow cursor-pointer text-base font-bold text-black xl2:text-lg">{name}</h3>
-                {price && price_sale ? (
+                {price && price != 0 ? (
                     <div className="flex items-center gap-3">
                         <div className="flex items-center gap-1">
                             <RiMoneyDollarCircleFill className="size-4 text-orange-500" />
-                            <del>{Math.floor(price)} xu</del>
+                            {price_sale && price_sale != 0 ? (
+                                <del>{Math.floor(price)}</del>
+                            ) : (
+                                <p>{Math.floor(price)}</p>
+                            )}
                         </div>
-                        <p className="font-semibold text-red-600">{Math.floor(price_sale)} xu</p>
+                        {price_sale && price_sale != 0 && (
+                            <p className="font-semibold text-red-600">{Math.floor(price_sale)}</p>
+                        )}
                     </div>
                 ) : (
-                    <span className="text-sm text-orange-500 lg:text-base">Miễn phí</span>
+                    <span className="text-orange-500">Miễn phí</span>
                 )}
 
                 <div className="flex items-center gap-2">

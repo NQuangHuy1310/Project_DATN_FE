@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, useCallback, useMemo } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 
 import { FaCheckCircle, FaLock } from 'react-icons/fa'
 import {
@@ -27,6 +27,7 @@ import { useCourseLeaningBySlug } from '@/app/hooks/courses/useCourse'
 import { ILessonLeaning, IModuleLeaning } from '@/types/course/course'
 import { useGetIdParams, useGetSlugParams } from '@/app/hooks/common/useCustomParams'
 import { formatDurationSecond } from '@/lib/common'
+import routes from '@/configs/routes'
 
 const CourseLearning = () => {
     const [toggleTab, setToggleTab] = useState<boolean>(true)
@@ -38,8 +39,9 @@ const CourseLearning = () => {
     const courseListRef = useRef<HTMLDivElement | null>(null)
     const [pauseVideoCallback, setPauseVideoCallback] = useState<() => void>(() => {})
     const [playVideoCallback, setPlayVideoCallback] = useState<() => void>(() => {})
-
     const [checkQuizLeaning, setCheckQuizLeaning] = useState<boolean>()
+
+    const navigate = useNavigate()
 
     const idLesson = useGetIdParams('id')
     const timeNote = useGetIdParams('time')
@@ -394,8 +396,13 @@ const CourseLearning = () => {
             {/* Header */}
             <header className="fixed z-50 flex h-14 w-full items-center justify-between border-b bg-white px-4 py-2 text-black">
                 <div className="flex items-center gap-4">
-                    <HiChevronLeft className="size-8 text-white" />
-                    <img src={logo} className="hidden rounded-md md:block" alt="Logo" />
+                    <HiChevronLeft onClick={() => navigate(routes.myCourses)} className="size-8 cursor-pointer" />
+                    <img
+                        src={logo}
+                        className="hidden cursor-pointer rounded-md md:block"
+                        alt="Logo"
+                        onClick={() => navigate(routes.userDashboard)}
+                    />
                     <h2 className="md:text-md text-sm font-semibold lg:text-lg">{courseModule?.course_name}</h2>
                 </div>
                 <div className="flex items-center gap-5">

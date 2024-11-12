@@ -18,6 +18,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { authApis } from '@/app/services/accounts'
 import { removeAccessToken } from '@/lib'
 import { useUserStore } from '@/app/store'
+import { validRoutesMember } from '@/constants'
 
 const UserButton = () => {
     const location = useLocation()
@@ -44,9 +45,10 @@ const UserButton = () => {
                         </AvatarFallback>
                     </Avatar>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-60">
+                <DropdownMenuContent align="end" className="w-72">
                     <DropdownMenuGroup className="flex flex-col gap-1.5 p-2">
-                        {location.pathname.includes(routes.userDashboard) && user?.user_type === 'teacher' ? (
+                        {validRoutesMember.some((route) => location.pathname.includes(route)) &&
+                        user?.user_type === 'teacher' ? (
                             <Link to={routes.instructorDashboard}>
                                 <DropdownMenuItem className="flex items-center gap-2">
                                     <TbUserHexagon className="size-4" />
@@ -65,7 +67,9 @@ const UserButton = () => {
                             <Link to={routes.instructorRegister}>
                                 <DropdownMenuItem className="flex items-center gap-2">
                                     <TbUserHexagon className="size-4" />
-                                    <span className="max-w-40 text-base font-medium">Đăng ký trở thành giảng viên</span>
+                                    <span className="whitespace-nowrap text-base font-medium">
+                                        Đăng ký thành giảng viên
+                                    </span>
                                 </DropdownMenuItem>
                             </Link>
                         )}

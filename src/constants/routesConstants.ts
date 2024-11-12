@@ -157,3 +157,31 @@ export const privateRoutes = [
         title: 'Ví của tôi'
     }
 ]
+
+export const validRoutesMember = [
+    routes.userDashboard,
+    routes.course,
+    routes.myCourses,
+    routes.searchCourses,
+    routes.courseDetail,
+    routes.courseLeaning,
+    routes.courseDetailNoLogin,
+    routes.courseOutstanding,
+    routes.instructor,
+    routes.instructorDetail,
+    routes.account,
+    routes.accountProfile,
+    routes.accountHelp,
+    routes.accountSettings,
+    routes.accountNotifications,
+    routes.wallet,
+    routes.transaction,
+    routes.payment,
+    routes.posts,
+    routes.postsDetail,
+    routes.newPost,
+    routes.editPost,
+    routes.myPosts,
+    routes.myBookmarks,
+    routes.postFeatured
+]

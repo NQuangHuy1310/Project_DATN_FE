@@ -36,9 +36,15 @@ const Course = ({ data, progressLesson, page }: { data: ICourse; progressLesson?
                     <div className="flex items-center gap-3">
                         <div className="flex items-center gap-1">
                             <RiMoneyDollarCircleFill className="size-4 text-orange-500" />
-                            {data.price_sale ? <del>{Math.floor(data.price)}</del> : <p>{Math.floor(data.price)}</p>}
+                            {data.price_sale && data.price_sale != 0 ? (
+                                <del>{Math.floor(data.price)}</del>
+                            ) : (
+                                <p>{Math.floor(data.price)}</p>
+                            )}
                         </div>
-                        {data.price_sale && <p className="font-semibold text-red-600">{Math.floor(data.price_sale)}</p>}
+                        {data.price_sale && data.price_sale != 0 && (
+                            <p className="font-semibold text-red-600">{Math.floor(data.price_sale)}</p>
+                        )}
                     </div>
                 ) : (
                     <span className="text-orange-500">Miễn phí</span>

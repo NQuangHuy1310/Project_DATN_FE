@@ -23,7 +23,6 @@ const InstructorDetail = () => {
     const { mutateAsync: unFlowTeacher } = useUnFlowTeacher()
     const { user } = useGetUserProfile()
     const { data: checkFollow } = useCheckFlowTeacher(user?.id!, data?.dataTeacher.id!)
-    console.log(checkFollow)
 
     const handleFlowTeacher = async () => {
         if (data?.dataTeacher) {

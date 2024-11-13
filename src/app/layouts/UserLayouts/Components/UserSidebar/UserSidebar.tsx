@@ -40,7 +40,7 @@ const UserSidebar = ({
             className={`fixed z-50 min-h-screen w-full max-w-[60vw] bg-white px-4 transition-all duration-300 md:max-w-[50vw] ${isSidebar ? 'lg:max-w-64' : 'lg:max-w-24'} ${isOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`}
         >
             <div className="relative flex h-full flex-col gap-8 pt-6">
-                <Link to={routes.home} className="flex items-center justify-center gap-2">
+                <Link to={routes.userDashboard} className="flex items-center justify-center gap-2">
                     <div className="h-10 w-10">
                         <img src={logo} alt="Coursea" className="h-f w-full rounded-md object-cover" />
                     </div>

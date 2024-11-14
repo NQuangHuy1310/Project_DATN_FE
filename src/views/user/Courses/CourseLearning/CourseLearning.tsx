@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState, useCallback, useMemo } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 
-import { FaCheckCircle, FaLock } from 'react-icons/fa'
 import {
     HiMenu,
     HiPlay,
@@ -15,19 +14,22 @@ import {
     HiQuestionMarkCircle
 } from 'react-icons/hi'
 import logo from '@/assets/Union.svg'
+import { HiMiniCodeBracket } from 'react-icons/hi2'
+import { FaCheckCircle, FaLock } from 'react-icons/fa'
 
+import routes from '@/configs/routes'
 import Loading from '@/components/Common/Loading/Loading'
 import { Button } from '@/components/ui/button'
+import CodeEditor from '@/components/shared/CourseLeaning/Sheet/CodeEditor'
 import AllNoteCourse from '@/components/shared/CourseLeaning/Sheet/AllNoteCourse'
-import { useLessonById, useQuizLessonById } from '@/app/hooks/courses/useLesson'
 import LeaningCourseQuiz from '@/components/shared/CourseLeaning/LeaningCourseQuiz'
 import LeaningCourseVideo from '@/components/shared/CourseLeaning/LeaningCourseVideo'
 import LeaningCourseDocument from '@/components/shared/CourseLeaning/LeaningCourseDocument'
+import { formatDurationSecond } from '@/lib/common'
 import { useCourseLeaningBySlug } from '@/app/hooks/courses/useCourse'
 import { ILessonLeaning, IModuleLeaning } from '@/types/course/course'
+import { useLessonById, useQuizLessonById } from '@/app/hooks/courses/useLesson'
 import { useGetIdParams, useGetSlugParams } from '@/app/hooks/common/useCustomParams'
-import { formatDurationSecond } from '@/lib/common'
-import routes from '@/configs/routes'
 
 const CourseLearning = () => {
     const [toggleTab, setToggleTab] = useState<boolean>(true)
@@ -35,6 +37,7 @@ const CourseLearning = () => {
     const [allNodeSheet, setAllNodeSheet] = useState(false)
     const [checkNote, setCheckNote] = useState<boolean>(false)
     const [checkButton, setCheckButton] = useState<boolean>(true)
+    const [isToggledCode, setIsToggledCode] = useState(false)
     const [searchParams, setSearchParams] = useSearchParams()
     const courseListRef = useRef<HTMLDivElement | null>(null)
     const [pauseVideoCallback, setPauseVideoCallback] = useState<() => void>(() => {})
@@ -46,6 +49,8 @@ const CourseLearning = () => {
     const idLesson = useGetIdParams('id')
     const timeNote = useGetIdParams('time')
     const slug = useGetSlugParams('slug')
+
+    const handleToggleCode = () => setIsToggledCode(!isToggledCode)
 
     // Danh sách bài học theo khóa học
     const { data: courseModule, isLoading, refetch } = useCourseLeaningBySlug(slug!)
@@ -435,10 +440,30 @@ const CourseLearning = () => {
                             }
                         }}
                     />
-                    <div className="flex items-center gap-1">
-                        <HiQuestionMarkCircle className="size-5" />
-                        <span className="hidden lg:block">Hướng dẫn</span>
+                    <div
+                        onClick={handleToggleCode}
+                        className="relative h-[30px] w-[60px] cursor-pointer rounded-full border bg-white"
+                    >
+                        <div
+                            className={`absolute top-0 h-[28px] w-7 rounded-full p-1 text-white transition-transform duration-300 ${
+                                isToggledCode ? 'bg-blue-500' : 'bg-darkGrey/80'
+                            }`}
+                            style={{
+                                transform: isToggledCode ? 'translateX(30px)' : 'translateX(0)'
+                            }}
+                        >
+                            <HiMiniCodeBracket className="h-full w-full" />
+                        </div>
                     </div>
+                    <CodeEditor
+                        open={isToggledCode}
+                        isOpen={(isOpen) => {
+                            setIsToggledCode(isOpen)
+                            if (!isOpen) {
+                                playVideoCallback()
+                            }
+                        }}
+                    />
                 </div>
             </header>
 

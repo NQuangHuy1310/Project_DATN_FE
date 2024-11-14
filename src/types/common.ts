@@ -41,3 +41,21 @@ export interface IComment {
     created_at: string
     children: IComment[]
 }
+
+export interface Language {
+    [key: string]: string
+    javascript: string
+    typescript: string
+    python: string
+    java: string
+    php: string
+}
+
+export interface Language_Snippet {
+    [key: string]: string
+    javascript: string
+    typescript: string
+    python: string
+    java: string
+    php: string
+}

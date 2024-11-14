@@ -97,7 +97,7 @@ const CourseToday = ({
                             Mua khoá học
                         </Link>
                     ) : (
-                        <Button className="w-full">Xem chi tiết</Button>
+                        <Link to={routes.courseDetail.replace(':slug', slug)} className="block w-full rounded-md bg-primary py-2 text-center text-white">Xem chi tiết</Link>
                     )}
                 </div>
             )}

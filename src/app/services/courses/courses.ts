@@ -1,6 +1,6 @@
 import axiosClient from '@/configs/axiosClient'
 import { courseUri } from '@/app/services/Uri/courses/courses'
-import { CourseData, ICourse, ICourseCategory, ICourseDetail, IQuizDetail } from '@/types/course/course'
+import { CourseData, ICourse, ICourseCategory, ICourseDetail, IQuizDetail, IWishList } from '@/types/course/course'
 import { IBuyData, IComment, ICreateComment } from '@/types'
 
 export const courseApi = {
@@ -43,7 +43,16 @@ export const courseApi = {
     checkBuyCourse: async (userId: number, courseId: number): Promise<any> => {
         return axiosClient.get(courseUri.CHECK_BUY_COURSE(userId, courseId))
     },
+
     registerCourse: async (userId: number, courseId: number, data: IBuyData): Promise<IBuyData> => {
         return axiosClient.post(courseUri.REGISTER_COURSE(userId, courseId), data)
+    },
+
+    addWishList: async (courseId: number): Promise<IWishList> => {
+        return axiosClient.post(courseUri.WISH_LIST(courseId))
+    },
+
+    unWishList: async (courseId: number): Promise<IWishList> => {
+        return axiosClient.post(courseUri.UN_WISH_LIST(courseId))
     }
 }

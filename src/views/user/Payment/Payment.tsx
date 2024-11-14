@@ -29,6 +29,7 @@ import {
     AlertDialogHeader
 } from '@/components/ui/alert-dialog'
 import { IBuyData } from '@/types'
+import { RiMoneyDollarCircleFill } from 'react-icons/ri'
 
 const Payment = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false)
@@ -37,7 +38,6 @@ const Payment = () => {
     const [isVoucherApplied, setIsVoucherApplied] = useState<boolean>(false)
 
     const slug = useGetSlugParams('slug')
-
 
     const { data: courseData, isLoading } = usePaymentCourseBySlug(slug!)
     const { user } = useGetUserProfile()
@@ -48,7 +48,8 @@ const Payment = () => {
 
     const balance = Math.floor(transactionData?.balance ?? 0)
     const totalTime = formatDuration((courseData?.course_duration as unknown as number) || 0)
-    const totalPrice = Math.floor(courseData?.price_sale || courseData?.price || 0)
+    const totalPrice = Math.floor(courseData?.price_sale && courseData.price_sale > 0 ? courseData.price_sale : (courseData?.price ?? 0)
+    )
 
     const handleApplyVoucher = async () => {
         if (isVoucherApplied) {
@@ -145,12 +146,20 @@ const Payment = () => {
                                     </div>
                                     <div className="flex items-center gap-2">
                                         <h4 className="text-[16px] font-medium">Giá: </h4>
-                                        <div className="flex gap-1">
-                                            <TbCoinFilled className="size-5 text-yellow-500" />
-                                            <span className="text-[16px] font-semibold">
-                                                {Math.floor(courseData?.price_sale || 0) ||
-                                                    Math.floor(courseData?.price || 0)}
-                                            </span>
+                                        <div className="flex items-center gap-3">
+                                            <div className="flex items-center gap-1">
+                                                <RiMoneyDollarCircleFill className="size-4 text-orange-500" />
+                                                {courseData?.price_sale && courseData?.price_sale != 0 ? (
+                                                    <del className="text-base">{Math.floor(courseData.price)}</del>
+                                                ) : (
+                                                    <p className="text-base">{Math.floor(courseData?.price ?? 0)}</p>
+                                                )}
+                                            </div>
+                                            {courseData?.price_sale && courseData?.price_sale != 0 && (
+                                                <p className="text-base font-semibold text-red-600">
+                                                    {Math.floor(courseData?.price_sale)}
+                                                </p>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
@@ -205,7 +214,9 @@ const Payment = () => {
                                         onChange={(e) => setVoucherCode(e.target.value)}
                                         readOnly={isVoucherApplied}
                                     />
-                                    <Button onClick={handleApplyVoucher}>{isVoucherApplied ? 'Đổi mã' : 'Áp dụng'}</Button>
+                                    <Button onClick={handleApplyVoucher}>
+                                        {isVoucherApplied ? 'Đổi mã' : 'Áp dụng'}
+                                    </Button>
                                 </div>
                             </div>
                             <div className="flex flex-col gap-3">
@@ -213,7 +224,7 @@ const Payment = () => {
                                     Thanh toán
                                 </Button>
                                 <div className="flex gap-2">
-                                    <Link to={`/course/${slug}`} className="w-full">
+                                    <Link to={routes.courseDetail.replace(':slug', slug!)} className="w-full">
                                         <Button variant="outline" className="flex w-full gap-2">
                                             <IoArrowBackOutline className="size-5" />
                                             Quay lại

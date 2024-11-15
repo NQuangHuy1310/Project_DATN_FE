@@ -30,7 +30,8 @@ const routes = {
     accountHelp: '/account/help',
     accountSettings: '/account/settings',
     accountNotifications: '/account/notifications',
-
+    //WishList
+    wishList: '/wish-list',
     // wallet
     wallet: '/wallet',
     transaction: '/transaction',

@@ -19,6 +19,7 @@ import { useCheckRatingUser, useCreateRating } from '@/app/hooks/ratings/useRati
 import {
     useAddWishList,
     useCheckBuyCourse,
+    useCheckWishList,
     useCourseDetailNoLoginBySlug,
     useRegisterCourse,
     useUnWishList
@@ -70,8 +71,9 @@ const CourseDetail = () => {
     const { mutateAsync: unFlowTeacher } = useUnFlowTeacher()
     const { mutateAsync: addWishList } = useAddWishList()
     const { mutateAsync: unWishList } = useUnWishList()
+    const { data: checkWishList } = useCheckWishList(courseDetail?.id)
     const { data: checkFollow } = useCheckFlowTeacher(user?.id!, courseDetail?.user?.id!)
-
+    console.log(checkWishList)
     const totalTime = formatDuration((courseDetail?.total_duration_video as unknown as number) || 0)
     const rating = watch('rate')
 
@@ -365,18 +367,18 @@ const CourseDetail = () => {
                                         >
                                             Mua khoá học
                                         </Link>
-                                        <div className="w-11 h-9 flex justify-center items-center border-2 rounded-md">
+                                        <div className="w-11 h-9 flex justify-center items-center border-2 rounded-md cursor-pointer">
                                             {isProcessing ? (
                                                 <div className="w-5 h-5 border-2 border-t-transparent border-primary rounded-full animate-spin"></div>
-                                            ) : isLiked ? (
+                                            ) : checkWishList?.action === 'unfavorite' ? (
                                                 <FaHeart
                                                     onClick={handleUnWishList}
-                                                    className="size-6 rounded-md text-primary cursor-pointer"
+                                                    className="size-6 rounded-md text-primary"
                                                 />
                                             ) : (
                                                 <FaRegHeart
                                                     onClick={handleAddWishList}
-                                                    className="size-6 rounded-md cursor-pointer text-darkGrey"
+                                                    className="size-6 rounded-md text-darkGrey"
                                                 />
                                             )}
                                         </div>

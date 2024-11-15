@@ -6,7 +6,7 @@ import { IoIosStar } from 'react-icons/io'
 import { HiArrowLeft } from 'react-icons/hi'
 import { IoTimeOutline } from 'react-icons/io5'
 import { FaRegCirclePlay } from 'react-icons/fa6'
-import { FaRegUser, FaStar } from 'react-icons/fa'
+import { FaHeart, FaRegHeart, FaRegUser, FaStar } from 'react-icons/fa'
 import { RiMoneyDollarCircleFill } from 'react-icons/ri'
 
 import { toast } from 'sonner'
@@ -16,7 +16,13 @@ import { formatDuration, getImagesUrl } from '@/lib/common'
 import useGetUserProfile from '@/app/hooks/accounts/useGetUser'
 import { useGetSlugParams } from '@/app/hooks/common/useCustomParams'
 import { useCheckRatingUser, useCreateRating } from '@/app/hooks/ratings/useRating.ts'
-import { useCheckBuyCourse, useCourseDetailNoLoginBySlug, useRegisterCourse } from '@/app/hooks/courses/useCourse'
+import {
+    useAddWishList,
+    useCheckBuyCourse,
+    useCourseDetailNoLoginBySlug,
+    useRegisterCourse,
+    useUnWishList
+} from '@/app/hooks/courses/useCourse'
 
 import About from '@/views/user/Courses/CourseDetail/About'
 import Reviews from '@/views/user/Courses/CourseDetail/Reviews'
@@ -48,6 +54,8 @@ const CourseDetail = () => {
     const navigate = useNavigate()
     const slug = useGetSlugParams('slug')
     const [isOpen, setIsOpen] = useState<boolean>(false)
+    const [isLiked, setIsLiked] = useState<boolean>(false)
+    const [isProcessing, setIsProcessing] = useState<boolean>(false)
     const handleToggleCourse = () => setToggleCourse(!toggleCourse)
     const [toggleCourse, setToggleCourse] = useState<boolean>(false)
 
@@ -60,6 +68,8 @@ const CourseDetail = () => {
     const { mutateAsync: registerCourse } = useRegisterCourse()
     const { mutateAsync: flowTeacher } = useFlowTeacher()
     const { mutateAsync: unFlowTeacher } = useUnFlowTeacher()
+    const { mutateAsync: addWishList } = useAddWishList()
+    const { mutateAsync: unWishList } = useUnWishList()
     const { data: checkFollow } = useCheckFlowTeacher(user?.id!, courseDetail?.user?.id!)
 
     const totalTime = formatDuration((courseDetail?.total_duration_video as unknown as number) || 0)
@@ -104,6 +114,24 @@ const CourseDetail = () => {
     const handleUnFlowTeacher = async () => {
         if (courseDetail?.user) {
             await unFlowTeacher([{ following_id: courseDetail?.user?.id! }])
+        }
+    }
+
+    const handleAddWishList = async () => {
+        setIsProcessing(true)
+        if (courseDetail?.id) {
+            await addWishList(courseDetail.id)
+            setIsLiked((prev) => !prev)
+            setIsProcessing(false)
+        }
+    }
+
+    const handleUnWishList = async () => {
+        setIsProcessing(true)
+        if (courseDetail?.id) {
+            await unWishList(courseDetail.id)
+            setIsLiked(false)
+            setIsProcessing(false)
         }
     }
 
@@ -322,7 +350,7 @@ const CourseDetail = () => {
                                         )}
                                     </div>
                                 ) : (!courseDetail?.price && !courseDetail?.price_sale) ||
-                                  (courseDetail?.price == 0 && courseDetail?.price_sale == 0) ? (
+                                    (courseDetail?.price == 0 && courseDetail?.price_sale == 0) ? (
                                     <Button
                                         className="block w-full rounded-md bg-primary py-2 text-center text-white"
                                         onClick={handleLearnNow}
@@ -330,12 +358,29 @@ const CourseDetail = () => {
                                         Đăng ký học
                                     </Button>
                                 ) : (
-                                    <Link
-                                        className="block w-full rounded-md bg-primary py-2 text-center text-white"
-                                        to={routes.payment.replace(':slug', slug!)}
-                                    >
-                                        Mua khoá học
-                                    </Link>
+                                    <div className="flex gap-3 items-center">
+                                        <Link
+                                            className="block w-full rounded-md bg-primary py-2 text-center text-white"
+                                            to={routes.payment.replace(':slug', slug!)}
+                                        >
+                                            Mua khoá học
+                                        </Link>
+                                        <div className="w-11 h-9 flex justify-center items-center border-2 rounded-md">
+                                            {isProcessing ? (
+                                                <div className="w-5 h-5 border-2 border-t-transparent border-primary rounded-full animate-spin"></div>
+                                            ) : isLiked ? (
+                                                <FaHeart
+                                                    onClick={handleUnWishList}
+                                                    className="size-6 rounded-md text-primary cursor-pointer"
+                                                />
+                                            ) : (
+                                                <FaRegHeart
+                                                    onClick={handleAddWishList}
+                                                    className="size-6 rounded-md cursor-pointer text-darkGrey"
+                                                />
+                                            )}
+                                        </div>
+                                    </div>
                                 )}
                             </div>
                         )}
@@ -354,9 +399,8 @@ const CourseDetail = () => {
                                                 <FaStar
                                                     key={star}
                                                     onClick={() => setValue('rate', star)}
-                                                    className={`cursor-pointer ${
-                                                        star <= rating ? 'text-yellow-500' : 'text-gray-300'
-                                                    } h-5 w-5 md:h-8 md:w-8`}
+                                                    className={`cursor-pointer ${star <= rating ? 'text-yellow-500' : 'text-gray-300'
+                                                        } h-5 w-5 md:h-8 md:w-8`}
                                                 />
                                             ))}
                                         </div>

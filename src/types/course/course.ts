@@ -216,3 +216,7 @@ export interface IQuizProCess {
     is_completed: 0 | 1
     _method?: string
 }
+
+export interface IWishList {
+    id_course: number
+}

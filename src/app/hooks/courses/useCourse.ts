@@ -125,3 +125,28 @@ export const useRegisterCourse = () => {
         }
     })
 }
+
+export const useAddWishList = () => {
+    const queryClient = useQueryClient()
+
+    return useMutation({
+        mutationFn: async (courseId: number) => {
+            return courseApi.addWishList(courseId)
+        },
+        onSuccess: async () => {
+            queryClient.invalidateQueries({ queryKey: ['wishlist-course'] })
+        }
+    })
+}
+
+export const useUnWishList = () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: async (courseId: number) => {
+            return courseApi.unWishList(courseId)
+        },
+        onSuccess: async () => {
+            queryClient.invalidateQueries({ queryKey: ['wishlist-course'] })
+        }
+    })
+}

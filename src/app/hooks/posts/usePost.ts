@@ -4,7 +4,6 @@ import { postsApi } from '@/app/services/posts'
 import { ICreatePost, IFeaturedPost, IPosts } from '@/types/post'
 import { IComment, ICreateComment } from '@/types'
 
-
 export const useGetPosts = (options?: Omit<UseQueryOptions<IPosts[]>, 'queryKey' | 'queryFn'>) => {
     return useQuery<IPosts[]>({
         ...options,
@@ -74,7 +73,7 @@ export const useGetCommentPost = (
 ) => {
     return useQuery({
         ...options,
-        queryKey: ['comments-post'],
+        queryKey: ['comments-post', slug],
         queryFn: () => postsApi.getComment(slug)
     })
 }

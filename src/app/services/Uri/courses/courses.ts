@@ -13,5 +13,8 @@ export const courseUri = {
     REGISTER_COURSE: (userId: number, courseId: number) => `transactions/register-course/${userId}/${courseId}`,
     //COMMENT COURSE
     ADD_COMMENT_COURSE: 'comments/add-comment-lesson',
-    GET_COMMENT: (id: number) => `comments/comment-lesson/${id}`
+    GET_COMMENT: (id: number) => `comments/comment-lesson/${id}`,
+    //WISHLIST
+    WISH_LIST: (courseId: number) => `${COURSE_URL}favorite/${courseId}`,
+    UN_WISH_LIST: (courseId: number) => `${COURSE_URL}unfavorite/${courseId}`
 }

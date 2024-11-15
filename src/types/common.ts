@@ -59,3 +59,30 @@ export interface Language_Snippet {
     java: string
     php: string
 }
+interface NotificationData {
+    url: string
+    type: string
+    status: string
+    message: string
+    course_id: number
+    conditions: string | null
+    course_name: string
+    admin_comments: string | null
+}
+
+export interface Notification {
+    id: string
+    notifiable_type: string
+    notifiable_id: number
+    type: string
+    data: NotificationData
+    read_at: string | null
+    formatTime?: string
+    created_at: string
+    updated_at: string
+}
+
+export interface CountNotification {
+    unreadCount: number
+    allNotifications: number
+}

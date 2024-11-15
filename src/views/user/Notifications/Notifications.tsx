@@ -1,7 +1,9 @@
-import { notificationMessages } from '@/constants/mockData'
 import NotificationMessage from '@/components/shared/NotificationMessage'
+import { useGetNotification } from '@/app/hooks/notifications/notifications'
 
 const Notifications = () => {
+    const { data: dataNotification } = useGetNotification()
+
     return (
         <div className="card w-full">
             <div className="flex flex-col gap-7">
@@ -10,9 +12,9 @@ const Notifications = () => {
                     <p className="cursor-pointer text-darkGrey">Đánh dấu đã đọc</p>
                 </div>
                 <div className="flex flex-col gap-3">
-                    {notificationMessages &&
-                        notificationMessages.length > 0 &&
-                        notificationMessages.map((item, index) => <NotificationMessage key={index} {...item} />)}
+                    {dataNotification &&
+                        dataNotification.length > 0 &&
+                        dataNotification?.map((item, index) => <NotificationMessage key={index} {...item} />)}
                 </div>
             </div>
         </div>

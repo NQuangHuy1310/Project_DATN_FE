@@ -1,9 +1,10 @@
 import { useMutation, useQuery, useQueryClient, UseQueryOptions } from '@tanstack/react-query'
 import { notificationApi } from '@/app/services/notifications'
+import { CountNotification, Notification } from '@/types'
 
 export const useGetNotification = (
     count: number = 10,
-    options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
+    options?: Omit<UseQueryOptions<Notification[]>, 'queryKey' | 'queryFn'>
 ) => {
     return useQuery({
         ...options,
@@ -12,7 +13,7 @@ export const useGetNotification = (
     })
 }
 
-export const useGetAllAndUnRead = (options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>) => {
+export const useGetAllAndUnRead = (options?: Omit<UseQueryOptions<CountNotification>, 'queryKey' | 'queryFn'>) => {
     return useQuery({
         ...options,
         queryKey: ['getAllAndUnRead'],
@@ -24,11 +25,14 @@ export const useMarkAsRead = () => {
     const queryClient = useQueryClient()
 
     return useMutation({
-        mutationFn: async (notificationID: number) => {
+        mutationFn: async (notificationID: string) => {
             return notificationApi.markAsRead(notificationID)
         },
         onSuccess: async () => {
-            await queryClient.invalidateQueries({ queryKey: ['notifications'] })
+            await Promise.all([
+                queryClient.invalidateQueries({ queryKey: ['getAllAndUnRead'] }),
+                queryClient.invalidateQueries({ queryKey: ['notifications'] })
+            ])
         }
     })
 }

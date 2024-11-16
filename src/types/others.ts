@@ -1,6 +1,3 @@
-import { IUser } from '@/types/auth'
-import { notificationTypes } from '@/constants'
-
 export interface ICategory {
     id: number
     name: string
@@ -20,16 +17,6 @@ export interface IBanner {
     start_time: Date
     end_time: Date
 }
-
-export interface INotificationMessage {
-    notificationType: notificationTypes
-    title: string
-    message: string
-    senderBy: IUser
-    sentAt: string
-    isRead: boolean
-}
-
 export interface IBank {
     id: number
     name: string

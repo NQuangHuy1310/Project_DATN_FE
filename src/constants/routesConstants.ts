@@ -60,6 +60,7 @@ import InstructorRegisQuestion from '@/views/user/InstructorRegis/InstructorRegi
 import CourseOutstanding from '@/views/user/Courses/CourseOutstanding'
 import PostFeatured from '@/views/user/Posts/PostFeatured'
 import CourseWishList from '@/views/user/Courses/CourseWishList'
+import PerformanceStudents from '@/views/instructor/Performance/PerformanceStudents'
 
 // Routes không cần đăng nhập
 export const publicRoutes = [
@@ -138,7 +139,13 @@ export const privateRoutes = [
         path: routes.instructorPerformanceOverview,
         layout: InstructorPerformance,
         element: PerformanceOverview,
-        title: 'Hiệu suất'
+        title: 'Tổng quan'
+    },
+    {
+        path: routes.instructorPerformanceStudent,
+        layout: InstructorPerformance,
+        element: PerformanceStudents,
+        title: 'Học viên'
     },
     {
         path: routes.instructorAnnouncements,

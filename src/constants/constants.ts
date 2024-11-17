@@ -133,24 +133,19 @@ export const accountAside = [
 
 export const instructorAside = [
     {
-        title: 'Hỏi đáp',
-        icon: AiOutlineQuestionCircle,
-        path: routes.instructorQa
-    },
-    {
         title: 'Tin nhắn',
         icon: TbMessageDots,
         path: routes.instructorMessage
     },
     {
+        title: 'Hỏi đáp',
+        icon: AiOutlineQuestionCircle,
+        path: routes.instructorQa
+    },
+    {
         title: 'Bài tập',
         icon: BiBook,
         path: routes.instructorAssignments
-    },
-    {
-        title: 'Thông báo',
-        icon: FaRegBell,
-        path: routes.instructorAnnouncements
     }
 ]
 

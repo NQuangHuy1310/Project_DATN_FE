@@ -76,7 +76,7 @@ const InstructorAside = ({ performanceAside }: { performanceAside?: boolean }) =
                 </>
             ) : (
                 <aside className="card flex w-full max-w-full flex-shrink-0 flex-col gap-7 lg:max-w-[270px]">
-                    <h3 className="text-xl font-bold">{!performanceAside ? 'Hỏi đáp và giao tiếp' : 'Thống kê'}</h3>
+                    <h3 className="text-xl font-bold">{!performanceAside ? 'Hỏi đáp và giao tiếp' : 'Hiệu xuất'}</h3>
                     <div className="flex flex-col gap-5">
                         {asideItems.map((item, index) => (
                             <NavLink to={item.path} key={index}>

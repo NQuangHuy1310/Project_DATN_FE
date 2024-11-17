@@ -10,15 +10,12 @@ import { toast } from 'sonner'
 import { useNavigate } from 'react-router-dom'
 import routes from '@/configs/routes'
 import { getImagesUrl } from '@/lib'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
 const MyPosts = () => {
     const navigate = useNavigate()
     const { data, isLoading } = useGetMyPosts()
     const { mutateAsync: deletePost } = useDeletePost()
-
-    if (isLoading) {
-        return <Loading />
-    }
 
     const handleDeletePost = async (postSlug: string) => {
         await deletePost(postSlug)
@@ -29,6 +26,12 @@ const MyPosts = () => {
         const postDetailUrl = routes.editPost.replace(':slug', postSlug)
         navigate(postDetailUrl)
     }
+
+    if (isLoading) {
+        return <Loading />
+    }
+
+    console.log(data)
 
     return (
         <div className="flex flex-col gap-5 rounded-md bg-white p-10 px-20">
@@ -52,9 +55,9 @@ const MyPosts = () => {
                                 >
                                     <div className="flex gap-3">
                                         <img
-                                            className="h-20 w-20 rounded border"
+                                            className="h-40 w-64 rounded border object-cover"
                                             src={getImagesUrl(post.thumbnail)}
-                                            alt=""
+                                            alt={post.title}
                                         />
                                         <div className="flex flex-col gap-2">
                                             <h3 className="cursor-pointer text-lg" onClick={handleNavigate(post.slug)}>
@@ -63,7 +66,20 @@ const MyPosts = () => {
                                             <div className="flex items-center gap-1">
                                                 <span className="text-darkGrey">Đã xuất bản</span>
                                                 <BsDot className="text-darkGrey" />
-                                                <span className="text-darkGrey">1 thg 11</span>
+                                                <span className="text-darkGrey">{timeAgo}</span>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <Avatar className="size-6 cursor-pointer">
+                                                    <AvatarImage
+                                                        className="object-cover"
+                                                        src={getImagesUrl(post?.avatar || '')}
+                                                        alt={post?.username}
+                                                    />
+                                                    <AvatarFallback className="bg-slate-500/50 text-base font-semibold text-white">
+                                                        {post?.username.charAt(0).toUpperCase()}
+                                                    </AvatarFallback>
+                                                </Avatar>
+                                                <span className="text-xs font-semibold">{post.username}</span>
                                             </div>
                                         </div>
                                     </div>

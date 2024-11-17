@@ -1,7 +1,15 @@
 import { courseApi } from '@/app/services/courses/courses'
 import { IBuyData } from '@/types'
 import { IComment, ICreateComment } from '@/types/common'
-import { CourseData, ICourse, ICourseCategory, ICourseDetail, IQuizDetail } from '@/types/course/course'
+import {
+    checkWishList,
+    CourseData,
+    ICourse,
+    ICourseCategory,
+    ICourseDetail,
+    ICourseWishList,
+    IQuizDetail
+} from '@/types/course/course'
 import { useMutation, useQuery, useQueryClient, UseQueryOptions } from '@tanstack/react-query'
 
 export const useCourseLeaningBySlug = (
@@ -126,6 +134,18 @@ export const useRegisterCourse = () => {
     })
 }
 
+export const useGetWishList = (
+    page: number,
+    perPage?: number,
+    options?: Omit<UseQueryOptions<ICourseWishList>, 'queryKey' | 'queryFn'>
+) => {
+    return useQuery({
+        ...options,
+        queryKey: ['wishlist-course', page, perPage],
+        queryFn: () => courseApi.getWishList(page, perPage)
+    })
+}
+
 export const useAddWishList = () => {
     const queryClient = useQueryClient()
 
@@ -148,5 +168,17 @@ export const useUnWishList = () => {
         onSuccess: async () => {
             queryClient.invalidateQueries({ queryKey: ['wishlist-course'] })
         }
+    })
+}
+
+export const useCheckWishList = (
+    courseId: number,
+    options?: Omit<UseQueryOptions<checkWishList>, 'queryKey' | 'queryFn'>
+) => {
+    return useQuery<checkWishList>({
+        ...options,
+        queryKey: ['wishlist-course', courseId],
+        enabled: !!courseId,
+        queryFn: () => courseApi.checkWishList(courseId)
     })
 }

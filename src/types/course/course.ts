@@ -222,3 +222,13 @@ export interface IQuizProCess {
 export interface IWishList {
     id_course: number
 }
+export interface checkWishList {
+    action: 'favorite' | 'unfavorite'
+}
+
+export interface ICourseWishList {
+    current_page: number
+    data: ICourse[]
+    per_page: number
+    total: number
+}

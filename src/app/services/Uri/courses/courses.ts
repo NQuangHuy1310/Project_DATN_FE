@@ -15,6 +15,9 @@ export const courseUri = {
     ADD_COMMENT_COURSE: 'comments/add-comment-lesson',
     GET_COMMENT: (id: number) => `comments/comment-lesson/${id}`,
     //WISHLIST
-    WISH_LIST: (courseId: number) => `${COURSE_URL}favorite/${courseId}`,
-    UN_WISH_LIST: (courseId: number) => `${COURSE_URL}unfavorite/${courseId}`
+    WISH_LIST: (page: number, perPage?: number) =>
+        `${COURSE_URL}favorite?page=${page}${perPage ? `&perPage=${perPage}` : ''}`,
+    ADD_WISH_LIST: (courseId: number) => `${COURSE_URL}favorite/${courseId}`,
+    UN_WISH_LIST: (courseId: number) => `${COURSE_URL}unfavorite/${courseId}`,
+    CHECK_WISH_LIST: (courseId: number) => `${COURSE_URL}check-favorite/${courseId}`
 }

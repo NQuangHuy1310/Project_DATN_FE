@@ -10,7 +10,7 @@ import { AiOutlineQuestionCircle } from 'react-icons/ai'
 import { TbMessageDots, TbUserHexagon } from 'react-icons/tb'
 import { HiBookOpen, HiOutlineTemplate } from 'react-icons/hi'
 import { IoMdHelpCircleOutline, IoMdHome } from 'react-icons/io'
-import { FaAddressBook, FaRegBell, FaUserCog } from 'react-icons/fa'
+import { FaAddressBook, FaHeart, FaRegBell, FaUserCog } from 'react-icons/fa'
 import { IoSettingsOutline, IoChatboxEllipsesOutline } from 'react-icons/io5'
 import { FaRegCircleQuestion, FaRegCircleCheck, FaChartSimple, FaBookAtlas } from 'react-icons/fa6'
 
@@ -38,6 +38,11 @@ export const sidebarList = [
                 title: 'Tìm kiếm khoá học',
                 icon: FaBookAtlas,
                 path: routes.searchCourses
+            },
+            {
+                title: 'Khóa học yêu thích',
+                icon: FaHeart,
+                path: routes.wishList
             }
         ]
     },
@@ -128,24 +133,19 @@ export const accountAside = [
 
 export const instructorAside = [
     {
-        title: 'Hỏi đáp',
-        icon: AiOutlineQuestionCircle,
-        path: routes.instructorQa
-    },
-    {
         title: 'Tin nhắn',
         icon: TbMessageDots,
         path: routes.instructorMessage
     },
     {
+        title: 'Hỏi đáp',
+        icon: AiOutlineQuestionCircle,
+        path: routes.instructorQa
+    },
+    {
         title: 'Bài tập',
         icon: BiBook,
         path: routes.instructorAssignments
-    },
-    {
-        title: 'Thông báo',
-        icon: FaRegBell,
-        path: routes.instructorAnnouncements
     }
 ]
 

@@ -1,11 +1,14 @@
-import { useState } from 'react'
+import Papa from 'papaparse'
+import { toast } from 'sonner'
+import { FaFileDownload } from 'react-icons/fa'
+import { ChangeEvent, useRef, useState } from 'react'
 import { FaPen, FaRegTrashAlt } from 'react-icons/fa'
 import { FaRegCircleQuestion } from 'react-icons/fa6'
 
 import { ILessonQuiz } from '@/types/instructor'
 import { Button } from '@/components/ui/button'
 import ConfirmDialog from '@/components/shared/ConfirmDialog'
-import { useDeleteLessonQuiz, useGetLessonQuiz } from '@/app/hooks/instructors'
+import { useCreateQuestion, useDeleteLessonQuiz, useGetLessonQuiz } from '@/app/hooks/instructors'
 import DialogAddQuestion from '@/components/shared/CourseContent/Dialog/DialogAddQuestion'
 import LessonQuizzes from '@/components/shared/CourseContent/LessonQuizzes'
 
@@ -15,14 +18,108 @@ interface QuizItemProps {
     moduleId: number
 }
 
+const fieldsImport = ['question', 'question_type', 'correct_answer']
+
 const QuizItem = ({ lesson, moduleId, canEdit }: QuizItemProps) => {
     const { title } = lesson
     const { data } = useGetLessonQuiz(moduleId)
     const { mutateAsync: deleteLessonQuiz, isPending } = useDeleteLessonQuiz()
+    const { mutateAsync: createQuestion } = useCreateQuestion()
 
+    const inputRef = useRef<HTMLInputElement | null>(null)
+    const [isEditQuiz, setIsEditQuiz] = useState(false)
     const [isOpenDialog, setIsOpenDialog] = useState(false)
     const [isOpenAddDialog, setIsOpenAddDialog] = useState(false)
-    const [isEditQuiz, setIsEditQuiz] = useState(false)
+
+    const handleImportClick = () => {
+        if (inputRef.current) {
+            inputRef.current.click()
+        }
+    }
+
+    const handleDownload = () => {
+        Papa.parse('', {
+            download: true,
+            complete: function (results: any) {
+                console.log(results)
+            }
+        })
+    }
+
+    const handleImportFile = async (e: ChangeEvent<HTMLInputElement>) => {
+        const files = e.target.files
+
+        if (files && files.length > 0) {
+            const file = files[0]
+
+            Papa.parse(file, {
+                header: true,
+                skipEmptyLines: true,
+                complete: async (results: { data: any[]; meta: { fields: string[] } }) => {
+                    const data = results.data
+
+                    for (const row of data) {
+                        const missingFields = fieldsImport.filter((field) => !(field in row))
+                        if (missingFields.length > 0) {
+                            toast.error('File tải lên không hợp lệ!', {
+                                description: 'Bạn cần tải lên file có dạng .csv và đúng định dạng'
+                            })
+                            return
+                        }
+
+                        const options = ['option 1', 'option 2', 'option 3', 'option 4', 'option 5']
+                        const presentOptions = options.filter((option) => option in row).length
+
+                        if (presentOptions < 2) {
+                            toast.error('Cần ít nhất 2 options cho câu hỏi: ' + row.question)
+                            return
+                        }
+
+                        if (presentOptions > 5) {
+                            toast.error('Tối đa chỉ được 5 options cho câu hỏi: ' + row.question)
+                            return
+                        }
+
+                        const optionsArray = options
+                            .map((option) => {
+                                if (option in row) {
+                                    return {
+                                        text: row[option],
+                                        image: row.image || undefined,
+                                        remove_image: row.remove_image || false
+                                    }
+                                }
+                                return null
+                            })
+                            .filter((option) => option !== null)
+
+                        let correctAnswer: number | number[]
+
+                        if (row.question_type === 'one_choice') {
+                            correctAnswer = Number(row.correct_answer)
+                        } else {
+                            correctAnswer = row.correct_answer.split(',').map((answer: any) => Number(answer.trim()))
+                        }
+
+                        const payload = {
+                            question: {
+                                question: row.question,
+                                type: row.question_type,
+                                correct_answer: correctAnswer,
+                                image: row.image
+                            },
+                            options: optionsArray
+                        }
+
+                        // Gọi hàm tạo câu hỏi
+                        await createQuestion([lesson.id!, payload])
+
+                        await createQuestion([lesson.id!, payload])
+                    }
+                }
+            })
+        }
+    }
 
     const handleDeleteLesson = async () => {
         await deleteLessonQuiz(lesson.id)
@@ -46,6 +143,19 @@ const QuizItem = ({ lesson, moduleId, canEdit }: QuizItemProps) => {
                         </div>
                     </div>
                     <div className="flex items-center gap-2">
+                        <input hidden type="file" ref={inputRef} accept=".csv" onChange={(e) => handleImportFile(e)} />
+                        <Button
+                            size="sm"
+                            variant="outline"
+                            disabled={!canEdit}
+                            onClick={handleDownload}
+                            className="flex items-center gap-2"
+                        >
+                            Mẫu import <FaFileDownload className="size-3 text-primary" />
+                        </Button>
+                        <Button size="sm" variant="outline" disabled={!canEdit} onClick={handleImportClick}>
+                            Import câu hỏi
+                        </Button>
                         <Button
                             size="sm"
                             variant="outline"

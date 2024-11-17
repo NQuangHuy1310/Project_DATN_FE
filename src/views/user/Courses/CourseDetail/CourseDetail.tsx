@@ -63,18 +63,17 @@ const CourseDetail = () => {
     const { user } = useGetUserProfile()
     const { mutateAsync: addRating } = useCreateRating()
     const { data: courseDetail, isLoading: LoadingCourse } = useCourseDetailNoLoginBySlug(slug!)
-    const { data: isPurchased } = useCheckBuyCourse(user?.id || 0, courseDetail?.id || 0)
-    const { data: checkRating, isLoading: LoadingCheck } = useCheckRatingUser(user?.id || 0, courseDetail?.id || 0)
-
+    const { data: isPurchased } = useCheckBuyCourse(user?.id || 0, courseDetail?.course?.id || 0)
+    const { data: checkRating, isLoading: LoadingCheck } = useCheckRatingUser(user?.id || 0, courseDetail?.course?.id || 0)
+    console.log(courseDetail?.ratings)
     const { mutateAsync: registerCourse } = useRegisterCourse()
     const { mutateAsync: flowTeacher } = useFlowTeacher()
     const { mutateAsync: unFlowTeacher } = useUnFlowTeacher()
     const { mutateAsync: addWishList } = useAddWishList()
     const { mutateAsync: unWishList } = useUnWishList()
+    const { data: checkFollow } = useCheckFlowTeacher(user?.id!, courseDetail?.course?.user?.id!)
+    const totalTime = formatDuration((courseDetail?.course?.total_duration_video as unknown as number) || 0)
     const { data: checkWishList } = useCheckWishList(courseDetail?.id)
-    const { data: checkFollow } = useCheckFlowTeacher(user?.id!, courseDetail?.user?.id!)
-    console.log(checkWishList)
-    const totalTime = formatDuration((courseDetail?.total_duration_video as unknown as number) || 0)
     const rating = watch('rate')
 
     const onSubmit = async (data: any) => {
@@ -84,7 +83,7 @@ const CourseDetail = () => {
             const payload = {
                 ...data,
                 id_user: user.id,
-                id_course: courseDetail?.id
+                id_course: courseDetail?.course?.id
             }
             await addRating(payload)
             setIsOpen(false)
@@ -95,7 +94,7 @@ const CourseDetail = () => {
         if (user && courseDetail) {
             const payload: [number, number, IBuyData] = [
                 user.id,
-                courseDetail.id,
+                courseDetail?.course?.id,
                 {
                     total_coin: 0,
                     coin_discount: 0,
@@ -108,21 +107,21 @@ const CourseDetail = () => {
     }
 
     const handleFlowTeacher = async () => {
-        if (courseDetail?.user) {
-            await flowTeacher([{ following_id: courseDetail?.user?.id! }])
+        if (courseDetail?.course?.user) {
+            await flowTeacher([{ following_id: courseDetail?.course?.user?.id }])
         }
     }
 
     const handleUnFlowTeacher = async () => {
-        if (courseDetail?.user) {
-            await unFlowTeacher([{ following_id: courseDetail?.user?.id! }])
+        if (courseDetail?.course?.user) {
+            await unFlowTeacher([{ following_id: courseDetail?.course?.user?.id }])
         }
     }
 
     const handleAddWishList = async () => {
         setIsProcessing(true)
-        if (courseDetail?.id) {
-            await addWishList(courseDetail.id)
+        if (courseDetail?.course?.id) {
+            await addWishList(courseDetail?.course?.id)
             setIsLiked((prev) => !prev)
             setIsProcessing(false)
         }
@@ -130,8 +129,8 @@ const CourseDetail = () => {
 
     const handleUnWishList = async () => {
         setIsProcessing(true)
-        if (courseDetail?.id) {
-            await unWishList(courseDetail.id)
+        if (courseDetail?.course?.id) {
+            await unWishList(courseDetail?.course?.id)
             setIsLiked(false)
             setIsProcessing(false)
         }
@@ -147,7 +146,7 @@ const CourseDetail = () => {
                 </Link>
                 <div className="h-[300px] w-full md:h-[400px] lg:h-[500px]">
                     <video
-                        src={getImagesUrl(courseDetail ? courseDetail.trailer! : '')}
+                        src={getImagesUrl(courseDetail ? courseDetail?.course?.trailer! : '')}
                         title="YouTube video player"
                         className="h-full w-full rounded-lg"
                         controls
@@ -155,43 +154,51 @@ const CourseDetail = () => {
                 </div>
                 <div className="flex flex-col gap-7 px-2">
                     <div className="flex flex-col gap-5">
-                        <h4 className="text-lg font-bold md:text-xl lg:text-2xl">{courseDetail?.name}</h4>
+                        <h4 className="text-lg font-bold md:text-xl lg:text-2xl">{courseDetail?.course?.name}</h4>
 
                         <div className="flex flex-wrap items-center justify-between gap-5">
                             <div className="flex items-center gap-5">
                                 <div className="flex items-center gap-2.5">
                                     <Avatar className="size-8">
                                         <AvatarImage
-                                            src={getImagesUrl(courseDetail?.user?.avatar || '')}
-                                            alt={courseDetail?.user?.name}
+                                            src={getImagesUrl(courseDetail?.course?.user?.avatar || '')}
+                                            alt={courseDetail?.course?.user?.name}
                                             className="h-full w-full object-cover"
                                         />
-                                        <AvatarFallback>{courseDetail?.user?.name?.slice(0, 2)}</AvatarFallback>
+                                        <AvatarFallback>{courseDetail?.course?.user?.name?.slice(0, 2)}</AvatarFallback>
                                     </Avatar>
-                                    <h6 className="whitespace-nowrap md:text-base">{courseDetail?.user?.name}</h6>
+                                    <h6 className="whitespace-nowrap md:text-base">{courseDetail?.course?.user?.name}</h6>
                                 </div>
-                                {checkFollow && checkFollow?.action == 'follow' && (
-                                    <Button variant="default" className="w-full py-3" onClick={handleFlowTeacher}>
-                                        {TeacherStatus.follow}
-                                    </Button>
-                                )}
-                                {checkFollow && checkFollow?.action == 'unfollow' && (
-                                    <Button
-                                        variant="outline"
-                                        className="w-full py-3 duration-500 hover:bg-red-400 hover:text-white"
-                                        onClick={handleUnFlowTeacher}
-                                    >
-                                        {TeacherStatus.unFollow}
-                                    </Button>
+                                {user?.id !== courseDetail?.course?.user?.id && (
+                                    <>
+                                        {checkFollow?.action === 'follow' && (
+                                            <Button
+                                                variant="default"
+                                                className="w-full py-3"
+                                                onClick={handleFlowTeacher}
+                                            >
+                                                {TeacherStatus.follow}
+                                            </Button>
+                                        )}
+                                        {checkFollow?.action === 'unfollow' && (
+                                            <Button
+                                                variant="outline"
+                                                className="w-full py-3 duration-500 hover:bg-red-400 hover:text-white"
+                                                onClick={handleUnFlowTeacher}
+                                            >
+                                                {TeacherStatus.unFollow}
+                                            </Button>
+                                        )}
+                                    </>
                                 )}
                             </div>
                             <div className="flex items-center gap-1">
                                 <IoIosStar className="size-5 text-primary" />
-                                <span> 4,5 (500 Đánh giá)</span>
+                                <span>{Math.floor(courseDetail?.ratings?.average_rating)} ({courseDetail?.ratings?.total_reviews} đánh giá)</span>
                             </div>
 
                             <div className="block md:hidden">
-                                <CourseLevel courseLevel={courseDetail?.level || ''} />
+                                <CourseLevel courseLevel={courseDetail?.course?.level || ''} />
                             </div>
                         </div>
                         <div className="flex items-center justify-between">
@@ -199,13 +206,13 @@ const CourseDetail = () => {
                                 <div className="flex items-center gap-1.5">
                                     <FaRegUser className="size-4 text-darkGrey" />
                                     <p className="text-xs font-medium text-black md:text-base">
-                                        {courseDetail?.total_student} học sinh
+                                        {courseDetail?.course?.total_student} học sinh
                                     </p>
                                 </div>
                                 <div className="flex items-center gap-1.5">
                                     <FaRegCirclePlay className="size-4 text-darkGrey" />
                                     <p className="text-xs font-medium text-black md:text-base">
-                                        Tổng số {courseDetail?.total_lessons} bài giảng
+                                        Tổng số {courseDetail?.course?.total_lessons} bài giảng
                                     </p>
                                 </div>
                                 <div className="flex items-center gap-1.5">
@@ -216,7 +223,7 @@ const CourseDetail = () => {
                                 </div>
                             </div>
                             <div className="hidden md:block">
-                                <CourseLevel courseLevel={courseDetail?.level ?? level.Beginner} />
+                                <CourseLevel courseLevel={courseDetail?.course?.level ?? level.Beginner} />
                             </div>
                         </div>
                     </div>
@@ -236,17 +243,17 @@ const CourseDetail = () => {
                         <div className="p-4">
                             <TabsContent value="about">
                                 <About
-                                    goals={courseDetail?.goals ?? []}
-                                    description={courseDetail?.description ?? ''}
-                                    requirements={courseDetail?.requirements ?? []}
-                                    audiences={courseDetail?.audiences ?? []}
+                                    goals={courseDetail?.course?.goals ?? []}
+                                    description={courseDetail?.course?.description ?? ''}
+                                    requirements={courseDetail?.course?.requirements ?? []}
+                                    audiences={courseDetail?.course?.audiences ?? []}
                                 />
                             </TabsContent>
                             <TabsContent value="content">
-                                <Content modules={courseDetail?.modules ?? []} />
+                                <Content modules={courseDetail?.course?.modules ?? []} />
                             </TabsContent>
                             <TabsContent value="review">
-                                <Reviews idDetailCourse={courseDetail?.id || 0} />
+                                <Reviews idDetailCourse={courseDetail?.course?.id || 0} />
                             </TabsContent>
                         </div>
                     </Tabs>
@@ -257,32 +264,32 @@ const CourseDetail = () => {
                     <div className="card flex w-full max-w-full cursor-text flex-col gap-4 p-4 hover:shadow-[0px_40px_100px_0px_#0000000d] hover:transition-all lg:max-w-[360px] xl:max-w-[400px] xl:p-7 2xl:max-w-[400px]">
                         <div className="relative h-[160px] flex-shrink-0 cursor-pointer">
                             <img
-                                src={getImagesUrl(courseDetail?.thumbnail ?? '')}
-                                alt={courseDetail?.name}
+                                src={getImagesUrl(courseDetail?.course?.thumbnail ?? '')}
+                                alt={courseDetail?.course?.name}
                                 className="h-full w-full rounded-lg object-cover"
                             />
                             <div className="absolute bottom-2.5 left-2.5">
-                                <CourseLevel courseLevel={courseDetail?.level ?? level.Beginner} />
+                                <CourseLevel courseLevel={courseDetail?.course?.level ?? level.Beginner} />
                             </div>
                         </div>
 
                         <div className="flex flex-col gap-4">
                             <h3 className="text-overflow cursor-pointer text-base font-bold text-black xl2:text-lg">
-                                {courseDetail?.name}
+                                {courseDetail?.course?.name}
                             </h3>
-                            {courseDetail?.price && courseDetail?.price != 0 ? (
+                            {courseDetail?.course?.price && courseDetail?.course?.price != 0 ? (
                                 <div className="flex items-center gap-3">
                                     <div className="flex items-center gap-1">
                                         <RiMoneyDollarCircleFill className="size-4 text-orange-500" />
-                                        {courseDetail?.price_sale && courseDetail?.price_sale != 0 ? (
-                                            <del>{Math.floor(courseDetail?.price)}</del>
+                                        {courseDetail?.course?.price_sale && courseDetail?.course?.price_sale != 0 ? (
+                                            <del>{Math.floor(courseDetail?.course?.price)}</del>
                                         ) : (
-                                            <p>{Math.floor(courseDetail?.price)}</p>
+                                            <p>{Math.floor(courseDetail?.course?.price)}</p>
                                         )}
                                     </div>
-                                    {courseDetail?.price_sale && courseDetail?.price_sale != 0 && (
+                                    {courseDetail?.course?.price_sale && courseDetail?.course?.price_sale != 0 && (
                                         <p className="font-semibold text-red-600">
-                                            {Math.floor(courseDetail?.price_sale)}
+                                            {Math.floor(courseDetail?.course?.price_sale)}
                                         </p>
                                     )}
                                 </div>
@@ -294,36 +301,36 @@ const CourseDetail = () => {
                                 <Link to="" className="flex w-full items-center gap-2.5">
                                     <Avatar className="size-8 flex-shrink-0">
                                         <AvatarImage
-                                            src={getImagesUrl(user?.avatar as string) || ''}
-                                            alt={user?.name}
+                                            src={getImagesUrl(courseDetail?.course?.user?.avatar as string) || ''}
+                                            alt={courseDetail?.course?.user?.name}
                                         />
                                         <AvatarFallback className="flex size-8 items-center justify-center bg-slate-500/50 font-semibold">
-                                            {user?.name.charAt(0)}
+                                            {courseDetail?.course?.user?.name.charAt(0)}
                                         </AvatarFallback>
                                     </Avatar>
-                                    <p className="w-fit text-sm font-medium xl2:text-base">{user?.name}</p>
+                                    <p className="w-fit text-sm font-medium xl2:text-base">{courseDetail?.course?.user?.name}</p>
                                 </Link>
                             </div>
 
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-1.5">
                                     <FaRegUser className="size-4 text-darkGrey" />
-                                    <p className="font-medium text-black">{courseDetail?.total_student}</p>
+                                    <p className="font-medium text-black">{courseDetail?.course?.total_student}</p>
                                 </div>
                                 <div className="flex items-center gap-1.5">
                                     <IoTimeOutline className="size-4 text-darkGrey" />
                                     <p className="font-medium text-black">
-                                        {courseDetail?.total_duration_video ? totalTime : 0}
+                                        {courseDetail?.course?.total_duration_video ? totalTime : 0}
                                     </p>
                                 </div>
                                 <div className="flex items-center gap-1.5">
                                     <FaRegCirclePlay className="size-4 text-darkGrey" />
-                                    <p className="font-medium text-black">{courseDetail?.total_lessons}</p>
+                                    <p className="font-medium text-black">{courseDetail?.course?.total_lessons}</p>
                                 </div>
                             </div>
                         </div>
 
-                        {user?.id !== courseDetail?.id_user && (
+                        {user?.id !== courseDetail?.course?.id_user ? (
                             <div className="w-full">
                                 {isPurchased?.status === 'error' ? (
                                     <div className="flex w-full gap-2">
@@ -351,8 +358,8 @@ const CourseDetail = () => {
                                             </>
                                         )}
                                     </div>
-                                ) : (!courseDetail?.price && !courseDetail?.price_sale) ||
-                                    (courseDetail?.price == 0 && courseDetail?.price_sale == 0) ? (
+                                ) : (!courseDetail?.course?.price && !courseDetail?.course?.price_sale) ||
+                                    (courseDetail?.course?.price === 0 && courseDetail?.course?.price_sale === 0) ? (
                                     <Button
                                         className="block w-full rounded-md bg-primary py-2 text-center text-white"
                                         onClick={handleLearnNow}
@@ -385,7 +392,24 @@ const CourseDetail = () => {
                                     </div>
                                 )}
                             </div>
+                        ) : (
+                            isPurchased?.status === 'error' ? (
+                                <Button
+                                    className="w-full"
+                                    onClick={() => navigate(routes.courseLeaning.replace(':slug', slug!))}
+                                >
+                                    Vào học
+                                </Button>
+                            ) : (
+                                <Button
+                                    className="block w-full rounded-md bg-primary py-2 text-center text-white"
+                                    onClick={handleLearnNow}
+                                >
+                                    Đăng ký học
+                                </Button>
+                            )
                         )}
+
 
                         <Dialog open={isOpen} onOpenChange={setIsOpen}>
                             <DialogContent className="max-h-[90vh] w-[90vw] max-w-full overflow-y-scroll p-5 md:max-w-[50vw] md:p-10">
@@ -432,10 +456,6 @@ const CourseDetail = () => {
                     </div>
                 </div>
                 <div className="card flex w-full flex-col gap-4 lg:hidden">
-                    <div className="flex items-center justify-between">
-                        <span className="text-lg font-semibold">5 Chương</span>
-                        <span>0/5 hoàn thành</span>
-                    </div>
                     <Button onClick={handleToggleCourse}>Tham gia khóa học</Button>
                 </div>
 
@@ -450,62 +470,191 @@ const CourseDetail = () => {
                         <div className="card flex w-full max-w-full cursor-text flex-col gap-4 p-4 hover:shadow-[0px_40px_100px_0px_#0000000d] hover:transition-all lg:max-w-[360px] xl:max-w-[400px] xl:p-7 2xl:max-w-[400px]">
                             <div className="relative h-[160px] flex-shrink-0 cursor-pointer">
                                 <img
-                                    src={getImagesUrl(courseDetail?.thumbnail ?? '')}
-                                    alt={courseDetail?.name}
+                                    src={getImagesUrl(courseDetail?.course?.thumbnail ?? '')}
+                                    alt={courseDetail?.course?.name}
                                     className="h-full w-full rounded-lg object-cover"
                                 />
                                 <div className="absolute bottom-2.5 left-2.5">
-                                    <CourseLevel courseLevel={courseDetail?.level ?? level.Beginner} />
+                                    <CourseLevel courseLevel={courseDetail?.course?.level ?? level.Beginner} />
                                 </div>
                             </div>
 
                             <div className="sticky top-0 flex flex-col gap-4">
                                 <h3 className="text-overflow cursor-pointer text-base font-bold text-black xl2:text-lg">
-                                    {courseDetail?.name}
+                                    {courseDetail?.course?.name}
                                 </h3>
-                                {courseDetail?.price && courseDetail?.price_sale ? (
+                                {courseDetail?.course?.price && courseDetail?.course?.price != 0 ? (
                                     <div className="flex items-center gap-3">
                                         <div className="flex items-center gap-1">
                                             <RiMoneyDollarCircleFill className="size-4 text-orange-500" />
-                                            <del>{Math.floor(courseDetail?.price)} xu</del>
+                                            {courseDetail?.course?.price_sale && courseDetail?.course?.price_sale != 0 ? (
+                                                <del>{Math.floor(courseDetail?.course?.price)}</del>
+                                            ) : (
+                                                <p>{Math.floor(courseDetail?.course?.price)}</p>
+                                            )}
                                         </div>
-                                        <p className="font-semibold text-red-600">
-                                            {Math.floor(courseDetail?.price_sale)} xu
-                                        </p>
+                                        {courseDetail?.course?.price_sale && courseDetail?.course?.price_sale != 0 && (
+                                            <p className="font-semibold text-red-600">
+                                                {Math.floor(courseDetail?.course?.price_sale)}
+                                            </p>
+                                        )}
                                     </div>
                                 ) : (
-                                    <span className="text-sm text-orange-500 lg:text-base">Miễn phí</span>
+                                    <span className="text-orange-500">Miễn phí</span>
                                 )}
 
                                 <div className="flex items-center gap-2">
                                     <Link to="" className="flex w-full items-center gap-2.5">
                                         <Avatar className="size-8 flex-shrink-0">
                                             <AvatarImage
-                                                src={getImagesUrl(user?.avatar as string) || ''}
-                                                alt={user?.name}
+                                                src={getImagesUrl(courseDetail?.course?.user?.avatar as string) || ''}
+                                                alt={courseDetail?.course?.user?.name}
                                             />
                                             <AvatarFallback className="flex size-8 items-center justify-center bg-slate-500/50 font-semibold">
-                                                {user?.name.charAt(0)}
+                                                {courseDetail?.course?.user?.name.charAt(0)}
                                             </AvatarFallback>
                                         </Avatar>
-                                        <p className="w-fit text-sm font-medium xl2:text-base">{user?.name}</p>
+                                        <p className="w-fit text-sm font-medium xl2:text-base">{courseDetail?.course?.user?.name}</p>
                                     </Link>
                                 </div>
 
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-1.5">
                                         <FaRegUser className="size-4 text-darkGrey" />
-                                        <p className="font-medium text-black">{courseDetail?.total_student}</p>
+                                        <p className="font-medium text-black">{courseDetail?.course?.total_student}</p>
                                     </div>
                                     <div className="flex items-center gap-1.5">
                                         <IoTimeOutline className="size-4 text-darkGrey" />
-                                        <p className="font-medium text-black">{courseDetail?.total_duration_video}</p>
+                                        <p className="font-medium text-black">{courseDetail?.course?.total_duration_video ? totalTime : 0}</p>
                                     </div>
                                     <div className="flex items-center gap-1.5">
                                         <FaRegCirclePlay className="size-4 text-darkGrey" />
-                                        <p className="font-medium text-black">{courseDetail?.total_lessons}</p>
+                                        <p className="font-medium text-black">{courseDetail?.course?.total_lessons}</p>
                                     </div>
                                 </div>
+                                {user?.id !== courseDetail?.course?.id_user ? (
+                                    <div className="w-full">
+                                        {isPurchased?.status === 'error' ? (
+                                            <div className="flex w-full gap-2">
+                                                <Button
+                                                    className="w-full"
+                                                    onClick={() => navigate(routes.courseLeaning.replace(':slug', slug!))}
+                                                >
+                                                    Vào học
+                                                </Button>
+                                                {checkRating?.data?.status !== 'pending' && (
+                                                    <>
+                                                        {checkRating?.data?.status === 'completed' ? (
+                                                            <Button variant="outline" className="w-full" disabled>
+                                                                Đã đánh giá
+                                                            </Button>
+                                                        ) : checkRating?.data?.status === 'allow' ? (
+                                                            <Button
+                                                                variant="outline"
+                                                                className="w-full"
+                                                                onClick={() => setIsOpen(true)}
+                                                            >
+                                                                Đánh giá
+                                                            </Button>
+                                                        ) : null}
+                                                    </>
+                                                )}
+                                            </div>
+                                        ) : (!courseDetail?.course?.price && !courseDetail?.course?.price_sale) ||
+                                            (courseDetail?.course?.price === 0 && courseDetail?.course?.price_sale === 0) ? (
+                                            <Button
+                                                className="block w-full rounded-md bg-primary py-2 text-center text-white"
+                                                onClick={handleLearnNow}
+                                            >
+                                                Đăng ký học
+                                            </Button>
+                                        ) : (
+                                            <div className="flex gap-3 items-center">
+                                                <Link
+                                                    className="block w-full rounded-md bg-primary py-2 text-center text-white"
+                                                    to={routes.payment.replace(':slug', slug!)}
+                                                >
+                                                    Mua khoá học
+                                                </Link>
+                                                <div className="w-11 h-9 flex justify-center items-center border-2 rounded-md">
+                                                    {isProcessing ? (
+                                                        <div className="w-5 h-5 border-2 border-t-transparent border-primary rounded-full animate-spin"></div>
+                                                    ) : isLiked ? (
+                                                        <FaHeart
+                                                            onClick={handleUnWishList}
+                                                            className="size-6 rounded-md text-primary cursor-pointer"
+                                                        />
+                                                    ) : (
+                                                        <FaRegHeart
+                                                            onClick={handleAddWishList}
+                                                            className="size-6 rounded-md cursor-pointer text-darkGrey"
+                                                        />
+                                                    )}
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                ) : (
+                                    isPurchased?.status === 'error' ? (
+                                        <Button
+                                            className="w-full"
+                                            onClick={() => navigate(routes.courseLeaning.replace(':slug', slug!))}
+                                        >
+                                            Vào học
+                                        </Button>
+                                    ) : (
+                                        <Button
+                                            className="block w-full rounded-md bg-primary py-2 text-center text-white"
+                                            onClick={handleLearnNow}
+                                        >
+                                            Đăng ký học
+                                        </Button>
+                                    )
+                                )}
+
+
+                                <Dialog open={isOpen} onOpenChange={setIsOpen}>
+                                    <DialogContent className="max-h-[90vh] w-[90vw] max-w-full overflow-y-scroll p-5 md:max-w-[50vw] md:p-10">
+                                        <form onSubmit={handleSubmit(onSubmit)}>
+                                            <h1 className="text-center text-lg font-bold md:text-left md:text-3xl">Đánh giá</h1>
+                                            <div className="flex flex-col gap-5">
+                                                <span className="text-center text-sm md:text-left md:text-lg">
+                                                    Bạn có hài lòng với khóa học?
+                                                </span>
+
+                                                <div className="flex justify-center gap-2 md:justify-start">
+                                                    {[1, 2, 3, 4, 5].map((star) => (
+                                                        <FaStar
+                                                            key={star}
+                                                            onClick={() => setValue('rate', star)}
+                                                            className={`cursor-pointer ${star <= rating ? 'text-yellow-500' : 'text-gray-300'
+                                                                } h-5 w-5 md:h-8 md:w-8`}
+                                                        />
+                                                    ))}
+                                                </div>
+
+                                                <div className="mx-auto flex w-full flex-col gap-4 md:mx-0">
+                                                    <h3 className="text-sm md:text-lg">Đánh giá của bạn</h3>
+                                                    <textarea
+                                                        {...register('content', { required: 'Vui lòng nhập nội dung' })}
+                                                        className="w-full resize-none rounded-md border-2 border-gray-300 p-2 md:p-4"
+                                                        rows={4}
+                                                        placeholder="Viết đánh giá của bạn ở đây..."
+                                                    />
+                                                    {errors.content && (
+                                                        <span className="text-red-500">{errors.content.message}</span>
+                                                    )}
+                                                </div>
+
+                                                <div className="flex justify-center md:justify-start">
+                                                    <DialogFooter>
+                                                        <Button type="submit">Gửi đánh giá</Button>
+                                                    </DialogFooter>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </DialogContent>
+                                </Dialog>
                             </div>
                         </div>
                     )}

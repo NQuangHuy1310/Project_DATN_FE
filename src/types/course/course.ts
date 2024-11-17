@@ -58,6 +58,7 @@ export interface IModule {
     title: string
     time: number
     lessons: ILesson[]
+    quiz: IQuizLeaning
 }
 
 export interface ILessonAbleLeaning {
@@ -149,6 +150,7 @@ export interface ILessonProCess {
 }
 
 export interface ICourseDetail extends ICourse {
+    author: string
     tags: any[]
     goals: Goal[]
     requirements: Requirement[]

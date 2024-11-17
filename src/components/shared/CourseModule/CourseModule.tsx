@@ -6,6 +6,7 @@ import { MdOutlinePlayCircleOutline } from 'react-icons/md'
 
 import { IModule } from '@/types/course/course.ts'
 import { formatDuration } from '@/lib'
+import { HiQuestionMarkCircle } from 'react-icons/hi'
 
 const CourseModule = ({ module }: { module: IModule }) => {
     const [isShowLesson, setIsShowLesson] = useState<boolean>(false)
@@ -24,7 +25,7 @@ const CourseModule = ({ module }: { module: IModule }) => {
                     )}
                     <h5 className="text-base font-medium">{module.title}</h5>
                 </div>
-                <p>{module.lessons.length} bài học</p>
+                <p>{module.lessons.length + 1} bài học</p>
             </div>
             <div className="py-2 opacity-75">
                 {isShowLesson &&
@@ -44,7 +45,16 @@ const CourseModule = ({ module }: { module: IModule }) => {
                             {formatDuration(item.duration)}
                         </div>
                     ))}
+                {isShowLesson && module.quiz && (
+                    <div className="flex items-center justify-between px-6 py-3">
+                        <div className="flex items-center gap-2">
+                            <HiQuestionMarkCircle className="size-5 text-primary" />
+                            <h6 className="text-sm font-semibold">{module.quiz.title}</h6>
+                        </div>
+                    </div>
+                )}
             </div>
+
         </div>
     )
 }

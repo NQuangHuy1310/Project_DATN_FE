@@ -56,7 +56,6 @@ const CodeEditor = ({ open, isOpen }: { open: boolean; isOpen: (open: boolean) =
             setOutput(result.run.output.split('\n'))
             setIsError(!!result.stderr)
         } catch (error: any) {
-            console.log(error)
             setIsError(true)
         } finally {
             setIsLoading(false)

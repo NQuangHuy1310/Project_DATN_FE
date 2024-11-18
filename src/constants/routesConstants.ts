@@ -61,6 +61,7 @@ import CourseOutstanding from '@/views/user/Courses/CourseOutstanding'
 import PostFeatured from '@/views/user/Posts/PostFeatured'
 import CourseWishList from '@/views/user/Courses/CourseWishList'
 import PerformanceStudents from '@/views/instructor/Performance/PerformanceStudents'
+import Certification from '@/views/user/Certification/Certification'
 
 // Routes không cần đăng nhập
 export const publicRoutes = [
@@ -115,6 +116,9 @@ export const privateRoutes = [
     },
     // wallet
     { path: routes.wallet, layout: UserDashboardLayout, element: Transaction, title: 'Nạp tiền vào tài khoản' },
+
+    // Certification
+    { path: routes.certification, layout: UserDashboardLayout, element: Certification, title: 'Chứng chỉ' },
 
     //Payment
     { path: routes.payment, layout: UserDashboardLayout, element: Payment, title: 'Thanh toán' },

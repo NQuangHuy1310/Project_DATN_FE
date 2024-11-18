@@ -14,6 +14,7 @@ import {
     HiQuestionMarkCircle
 } from 'react-icons/hi'
 import logo from '@/assets/Union.svg'
+import { FaMedal } from 'react-icons/fa6'
 import { HiMiniCodeBracket } from 'react-icons/hi2'
 import { FaCheckCircle, FaLock } from 'react-icons/fa'
 
@@ -26,10 +27,17 @@ import LeaningCourseQuiz from '@/components/shared/CourseLeaning/LeaningCourseQu
 import LeaningCourseVideo from '@/components/shared/CourseLeaning/LeaningCourseVideo'
 import LeaningCourseDocument from '@/components/shared/CourseLeaning/LeaningCourseDocument'
 import { formatDurationSecond } from '@/lib/common'
+import { usePostCertification } from '@/app/hooks/others/useOthers'
 import { useCourseLeaningBySlug } from '@/app/hooks/courses/useCourse'
 import { ILessonLeaning, IModuleLeaning } from '@/types/course/course'
 import { useLessonById, useQuizLessonById } from '@/app/hooks/courses/useLesson'
 import { useGetIdParams, useGetSlugParams } from '@/app/hooks/common/useCustomParams'
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuGroup,
+    DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu'
 
 const CourseLearning = () => {
     const [toggleTab, setToggleTab] = useState<boolean>(true)
@@ -43,6 +51,7 @@ const CourseLearning = () => {
     const [pauseVideoCallback, setPauseVideoCallback] = useState<() => void>(() => {})
     const [playVideoCallback, setPlayVideoCallback] = useState<() => void>(() => {})
     const [checkQuizLeaning, setCheckQuizLeaning] = useState<boolean>()
+    const [codeCertification, setCodeCertification] = useState<string>()
 
     const navigate = useNavigate()
 
@@ -51,6 +60,10 @@ const CourseLearning = () => {
     const slug = useGetSlugParams('slug')
 
     const handleToggleCode = () => setIsToggledCode(!isToggledCode)
+
+    // Tạo chứng chỉ
+    const { mutateAsync: postCertification } = usePostCertification()
+    // call api lấy code chứng chỉ
 
     // Danh sách bài học theo khóa học
     const { data: courseModule, isLoading, refetch } = useCourseLeaningBySlug(slug!)
@@ -69,6 +82,12 @@ const CourseLearning = () => {
         )
     }, [courseModule])
 
+    // Lấy bài học hiện tạo
+    const currentModule = courseModule?.modules.find((module) => module.quiz?.id === idLesson)
+
+    // Kiểm tra bài học hiện tại phải bài cuối không
+    const isLastQuiz = currentModule?.quiz?.is_last_quiz || 0
+
     const isQuiz = quizArray.some((quiz: any) => quiz.id === idLesson)
 
     const { data: courseLesson } = useLessonById(idLesson!, isQuiz)
@@ -77,6 +96,11 @@ const CourseLearning = () => {
     const lessons = courseModule?.modules?.flatMap((module) => module.lessons) || []
     const isLessonInModule = lessons.some((lesson) => lesson.id === idLesson)
     const nextLessonId = courseModule?.next_lesson?.id
+
+    const handlePostCertification = async (id: number) => {
+        const data = await postCertification([id])
+        setCodeCertification(data.code)
+    }
 
     useEffect(() => {
         const currentQuiz = quizArray.find((quiz) => quiz.id === idLesson)
@@ -89,6 +113,15 @@ const CourseLearning = () => {
         if (courseModule && !isLessonInModule && nextLessonId) {
             if (!idLesson) {
                 setSearchParams({ id: nextLessonId.toString() })
+            }
+        }
+        if (courseModule && !nextLessonId && courseModule.progress_percent == 100 && !idLesson) {
+            const lastQuiz = courseModule.modules
+                ?.flatMap((module) => module.quiz)
+                ?.find((quiz) => quiz.is_last_quiz == 1)
+
+            if (lastQuiz) {
+                setSearchParams({ id: lastQuiz.id.toString() })
             }
         }
     }, [courseModule, isLessonInModule, idLesson, nextLessonId, setSearchParams])
@@ -162,7 +195,7 @@ const CourseLearning = () => {
     }, [courseModule, idLesson, searchParams, setSearchParams])
 
     useEffect(() => {
-        if (courseModule && nextLessonId !== undefined && idLesson !== undefined) {
+        if (courseModule && idLesson !== undefined) {
             const quizModuleIndex = courseModule.modules.findIndex((module) => module.quiz?.id === idLesson)
             if (quizModuleIndex !== -1) {
                 const isLastModule = quizModuleIndex === courseModule.modules.length - 1
@@ -180,7 +213,14 @@ const CourseLearning = () => {
                 }
             }
         }
-    }, [courseModule, nextLessonId, idLesson])
+        if (courseModule && courseModule.progress_percent == 100) {
+            const lastQuiz = courseModule.modules
+                ?.flatMap((module) => module.quiz)
+                ?.find((quiz) => quiz.is_last_quiz == 1)
+            const quizModuleIndexLast = courseModule.modules.findIndex((module) => module.quiz?.id === lastQuiz?.id)
+            setActiveModules((prev) => [...new Set([...prev, quizModuleIndexLast])])
+        }
+    }, [courseModule, idLesson])
 
     const handleChangeLesson = useCallback(
         (direction: 'next' | 'previous') => {
@@ -298,14 +338,15 @@ const CourseLearning = () => {
                                     <div
                                         key={lesson.id}
                                         className={`border-b px-7 py-2 ${lesson.id === idLesson ? 'bg-primary/15' : ''} ${
-                                            lesson.is_completed === 1 || lesson.id === courseModule.next_lesson.id
+                                            lesson.is_completed === 1 ||
+                                            (courseModule.next_lesson && lesson.id === courseModule.next_lesson.id)
                                                 ? 'cursor-pointer'
                                                 : 'cursor-not-allowed'
                                         }`}
                                         onClick={() => {
                                             if (
                                                 lesson.is_completed === 1 ||
-                                                lesson.id === courseModule.next_lesson.id
+                                                (courseModule.next_lesson && lesson.id === courseModule.next_lesson.id)
                                             ) {
                                                 handleLessonClick(lesson.id)
                                             }
@@ -321,9 +362,6 @@ const CourseLearning = () => {
                                                         {lesson.content_type === 'document' && (
                                                             <HiBookOpen className="size-4 text-primary" />
                                                         )}
-                                                        {lesson.content_type === 'quiz' && (
-                                                            <HiQuestionMarkCircle className="size-4 text-primary" />
-                                                        )}
                                                         {lesson.content_type === 'video' && (
                                                             <HiPlay className="size-4 text-primary" />
                                                         )}
@@ -336,9 +374,11 @@ const CourseLearning = () => {
                                                     </span>
                                                 </div>
                                             </div>
-                                            {lesson.is_completed === 1 ? (
+                                            {lesson && lesson.is_completed === 1 ? (
                                                 <FaCheckCircle className="size-3 text-primary" />
-                                            ) : lesson.id === courseModule.next_lesson.id ? (
+                                            ) : courseModule.next_lesson &&
+                                              lesson &&
+                                              lesson.id === courseModule.next_lesson.id ? (
                                                 <div></div>
                                             ) : (
                                                 <FaLock className="size-3 text-darkGrey" />
@@ -349,14 +389,16 @@ const CourseLearning = () => {
                                 {module.quiz && (
                                     <div
                                         className={`flex items-center justify-between border-b px-7 py-2 ${module.quiz.id === idLesson ? 'bg-primary/15' : ''} ${
-                                            courseModule.next_lesson.id === module.quiz.id ||
+                                            (courseModule.next_lesson &&
+                                                courseModule.next_lesson.id === module.quiz.id) ||
                                             module.quiz?.is_completed == 1
                                                 ? 'cursor-pointer'
                                                 : 'cursor-not-allowed'
                                         }`}
                                         onClick={() => {
                                             if (
-                                                courseModule.next_lesson.id === module.quiz.id ||
+                                                (courseModule.next_lesson &&
+                                                    courseModule.next_lesson.id === module.quiz.id) ||
                                                 module.quiz?.is_completed == 1
                                             ) {
                                                 handleQuizClick(module.quiz.id)
@@ -377,9 +419,11 @@ const CourseLearning = () => {
                                             </div>
                                         </div>
                                         {/* Kiểm tra trạng thái mở khóa cho quiz */}
-                                        {module.quiz.is_completed === 1 ? (
+                                        {module.quiz && module.quiz.is_completed === 1 ? (
                                             <FaCheckCircle className="size-3 text-primary" />
-                                        ) : module.quiz.id === courseModule.next_lesson.id ? (
+                                        ) : courseModule.next_lesson &&
+                                          module.quiz &&
+                                          module.quiz.id === courseModule.next_lesson.id ? (
                                             <div></div>
                                         ) : (
                                             <FaLock className="size-3 text-darkGrey" />
@@ -411,14 +455,46 @@ const CourseLearning = () => {
                     <h2 className="md:text-md text-sm font-semibold lg:text-lg">{courseModule?.course_name}</h2>
                 </div>
                 <div className="flex items-center gap-5">
-                    <div className="flex items-center gap-2">
-                        <span className="flex h-10 w-10 items-center justify-center rounded-full border text-xs md:text-sm">
-                            {((courseModule?.completed_lessons! / courseModule?.total_lessons!) * 100).toFixed(0)}%
-                        </span>
-                        <span className="hidden lg:block">
-                            {courseModule?.completed_lessons!}/{courseModule?.total_lessons!} bài học
-                        </span>
-                    </div>
+                    {courseModule?.completed_lessons == courseModule?.total_lessons ? (
+                        <DropdownMenu>
+                            <DropdownMenuTrigger
+                                asChild
+                                className="relative outline-none transition hover:opacity-75"
+                                onClick={() => handlePostCertification(courseModule?.modules[0].id_course!)}
+                            >
+                                <div className="flex cursor-pointer items-center gap-3">
+                                    <FaMedal className="size-5 text-primary" />
+                                    <span>Nhận giấy chứng nhận</span>
+                                </div>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="center" className="w-52">
+                                <DropdownMenuGroup className="flex flex-col gap-3 p-2">
+                                    <span className="text-base font-semibold">
+                                        Đã hoàn thành {courseModule?.completed_lessons!} /{' '}
+                                        {courseModule?.total_lessons!}
+                                    </span>
+                                    <Button
+                                        disabled={codeCertification ? false : true}
+                                        onClick={() =>
+                                            navigate(routes.certification.replace(':code', codeCertification!))
+                                        }
+                                    >
+                                        {codeCertification ? 'Nhận giấy chứng nhận' : 'Đang tải chứng chỉ ...'}
+                                    </Button>
+                                </DropdownMenuGroup>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    ) : (
+                        <div className="flex items-center gap-2">
+                            <span className="flex h-10 w-10 items-center justify-center rounded-full border text-xs md:text-sm">
+                                {((courseModule?.completed_lessons! / courseModule?.total_lessons!) * 100).toFixed(0)}%
+                            </span>
+                            <span className="hidden lg:block">
+                                {courseModule?.completed_lessons!}/{courseModule?.total_lessons!} bài học
+                            </span>
+                        </div>
+                    )}
+
                     <div
                         className="flex cursor-pointer items-center gap-1"
                         onClick={() => {
@@ -500,6 +576,7 @@ const CourseLearning = () => {
                             dataLesson={quizLesson}
                             setCheckButton={setCheckButton}
                             idCourse={courseModule?.modules[0].id_course!}
+                            isLastQuiz={isLastQuiz}
                         />
                     )}
                 </section>
@@ -507,7 +584,7 @@ const CourseLearning = () => {
                 {/* Sidebar */}
                 <aside
                     ref={courseListRef}
-                    className={`absolute top-0 z-50 h-[89vh] w-full overflow-y-auto bg-white px-2 md:w-[50vw] lg:fixed lg:bottom-0 lg:right-0 lg:top-[60px] lg:w-[23%] lg:border-l lg:px-1 ${
+                    className={`absolute top-0 z-50 h-[86vh] w-full overflow-y-auto bg-white px-2 md:w-[50vw] lg:fixed lg:bottom-0 lg:right-0 lg:top-[60px] lg:w-[23%] lg:border-l lg:px-1 ${
                         toggleTab ? 'block' : 'hidden'
                     }`}
                 >
@@ -527,12 +604,13 @@ const CourseLearning = () => {
                     <Button
                         onClick={() => handleChangeLesson('previous')}
                         variant="secondary"
+                        disabled={idLesson === courseModule?.modules[0].lessons[0].id}
                         className="md:text-md relative h-6 rounded-2xl !ps-5 text-sm md:h-8"
                     >
                         Bài Trước
                     </Button>
                     <Button
-                        disabled={checkButton}
+                        disabled={!isLastQuiz ? checkButton : true}
                         onClick={() => {
                             handleChangeLesson('next')
                         }}

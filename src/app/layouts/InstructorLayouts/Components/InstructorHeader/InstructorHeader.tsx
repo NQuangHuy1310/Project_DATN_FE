@@ -1,8 +1,7 @@
-import { FaBars, FaRegBell } from 'react-icons/fa'
-import { Link } from 'react-router-dom'
+import { FaBars } from 'react-icons/fa'
 
-import routes from '@/configs/routes'
 import UserButton from '@/components/shared/UserButton'
+import NotificationButton from '@/components/shared/NotificationButton'
 
 function InstructorHeader({
     isSidebar,
@@ -22,9 +21,7 @@ function InstructorHeader({
                 <h2 className="text-xl font-medium">{title}</h2>
             </div>
             <div className="flex items-center gap-5">
-                <Link to={routes.instructorNotifications}>
-                    <FaRegBell className="size-5 cursor-pointer text-black" />
-                </Link>
+                <NotificationButton />
                 <UserButton />
             </div>
         </header>

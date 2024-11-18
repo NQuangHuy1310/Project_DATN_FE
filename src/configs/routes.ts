@@ -39,6 +39,9 @@ const routes = {
     //Payment
     payment: '/payment/course/:slug',
 
+    // Certification
+    certification: '/certification/:code',
+
     // Post management routes
     posts: '/posts',
     postsDetail: '/posts/:slug',

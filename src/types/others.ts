@@ -1,3 +1,6 @@
+import { IUser } from '@/types/auth'
+import { ICourse } from '@/types/course/course'
+
 export interface ICategory {
     id: number
     name: string
@@ -37,4 +40,18 @@ export interface QuestionTeacher {
     description: string
     question: string
     options: string[]
+}
+
+export interface CertificateData {
+    id: number
+    code: string
+    user_id: number
+    course_id: number
+    completion_date: string
+    image_url: string
+    pdf_url: string
+    created_at: string
+    updated_at: string
+    course: ICourse
+    user: IUser
 }

@@ -1,25 +1,36 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 
 import { toast } from 'sonner'
-
 import { Button } from '@/components/ui/button'
 import useGetUserProfile from '@/app/hooks/accounts/useGetUser'
 import { ICheckQuizLeaningPost, IQuizLeaning } from '@/types/course/course'
 import { useCheckQuizLeaning, useGetQuizLeaning, useUpdateQuizProCess } from '@/app/hooks/courses/useLesson'
+import {
+    AlertDialog,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle
+} from '@/components/ui/alert-dialog'
 
 const LeaningCourseQuiz = ({
     checkQuiz,
     dataLesson,
     idCourse,
+    isLastQuiz,
     setCheckButton
 }: {
     dataLesson: IQuizLeaning
     checkQuiz: boolean | undefined
     idCourse: number
+    isLastQuiz: number
     setCheckButton: Dispatch<SetStateAction<boolean>>
 }) => {
     const [userAnswers, setUserAnswers] = useState<{ [key: number]: number | number[] | null }>({})
     const [incorrectOptions, setIncorrectOptions] = useState<{ [key: number]: number[] }>({})
+    const [checkFinish, setCheckFinish] = useState<boolean>(false)
     const [isDisabled, setIsDisabled] = useState(true)
 
     const { user } = useGetUserProfile()
@@ -96,6 +107,9 @@ const LeaningCourseQuiz = ({
                     _method: 'PUT'
                 }
             ])
+            if (isLastQuiz && isLastQuiz == 1) {
+                setCheckFinish(true)
+            }
             setCheckButton(false)
             toast.success('Chúc mừng bạn đã trả lời chính xác')
         } else {
@@ -158,6 +172,17 @@ const LeaningCourseQuiz = ({
                     ))}
                 </div>
             ))}
+            <AlertDialog open={checkFinish} onOpenChange={() => setCheckFinish(false)}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Chúc mừng bạn đã hoàn thành khóa học</AlertDialogTitle>
+                        <AlertDialogDescription>Cảm ơn bạn đã tham gia học cùng chúng tôi</AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>Đóng</AlertDialogCancel>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
             <Button onClick={checkAnswers} disabled={isDisabled}>
                 Kiểm tra
             </Button>

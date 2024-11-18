@@ -112,6 +112,7 @@ export interface IQuizLeaning {
     total_points: number
     title: string
     is_completed: number
+    is_last_quiz: number
     description: string
     questions: IQuestion[]
 }

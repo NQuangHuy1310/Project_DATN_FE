@@ -1,3 +1,4 @@
+import { toast } from 'sonner'
 import { useRegisterTeacher } from '@/app/hooks/accounts/useRegisterTeacher'
 import { Button } from '@/components/ui/button'
 import { questions } from '@/constants/constants'
@@ -43,6 +44,7 @@ const InstructorRegisQuestion = () => {
             localStorage.setItem('currentQuestion', nextQuestion.toString())
         } else {
             await registerTeacher()
+            toast.success('Chúc mừng bạn đăng ký thành công')
         }
     }
 

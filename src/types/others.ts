@@ -42,6 +42,10 @@ export interface QuestionTeacher {
     options: string[]
 }
 
+interface CourseCertification extends ICourse {
+    user: IUser
+}
+
 export interface CertificateData {
     id: number
     code: string
@@ -52,6 +56,5 @@ export interface CertificateData {
     pdf_url: string
     created_at: string
     updated_at: string
-    course: ICourse
-    user: IUser
+    course: CourseCertification
 }

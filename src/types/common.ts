@@ -65,6 +65,7 @@ interface NotificationData {
     status: string
     message: string
     course_id: number
+    user_role: string
     conditions: string | null
     course_name: string
     admin_comments: string | null

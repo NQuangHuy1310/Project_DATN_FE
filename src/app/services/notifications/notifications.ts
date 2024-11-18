@@ -12,7 +12,7 @@ export const notificationApi = {
     markAsRead: async (id: string): Promise<any> => {
         return axiosClient.post(notificationUri.markAdRead(id), {})
     },
-    deleteNotification: async (id: number): Promise<any> => {
+    deleteNotification: async (id: string): Promise<any> => {
         return axiosClient.delete(notificationUri.deleteNotification(id))
     }
 }

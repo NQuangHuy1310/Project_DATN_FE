@@ -31,8 +31,6 @@ const MyPosts = () => {
         return <Loading />
     }
 
-    console.log(data)
-
     return (
         <div className="flex flex-col gap-5 rounded-md bg-white p-10 px-20">
             <Tabs defaultValue="published" className="flex min-h-[500px] flex-col gap-3">

@@ -1,3 +1,6 @@
+import { create } from 'zustand'
+import { ICategory } from '../others'
+
 export interface IPosts {
     allow_comments: number
     avatar: string
@@ -37,8 +40,11 @@ export interface IFeaturedPost {
     title: string
     slug: string
     thumbnail: string
+    description: string
     views: number
     name: string
     avatar: string
-
+    categories: ICategory[]
+    created_at: string
+    content: string
 }

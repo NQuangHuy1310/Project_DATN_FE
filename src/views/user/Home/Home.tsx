@@ -91,12 +91,12 @@ const Home = () => {
                     {ratings?.map((item, index) => (
                         <div key={index} className="w-full rounded-lg border bg-white px-7 py-3 md:max-w-[354px]">
                             <div className="flex space-x-4">
-                                <Avatar className="size-10 flex-shrink-0">
+                                {/* <Avatar className="size-10 flex-shrink-0">
                                     <AvatarImage src={item?.user_avatar || ''} alt={item.user_name} />
                                     <AvatarFallback className="flex size-10 items-center justify-center bg-slate-500/50 font-semibold">
                                         {item.user_name.charAt(0)}
                                     </AvatarFallback>
-                                </Avatar>
+                                </Avatar> */}
                                 <div className="flex flex-col gap-1">
                                     <h4 className="font-bold text-gray-800">{item.user_name}</h4>
                                     <p className="text-[9px] text-gray-500">{item.created_at}</p>

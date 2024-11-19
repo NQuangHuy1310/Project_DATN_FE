@@ -287,3 +287,13 @@ export interface IChangeLessonTypeData {
     content?: string
     description?: string
 }
+
+export interface RevenueData {
+    total_revenue: number
+    monthly_revenue: {
+        [key: number]: number // Từ 1 đến 12 (tháng)
+    }
+    total_students: number
+    total_courses: number
+    top_courses: ICourseItem[]
+}

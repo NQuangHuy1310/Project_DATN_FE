@@ -22,7 +22,8 @@ import {
     IQuiz,
     ITargetCourse,
     IUpdatePositionLessonData,
-    IUpdatePositionModuleData
+    IUpdatePositionModuleData,
+    RevenueData
 } from '@/types/instructor'
 
 // Mutation
@@ -437,5 +438,13 @@ export const useGetLessonQuiz = (id: number, options?: Omit<UseQueryOptions<IQui
         ...options,
         queryKey: ['quiz', id],
         queryFn: () => instructorApi.getLessonQuiz(id)
+    })
+}
+
+export const useStatistic = (options?: Omit<UseQueryOptions<RevenueData>, 'queryKey' | 'queryFn'>) => {
+    return useQuery({
+        ...options,
+        queryKey: ['instructorStatistic'],
+        queryFn: instructorApi.instructorStatistic
     })
 }

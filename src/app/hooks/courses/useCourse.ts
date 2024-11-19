@@ -1,7 +1,15 @@
 import { courseApi } from '@/app/services/courses/courses'
 import { IBuyData } from '@/types'
 import { IComment, ICreateComment } from '@/types/common'
-import { CourseData, ICheckWishList, ICourse, ICourseCategory, ICourseDetail, ICourseDetailAndRating, ICourseWishList, IQuizDetail } from '@/types/course/course'
+import {
+    CourseData,
+    ICheckWishList,
+    ICourse,
+    ICourseCategory,
+    ICourseDetail,
+    ICourseWishList,
+    IQuizDetail
+} from '@/types/course/course'
 import { useMutation, useQuery, useQueryClient, UseQueryOptions } from '@tanstack/react-query'
 
 export const useCourseLeaningBySlug = (
@@ -30,9 +38,9 @@ export const useCourseDetailBySlug = (
 
 export const useCourseDetailNoLoginBySlug = (
     slug: string,
-    options?: Omit<UseQueryOptions<ICourseDetailAndRating>, 'queryKey' | 'queryFn'>
+    options?: Omit<UseQueryOptions<ICourseDetail>, 'queryKey' | 'queryFn'>
 ) => {
-    return useQuery<ICourseDetailAndRating>({
+    return useQuery<ICourseDetail>({
         ...options,
         queryKey: ['course-detail-no-login', slug],
         enabled: !!slug,

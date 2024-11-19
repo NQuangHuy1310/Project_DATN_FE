@@ -10,9 +10,7 @@ const MyCourses = () => {
         <div className="flex flex-col gap-7">
             <FilterBar placeholder="Tìm kiếm khóa học và người hướng dẫn" lever />
             <div className="flex flex-wrap gap-10">
-                {courseBought &&
-                    courseBought.user_courses.length > 0 &&
-                    courseBought.user_courses.map((item, index) => <CourseMyBought data={item} key={index} />)}
+                {courseBought && courseBought.map((item, index) => <CourseMyBought data={item} key={index} />)}
             </div>
         </div>
     )

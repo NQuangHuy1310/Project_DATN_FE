@@ -1,16 +1,16 @@
+import { IUser } from './auth'
+
 export interface IPayment {
-    average_rating: string
-    course_duration: null
-    course_id: number
-    course_name: string
-    course_thumbnail: string
+    ratings_avg_rate: string
+    id: number
+    name: string
+    thumbnail: string
     price: number
     price_sale: number
     total_lessons: number
     total_student: number
-    user_avatar: string
-    user_id: number
-    user_name: string
+    total_duration_video: number
+    user: IUser
 }
 export interface IBuyData {
     voucher_code?: string

@@ -5,7 +5,6 @@ import {
     ICourse,
     ICourseCategory,
     ICourseDetail,
-    ICourseDetailAndRating,
     ICourseWishList,
     IQuizDetail,
     IWishList
@@ -25,7 +24,7 @@ export const courseApi = {
         return axiosClient.get(courseUri.GET_DETAIL_QUIZ(slug))
     },
 
-    detailCourseNoLogin: async (slug: string): Promise<ICourseDetailAndRating> => {
+    detailCourseNoLogin: async (slug: string): Promise<ICourseDetail> => {
         return axiosClient.get(courseUri.DETAIL_COURSE_NO_LOGIN(slug))
     },
 

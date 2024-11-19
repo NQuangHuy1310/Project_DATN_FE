@@ -33,8 +33,7 @@ export interface ICourse {
     total_duration_video: number
     total_duration?: number
     user?: IUser
-    average_rating?: number
-    ratings_avg_rate?:number
+    ratings_avg_rate?: number
 }
 
 export interface ICourseToday extends ICourse {
@@ -158,6 +157,7 @@ export interface ICourseDetail extends ICourse {
     requirements: Requirement[]
     audiences: Audience[]
     modules: IModule[]
+    ratings_count: number
 }
 
 export interface Goal {
@@ -233,11 +233,4 @@ export interface ICourseWishList {
     data: ICourse[]
     per_page: number
     total: number
-}
-export interface ICourseDetailAndRating {
-    course: ICourseDetail
-    ratings: {
-        average_rating: number
-        total_reviews: number
-    }
 }

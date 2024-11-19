@@ -10,9 +10,9 @@ import { CourseLevel } from '@/components/shared/Course/CourseLevel'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import { RiMoneyDollarCircleFill } from 'react-icons/ri'
 import { formatDuration, getImagesUrl } from '@/lib'
-import { ICourseUser } from '@/types/user'
+import { ICourseMyBought } from '@/types/user'
 
-const CourseMyBought = ({ data, progressLesson }: { data: ICourseUser; progressLesson?: number }) => {
+const CourseMyBought = ({ data, progressLesson }: { data: ICourseMyBought; progressLesson?: number }) => {
     const totalTime = formatDuration((data?.total_duration_video as unknown as number) || 0)
     return (
         <Link

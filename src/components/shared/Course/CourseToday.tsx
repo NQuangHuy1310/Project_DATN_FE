@@ -42,19 +42,27 @@ const CourseToday = ({
                 {price && price != 0 ? (
                     <div className="flex items-center gap-3">
                         <div className="flex items-center gap-1">
-                            <RiMoneyDollarCircleFill className="size-4 text-orange-500" />
                             {price_sale && price_sale != 0 ? (
-                                <del>{Math.floor(price)}</del>
+                                <div className='flex items-center gap-1'>
+                                    <RiMoneyDollarCircleFill className="size-5 text-orange-500" />
+                                    <del className='font-semibold '>{Math.floor(price)}</del>
+                                </div>
                             ) : (
-                                <p>{Math.floor(price)}</p>
+                                <div className='flex items-center gap-1'>
+                                    <RiMoneyDollarCircleFill className="size-5 text-orange-500" />
+                                    <p className='text-base'>{Math.floor(price)}</p>
+                                </div>
                             )}
                         </div>
                         {price_sale && price_sale != 0 && (
-                            <p className="font-semibold text-red-600">{Math.floor(price_sale)}</p>
+                            <div className='flex items-center gap-1'>
+                                <RiMoneyDollarCircleFill className="size-5 text-orange-500" />
+                                <p className="font-semibold text-base text-red-600">{Math.floor(price_sale)}</p>
+                            </div>
                         )}
                     </div>
                 ) : (
-                    <span className="text-orange-500">Miễn phí</span>
+                    <span className="text-orange-500 text-base">Miễn phí</span>
                 )}
 
                 <div className="flex items-center gap-2">
@@ -75,12 +83,12 @@ const CourseToday = ({
                         <p className="font-medium text-black">{total_student}</p>
                     </div>
                     <div className="flex items-center gap-1.5">
-                        <IoTimeOutline className="size-4 text-darkGrey" />
-                        <p className="font-medium text-black">{total_duration_video ? totalTime : 0}</p>
-                    </div>
-                    <div className="flex items-center gap-1.5">
                         <FaRegCirclePlay className="size-4 text-darkGrey" />
                         <p className="font-medium text-black">{total_lessons}</p>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                        <IoTimeOutline className="size-4 text-darkGrey" />
+                        <p className="font-medium text-black">{total_duration_video ? totalTime : 0}</p>
                     </div>
                 </div>
             </div>

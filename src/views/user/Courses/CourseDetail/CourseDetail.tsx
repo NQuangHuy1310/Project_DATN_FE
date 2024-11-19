@@ -61,22 +61,19 @@ const CourseDetail = () => {
     const [toggleCourse, setToggleCourse] = useState<boolean>(false)
 
     const { user } = useGetUserProfile()
-    const { mutateAsync: addRating } = useCreateRating()
     const { data: courseDetail, isLoading: LoadingCourse } = useCourseDetailNoLoginBySlug(slug!)
-    const course = courseDetail?.course
-    const ratings = courseDetail?.ratings
+    const { data: isPurchased } = useCheckBuyCourse(user?.id || 0, courseDetail?.id || 0)
+    const { data: checkRating } = useCheckRatingUser(user?.id || 0, courseDetail?.id || 0)
 
-    const { data: isPurchased } = useCheckBuyCourse(user?.id || 0, course?.id || 0)
-    const { data: checkRating } = useCheckRatingUser(user?.id || 0, course?.id || 0)
-
+    const { mutateAsync: addRating } = useCreateRating()
     const { mutateAsync: registerCourse } = useRegisterCourse()
     const { mutateAsync: flowTeacher } = useFlowTeacher()
     const { mutateAsync: unFlowTeacher } = useUnFlowTeacher()
     const { mutateAsync: addWishList } = useAddWishList()
     const { mutateAsync: unWishList } = useUnWishList()
-    const { data: checkFollow } = useCheckFlowTeacher(user?.id ?? 0, course?.user?.id ?? 0)
-    const totalTime = formatDuration((course?.total_duration_video as unknown as number) || 0)
-    const { data: checkWishList } = useCheckWishList(course?.id || 0)
+    const { data: checkFollow } = useCheckFlowTeacher(user?.id ?? 0, courseDetail?.user?.id ?? 0)
+    const totalTime = formatDuration((courseDetail?.total_duration_video as unknown as number) || 0)
+    const { data: checkWishList } = useCheckWishList(courseDetail?.id || 0)
     const rating = watch('rate')
 
     const onSubmit = async (data: any) => {
@@ -86,7 +83,7 @@ const CourseDetail = () => {
             const payload = {
                 ...data,
                 id_user: user.id,
-                id_course: course?.id
+                id_course: courseDetail?.id
             }
             await addRating(payload)
             setIsOpen(false)
@@ -97,7 +94,7 @@ const CourseDetail = () => {
         if (user && courseDetail) {
             const payload: [number, number, IBuyData] = [
                 user.id,
-                course?.id ?? 0,
+                courseDetail?.id ?? 0,
                 {
                     total_coin: 0,
                     coin_discount: 0,
@@ -110,21 +107,21 @@ const CourseDetail = () => {
     }
 
     const handleFlowTeacher = async () => {
-        if (course?.user) {
-            await flowTeacher([{ following_id: course?.user?.id }])
+        if (courseDetail?.user) {
+            await flowTeacher([{ following_id: courseDetail?.user?.id }])
         }
     }
 
     const handleUnFlowTeacher = async () => {
-        if (course?.user) {
-            await unFlowTeacher([{ following_id: course?.user?.id }])
+        if (courseDetail?.user) {
+            await unFlowTeacher([{ following_id: courseDetail?.user?.id }])
         }
     }
 
     const handleAddWishList = async () => {
         setIsProcessing(true)
-        if (course?.id) {
-            await addWishList(course?.id)
+        if (courseDetail?.id) {
+            await addWishList(courseDetail?.id)
             setIsLiked((prev) => !prev)
             setIsProcessing(false)
         }
@@ -132,14 +129,14 @@ const CourseDetail = () => {
 
     const handleUnWishList = async () => {
         setIsProcessing(true)
-        if (course?.id) {
-            await unWishList(course?.id)
+        if (courseDetail?.id) {
+            await unWishList(courseDetail?.id)
             setIsLiked(false)
             setIsProcessing(false)
         }
     }
 
-    if ( LoadingCourse) return <Loading />
+    if (LoadingCourse) return <Loading />
 
     return (
         <div className="grid w-full grid-cols-12 gap-5">
@@ -149,7 +146,7 @@ const CourseDetail = () => {
                 </Link>
                 <div className="h-[300px] w-full md:h-[400px] lg:h-[500px]">
                     <video
-                        src={getImagesUrl(course?.trailer || '')}
+                        src={getImagesUrl(courseDetail?.trailer || '')}
                         title="YouTube video player"
                         className="h-full w-full rounded-lg"
                         controls
@@ -157,22 +154,22 @@ const CourseDetail = () => {
                 </div>
                 <div className="flex flex-col gap-7 px-2">
                     <div className="flex flex-col gap-5">
-                        <h4 className="text-lg font-bold md:text-xl lg:text-2xl">{course?.name}</h4>
+                        <h4 className="text-lg font-bold md:text-xl lg:text-2xl">{courseDetail?.name}</h4>
 
                         <div className="flex flex-wrap items-center justify-between gap-5">
                             <div className="flex items-center gap-5">
                                 <div className="flex items-center gap-2.5">
                                     <Avatar className="size-8">
                                         <AvatarImage
-                                            src={getImagesUrl(course?.user?.avatar || '')}
-                                            alt={course?.user?.name}
+                                            src={getImagesUrl(courseDetail?.user?.avatar || '')}
+                                            alt={courseDetail?.user?.name}
                                             className="h-full w-full object-cover"
                                         />
-                                        <AvatarFallback>{course?.user?.name?.slice(0, 2)}</AvatarFallback>
+                                        <AvatarFallback>{courseDetail?.user?.name?.slice(0, 2)}</AvatarFallback>
                                     </Avatar>
-                                    <h6 className="whitespace-nowrap md:text-base">{course?.user?.name}</h6>
+                                    <h6 className="whitespace-nowrap md:text-base">{courseDetail?.user?.name}</h6>
                                 </div>
-                                {user?.id !== course?.user?.id && (
+                                {user?.id !== courseDetail?.user?.id && (
                                     <>
                                         {checkFollow?.action === 'follow' && (
                                             <Button
@@ -198,12 +195,12 @@ const CourseDetail = () => {
                             <div className="flex items-center gap-1">
                                 <IoIosStar className="size-5 text-primary" />
                                 <span>
-                                    {Math.floor(ratings?.average_rating ?? 0)} ({ratings?.total_reviews} đánh giá)
+                                    {courseDetail?.ratings_avg_rate ?? 0} ({courseDetail?.ratings_count} đánh giá)
                                 </span>
                             </div>
 
                             <div className="block md:hidden">
-                                <CourseLevel courseLevel={course?.level || ''} />
+                                <CourseLevel courseLevel={courseDetail?.level || ''} />
                             </div>
                         </div>
                         <div className="flex items-center justify-between">
@@ -211,13 +208,13 @@ const CourseDetail = () => {
                                 <div className="flex items-center gap-1.5">
                                     <FaRegUser className="size-4 text-darkGrey" />
                                     <p className="text-xs font-medium text-black md:text-base">
-                                        {course?.total_student} học viên
+                                        {courseDetail?.total_student} học viên
                                     </p>
                                 </div>
                                 <div className="flex items-center gap-1.5">
                                     <FaRegCirclePlay className="size-4 text-darkGrey" />
                                     <p className="text-xs font-medium text-black md:text-base">
-                                        Tổng số {course?.total_lessons} bài giảng
+                                        Tổng số {courseDetail?.total_lessons} bài giảng
                                     </p>
                                 </div>
                                 <div className="flex items-center gap-1.5">
@@ -228,7 +225,7 @@ const CourseDetail = () => {
                                 </div>
                             </div>
                             <div className="hidden md:block">
-                                <CourseLevel courseLevel={course?.level ?? level.Beginner} />
+                                <CourseLevel courseLevel={courseDetail?.level ?? level.Beginner} />
                             </div>
                         </div>
                     </div>
@@ -248,17 +245,17 @@ const CourseDetail = () => {
                         <div className="p-4">
                             <TabsContent value="about">
                                 <About
-                                    goals={course?.goals ?? []}
-                                    description={course?.description ?? ''}
-                                    requirements={course?.requirements ?? []}
-                                    audiences={course?.audiences ?? []}
+                                    goals={courseDetail?.goals ?? []}
+                                    description={courseDetail?.description ?? ''}
+                                    requirements={courseDetail?.requirements ?? []}
+                                    audiences={courseDetail?.audiences ?? []}
                                 />
                             </TabsContent>
                             <TabsContent value="content">
-                                <Content modules={course?.modules ?? []} />
+                                <Content modules={courseDetail?.modules ?? []} />
                             </TabsContent>
                             <TabsContent value="review">
-                                <Reviews idDetailCourse={course?.id || 0} />
+                                <Reviews idDetailCourse={courseDetail?.id || 0} />
                             </TabsContent>
                         </div>
                     </Tabs>
@@ -269,71 +266,79 @@ const CourseDetail = () => {
                     <div className="card flex w-full max-w-full cursor-text flex-col gap-4 p-4 hover:shadow-[0px_40px_100px_0px_#0000000d] hover:transition-all lg:max-w-[360px] xl:max-w-[400px] xl:p-7 2xl:max-w-[400px]">
                         <div className="relative h-[160px] flex-shrink-0 cursor-pointer">
                             <img
-                                src={getImagesUrl(course?.thumbnail ?? '')}
-                                alt={course?.name}
+                                src={getImagesUrl(courseDetail?.thumbnail ?? '')}
+                                alt={courseDetail?.name}
                                 className="h-full w-full rounded-lg object-cover"
                             />
                             <div className="absolute bottom-2.5 left-2.5">
-                                <CourseLevel courseLevel={course?.level ?? level.Beginner} />
+                                <CourseLevel courseLevel={courseDetail?.level ?? level.Beginner} />
                             </div>
                         </div>
 
                         <div className="flex flex-col gap-4">
                             <h3 className="text-overflow cursor-pointer text-base font-bold text-black xl2:text-lg">
-                                {course?.name}
+                                {courseDetail?.name}
                             </h3>
-                            {course?.price && course?.price != 0 ? (
+                            {courseDetail?.price && courseDetail?.price != 0 ? (
                                 <div className="flex items-center gap-3">
                                     <div className="flex items-center gap-1">
-                                        <RiMoneyDollarCircleFill className="size-4 text-orange-500" />
-                                        {course?.price_sale && course?.price_sale != 0 ? (
-                                            <del>{Math.floor(course?.price)}</del>
+                                        {courseDetail?.price_sale && courseDetail?.price_sale != 0 ? (
+                                            <div className='flex items-center gap-1'>
+                                                <RiMoneyDollarCircleFill className="size-5 text-orange-500" />
+                                                <del className='font-semibold '>{Math.floor(courseDetail?.price)}</del>
+                                            </div>
                                         ) : (
-                                            <p>{Math.floor(course?.price)}</p>
+                                            <div className='flex items-center gap-1'>
+                                                <RiMoneyDollarCircleFill className="size-5 text-orange-500" />
+                                                <p className='text-base'>{Math.floor(courseDetail?.price)}</p>
+                                            </div>
                                         )}
                                     </div>
-                                    {course?.price_sale && course?.price_sale != 0 && (
-                                        <p className="font-semibold text-red-600">{Math.floor(course?.price_sale)}</p>
+                                    {courseDetail?.price_sale && courseDetail?.price_sale != 0 && (
+                                        <div className='flex items-center gap-1'>
+                                            <RiMoneyDollarCircleFill className="size-5 text-orange-500" />
+                                            <p className="font-semibold text-base text-red-600">{Math.floor(courseDetail?.price_sale)}</p>
+                                        </div>
                                     )}
                                 </div>
                             ) : (
-                                <span className="text-orange-500">Miễn phí</span>
+                                <span className="text-orange-500 text-base">Miễn phí</span>
                             )}
 
                             <div className="flex items-center gap-2">
                                 <Link to="" className="flex w-full items-center gap-2.5">
                                     <Avatar className="size-8 flex-shrink-0">
                                         <AvatarImage
-                                            src={getImagesUrl(course?.user?.avatar as string) || ''}
-                                            alt={course?.user?.name}
+                                            src={getImagesUrl(courseDetail?.user?.avatar as string) || ''}
+                                            alt={courseDetail?.user?.name}
                                         />
                                         <AvatarFallback className="flex size-8 items-center justify-center bg-slate-500/50 font-semibold">
-                                            {course?.user?.name.charAt(0)}
+                                            {courseDetail?.user?.name.charAt(0)}
                                         </AvatarFallback>
                                     </Avatar>
-                                    <p className="w-fit text-sm font-medium xl2:text-base">{course?.user?.name}</p>
+                                    <p className="w-fit text-sm font-medium xl2:text-base">{courseDetail?.user?.name}</p>
                                 </Link>
                             </div>
 
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-1.5">
                                     <FaRegUser className="size-4 text-darkGrey" />
-                                    <p className="font-medium text-black">{course?.total_student}</p>
+                                    <p className="font-medium text-black">{courseDetail?.total_student}</p>
+                                </div>
+                                <div className="flex items-center gap-1.5">
+                                    <FaRegCirclePlay className="size-4 text-darkGrey" />
+                                    <p className="font-medium text-black">{courseDetail?.total_lessons}</p>
                                 </div>
                                 <div className="flex items-center gap-1.5">
                                     <IoTimeOutline className="size-4 text-darkGrey" />
                                     <p className="font-medium text-black">
-                                        {course?.total_duration_video ? totalTime : 0}
+                                        {courseDetail?.total_duration_video ? totalTime : 0}
                                     </p>
-                                </div>
-                                <div className="flex items-center gap-1.5">
-                                    <FaRegCirclePlay className="size-4 text-darkGrey" />
-                                    <p className="font-medium text-black">{course?.total_lessons}</p>
                                 </div>
                             </div>
                         </div>
 
-                        {user?.id !== course?.id_user ? (
+                        {user?.id !== courseDetail?.id_user ? (
                             <div className="w-full">
                                 {isPurchased?.status === 'error' ? (
                                     <div className="flex w-full gap-2">
@@ -361,8 +366,8 @@ const CourseDetail = () => {
                                             </>
                                         )}
                                     </div>
-                                ) : (!course?.price && !course?.price_sale) ||
-                                    (course?.price === 0 && course?.price_sale === 0) ? (
+                                ) : (!courseDetail?.price && !courseDetail?.price_sale) ||
+                                    (courseDetail?.price === 0 && courseDetail?.price_sale === 0) ? (
                                     <Button
                                         className="block w-full rounded-md bg-primary py-2 text-center text-white"
                                         onClick={handleLearnNow}
@@ -470,32 +475,32 @@ const CourseDetail = () => {
                         <div className="card flex w-full max-w-full cursor-text flex-col gap-4 p-4 hover:shadow-[0px_40px_100px_0px_#0000000d] hover:transition-all lg:max-w-[360px] xl:max-w-[400px] xl:p-7 2xl:max-w-[400px]">
                             <div className="relative h-[160px] flex-shrink-0 cursor-pointer">
                                 <img
-                                    src={getImagesUrl(course?.thumbnail ?? '')}
-                                    alt={course?.name}
+                                    src={getImagesUrl(courseDetail?.thumbnail ?? '')}
+                                    alt={courseDetail?.name}
                                     className="h-full w-full rounded-lg object-cover"
                                 />
                                 <div className="absolute bottom-2.5 left-2.5">
-                                    <CourseLevel courseLevel={course?.level ?? level.Beginner} />
+                                    <CourseLevel courseLevel={courseDetail?.level ?? level.Beginner} />
                                 </div>
                             </div>
 
                             <div className="sticky top-0 flex flex-col gap-4">
                                 <h3 className="text-overflow cursor-pointer text-base font-bold text-black xl2:text-lg">
-                                    {course?.name}
+                                    {courseDetail?.name}
                                 </h3>
-                                {course?.price && course?.price != 0 ? (
+                                {courseDetail?.price && courseDetail?.price != 0 ? (
                                     <div className="flex items-center gap-3">
                                         <div className="flex items-center gap-1">
                                             <RiMoneyDollarCircleFill className="size-4 text-orange-500" />
-                                            {course?.price_sale && course?.price_sale != 0 ? (
-                                                <del>{Math.floor(course?.price)}</del>
+                                            {courseDetail?.price_sale && courseDetail?.price_sale != 0 ? (
+                                                <del>{Math.floor(courseDetail?.price)}</del>
                                             ) : (
-                                                <p>{Math.floor(course?.price)}</p>
+                                                <p>{Math.floor(courseDetail?.price)}</p>
                                             )}
                                         </div>
-                                        {course?.price_sale && course?.price_sale != 0 && (
+                                        {courseDetail?.price_sale && courseDetail?.price_sale != 0 && (
                                             <p className="font-semibold text-red-600">
-                                                {Math.floor(course?.price_sale)}
+                                                {Math.floor(courseDetail?.price_sale)}
                                             </p>
                                         )}
                                     </div>
@@ -507,34 +512,34 @@ const CourseDetail = () => {
                                     <Link to="" className="flex w-full items-center gap-2.5">
                                         <Avatar className="size-8 flex-shrink-0">
                                             <AvatarImage
-                                                src={getImagesUrl(course?.user?.avatar as string) || ''}
-                                                alt={course?.user?.name}
+                                                src={getImagesUrl(courseDetail?.user?.avatar as string) || ''}
+                                                alt={courseDetail?.user?.name}
                                             />
                                             <AvatarFallback className="flex size-8 items-center justify-center bg-slate-500/50 font-semibold">
-                                                {course?.user?.name.charAt(0)}
+                                                {courseDetail?.user?.name.charAt(0)}
                                             </AvatarFallback>
                                         </Avatar>
-                                        <p className="w-fit text-sm font-medium xl2:text-base">{course?.user?.name}</p>
+                                        <p className="w-fit text-sm font-medium xl2:text-base">{courseDetail?.user?.name}</p>
                                     </Link>
                                 </div>
 
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-1.5">
                                         <FaRegUser className="size-4 text-darkGrey" />
-                                        <p className="font-medium text-black">{course?.total_student}</p>
+                                        <p className="font-medium text-black">{courseDetail?.total_student}</p>
                                     </div>
                                     <div className="flex items-center gap-1.5">
                                         <IoTimeOutline className="size-4 text-darkGrey" />
                                         <p className="font-medium text-black">
-                                            {course?.total_duration_video ? totalTime : 0}
+                                            {courseDetail?.total_duration_video ? totalTime : 0}
                                         </p>
                                     </div>
                                     <div className="flex items-center gap-1.5">
                                         <FaRegCirclePlay className="size-4 text-darkGrey" />
-                                        <p className="font-medium text-black">{course?.total_lessons}</p>
+                                        <p className="font-medium text-black">{courseDetail?.total_lessons}</p>
                                     </div>
                                 </div>
-                                {user?.id !== course?.id_user ? (
+                                {user?.id !== courseDetail?.id_user ? (
                                     <div className="w-full">
                                         {isPurchased?.status === 'error' ? (
                                             <div className="flex w-full gap-2">
@@ -564,8 +569,8 @@ const CourseDetail = () => {
                                                     </>
                                                 )}
                                             </div>
-                                        ) : (!course?.price && !course?.price_sale) ||
-                                            (course?.price === 0 && course?.price_sale === 0) ? (
+                                        ) : (!courseDetail?.price && !courseDetail?.price_sale) ||
+                                            (courseDetail?.price === 0 && courseDetail?.price_sale === 0) ? (
                                             <Button
                                                 className="block w-full rounded-md bg-primary py-2 text-center text-white"
                                                 onClick={handleLearnNow}

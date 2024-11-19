@@ -2,10 +2,9 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
 import routes from '@/configs/routes'
-import { FaClock } from 'react-icons/fa'
 import { IoIosStar } from 'react-icons/io'
 import { TbCoinFilled } from 'react-icons/tb'
-import { IoArrowBackOutline } from 'react-icons/io5'
+import { IoArrowBackOutline, IoTimeOutline } from 'react-icons/io5'
 import useGetUserProfile from '@/app/hooks/accounts/useGetUser'
 
 import { toast } from 'sonner'
@@ -30,6 +29,7 @@ import {
 } from '@/components/ui/alert-dialog'
 import { IBuyData } from '@/types'
 import { RiMoneyDollarCircleFill } from 'react-icons/ri'
+import { FaRegCirclePlay } from 'react-icons/fa6'
 
 const Payment = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false)
@@ -47,7 +47,7 @@ const Payment = () => {
     const { mutateAsync: applyVoucher } = useApplyVoucher()
 
     const balance = Math.floor(transactionData?.balance ?? 0)
-    const totalTime = formatDuration((courseData?.course_duration as unknown as number) || 0)
+    const totalTime = formatDuration((courseData?.total_duration_video as unknown as number) || 0)
     const totalPrice = Math.floor(courseData?.price_sale && courseData.price_sale > 0 ? courseData.price_sale : (courseData?.price ?? 0)
     )
 
@@ -80,7 +80,7 @@ const Payment = () => {
             } else {
                 const payload: [number, number, IBuyData] = [
                     user?.id,
-                    courseData?.course_id,
+                    courseData?.id,
                     {
                         voucher_code: voucherCode,
                         total_coin: courseData.price_sale > 0 ? courseData.price_sale : courseData.price,
@@ -106,28 +106,29 @@ const Payment = () => {
                             <div className="flex flex-col gap-10 py-2 md:flex-row">
                                 <div className="max-w-[400px]">
                                     <img
-                                        src={getImagesUrl(courseData?.course_thumbnail || '')}
+                                        src={getImagesUrl(courseData?.thumbnail || '')}
                                         className="w-full rounded-md"
                                         alt=""
                                     />
                                 </div>
                                 <div className="flex flex-col gap-4">
-                                    <h3 className="text-lg font-bold md:text-2xl">{courseData?.course_name}</h3>
+                                    <h3 className="text-lg font-bold md:text-2xl">{courseData?.name}</h3>
 
                                     <div className="flex items-center gap-5">
                                         <div className="flex items-center gap-1">
                                             <IoIosStar className="size-5 text-primary" />
                                             <span className="text-[16px] font-medium">
-                                                {courseData?.average_rating}
+                                                {courseData?.ratings_avg_rate}
                                             </span>
                                         </div>
                                         <div>
-                                            <span className="text-[16px] font-medium">
+                                            <span className="flex items-center gap-1.5 text-base font-medium">
+                                                <FaRegCirclePlay className="size-5 text-darkGrey" />
                                                 {courseData?.total_lessons} bài học
                                             </span>
                                         </div>
-                                        <div className="flex items-center gap-1">
-                                            <FaClock />
+                                        <div className="flex items-center gap-1.5 text-base font-medium">
+                                            <IoTimeOutline className="size-5 text-darkGrey" />
                                             <span className="text-[16px] font-medium">{totalTime}</span>
                                         </div>
                                     </div>
@@ -135,30 +136,33 @@ const Payment = () => {
                                         <Avatar className="size-7 cursor-pointer md:size-10">
                                             <AvatarImage
                                                 className="object-cover"
-                                                src={courseData?.user_avatar}
-                                                alt={user?.name}
+                                                src={getImagesUrl(courseData?.user?.avatar || '')}
+                                                alt={courseData?.user?.name}
                                             />
                                             <AvatarFallback className="bg-slate-500/50 text-xl font-semibold text-white">
-                                                {courseData?.user_name.charAt(0)}
+                                                {courseData?.user?.name.charAt(0)}
                                             </AvatarFallback>
                                         </Avatar>
-                                        <p className="text-[16px] font-medium md:text-lg">{courseData?.user_name}</p>
+                                        <p className="text-[16px] font-medium md:text-lg">{courseData?.user?.name}</p>
                                     </div>
                                     <div className="flex items-center gap-2">
                                         <h4 className="text-[16px] font-medium">Giá: </h4>
                                         <div className="flex items-center gap-3">
                                             <div className="flex items-center gap-1">
-                                                <RiMoneyDollarCircleFill className="size-4 text-orange-500" />
                                                 {courseData?.price_sale && courseData?.price_sale != 0 ? (
-                                                    <del className="text-base">{Math.floor(courseData.price)}</del>
+                                                    <div className='flex items-center gap-1'>
+                                                        <RiMoneyDollarCircleFill className="size-5 text-orange-500" />
+                                                        <del className='font-semibold '>{Math.floor(courseData?.price)}</del>
+                                                    </div>
                                                 ) : (
                                                     <p className="text-base">{Math.floor(courseData?.price ?? 0)}</p>
                                                 )}
                                             </div>
                                             {courseData?.price_sale && courseData?.price_sale != 0 && (
-                                                <p className="text-base font-semibold text-red-600">
-                                                    {Math.floor(courseData?.price_sale)}
-                                                </p>
+                                                <div className='flex items-center gap-1'>
+                                                    <RiMoneyDollarCircleFill className="size-5 text-orange-500" />
+                                                    <p className='font-semibold '>{Math.floor(courseData?.price_sale)}</p>
+                                                </div>
                                             )}
                                         </div>
                                     </div>

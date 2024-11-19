@@ -12,6 +12,8 @@ import { useCourseCategoryHome, useCourseSaleHome } from '@/app/hooks/courses/us
 import { useGetFeaturedPosts } from '@/app/hooks/posts'
 import Post from '@/components/shared/Post'
 import Banners from '@/components/shared/Banner/Banners'
+import { formatDistanceToNow } from 'date-fns'
+import { vi } from 'date-fns/locale'
 
 const Home = () => {
     const { data: ratings, isLoading: loadingRating } = useGetRatingHome()
@@ -19,13 +21,17 @@ const Home = () => {
     const { data: course_category = [], isLoading: loadingCourseCategory } = useCourseCategoryHome()
     const { data: postFeatured } = useGetFeaturedPosts()
 
+    const formatTime = (date: any) => {
+        return formatDistanceToNow(new Date(date), { addSuffix: true, locale: vi })
+    }
+
     if (loadingRating || loadingSaleHome || loadingCourseCategory) return <Loading />
 
     return (
         <div>
             <Banners />
             <div className="mx-auto flex max-w-[1200px] items-center gap-4 px-5 py-9 lg:px-0">
-                <h2 className="text-xl font-medium">Khóa học giảm giá</h2>
+                <h3 className="text-xl font-medium md:text-2xl">Khóa học giảm giá</h3>
                 <CountdownTime hours={1} minutes={24} seconds={1} />
             </div>
             <div className="mx-auto flex max-w-[1200px] flex-wrap gap-8 px-5 lg:px-0">
@@ -33,43 +39,38 @@ const Home = () => {
                     <Course key={index} data={item} page={routes.courseDetailNoLogin} />
                 ))}
             </div>
+            <div className="mx-auto max-w-[1200px] py-10 lg:px-0">
+                <h3 className="text-xl font-medium md:text-2xl">Khóa học theo danh mục</h3>
+                <Tabs defaultValue={course_category[0]?.name} className="container-main flex-col ">
+                    <TabsList className="scrollbar-hide flex w-full items-start justify-start gap-2 overflow-x-auto">
+                        {course_category.map((category) => (
+                            <TabsTrigger
+                                key={category.id}
+                                value={category.name}
+                                className="min-w-max shrink-0 px-4 py-2 text-base"
+                            >
+                                {category.name}
+                            </TabsTrigger>
+                        ))}
+                    </TabsList>
 
-            <Tabs defaultValue={course_category[0]?.name} className="container-main flex-col py-10">
-                <TabsList className="scrollbar-hide flex w-full items-start justify-start gap-2 overflow-x-auto">
-                    {course_category.map((category) => (
-                        <TabsTrigger
-                            key={category.id}
-                            value={category.name}
-                            className="min-w-max shrink-0 px-4 py-2 text-base"
-                        >
-                            {category.name}
-                        </TabsTrigger>
-                    ))}
-                </TabsList>
-
-                <div className="p-4">
-                    {course_category.map((category) => (
-                        <TabsContent key={category.id} value={category.name} className="flex flex-col gap-5">
-                            <div className="flex flex-col gap-5">
-                                <h3 className="text-xl font-medium">{category.name}</h3>
-                                <p className="text-sm">{category.description || 'Không có mô tả'}</p>
-                            </div>
-                            <div className="flex flex-wrap gap-8">
-                                {category.courses.length > 0 ? (
-                                    category.courses.map((course, index) => {
-                                        return <Course data={course} key={index} page={routes.courseDetailNoLogin} />
-                                    })
-                                ) : (
-                                    <p>Không có khóa học nào</p>
-                                )}
-                            </div>
-                        </TabsContent>
-                    ))}
-                </div>
-            </Tabs>
+                    <div className="p-4">
+                        {course_category.map((category) => (
+                            <TabsContent key={category.id} value={category.name} className="flex flex-col gap-5">
+                                <div className="flex flex-wrap gap-8">
+                                    {
+                                        category.courses.map((course, index) => {
+                                            return <Course data={course} key={index} page={routes.courseDetailNoLogin} />
+                                        })
+                                    }
+                                </div>
+                            </TabsContent>
+                        ))}
+                    </div>
+                </Tabs>
+            </div>
             <div className="container-main pb-10">
                 <h3 className="pb-7 text-xl font-medium md:text-2xl">Bài viết nổi bật</h3>
-
                 <div className="flex flex-wrap gap-7">
                     {postFeatured?.map((post, index) => (
                         <Post
@@ -84,7 +85,6 @@ const Home = () => {
                     ))}
                 </div>
             </div>
-
             <div className="container-main pb-10">
                 <h3 className="pb-7 text-xl font-medium md:text-2xl">Đánh giá</h3>
                 <div className="flex flex-wrap gap-3">
@@ -92,14 +92,14 @@ const Home = () => {
                         <div key={index} className="w-full rounded-lg border bg-white px-7 py-3 md:max-w-[354px]">
                             <div className="flex space-x-4">
                                 <Avatar className="size-10 flex-shrink-0">
-                                    <AvatarImage src={item?.user_avatar || ''} alt={item.user_name} />
+                                    <AvatarImage src={item?.avatar || ''} alt={item.name} />
                                     <AvatarFallback className="flex size-10 items-center justify-center bg-slate-500/50 font-semibold">
-                                        {item.user_name.charAt(0)}
+                                        {item.name.charAt(0)}
                                     </AvatarFallback>
                                 </Avatar>
                                 <div className="flex flex-col gap-1">
-                                    <h4 className="font-bold text-gray-800">{item.user_name}</h4>
-                                    <p className="text-[9px] text-gray-500">{item.created_at}</p>
+                                    <h4 className="font-bold text-gray-800">{item.name}</h4>
+                                    <p className="text-[9px] text-gray-500">{formatTime(item.created_at)}</p>
 
                                     <div className="flex space-x-1">
                                         {Array(item.rate)

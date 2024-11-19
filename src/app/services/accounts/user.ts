@@ -18,7 +18,7 @@ export const userApis = {
     changePassword: async (data: IChangePassword): Promise<IResponse> => {
         return axiosClient.post(userUri.CHANGE_PASSWORD, data)
     },
-    getMyCourseBought: async (): Promise<ICourseMyBought> => {
+    getMyCourseBought: async (): Promise<ICourseMyBought[]> => {
         return axiosClient.get(userUri.GET_MY_COURSE_BOUGHT)
     },
     flowTeacher: async (teacher: Flow): Promise<Flow> => {

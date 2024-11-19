@@ -1,9 +1,8 @@
-import { IUser } from '@/types/auth'
 import { ICourse } from '@/types/course/course'
 import { ICategory } from './others'
 
-export interface ICourseMyBought extends IUser {
-    user_courses: ICourseUser[]
+export interface ICourseMyBought extends ICourse {
+    progress_percent: number
 }
 
 export interface ICourseUser extends ICourse {

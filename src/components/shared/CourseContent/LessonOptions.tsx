@@ -9,17 +9,28 @@ import LessonCoding from '@/components/shared/CourseContent/LessonCoding'
 import LessonQuizzes from '@/components/shared/CourseContent/LessonQuizzes'
 import LessonDocument from '@/components/shared/CourseContent/LessonDocument'
 import { lessonOptions } from '@/constants'
+import { toast } from 'sonner'
 
 type lessonTypes = 'video' | 'document' | 'quizzes' | 'coding'
 
 interface LessonOptionsProps {
     handleClose: (value: boolean) => void
     moduleId: number
+    isHasQuiz?: boolean
 }
 
-const LessonOptions = ({ handleClose, moduleId }: LessonOptionsProps) => {
+const LessonOptions = ({ handleClose, moduleId, isHasQuiz }: LessonOptionsProps) => {
     const [isShowLesson, setIsShowLesson] = useState(false)
     const [lessonType, setLessonType] = useState<lessonTypes | undefined>(undefined)
+
+    const handleClickButton = (type: lessonTypes) => {
+        if (isHasQuiz) {
+            toast.error('Chương học này đã có bài tập không thể thêm bài tập nữa!')
+            return
+        }
+        setLessonType(type)
+        setIsShowLesson(true)
+    }
 
     return (
         <div className="flex flex-col gap-5">
@@ -31,8 +42,7 @@ const LessonOptions = ({ handleClose, moduleId }: LessonOptionsProps) => {
                             size="sm"
                             className="flex items-center gap-2"
                             onClick={() => {
-                                setLessonType(item.type as lessonTypes)
-                                setIsShowLesson(true)
+                                handleClickButton(item.type as lessonTypes)
                             }}
                         >
                             <FiPlus />

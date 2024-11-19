@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
-import { CSS } from '@dnd-kit/utilities'
-import { useSortable } from '@dnd-kit/sortable'
 import { useState } from 'react'
+import { CSS } from '@dnd-kit/utilities'
+import { MdOutlineQuiz } from 'react-icons/md'
+import { useSortable } from '@dnd-kit/sortable'
+import { FaRegRectangleList } from 'react-icons/fa6'
 import { FaAngleDown, FaAngleUp, FaBars, FaPen, FaRegTrashAlt } from 'react-icons/fa'
 
 import { IModule } from '@/types/instructor'
@@ -59,9 +61,20 @@ const CourseModules = ({
         >
             <div className="group flex items-center justify-between">
                 <div className="flex items-center gap-5">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-3">
                         <h5 className="text-base font-semibold">Tên chương: {module.title}</h5>
-                        <h6 className="text-base font-semibold">Có: {module.total_lessons} bài học</h6>
+                        {' - '}
+                        <div className="flex items-center gap-3">
+                            <h6 className="flex items-center gap-1 text-base font-semibold">
+                                <FaRegRectangleList className="size-5 text-primary" /> {module.total_lessons} Bài học
+                            </h6>
+                            {' | '}
+                            {module.quiz && (
+                                <h6 className="flex items-center gap-1 text-base font-semibold">
+                                    <MdOutlineQuiz className="size-5 text-secondaryGreen" /> Bài tập
+                                </h6>
+                            )}
+                        </div>
                     </div>
                     <div className="hidden gap-2 group-hover:flex">
                         <Button

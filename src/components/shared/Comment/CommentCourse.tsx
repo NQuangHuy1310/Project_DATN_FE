@@ -2,7 +2,6 @@ import { Dispatch, SetStateAction, useState } from 'react'
 import ReactQuill from 'react-quill'
 
 import { getImagesUrl } from '@/lib'
-import { formats, modules } from '@/constants/quillConstants'
 import useGetUserProfile from '@/app/hooks/accounts/useGetUser'
 
 import { useGetIdParams } from '@/app/hooks/common/useCustomParams'
@@ -13,6 +12,9 @@ import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent } from '@/components/ui/sheet'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
+import { toast } from 'sonner'
+import { formatDistanceToNow } from 'date-fns'
+import { vi } from 'date-fns/locale'
 
 interface IComment {
     isOpen: boolean
@@ -33,23 +35,35 @@ const CommentCourse = ({ isOpen, setIsOpen, commentId }: IComment) => {
     const { data: comments } = useGetCommentCourse(id!)
     const { mutateAsync: addComment } = useAddCommentCourse()
     const totalComment = comments?.length
+    const formatTime = (date: any) => {
+        return formatDistanceToNow(new Date(date), { addSuffix: true, locale: vi })
+    }
 
     const handleReplyClick = (commentId: number, name: string, parentId?: number) => {
         setActiveReply(commentId)
         const rootParentId = parentId || commentId
         setParentCommentId(rootParentId)
+        const currentComment = comments?.find((comment) => comment.id === commentId)
+        const isOwnComment = currentComment?.id_user === user?.id
         setContentMap((prevContent) => ({
             ...prevContent,
-            [commentId]: `<span>@${name} </span> `
+            [commentId]: isOwnComment ? '' : `<span>@${name}&nbsp;</span>`
         }))
     }
 
     const handleAddComment = async (commentIds: number) => {
         if (user?.id) {
+            const commentContent = contentMap[commentIds] || ''
+
+            if (!commentContent.trim()) {
+                toast.error('Vui lòng nhập nội dung bình luận.')
+                return
+            }
+
             setIsPending(true)
             const payload = {
                 id_user: user?.id,
-                content: contentMap[commentIds] || '',
+                content: commentContent,
                 parent_id: parentCommentId,
                 commentable_id: commentId
             }
@@ -86,9 +100,9 @@ const CommentCourse = ({ isOpen, setIsOpen, commentId }: IComment) => {
     return (
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetContent>
-                <div className="flex gap-3 p-3">
+                <div className="flex gap-3 p-3 w-full">
                     {isOpenComment ? (
-                        <div className="flex gap-2">
+                        <div className="flex gap-2 w-full">
                             <Avatar className="size-7 cursor-pointer md:size-10">
                                 <AvatarImage
                                     className="object-cover"
@@ -102,9 +116,6 @@ const CommentCourse = ({ isOpen, setIsOpen, commentId }: IComment) => {
                             <div className="flex w-full flex-col gap-2">
                                 <div className="w-full">
                                     <ReactQuill
-                                        theme="snow"
-                                        formats={formats}
-                                        modules={modules}
                                         value={contentMap[commentId] || ''}
                                         onChange={(value) => handleContentChange(commentId, value)}
                                     />
@@ -140,12 +151,12 @@ const CommentCourse = ({ isOpen, setIsOpen, commentId }: IComment) => {
                     <h3 className="text-lg font-semibold">{totalComment} Bình luận</h3>
                     <div className="scrollbar-hide max-h-[600px] overflow-y-scroll p-4">
                         {comments && comments.length > 0 ? (
-                            <div className="flex flex-col gap-5">
+                            <div className="flex flex-col gap-5 w-full">
                                 {comments
                                     ?.filter((comment) => comment.parent_id === null)
                                     .map((comment: any) => (
-                                        <div key={comment.id} className="flex flex-col gap-3">
-                                            <div className="flex gap-2">
+                                        <div key={comment.id} className="flex flex-col gap-3 w-full">
+                                            <div className="flex gap-2 w-full">
                                                 <Avatar className="size-7 cursor-pointer md:size-10">
                                                     <AvatarImage
                                                         className="object-cover"
@@ -159,7 +170,7 @@ const CommentCourse = ({ isOpen, setIsOpen, commentId }: IComment) => {
                                                 <div className="flex flex-col">
                                                     <p className="mr-2 font-semibold text-blue-600">{comment.name}</p>
                                                     <span className="text-sm text-darkGrey">
-                                                        {new Date(comment.created_at).toLocaleDateString()}
+                                                        {formatTime(comment.created_at)}
                                                     </span>
                                                 </div>
                                             </div>
@@ -192,9 +203,6 @@ const CommentCourse = ({ isOpen, setIsOpen, commentId }: IComment) => {
                                                     <div className="flex w-full flex-col gap-2">
                                                         <div className="w-full">
                                                             <ReactQuill
-                                                                theme="snow"
-                                                                formats={formats}
-                                                                modules={modules}
                                                                 value={contentMap[comment.id] || ''}
                                                                 onChange={(value) =>
                                                                     handleContentChange(comment.id, value)
@@ -253,9 +261,7 @@ const CommentCourse = ({ isOpen, setIsOpen, commentId }: IComment) => {
                                                                                 {child.name}
                                                                             </p>
                                                                             <span className="text-sm text-darkGrey">
-                                                                                {new Date(
-                                                                                    child.created_at
-                                                                                ).toLocaleDateString()}
+                                                                                {formatTime(child.created_at)}
                                                                             </span>
                                                                         </div>
                                                                     </div>
@@ -298,9 +304,6 @@ const CommentCourse = ({ isOpen, setIsOpen, commentId }: IComment) => {
                                                                             <div className="flex w-full flex-col gap-2">
                                                                                 <div className="w-full">
                                                                                     <ReactQuill
-                                                                                        theme="snow"
-                                                                                        formats={formats}
-                                                                                        modules={modules}
                                                                                         value={
                                                                                             contentMap[child.id] || ''
                                                                                         }

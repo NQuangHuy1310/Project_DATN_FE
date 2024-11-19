@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient, UseQueryOptions } from '@tanstack/react-query'
 
 import { postsApi } from '@/app/services/posts'
-import { ICreatePost, IFeaturedPost, IPosts } from '@/types/post'
+import { ICheckSavePost, ICreatePost, IFeaturedPost, IPosts } from '@/types/post'
 import { IComment, ICreateComment } from '@/types'
 
 export const useGetPosts = (options?: Omit<UseQueryOptions<IPosts[]>, 'queryKey' | 'queryFn'>) => {
@@ -95,5 +95,41 @@ export const useGetFeaturedPosts = (options?: Omit<UseQueryOptions<IFeaturedPost
         ...options,
         queryKey: ['featuredPosts'],
         queryFn: postsApi.getFeaturedPost
+    })
+}
+
+export const useSavePosts = () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: async (slug: string) => {
+            return postsApi.savePost(slug)
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['saved-post'] })
+        }
+    })
+}
+
+export const useUnSavePosts = () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: async (slug: string) => {
+            return postsApi.unSavePost(slug)
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['saved-post'] })
+        }
+    })
+}
+
+export const useCheckSavedPost = (
+    slug: string,
+    options?: Omit<UseQueryOptions<ICheckSavePost>, 'queryKey' | 'queryFn'>
+) => {
+    return useQuery<ICheckSavePost>({
+        ...options,
+        queryKey: ['saved-post', slug],
+        enabled: !!slug,
+        queryFn: () => postsApi.checkSavedPost(slug)
     })
 }

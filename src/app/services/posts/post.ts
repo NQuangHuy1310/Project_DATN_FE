@@ -41,7 +41,19 @@ export const postsApi = {
         return axiosClient.post(postUri.ADD_COMMENT, commentData)
     },
 
-    getFeaturedPost:async (): Promise<IFeaturedPost[]> => {
+    getFeaturedPost: async (): Promise<IFeaturedPost[]> => {
         return axiosClient.get(postUri.FEATURED_POST)
+    },
+
+    savePost: async (slug: string): Promise<any> => {
+        return axiosClient.post(postUri.SAVE_POST(slug))
+    },
+
+    unSavePost: async (slug: string): Promise<any> => {
+        return axiosClient.post(postUri.UN_SAVE_POST(slug))
+    },
+
+    checkSavedPost: async (slug: string): Promise<any> => {
+        return axiosClient.get(postUri.CHECK_SAVE_POST(slug))
     }
 }

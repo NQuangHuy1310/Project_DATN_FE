@@ -6,5 +6,8 @@ export const postUri = {
     DELETE_POST: (postSlug: string) => `${POST_URL}${postSlug}`,
     COMMENT: (slug: string) => `comments/comment-post/${slug}`,
     ADD_COMMENT: 'comments/add-comment-post',
-    FEATURED_POST: 'post-outstanding'
+    FEATURED_POST: 'post-outstanding',
+    SAVE_POST: (slug: string) => `${POST_URL}save/${slug}`,
+    UN_SAVE_POST: (slug: string) => `${POST_URL}unsave/${slug}`,
+    CHECK_SAVE_POST: (slug: string) => `${POST_URL}check-saved/${slug}`
 }

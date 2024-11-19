@@ -1,4 +1,3 @@
-import { create } from 'zustand'
 import { ICategory } from '../others'
 
 export interface IPosts {
@@ -47,4 +46,8 @@ export interface IFeaturedPost {
     categories: ICategory[]
     created_at: string
     content: string
+}
+
+export interface ICheckSavePost {
+    action: 'save' | 'unsave'
 }

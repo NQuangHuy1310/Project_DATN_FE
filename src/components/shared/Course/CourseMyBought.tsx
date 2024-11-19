@@ -71,7 +71,7 @@ const CourseMyBought = ({ data, progressLesson }: { data: ICourseMyBought; progr
                     )}
                     <div className="flex items-center gap-1">
                         <IoIosStar className="size-5 text-primary" />
-                        <span className='font-medium text-base'>{Math.floor(data.ratings_avg_rate ?? 0)}</span>
+                        <span className='font-medium text-base'>{data.ratings_avg_rate ?? 0}</span>
                     </div>
                 </div>
                 {progressLesson && data.total_lessons ? (

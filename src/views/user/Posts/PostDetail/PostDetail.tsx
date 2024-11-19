@@ -5,29 +5,52 @@ import { LuDot } from 'react-icons/lu'
 import { MdEmail } from 'react-icons/md'
 import { BsThreeDots } from 'react-icons/bs'
 import { IoFlagSharp } from 'react-icons/io5'
-import { CiBookmark } from 'react-icons/ci'
-import { FaFacebookSquare, FaLink } from 'react-icons/fa'
+import { FaBookmark, FaFacebookSquare, FaLink, FaRegBookmark } from 'react-icons/fa'
 
 import Loading from '@/components/Common/Loading/Loading'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 
-
-import { useGetPost } from '@/app/hooks/posts'
+import { useCheckSavedPost, useGetPost, useSavePosts, useUnSavePosts } from '@/app/hooks/posts'
 import { useState } from 'react'
 import { GoComment } from 'react-icons/go'
 import { PiHeartStraight } from 'react-icons/pi'
 import CommentPost from '@/components/shared/Comment/CommentPost'
+import { formatDistanceToNow } from 'date-fns'
+import { vi } from 'date-fns/locale'
 
 const PostDetail = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const [totalComment, setTotalComment] = useState<number>(0)
 
     const slug = useGetSlugParams('slug')
-    const { data: postDetailData, isLoading } = useGetPost(slug!)
 
+    const { data: postDetailData, isLoading } = useGetPost(slug!)
+    const { mutateAsync: savePost } = useSavePosts()
+    const { mutateAsync: unSavePost } = useUnSavePosts()
+    const { data: checkSavedPost } = useCheckSavedPost(postDetailData?.slug || '')
+
+    const formatTime = (date: any) => {
+        return formatDistanceToNow(new Date(date), { addSuffix: true, locale: vi })
+    }
+    const calculateReadingTime = (content: string) => {
+        const wordsPerMinute = 200
+        const words = content.trim().split(/\s+/).length
+        return Math.ceil((words / wordsPerMinute))
+    }
     const handleTotalComment = (total: number) => {
         setTotalComment(total)
+    }
+
+    const handleSavePost = async () => {
+        if (postDetailData?.slug) {
+            await savePost(postDetailData?.slug)
+        }
+    }
+    const handleUnSavePost = async () => {
+        if (postDetailData?.slug) {
+            await unSavePost(postDetailData?.slug)
+        }
     }
     if (isLoading) return <Loading />
 
@@ -36,10 +59,10 @@ const PostDetail = () => {
             <div className="fixed hidden w-2/12 flex-col gap-5 md:flex">
                 <h3 className="border-b-2 py-2 text-xl font-bold">{postDetailData?.username}</h3>
                 <div className="flex items-center gap-5 font-medium text-darkGrey">
-                    <div className="flex gap-1 cursor-pointer">
+                    <div className="flex cursor-pointer gap-1">
                         <PiHeartStraight className="size-7" /> <span></span>
                     </div>
-                    <div className="flex items-center gap-1 cursor-pointer">
+                    <div className="flex cursor-pointer items-center gap-1">
                         <GoComment onClick={() => setIsOpen(true)} className="size-6" />
                         <span>{totalComment}</span>
                     </div>
@@ -63,14 +86,18 @@ const PostDetail = () => {
                             <div className="flex flex-col">
                                 <p className="text-[16px] font-semibold md:text-lg">{postDetailData?.username}</p>
                                 <div className="flex items-center gap-1 font-medium text-darkGrey">
-                                    <p>22 ngày trước </p>
+                                    <p>{formatTime(postDetailData?.published_at)}</p>
                                     <LuDot />
-                                    <p>6 phút đọc</p>
+                                    <p>{calculateReadingTime(postDetailData?.content ?? '')} phút đọc</p>
                                 </div>
                             </div>
                         </div>
                         <div className="flex items-center gap-5">
-                            <CiBookmark className="size-6" />
+                            <div className='cursor-pointer'>
+                                {checkSavedPost?.action === 'unsave' ?
+                                    <FaBookmark onClick={handleUnSavePost} className='size-6 text-primary' /> : <FaRegBookmark onClick={handleSavePost} className='size-6' />
+                                }
+                            </div>
                             <div className="mb-2">
                                 <DropdownMenu>
                                     <DropdownMenuTrigger className="mt-1">

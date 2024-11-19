@@ -62,6 +62,7 @@ import PostFeatured from '@/views/user/Posts/PostFeatured'
 import CourseWishList from '@/views/user/Courses/CourseWishList'
 import PerformanceStudents from '@/views/instructor/Performance/PerformanceStudents'
 import Certification from '@/views/user/Certification/Certification'
+import CourseHistory from '@/views/user/Courses/CourseHistory'
 
 // Routes không cần đăng nhập
 export const publicRoutes = [
@@ -87,6 +88,7 @@ export const privateRoutes = [
     { path: routes.course, layout: UserDashboardLayout, element: CourseExplore, title: 'Khám phá khoá học' },
     { path: routes.searchCourses, layout: UserDashboardLayout, element: CourseMyCourses, title: 'Tìm kiếm khoá học' },
     { path: routes.courseDetail, layout: UserDashboardLayout, element: CourseDetail, title: 'Chi tiết khoá học' },
+    { path: routes.courseHistory, layout: UserDashboardLayout, element: CourseHistory, title: 'Lịch sử học tập' },
     { path: routes.courseLeaning, layout: CourseLayout, element: CourseLearning },
 
     { path: routes.userDashboard, layout: UserDashboardLayout, element: UserDashboard, title: 'Xin chào ...' },

@@ -1,8 +1,8 @@
 import { ICategory } from '../others'
 
 export interface IPosts {
+    user: { id: number; name: string; avatar: string }
     allow_comments: number
-    avatar: string
     categories: { id: number; name: string; slug: string }[]
     content: string
     description: string
@@ -15,9 +15,16 @@ export interface IPosts {
     thumbnail: string
     title: string
     user_id: number
-    username: string
     views: number
+    created_at: string
 }
+export interface IListPost {
+    current_page: number
+    data: IPosts[]
+    total: number
+    per_page: number
+}
+
 export interface IPostTag {
     name: string
 }

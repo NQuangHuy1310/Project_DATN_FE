@@ -1,11 +1,11 @@
 import { useMutation, useQuery, useQueryClient, UseQueryOptions } from '@tanstack/react-query'
 
 import { postsApi } from '@/app/services/posts'
-import { ICheckSavePost, ICreatePost, IFeaturedPost, IPosts } from '@/types/post'
+import { ICheckSavePost, ICreatePost, IFeaturedPost, IListPost, IPosts } from '@/types/post'
 import { IComment, ICreateComment } from '@/types'
 
-export const useGetPosts = (options?: Omit<UseQueryOptions<IPosts[]>, 'queryKey' | 'queryFn'>) => {
-    return useQuery<IPosts[]>({
+export const useGetPosts = (options?: Omit<UseQueryOptions<IListPost>, 'queryKey' | 'queryFn'>) => {
+    return useQuery<IListPost>({
         ...options,
         queryKey: ['posts'],
         queryFn: postsApi.getAllPost

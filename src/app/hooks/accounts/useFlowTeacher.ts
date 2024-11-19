@@ -10,6 +10,7 @@ export const useFlowTeacher = () => {
         },
         onSuccess: async () => {
             await Promise.all([
+                queryClient.invalidateQueries({ queryKey: ['instructor-detail'] }),
                 queryClient.invalidateQueries({ queryKey: ['check-follow-teacher'] }),
                 queryClient.invalidateQueries({ queryKey: ['teacher-month'] })
             ])
@@ -25,6 +26,7 @@ export const useUnFlowTeacher = () => {
         },
         onSuccess: async () => {
             await Promise.all([
+                queryClient.invalidateQueries({ queryKey: ['instructor-detail'] }),
                 queryClient.invalidateQueries({ queryKey: ['check-follow-teacher'] }),
                 queryClient.invalidateQueries({ queryKey: ['teacher-month'] })
             ])

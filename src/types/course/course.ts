@@ -34,6 +34,7 @@ export interface ICourse {
     total_duration?: number
     user?: IUser
     average_rating?: number
+    ratings_avg_rate?:number
 }
 
 export interface ICourseToday extends ICourse {
@@ -223,7 +224,7 @@ export interface IQuizProCess {
 export interface IWishList {
     id_course: number
 }
-export interface checkWishList {
+export interface ICheckWishList {
     action: 'favorite' | 'unfavorite'
 }
 
@@ -232,4 +233,11 @@ export interface ICourseWishList {
     data: ICourse[]
     per_page: number
     total: number
+}
+export interface ICourseDetailAndRating {
+    course: ICourseDetail
+    ratings: {
+        average_rating: number
+        total_reviews: number
+    }
 }

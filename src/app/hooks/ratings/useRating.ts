@@ -27,6 +27,7 @@ export const useCreateRating = () => {
             return ratingsApi.addRatingCourse(data)
         },
         onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['course-detail-no-login'] })
             queryClient.invalidateQueries({ queryKey: ['rating-check'] })
         }
     })

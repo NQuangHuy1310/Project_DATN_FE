@@ -1,4 +1,3 @@
-import { Suspense, lazy } from 'react'
 import { IoIosStar } from 'react-icons/io'
 import { MdListAlt } from 'react-icons/md'
 
@@ -9,12 +8,12 @@ import { useGetIdParams } from '@/app/hooks/common/useCustomParams'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { useInstructorById } from '@/app/hooks/instructors/useInstructorClient'
 import { useCheckFlowTeacher, useFlowTeacher, useUnFlowTeacher } from '@/app/hooks/accounts/useFlowTeacher'
-
-// Lazy load các component
-const Course = lazy(() => import('@/components/shared/Course'))
-const Loading = lazy(() => import('@/components/Common/Loading/Loading'))
-const FilterBar = lazy(() => import('@/components/shared/FilterBar/FilterBar'))
-const NoContent = lazy(() => import('@/components/shared/NoContent/NoContent'))
+import { FaUserFriends } from 'react-icons/fa'
+import { getImagesUrl } from '@/lib'
+import { RiUserFollowFill } from 'react-icons/ri'
+import Loading from '@/components/Common/Loading/Loading'
+import NoContent from '@/components/shared/NoContent/NoContent'
+import Course from '@/components/shared/Course'
 
 const InstructorDetail = () => {
     const instructorId = useGetIdParams('id')
@@ -22,36 +21,23 @@ const InstructorDetail = () => {
     const { mutateAsync: flowTeacher } = useFlowTeacher()
     const { mutateAsync: unFlowTeacher } = useUnFlowTeacher()
     const { user } = useGetUserProfile()
-    const { data: checkFollow } = useCheckFlowTeacher(user?.id!, data?.dataTeacher.id!)
+    const { data: checkFollow } = useCheckFlowTeacher(user?.id ?? 0, data?.dataTeacher.id ?? 0)
 
     const handleFlowTeacher = async () => {
         if (data?.dataTeacher) {
-            await flowTeacher([{ following_id: data?.dataTeacher.id! }])
+            await flowTeacher([{ following_id: data?.dataTeacher.id }])
         }
     }
 
     const handleUnFlowTeacher = async () => {
         if (data?.dataTeacher) {
-            await unFlowTeacher([{ following_id: data?.dataTeacher.id! }])
+            await unFlowTeacher([{ following_id: data?.dataTeacher.id }])
         }
     }
 
-    if (isLoading) {
-        return (
-            <Suspense fallback={<div>Loading...</div>}>
-                <Loading />
-            </Suspense>
-        )
-    }
+    if (isLoading) return <Loading />
 
-    if (!data) {
-        return (
-            <Suspense fallback={<div>Loading No Content...</div>}>
-                <NoContent />
-            </Suspense>
-        )
-    }
-
+    if (!data) return <NoContent />
     return (
         <div className="flex flex-col gap-5">
             <div className="card flex flex-col-reverse gap-7 md:flex-col">
@@ -59,7 +45,7 @@ const InstructorDetail = () => {
                     <div className="flex items-center gap-5">
                         <div className="h-14 w-14">
                             <Avatar className="size-11 md:size-14">
-                                <AvatarImage src={data?.dataTeacher.avatar} alt={data?.dataTeacher.avatar} />
+                                <AvatarImage src={getImagesUrl(data?.dataTeacher.avatar)} alt={data?.dataTeacher.avatar} />
                                 <AvatarFallback className="flex items-center justify-center bg-slate-500/50 font-semibold">
                                     {data?.dataTeacher.name?.charAt(0).toUpperCase()}
                                 </AvatarFallback>
@@ -70,13 +56,21 @@ const InstructorDetail = () => {
                         </div>
                     </div>
                     <div className="flex items-center gap-2">
+                        <RiUserFollowFill className="size-5" />
+                        <span>{data?.totalFollower} người theo dõi</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <FaUserFriends className="size-5" />
+                        <span>{data?.totalStudent} học viên</span>
+                    </div>
+                    <div className="flex items-center gap-2">
                         <MdListAlt className="size-5" />
                         <span>{data?.dataTeacher.total_courses} khóa học</span>
                     </div>
                     <div className="flex items-center gap-2">
                         <IoIosStar className="size-5 text-primary" />
                         <span>
-                            {data?.dataTeacher.total_ratings} ({data?.dataTeacher.total_ratings} đánh giá)
+                            {data?.dataTeacher.average_rating} ({data?.dataTeacher.total_ratings} đánh giá)
                         </span>
                     </div>
 
@@ -97,22 +91,14 @@ const InstructorDetail = () => {
                         )}
                     </div>
                 </div>
-
-                <Suspense fallback={<div>Loading Filter Bar...</div>}>
-                    <FilterBar placeholder="Tìm kiếm người hướng dẫn" lever />
-                </Suspense>
             </div>
 
             <div className="flex flex-wrap justify-center gap-5 md:justify-start">
-                <Suspense fallback={<div>Loading Courses...</div>}>
-                    {data?.dataCourses ? (
-                        data.dataCourses.map((item, index) => <Course key={index} data={item} />)
-                    ) : (
-                        <Suspense fallback={<div>Loading No Content...</div>}>
-                            <NoContent />
-                        </Suspense>
-                    )}
-                </Suspense>
+                {data?.dataCourses ? (
+                    data.dataCourses.map((item, index) => <Course key={index} data={item} />)
+                ) : (
+                    <NoContent />
+                )}
             </div>
         </div>
     )

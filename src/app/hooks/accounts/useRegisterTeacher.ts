@@ -1,7 +1,8 @@
 import { userApis } from '@/app/services/accounts'
 import { useUserStore } from '@/app/store/userStore'
 import routes from '@/configs/routes'
-import { useMutation } from '@tanstack/react-query'
+import { HistoryLeaning, LessonHistory } from '@/types'
+import { useMutation, useQuery, UseQueryOptions } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 
 export const useRegisterTeacher = () => {
@@ -23,5 +24,17 @@ export const useRegisterTeacher = () => {
             }
             navigate(routes.instructorDashboard)
         }
+    })
+}
+
+export const useCourseHistory = (
+    count: number,
+    options?: Omit<UseQueryOptions<HistoryLeaning>, 'queryKey' | 'queryFn'>
+) => {
+    return useQuery<HistoryLeaning>({
+        ...options,
+        enabled: !!count,
+        queryKey: ['course-history', count],
+        queryFn: () => userApis.courseHistory(count)
     })
 }

@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { BiBook } from 'react-icons/bi'
 import { BsPlayBtn } from 'react-icons/bs'
+import { GrHistory } from 'react-icons/gr'
 import { LuUserCircle } from 'react-icons/lu'
 import { PiStudentBold } from 'react-icons/pi'
 import { IoWalletSharp } from 'react-icons/io5'
@@ -43,6 +44,11 @@ export const sidebarList = [
                 title: 'Khóa học yêu thích',
                 icon: FaHeart,
                 path: routes.wishList
+            },
+            {
+                title: 'Lịch sử học tập',
+                icon: GrHistory,
+                path: routes.courseHistory
             }
         ]
     },

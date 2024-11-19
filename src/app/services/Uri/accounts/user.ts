@@ -9,5 +9,6 @@ export const userUri = {
     FLOW_TEACHER: `${USER_URL}follow`,
     UN_FOLLOW_TEACHER: `${USER_URL}unfollow`,
     CHECK_FOLLOW_TEACHER: (userId: number, teacherId: number) => `${USER_URL}check-follow/${userId}/${teacherId}`,
-    REGISTER_TEACHER: `${USER_URL}register-teacher`
+    REGISTER_TEACHER: `${USER_URL}register-teacher`,
+    COURSE_HISTORY: (count: number) => `${USER_URL}check-history-learning?limit=${count}`
 }

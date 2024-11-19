@@ -58,3 +58,23 @@ export interface CertificateData {
     updated_at: string
     course: CourseCertification
 }
+
+export interface LessonHistory {
+    id: number
+    id_module: number
+    title: string
+    thumbnail: string | null
+    description: string | null
+    content_type: 'document' | 'video'
+    lessonable_type: string
+    lessonable_id: number
+    slug: string
+    position: number
+    created_at: string
+    updated_at: string
+}
+
+export interface HistoryLeaning {
+    course: LessonHistory[]
+    total_lessons: number
+}

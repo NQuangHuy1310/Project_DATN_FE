@@ -110,10 +110,6 @@ const QuizItem = ({ lesson, moduleId, canEdit }: QuizItemProps) => {
                             },
                             options: optionsArray
                         }
-
-                        // Gọi hàm tạo câu hỏi
-                        await createQuestion([lesson.id!, payload])
-
                         await createQuestion([lesson.id!, payload])
                     }
                 }

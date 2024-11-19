@@ -42,5 +42,8 @@ export const instructorUri = {
     // Question
     CREATE_QUESTION: (quizID: number) => `${INSTRUCTOR_URL}lesson/quiz/${quizID}/add-question-and-option`,
     UPDATE_QUESTION: (questionID: number) => `${INSTRUCTOR_URL}lesson/quiz/${questionID}/update-question-and-option`,
-    DELETE_QUESTION: (questionID: number) => `${INSTRUCTOR_URL}lesson/quiz/${questionID}/delete-question-and-option`
+    DELETE_QUESTION: (questionID: number) => `${INSTRUCTOR_URL}lesson/quiz/${questionID}/delete-question-and-option`,
+
+    // Statistic
+    STATISTIC: `${INSTRUCTOR_URL}statistic`
 }

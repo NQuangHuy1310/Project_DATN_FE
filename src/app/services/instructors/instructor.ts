@@ -138,5 +138,10 @@ export const instructorApi = {
     },
     deleteQuestion: async (questionId: number): Promise<any> => {
         return axiosClient.delete(instructorUri.DELETE_QUESTION(questionId))
+    },
+
+    // Statistic
+    instructorStatistic: async (): Promise<any> => {
+        return axiosClient.get(instructorUri.STATISTIC)
     }
 }

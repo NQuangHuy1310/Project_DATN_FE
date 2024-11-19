@@ -12,7 +12,6 @@ import useFormatTime from '@/app/hooks/common/useFomatTime'
 import { CourseLevel } from '@/components/shared/Course/CourseLevel'
 import { getImagesUrl } from '@/lib'
 import { useGetSlugParams } from '@/app/hooks/common/useCustomParams'
-import { certificationApis } from '@/app/services/certificates/certificates'
 import { useGetCertification } from '@/app/hooks/others'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
@@ -21,9 +20,13 @@ import {
     DropdownMenuGroup,
     DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
+import { backendUrl } from '@/configs/baseUrl'
+import useGetUserProfile from '@/app/hooks/accounts/useGetUser'
 
 const Certification = () => {
     const code = useGetSlugParams('code')
+
+    const { user } = useGetUserProfile()
 
     const { data: detailCertification, isLoading } = useGetCertification(code!)
 
@@ -32,9 +35,24 @@ const Certification = () => {
     if (isLoading) return <Loading />
 
     const handleDownload = async (type: string) => {
-        certificationApis.getCertificationImage(code!, type)
+        const token = localStorage.getItem('access_token')
+        fetch(`${backendUrl}certificates/${code}/download-certificate?type=${type}`, {
+            headers: {
+                'Content-Type': `application/${type}`,
+                Authorization: `Bearer ${token}`
+            }
+        })
+            .then((res) => res.blob())
+            .then((data) => {
+                const url = window.URL.createObjectURL(data)
+                const a = document.createElement('a')
+                a.href = url
+                a.download = `download-file.${type}`
+                document.body.appendChild(a)
+                a.click()
+                document.body.removeChild(a)
+            })
     }
-
     return (
         <div className="flex w-full gap-8">
             <img src={image} className="w-full !max-w-[60vw]" alt="" />
@@ -45,14 +63,14 @@ const Certification = () => {
                         <Avatar className="size-8 flex-shrink-0">
                             <AvatarImage
                                 className="rounded-full"
-                                src={getImagesUrl(detailCertification?.user?.avatar || '')}
-                                alt={detailCertification?.user.name}
+                                src={getImagesUrl(user?.avatar || '')}
+                                alt={user?.name}
                             />
                             <AvatarFallback className="flex size-8 items-center justify-center rounded-full bg-slate-500/50 font-semibold">
-                                {detailCertification?.user.name.charAt(0)}
+                                {user?.name.charAt(0)}
                             </AvatarFallback>
                         </Avatar>
-                        <p className="flex-1 text-base">{detailCertification?.user.name}</p>
+                        <p className="flex-1 text-base">{user?.name}</p>
                     </div>
                 </div>
                 <Link
@@ -96,18 +114,18 @@ const Certification = () => {
                         )}
 
                         <div className="flex items-center justify-between">
-                            {detailCertification?.user && (
+                            {detailCertification?.course?.user && (
                                 <div className="flex w-fit items-center gap-2">
                                     <Avatar className="size-8 flex-shrink-0">
                                         <AvatarImage
-                                            src={getImagesUrl(detailCertification?.user?.avatar || '')}
-                                            alt={detailCertification?.user.name}
+                                            src={getImagesUrl(detailCertification?.course?.user?.avatar || '')}
+                                            alt={detailCertification?.course?.user.name}
                                         />
                                         <AvatarFallback className="flex size-8 items-center justify-center rounded-full bg-slate-500/50 font-semibold">
-                                            {detailCertification?.user.name.charAt(0)}
+                                            {detailCertification?.course?.user.name.charAt(0)}
                                         </AvatarFallback>
                                     </Avatar>
-                                    <p className="flex-1">{detailCertification?.user.name}</p>
+                                    <p className="flex-1">{detailCertification?.course?.user.name}</p>
                                 </div>
                             )}
                             <div className="flex items-center gap-1">

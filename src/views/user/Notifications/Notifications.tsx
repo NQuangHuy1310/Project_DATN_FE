@@ -1,8 +1,10 @@
 import NotificationMessage from '@/components/shared/NotificationMessage'
-import { useGetNotification } from '@/app/hooks/notifications/notifications'
+import { useGetAllAndUnRead, useGetNotification } from '@/app/hooks/notifications/notifications'
+import NoContent from '@/components/shared/NoContent/NoContent'
 
 const Notifications = () => {
-    const { data: dataNotification } = useGetNotification()
+    const { data: totalNotification } = useGetAllAndUnRead()
+    const { data: dataNotification } = useGetNotification(totalNotification?.allNotifications!)
 
     return (
         <div className="card w-full">
@@ -12,9 +14,11 @@ const Notifications = () => {
                     <p className="cursor-pointer text-darkGrey">Đánh dấu đã đọc</p>
                 </div>
                 <div className="flex flex-col gap-3">
-                    {dataNotification &&
-                        dataNotification.length > 0 &&
-                        dataNotification?.map((item, index) => <NotificationMessage key={index} {...item} />)}
+                    {dataNotification && dataNotification.length > 0 ? (
+                        dataNotification?.map((item, index) => <NotificationMessage key={index} {...item} />)
+                    ) : (
+                        <NoContent />
+                    )}
                 </div>
             </div>
         </div>

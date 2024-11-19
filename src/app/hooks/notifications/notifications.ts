@@ -3,12 +3,13 @@ import { notificationApi } from '@/app/services/notifications'
 import { CountNotification, Notification } from '@/types'
 
 export const useGetNotification = (
-    count: number = 10,
+    count: number,
     options?: Omit<UseQueryOptions<Notification[]>, 'queryKey' | 'queryFn'>
 ) => {
     return useQuery({
         ...options,
         queryKey: ['notifications', count],
+        enabled: !!count,
         queryFn: () => notificationApi.getNotifications(count)
     })
 }
@@ -41,11 +42,14 @@ export const useDeleteNotification = () => {
     const queryClient = useQueryClient()
 
     return useMutation({
-        mutationFn: async (notificationID: number) => {
+        mutationFn: async (notificationID: string) => {
             return notificationApi.deleteNotification(notificationID)
         },
         onSuccess: async () => {
-            await queryClient.invalidateQueries({ queryKey: ['notifications'] })
+            await Promise.all([
+                queryClient.invalidateQueries({ queryKey: ['getAllAndUnRead'] }),
+                queryClient.invalidateQueries({ queryKey: ['notifications'] })
+            ])
         }
     })
 }

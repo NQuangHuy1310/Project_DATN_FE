@@ -1,13 +1,35 @@
-import Banner from '@/assets/homeBanner.png'
-import rewarded from '@/assets/prop-get-rewarded-v3.png'
-import inspire from '@/assets/prop-inspire-v3.png'
-import teacher from '@/assets/prop-teach-v3.png'
-import { Button } from '@/components/ui/button'
-import routes from '@/configs/routes'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+import routes from '@/configs/routes'
+import Banner from '@/assets/homeBanner.png'
+import inspire from '@/assets/prop-inspire-v3.png'
+import teacher from '@/assets/prop-teach-v3.png'
+import rewarded from '@/assets/prop-get-rewarded-v3.png'
+import { Button } from '@/components/ui/button'
+import useGetUserProfile from '@/app/hooks/accounts/useGetUser'
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle
+} from '@/components/ui/alert-dialog'
+
 const InstructorRegis = () => {
+    const [checkProfile, setCheckProfile] = useState<boolean>(false)
+    const { profile } = useGetUserProfile()
     const navigate = useNavigate()
+    const handleCheckProfile = () => {
+        if (!profile) {
+            setCheckProfile(true)
+        } else {
+            navigate(routes.instructorRegisterQuestion)
+        }
+    }
     return (
         <>
             <div className="mx-auto flex max-w-5xl items-center justify-between">
@@ -16,7 +38,7 @@ const InstructorRegis = () => {
                         <h2 className="text-3xl font-semibold">Hãy đến dạy cùng chúng tôi</h2>
                         <p>Trở thành 1 người hướng dẫn và thay đổi cuộc sống của chính bạn</p>
                     </div>
-                    <Button onClick={() => navigate(routes.instructorRegisterQuestion)} className="w-fit">
+                    <Button onClick={handleCheckProfile} className="w-fit">
                         Đăng ký ngay
                     </Button>
                 </div>
@@ -44,6 +66,20 @@ const InstructorRegis = () => {
                     <p>Mở rộng mạng lưới chuyên môn, xây dựng chuyên môn và kiếm tiền từ mỗi lần trả phí.</p>
                 </div>
             </div>
+            <AlertDialog open={checkProfile} onOpenChange={() => setCheckProfile(false)}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Thông tin của bạn chưa đầy đủ</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            Vui lòng cập nhật đẩy đủ thông tin trước khi đăng kí trở thành giảng viên của chúng tôi
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>Hủy</AlertDialogCancel>
+                        <AlertDialogAction onClick={() => navigate(routes.accountProfile)}>Cập nhật</AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </>
     )
 }

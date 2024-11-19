@@ -44,7 +44,7 @@ const Teacher = ({ name, avatar, total_courses, total_ratings, id, average_ratin
                 <div className="flex items-center gap-1">
                     <IoIosStar className="size-4 text-primary md:size-5" />
                     <p className="text-xs font-medium md:text-sm">
-                        {average_rating || 0} ({total_ratings} Review)
+                        {average_rating || 0} ({total_ratings} đánh giá)
                     </p>
                 </div>
             </div>

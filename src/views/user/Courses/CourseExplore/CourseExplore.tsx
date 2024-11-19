@@ -1,6 +1,5 @@
 import Teacher from '@/components/shared/Teacher'
 import FilterBar from '@/components/shared/FilterBar/FilterBar'
-import { mockTeachers } from '@/constants/mockData'
 import { useCoursePopulate } from '@/app/hooks/courses/useCourse'
 import Loading from '@/components/Common/Loading/Loading'
 import Course from '@/components/shared/Course'

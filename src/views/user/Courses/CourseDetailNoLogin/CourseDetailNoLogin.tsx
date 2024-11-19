@@ -32,9 +32,10 @@ const CourseDetailNoLogin = () => {
     const [toggleCourse, setToggleCourse] = useState<boolean>(false)
 
     const { data: courseDetail, isLoading } = useCourseDetailNoLoginBySlug(slug!)
-
+    const course = courseDetail?.course
+    const ratings = courseDetail?.ratings
     const handleToggleCourse = () => setToggleCourse(!toggleCourse)
-    const totalTime = formatDuration((courseDetail?.course?.total_duration_video as unknown as number) || 0)
+    const totalTime = formatDuration((course?.total_duration_video as unknown as number) || 0)
 
     if (isLoading) return <Loading />
 
@@ -52,7 +53,7 @@ const CourseDetailNoLogin = () => {
                         </BreadcrumbItem>
                         <BreadcrumbSeparator />
                         <BreadcrumbItem>
-                            <BreadcrumbLink href="">{courseDetail?.course?.name}</BreadcrumbLink>
+                            <BreadcrumbLink href="">{course?.name}</BreadcrumbLink>
                         </BreadcrumbItem>
                     </BreadcrumbList>
                 </Breadcrumb>
@@ -60,7 +61,7 @@ const CourseDetailNoLogin = () => {
                     <div className="card col-span-12 flex flex-col gap-5 lg:col-span-8">
                         <div className="h-[300px] w-full md:h-[400px] lg:h-[440px]">
                             <video
-                                src={getImagesUrl(courseDetail?.course?.trailer || '')}
+                                src={getImagesUrl(course?.trailer || '')}
                                 title="YouTube video player"
                                 className="h-full w-full rounded-lg"
                                 controls
@@ -68,20 +69,20 @@ const CourseDetailNoLogin = () => {
                         </div>
                         <div className="flex flex-col gap-7 px-2">
                             <div className="flex flex-col gap-5">
-                                <h4 className="text-lg font-bold md:text-xl lg:text-2xl">{courseDetail?.course?.name}</h4>
+                                <h4 className="text-lg font-bold md:text-xl lg:text-2xl">{course?.name}</h4>
 
                                 <div className="flex flex-wrap items-center justify-between gap-5">
                                     <div className="flex gap-5">
                                         <div className="flex items-center gap-2.5">
                                             <Avatar className="size-8">
                                                 <AvatarImage
-                                                    src={getImagesUrl(courseDetail?.course?.user?.avatar || '')}
-                                                    alt={courseDetail?.course?.user?.name}
+                                                    src={getImagesUrl(course?.user?.avatar || '')}
+                                                    alt={course?.user?.name}
                                                     className="h-full w-full object-cover"
                                                 />
-                                                <AvatarFallback>{courseDetail?.course?.user?.name?.slice(0, 2)}</AvatarFallback>
+                                                <AvatarFallback>{course?.user?.name?.slice(0, 2)}</AvatarFallback>
                                             </Avatar>
-                                            <h6 className="md:text-base">{courseDetail?.course?.user?.name}</h6>
+                                            <h6 className="md:text-base">{course?.user?.name}</h6>
                                         </div>
                                         <Button
                                             className="bg-transparent text-primary hover:text-primary/80"
@@ -93,11 +94,11 @@ const CourseDetailNoLogin = () => {
                                     </div>
                                     <div className="flex items-center gap-1">
                                         <IoIosStar className="size-5 text-primary" />
-                                        <span>{Math.floor(courseDetail?.ratings?.average_rating)} ({courseDetail?.ratings?.total_reviews} đánh giá)</span>
+                                        <span>{Math.floor(ratings?.average_rating ?? 0)} ({ratings?.total_reviews} đánh giá)</span>
                                     </div>
 
                                     <div className="block md:hidden">
-                                        <CourseLevel courseLevel={courseDetail?.course?.level || ''} />
+                                        <CourseLevel courseLevel={course?.level || ''} />
                                     </div>
                                 </div>
 
@@ -106,13 +107,13 @@ const CourseDetailNoLogin = () => {
                                         <div className="flex items-center gap-1.5">
                                             <FaRegUser className="size-4 text-darkGrey" />
                                             <p className="text-xs font-medium text-black md:text-base">
-                                                {courseDetail?.course?.total_student} học sinh
+                                                {course?.total_student} học sinh
                                             </p>
                                         </div>
                                         <div className="flex items-center gap-1.5">
                                             <FaRegCirclePlay className="size-4 text-darkGrey" />
                                             <p className="text-xs font-medium text-black md:text-base">
-                                                Tổng số {courseDetail?.course?.total_lessons} bài giảng
+                                                Tổng số {course?.total_lessons} bài giảng
                                             </p>
                                         </div>
                                         <div className="flex items-center gap-1.5">
@@ -145,14 +146,14 @@ const CourseDetailNoLogin = () => {
                                 <div className="p-4">
                                     <TabsContent value="about">
                                         <About
-                                            goals={courseDetail?.course?.goals ?? []}
-                                            description={courseDetail?.course?.description ?? ''}
-                                            requirements={courseDetail?.course?.requirements ?? []}
-                                            audiences={courseDetail?.course?.audiences ?? []}
+                                            goals={course?.goals ?? []}
+                                            description={course?.description ?? ''}
+                                            requirements={course?.requirements ?? []}
+                                            audiences={course?.audiences ?? []}
                                         />
                                     </TabsContent>
                                     <TabsContent value="assignment">
-                                        <Content modules={courseDetail?.course?.modules ?? []} />
+                                        <Content modules={course?.modules ?? []} />
                                     </TabsContent>
                                     <TabsContent value="review">
                                         <Reviews />
@@ -166,20 +167,20 @@ const CourseDetailNoLogin = () => {
                         <div className="hidden w-full flex-shrink-0 transition-transform duration-500 lg:block">
                             {courseDetail && (
                                 <CourseToday
-                                    id={courseDetail?.course?.id!}
-                                    total_student={courseDetail?.course?.total_student}
-                                    lessons_count={courseDetail?.course?.lessons_count}
-                                    total_lessons={courseDetail?.course?.total_lessons}
-                                    total_duration_video={courseDetail?.course?.total_duration_video}
-                                    price_sale={courseDetail?.course?.price_sale || 0}
-                                    name={courseDetail?.course?.name || ''}
-                                    module={courseDetail?.course?.modules || []}
-                                    slug={courseDetail?.course?.slug || ''}
-                                    user={courseDetail?.course?.user!}
-                                    thumbnail={courseDetail?.course?.thumbnail || ''}
-                                    trailer={courseDetail?.course?.trailer}
-                                    price={courseDetail?.course?.price || 0}
-                                    level={courseDetail?.course?.level || ''}
+                                    id={course?.id ?? 0}
+                                    total_student={course?.total_student ?? 0}
+                                    lessons_count={course?.lessons_count ?? 0}
+                                    total_lessons={course?.total_lessons ?? 0}
+                                    total_duration_video={course?.total_duration_video ?? 0}
+                                    price_sale={course?.price_sale || 0}
+                                    name={course?.name || ''}
+                                    module={course?.modules || []}
+                                    slug={course?.slug || ''}
+                                    user={course?.user}
+                                    thumbnail={course?.thumbnail || ''}
+                                    trailer={course?.trailer}
+                                    price={course?.price || 0}
+                                    level={course?.level || ''}
                                     page={routes.courseDetailNoLogin || routes.courseDetail}
                                 />
                             )}
@@ -197,20 +198,20 @@ const CourseDetailNoLogin = () => {
                         >
                             {courseDetail && (
                                 <CourseToday
-                                    id={courseDetail?.course?.id}
-                                    total_student={courseDetail?.course?.total_student}
-                                    lessons_count={courseDetail?.course?.lessons_count}
-                                    total_lessons={courseDetail?.course?.total_lessons}
-                                    total_duration_video={courseDetail?.course?.total_duration_video}
-                                    price_sale={courseDetail?.course?.price_sale || 0}
-                                    name={courseDetail?.course?.name || ''}
-                                    module={courseDetail?.course?.modules || []}
-                                    slug={courseDetail?.course?.slug || ''}
-                                    user={courseDetail?.course?.user!}
-                                    thumbnail={courseDetail?.course?.thumbnail || ''}
-                                    trailer={courseDetail?.course?.trailer}
-                                    price={courseDetail?.course?.price || 0}
-                                    level={courseDetail?.course?.level || ''}
+                                    id={course?.id ?? 0}
+                                    total_student={course?.total_student ?? 0}
+                                    lessons_count={course?.lessons_count}
+                                    total_lessons={course?.total_lessons ?? 0}
+                                    total_duration_video={course?.total_duration_video ?? 0}
+                                    price_sale={course?.price_sale || 0}
+                                    name={course?.name || ''}
+                                    module={course?.modules || []}
+                                    slug={course?.slug || ''}
+                                    user={course?.user}
+                                    thumbnail={course?.thumbnail || ''}
+                                    trailer={course?.trailer}
+                                    price={course?.price || 0}
+                                    level={course?.level || ''}
                                     page={routes.courseDetailNoLogin || routes.courseDetail}
                                 />
                             )}

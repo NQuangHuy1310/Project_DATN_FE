@@ -20,4 +20,6 @@ export interface ITeacherAll {
 export interface ITeacherDetail {
     dataTeacher: ITeacher
     dataCourses: ICourse[]
+    totalFollower: number
+    totalStudent: number
 }

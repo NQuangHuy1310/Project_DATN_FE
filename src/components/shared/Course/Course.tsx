@@ -10,11 +10,11 @@ import { CourseLevel } from '@/components/shared/Course/CourseLevel'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import { ICourse } from '@/types/course/course'
 import { RiMoneyDollarCircleFill } from 'react-icons/ri'
-import { getImagesUrl } from '@/lib'
-import useFormatTime from '@/app/hooks/common/useFomatTime'
+import { formatDuration, getImagesUrl } from '@/lib'
 import routes from '@/configs/routes'
 
 const Course = ({ data, progressLesson, page }: { data: ICourse; progressLesson?: number; page?: string }) => {
+    const totalTime = formatDuration((data?.total_duration_video as unknown as number) || 0)
     return (
         <Link
             to={page == routes.courseDetailNoLogin ? `/course/${data.slug}` : `/courses/${data.slug}`}
@@ -35,19 +35,27 @@ const Course = ({ data, progressLesson, page }: { data: ICourse; progressLesson?
                 {data.price && data.price != 0 ? (
                     <div className="flex items-center gap-3">
                         <div className="flex items-center gap-1">
-                            <RiMoneyDollarCircleFill className="size-4 text-orange-500" />
                             {data.price_sale && data.price_sale != 0 ? (
-                                <del>{Math.floor(data.price)}</del>
+                                <div className='flex items-center gap-1'>
+                                    <RiMoneyDollarCircleFill className="size-5 text-orange-500" />
+                                    <del className='font-semibold '>{Math.floor(data.price)}</del>
+                                </div>
                             ) : (
-                                <p>{Math.floor(data.price)}</p>
+                                <div className='flex items-center gap-1'>
+                                    <RiMoneyDollarCircleFill className="size-5 text-orange-500" />
+                                    <p className='text-base'>{Math.floor(data.price)}</p>
+                                </div>
                             )}
                         </div>
                         {data.price_sale && data.price_sale != 0 && (
-                            <p className="font-semibold text-red-600">{Math.floor(data.price_sale)}</p>
+                            <div className='flex items-center gap-1'>
+                                <RiMoneyDollarCircleFill className="size-5 text-orange-500" />
+                                <p className="font-semibold text-base text-red-600">{Math.floor(data.price_sale)}</p>
+                            </div>
                         )}
                     </div>
                 ) : (
-                    <span className="text-orange-500">Miễn phí</span>
+                    <span className="text-orange-500 text-base">Miễn phí</span>
                 )}
 
                 <div className="flex items-center justify-between">
@@ -64,7 +72,7 @@ const Course = ({ data, progressLesson, page }: { data: ICourse; progressLesson?
                     )}
                     <div className="flex items-center gap-1">
                         <IoIosStar className="size-5 text-primary" />
-                        <span>5</span>
+                        <span className='font-medium text-base'>{Math.floor(data.ratings_avg_rate ?? 0)}</span>
                     </div>
                 </div>
                 {progressLesson && data.total_lessons ? (
@@ -76,16 +84,16 @@ const Course = ({ data, progressLesson, page }: { data: ICourse; progressLesson?
                 ) : (
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-1.5">
-                            <FaRegUser className="size-4 text-darkGrey" />
+                            <FaRegUser className="size-5 text-darkGrey" />
                             <p className="font-medium text-black">{data.total_student}</p>
                         </div>
                         <div className="flex items-center gap-1.5">
-                            <FaRegCirclePlay className="size-4 text-darkGrey" />
+                            <FaRegCirclePlay className="size-5 text-darkGrey" />
                             <p className="font-medium text-black">{data.total_lessons}</p>
                         </div>
                         <div className="flex items-center gap-1.5">
-                            <IoTimeOutline className="size-4 text-darkGrey" />
-                            <p className="font-medium text-black">{useFormatTime(data.total_duration_video)}</p>
+                            <IoTimeOutline className="size-5 text-darkGrey" />
+                            <p className="font-medium text-black">{totalTime}</p>
                         </div>
                     </div>
                 )}

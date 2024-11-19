@@ -40,7 +40,7 @@ const Dashboard = () => {
                                         id={item.id}
                                         name={item.name}
                                         avatar={item.avatar!}
-                                        average_rating={item.average_rating}
+                                        ratings_avg_rate={item.ratings_avg_rate}
                                         follow={item.follow}
                                         total_courses={item.total_courses}
                                         total_ratings={item.total_ratings}

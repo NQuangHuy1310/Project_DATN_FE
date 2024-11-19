@@ -41,8 +41,11 @@ export const useUpdateLessonProCess = () => {
         mutationFn: async ([lessonId, lessonData]) => {
             return lessonApi.lessonProcessLeaning(lessonId, lessonData)
         },
-        onSuccess() {
-            queryClient.invalidateQueries({ queryKey: ['lesson-process-leaning'] })
+        onSuccess: async () => {
+            await Promise.all([
+                queryClient.invalidateQueries({ queryKey: ['lesson-process-leaning'] }),
+                queryClient.invalidateQueries({ queryKey: ['course-my-bought'] })
+            ])
         }
     })
 }

@@ -82,7 +82,7 @@ const CourseLessons = ({ id, lessons, quiz, isShowContent, canEdit }: CourseModu
                         {isShowContent && quiz && <QuizItem lesson={quiz} moduleId={id} canEdit={canEdit} />}
 
                         {/* Hiển thị LessonOptions nếu đang thêm mới */}
-                        {isAddNew && <LessonOptions handleClose={setIsAddNew} moduleId={id} />}
+                        {isAddNew && <LessonOptions handleClose={setIsAddNew} moduleId={id} isHasQuiz={!!quiz} />}
 
                         {/* Nút thêm mục mới */}
                         {!isAddNew && (

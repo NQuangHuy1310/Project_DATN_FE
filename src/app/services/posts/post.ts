@@ -2,10 +2,10 @@ import { postUri } from '@/app/services/Uri/posts'
 import axiosClient from '@/configs/axiosClient'
 import { IComment, ICreateComment } from '@/types'
 
-import { ICreatePost, IFeaturedPost, IPosts } from '@/types/post'
+import { ICreatePost, IFeaturedPost, IListPost, IPosts } from '@/types/post'
 
 export const postsApi = {
-    getAllPost: async (): Promise<IPosts[]> => {
+    getAllPost: async (): Promise<IListPost> => {
         return axiosClient.get(postUri.POST)
     },
 

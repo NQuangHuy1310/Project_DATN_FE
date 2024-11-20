@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 
-import { IoIosStar } from 'react-icons/io'
+import { IoMdStar } from 'react-icons/io'
 import { FaRegUser } from 'react-icons/fa'
 import { IoTimeOutline } from 'react-icons/io5'
 import { FaRegCirclePlay } from 'react-icons/fa6'
@@ -15,6 +15,11 @@ import routes from '@/configs/routes'
 
 const Course = ({ data, progressLesson, page }: { data: ICourse; progressLesson?: number; page?: string }) => {
     const totalTime = formatDuration((data?.total_duration_video as unknown as number) || 0)
+    const stars = [...Array(5)].map((_, index) => {
+        const fullStar = index < Math.floor(data.ratings_avg_rate!)
+        const halfStar = index === Math.floor(data.ratings_avg_rate!) && data.ratings_avg_rate! % 1 !== 0
+        return { fullStar, halfStar }
+    })
     return (
         <Link
             to={page == routes.courseDetailNoLogin ? `/course/${data.slug}` : `/courses/${data.slug}`}
@@ -70,10 +75,29 @@ const Course = ({ data, progressLesson, page }: { data: ICourse; progressLesson?
                             <p className="flex-1">{data.user.name}</p>
                         </div>
                     )}
-                    <div className="flex items-center gap-1">
-                        <IoIosStar className="size-5 text-primary" />
-                        <span className='font-medium text-base'>{data.ratings_avg_rate ?? 0}</span>
-                    </div>
+
+                </div>
+                <div className="flex items-center gap-1">
+                    <span className="ml-1 font-semibold">
+                        {data.ratings_avg_rate! % 1 === 0
+                            ? Math.floor(data.ratings_avg_rate!)
+                            : data.ratings_avg_rate!.toFixed(1)
+                        }
+                    </span>
+
+                    {stars.map((star, starIndex) => (
+                        <div key={starIndex} className="relative">
+                            <IoMdStar className="size-4 text-gray-300" />
+                            {star.fullStar && <IoMdStar className="absolute left-0 top-0 size-4 text-primary" />}
+                            {star.halfStar && (
+                                <IoMdStar
+                                    className="absolute left-0 top-0 size-4 text-primary"
+                                    style={{ clipPath: 'inset(0 50% 0 0)' }}
+                                />
+                            )}
+                        </div>
+                    ))}
+                    <span className="ml-1 text-darkGrey font-medium">({data.ratings_count} đánh giá)</span>
                 </div>
                 {progressLesson && data.total_lessons ? (
                     <CourseProgress

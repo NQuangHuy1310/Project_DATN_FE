@@ -6,7 +6,7 @@ export interface ITeacher {
     total_courses: number
     total_ratings: number
     total_comments?: number
-    average_rating: number
+    ratings_avg_rate: number
     follow?: boolean
 }
 

@@ -34,6 +34,7 @@ export interface ICourse {
     total_duration?: number
     user?: IUser
     ratings_avg_rate?: number
+    ratings_count: number
 }
 
 export interface ICourseToday extends ICourse {

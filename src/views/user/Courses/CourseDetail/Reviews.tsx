@@ -5,19 +5,22 @@ import { useGetRatingForCourse } from '@/app/hooks/ratings/useRating'
 import Loading from '@/components/Common/Loading/Loading'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { getImagesUrl } from '@/lib'
-import useGetUserProfile from '@/app/hooks/accounts/useGetUser'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { BsThreeDotsVertical } from 'react-icons/bs'
 import { BiDislike, BiLike } from 'react-icons/bi'
+import { formatDistanceToNow } from 'date-fns'
+import { vi } from 'date-fns/locale'
 
 interface IRating {
     idDetailCourse?: number
 }
 
 const Reviews = ({ idDetailCourse }: IRating) => {
-    const { user } = useGetUserProfile()
     const { data: ratingData, isLoading } = useGetRatingForCourse(idDetailCourse ?? 0)
+    const formatTime = (date: any) => {
+        return formatDistanceToNow(new Date(date), { addSuffix: true, locale: vi })
+    }
     if (isLoading) return <Loading />
 
     return (
@@ -31,14 +34,14 @@ const Reviews = ({ idDetailCourse }: IRating) => {
                                     <div className="flex items-center gap-2.5">
                                         <Avatar className="size-10">
                                             <AvatarImage
-                                                src={getImagesUrl(user?.avatar || '')}
-                                                alt={user?.name}
+                                                src={getImagesUrl(rating?.avatar || '')}
+                                                alt={rating?.name}
                                                 className="h-full w-full object-cover"
                                             />
-                                            <AvatarFallback>{user?.name.charAt(0)}</AvatarFallback>
+                                            <AvatarFallback>{rating?.name.charAt(0)}</AvatarFallback>
                                         </Avatar>
                                         <div className="flex flex-col gap-1">
-                                            <h6 className="md:text-base">{user?.name}</h6>
+                                            <h6 className="md:text-base">{rating?.name}</h6>
                                             <div className="flex gap-1">
                                                 {[...Array(5)].map((_, starIndex) => (
                                                     <IoMdStar
@@ -47,7 +50,7 @@ const Reviews = ({ idDetailCourse }: IRating) => {
                                                     />
                                                 ))}
                                                 <p className="ms-2">
-                                                    {new Date(rating.created_at).toLocaleDateString()}
+                                                    {formatTime(rating.created_at)}
                                                 </p>
                                             </div>
                                         </div>
@@ -97,14 +100,14 @@ const Reviews = ({ idDetailCourse }: IRating) => {
                                                 <div className="flex items-center gap-2.5">
                                                     <Avatar className="size-10">
                                                         <AvatarImage
-                                                            src={getImagesUrl(user?.avatar || '')}
-                                                            alt={user?.name}
+                                                            src={getImagesUrl(rating?.avatar || '')}
+                                                            alt={rating?.name}
                                                             className="h-full w-full object-cover"
                                                         />
-                                                        <AvatarFallback>{user?.name.charAt(0)}</AvatarFallback>
+                                                        <AvatarFallback>{rating?.name.charAt(0)}</AvatarFallback>
                                                     </Avatar>
                                                     <div className="flex flex-col gap-1">
-                                                        <h6 className="md:text-base">{user?.name}</h6>
+                                                        <h6 className="md:text-base">{rating?.name}</h6>
                                                         <div className="flex gap-1">
                                                             {[...Array(5)].map((_, starIndex) => (
                                                                 <IoMdStar
@@ -113,7 +116,7 @@ const Reviews = ({ idDetailCourse }: IRating) => {
                                                                 />
                                                             ))}
                                                             <p className="ms-2">
-                                                                {new Date(rating.created_at).toLocaleDateString()}
+                                                                {formatTime(rating.created_at)}
                                                             </p>
                                                         </div>
                                                     </div>

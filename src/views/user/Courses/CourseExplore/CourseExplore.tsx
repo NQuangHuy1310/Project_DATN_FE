@@ -10,6 +10,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 const CoursesExplore = () => {
     const { data: coursePopulate, isLoading } = useCoursePopulate()
     const { data: instructorMonth } = useInstructorMonth()
+
     if (isLoading) return <Loading />
     return (
         <div className="flex flex-col gap-8">
@@ -33,7 +34,7 @@ const CoursesExplore = () => {
                                     id={item.id}
                                     name={item.name}
                                     avatar={item.avatar!}
-                                    average_rating={item.average_rating}
+                                    ratings_avg_rate={item.ratings_avg_rate}
                                     follow={item.follow}
                                     total_courses={item.total_courses}
                                     total_ratings={item.total_ratings}

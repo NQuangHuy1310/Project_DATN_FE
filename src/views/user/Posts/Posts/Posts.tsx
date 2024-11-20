@@ -12,7 +12,6 @@ const Posts = () => {
     if (isLoading) {
         return <Loading />
     }
-
     return (
         <div className="flex flex-col gap-7 rounded-md bg-white p-10 px-20">
             <div className="flex flex-col gap-5">

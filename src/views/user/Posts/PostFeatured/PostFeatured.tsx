@@ -25,7 +25,7 @@ const PostFeatured = () => {
     const calculateReadingTime = (content: string) => {
         const wordsPerMinute = 200
         const words = content.trim().split(/\s+/).length
-        return Math.ceil((words / wordsPerMinute))
+        return Math.ceil(words / wordsPerMinute)
     }
     return (
         <div>
@@ -46,10 +46,11 @@ const PostFeatured = () => {
                     </SelectContent>
                 </Select>
             </div>
+
             <div className="container-main pb-10">
-                <div className="flex flex-wrap gap-7">
+                <div className="flex flex-wrap justify-between gap-7">
                     {postFeatured?.map((post, index) => (
-                        <div key={index} className="flex flex-col gap-7 rounded-md bg-white">
+                        <div key={index} className="flex w-full flex-col gap-7 rounded-md bg-white">
                             <div className="flex w-full flex-wrap items-start gap-10">
                                 <div className="flex w-full max-w-[100%] cursor-pointer flex-col gap-4 rounded-lg border p-6 hover:shadow-md">
                                     <div className="flex justify-between">
@@ -97,7 +98,7 @@ const PostFeatured = () => {
                                     </div>
 
                                     <div className="flex gap-4 text-xs">
-                                        <div className="flex flex-col gap-5">
+                                        <div className="flex w-full flex-col gap-5">
                                             <div className="flex max-w-[80%] flex-col gap-1">
                                                 <Link to={routes.postsDetail.replace(':slug', post.slug)}>
                                                     {' '}

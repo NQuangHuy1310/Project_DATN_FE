@@ -67,5 +67,10 @@ export const postsApi = {
 
     checkLikedPost: async (slug: string): Promise<any> => {
         return axiosClient.get(postUri.CHECK_LIKED_POST(slug))
+    },
+
+    getPostByCategory: async (slug: string): Promise<any>=>{
+        return axiosClient.get(postUri.GET_POST_BY_CATEGORY(slug))
     }
+    
 }

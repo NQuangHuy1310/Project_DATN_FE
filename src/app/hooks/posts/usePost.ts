@@ -1,6 +1,14 @@
 import { useMutation, useQuery, useQueryClient, UseQueryOptions } from '@tanstack/react-query'
 import { postsApi } from '@/app/services/posts'
-import { ICheckLikePost, ICheckSavePost, ICreatePost, IFeaturedPost, IListPost, IPostDetail, IPosts } from '@/types/post'
+import {
+    ICheckLikePost,
+    ICheckSavePost,
+    ICreatePost,
+    IFeaturedPost,
+    IListPost,
+    IPostDetail,
+    IPosts
+} from '@/types/post'
 import { IComment, ICreateComment } from '@/types'
 
 export const useGetPosts = (options?: Omit<UseQueryOptions<IListPost>, 'queryKey' | 'queryFn'>) => {
@@ -172,5 +180,16 @@ export const useCheckLikedPost = (
         queryKey: ['liked-post', slug],
         enabled: !!slug,
         queryFn: () => postsApi.checkLikedPost(slug)
+    })
+}
+
+export const useGetPostsByCategory = (
+    slug: string,
+    options?: Omit<UseQueryOptions<IPosts[]>, 'queryKey' | 'queryFn'>
+) => {
+    return useQuery({
+        ...options,
+        queryKey: ['post-by-category', slug],
+        queryFn: () => postsApi.getPostByCategory(slug)
     })
 }

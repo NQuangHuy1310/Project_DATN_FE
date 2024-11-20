@@ -71,7 +71,7 @@ const CourseModules = ({
                             {' | '}
                             {module.quiz && (
                                 <h6 className="flex items-center gap-1 text-base font-semibold">
-                                    <MdOutlineQuiz className="size-5 text-secondaryGreen" /> Bài tập
+                                    <MdOutlineQuiz className="size-5 text-secondaryGreen" /> Đã Có Bài tập
                                 </h6>
                             )}
                         </div>

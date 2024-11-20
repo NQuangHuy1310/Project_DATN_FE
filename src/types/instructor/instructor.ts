@@ -82,6 +82,17 @@ export interface ILesson {
     content_type: 'document' | 'video' | 'quiz'
     position: number
     is_active: number
+    lessonable: {
+        id: number
+        title: string | null
+        type?: 'upload' | 'url'
+        url?: string
+        video_youtube_id?: string
+        duration?: number | null
+        content?: string
+        description?: string | null
+        resourse_path?: string | null
+    }
 }
 
 export interface IModule {
@@ -110,6 +121,7 @@ export interface ILessonDetail {
         duration?: number | null
         content?: string
         description?: string | null
+        resourse_path?: string | null
     }
 }
 
@@ -240,6 +252,7 @@ export interface IModuleData {
 export interface ILessonDocData {
     title: string
     content: string
+    resourse_path?: File
     _method?: string
 }
 

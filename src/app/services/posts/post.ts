@@ -55,5 +55,17 @@ export const postsApi = {
 
     checkSavedPost: async (slug: string): Promise<any> => {
         return axiosClient.get(postUri.CHECK_SAVE_POST(slug))
+    },
+
+    likePost: async (slug: string): Promise<any> => {
+        return axiosClient.post(postUri.LIKE_POST(slug))
+    },
+
+    unLikePost: async (slug: string): Promise<any> => {
+        return axiosClient.post(postUri.UNLIKE_POST(slug))
+    },
+
+    checkLikedPost: async (slug: string): Promise<any> => {
+        return axiosClient.get(postUri.CHECK_LIKED_POST(slug))
     }
 }

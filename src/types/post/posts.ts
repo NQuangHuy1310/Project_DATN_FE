@@ -16,6 +16,7 @@ export interface IPosts {
     title: string
     user_id: number
     views: number
+    likes:number
     created_at: string
 }
 export interface IListPost {
@@ -57,4 +58,8 @@ export interface IFeaturedPost {
 
 export interface ICheckSavePost {
     action: 'save' | 'unsave'
+}
+
+export interface ICheckLikePost {
+    action: 'like' | 'unlike'
 }

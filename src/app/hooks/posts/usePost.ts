@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient, UseQueryOptions } from '@tanstack/react-query'
-
 import { postsApi } from '@/app/services/posts'
+import { ICheckLikePost, ICheckSavePost, ICreatePost, IFeaturedPost, IPosts } from '@/types/post'
 import { ICheckSavePost, ICreatePost, IFeaturedPost, IListPost, IPosts } from '@/types/post'
 import { IComment, ICreateComment } from '@/types'
 
@@ -131,5 +131,47 @@ export const useCheckSavedPost = (
         queryKey: ['saved-post', slug],
         enabled: !!slug,
         queryFn: () => postsApi.checkSavedPost(slug)
+    })
+}
+
+export const useLikePost = () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: async (slug: string) => {
+            return postsApi.likePost(slug)
+        },
+        onSuccess: async () => {
+            await Promise.all([
+                queryClient.invalidateQueries({ queryKey: ['post'] }),
+                queryClient.invalidateQueries({ queryKey: ['liked-post'] })
+            ])
+        }
+    })
+}
+
+export const useUnLikePost = () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: async (slug: string) => {
+            return postsApi.unLikePost(slug)
+        },
+        onSuccess: async () => {
+            await Promise.all([
+                queryClient.invalidateQueries({ queryKey: ['post'] }),
+                queryClient.invalidateQueries({ queryKey: ['liked-post'] })
+            ])
+        }
+    })
+}
+
+export const useCheckLikedPost = (
+    slug: string,
+    options?: Omit<UseQueryOptions<ICheckLikePost>, 'queryKey' | 'queryFn'>
+) => {
+    return useQuery<ICheckLikePost>({
+        ...options,
+        queryKey: ['liked-post', slug],
+        enabled: !!slug,
+        queryFn: () => postsApi.checkLikedPost(slug)
     })
 }

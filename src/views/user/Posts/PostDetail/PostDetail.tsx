@@ -11,10 +11,10 @@ import Loading from '@/components/Common/Loading/Loading'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 
-import { useCheckSavedPost, useGetPost, useSavePosts, useUnSavePosts } from '@/app/hooks/posts'
+import { useCheckLikedPost, useCheckSavedPost, useGetPost, useLikePost, useSavePosts, useUnLikePost, useUnSavePosts } from '@/app/hooks/posts'
 import { useState } from 'react'
 import { GoComment } from 'react-icons/go'
-import { PiHeartStraight } from 'react-icons/pi'
+import { PiHeartStraight, PiHeartStraightFill } from 'react-icons/pi'
 import CommentPost from '@/components/shared/Comment/CommentPost'
 import { formatDistanceToNow } from 'date-fns'
 import { vi } from 'date-fns/locale'
@@ -28,7 +28,11 @@ const PostDetail = () => {
     const { data: postDetailData, isLoading } = useGetPost(slug!)
     const { mutateAsync: savePost } = useSavePosts()
     const { mutateAsync: unSavePost } = useUnSavePosts()
+    const { mutateAsync: likePost } = useLikePost()
+    const { mutateAsync: unLikePost } = useUnLikePost()
+
     const { data: checkSavedPost } = useCheckSavedPost(postDetailData?.slug || '')
+    const { data: checkLikedPost } = useCheckLikedPost(postDetailData?.slug || '')
 
     const formatTime = (date: any) => {
         return formatDistanceToNow(new Date(date), { addSuffix: true, locale: vi })
@@ -41,7 +45,7 @@ const PostDetail = () => {
     const handleTotalComment = (total: number) => {
         setTotalComment(total)
     }
-
+    //SAVE POST
     const handleSavePost = async () => {
         if (postDetailData?.slug) {
             await savePost(postDetailData?.slug)
@@ -52,6 +56,18 @@ const PostDetail = () => {
             await unSavePost(postDetailData?.slug)
         }
     }
+    //LIKE POST
+    const handleLikePost = async () => {
+        if (postDetailData?.slug) {
+            await likePost(postDetailData?.slug)
+        }
+    }
+    const handleUnLikePost = async () => {
+        if (postDetailData?.slug) {
+            await unLikePost(postDetailData?.slug)
+        }
+    }
+
     if (isLoading) return <Loading />
 
     return (
@@ -59,8 +75,13 @@ const PostDetail = () => {
             <div className="fixed hidden w-2/12 flex-col gap-5 md:flex">
                 <h3 className="border-b-2 py-2 text-xl font-bold">{postDetailData?.username}</h3>
                 <div className="flex items-center gap-5 font-medium text-darkGrey">
-                    <div className="flex cursor-pointer gap-1">
-                        <PiHeartStraight className="size-7" /> <span></span>
+                    <div className="flex items-center cursor-pointer gap-1">
+                        <div className="cursor-pointer">
+                            {checkLikedPost?.action === 'unlike' ?
+                                <PiHeartStraightFill onClick={handleUnLikePost} className='size-6 text-red-600' /> : <PiHeartStraight onClick={handleLikePost} className='size-6' />
+                            }
+                        </div>
+                        <span>{postDetailData?.likes}</span>
                     </div>
                     <div className="flex cursor-pointer items-center gap-1">
                         <GoComment onClick={() => setIsOpen(true)} className="size-6" />
@@ -142,11 +163,16 @@ const PostDetail = () => {
             <div className="mt-5 flex justify-between md:hidden">
                 <div className="flex items-center gap-5 font-medium text-darkGrey">
                     <div className="flex gap-1">
-                        <PiHeartStraight className="size-6" /> <span>6</span>
+                        <div className="cursor-pointer">
+                            {checkLikedPost?.action === 'unlike' ?
+                                <PiHeartStraightFill onClick={handleUnLikePost} className='size-7 text-red-600' /> : <PiHeartStraight onClick={handleLikePost} className='size-7' />
+                            }
+                        </div>
+                        <span>{postDetailData?.likes}</span>
                     </div>
                     <div className="flex items-center gap-1">
                         <GoComment onClick={() => setIsOpen(true)} className="size-4" />
-                        <span>6</span>
+                        <span>{totalComment}</span>
                     </div>
                 </div>
             </div>

@@ -10,10 +10,10 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useCourseCategoryHome, useCourseSaleHome } from '@/app/hooks/courses/useCourse'
 import { useGetFeaturedPosts } from '@/app/hooks/posts'
-import Post from '@/components/shared/Post'
 import Banners from '@/components/shared/Banner/Banners'
 import { formatDistanceToNow } from 'date-fns'
 import { vi } from 'date-fns/locale'
+import PostOutStanding from '@/components/shared/Post/PostOutStanding'
 
 const Home = () => {
     const { data: ratings, isLoading: loadingRating } = useGetRatingHome()
@@ -41,7 +41,7 @@ const Home = () => {
             </div>
             <div className="mx-auto max-w-[1200px] py-10 lg:px-0">
                 <h3 className="text-xl font-medium md:text-2xl">Khóa học theo danh mục</h3>
-                <Tabs defaultValue={course_category[0]?.name} className="container-main flex-col ">
+                <Tabs defaultValue={course_category[0]?.name} className="container-main flex-col">
                     <TabsList className="scrollbar-hide flex w-full items-start justify-start gap-2 overflow-x-auto">
                         {course_category.map((category) => (
                             <TabsTrigger
@@ -58,11 +58,9 @@ const Home = () => {
                         {course_category.map((category) => (
                             <TabsContent key={category.id} value={category.name} className="flex flex-col gap-5">
                                 <div className="flex flex-wrap gap-8">
-                                    {
-                                        category.courses.map((course, index) => {
-                                            return <Course data={course} key={index} page={routes.courseDetailNoLogin} />
-                                        })
-                                    }
+                                    {category.courses.map((course, index) => {
+                                        return <Course data={course} key={index} page={routes.courseDetailNoLogin} />
+                                    })}
                                 </div>
                             </TabsContent>
                         ))}
@@ -73,7 +71,7 @@ const Home = () => {
                 <h3 className="pb-7 text-xl font-medium md:text-2xl">Bài viết nổi bật</h3>
                 <div className="flex flex-wrap gap-7">
                     {postFeatured?.map((post, index) => (
-                        <Post
+                        <PostOutStanding
                             key={index}
                             image={post.thumbnail}
                             title={post.title}

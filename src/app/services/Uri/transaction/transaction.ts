@@ -8,5 +8,6 @@ export const transactionClientUri = {
 export const transactionInstructorUri = {
     GET_BALANCE: (userId: number) => `teacher/balance/${userId}}`,
     REQUEST_WITHDRAW: (userId: number) => `teacher/add-request-withdraw/${userId}`,
-    HISTORY_WITHDRAW: (userId: number) => `teacher/history-withdraw/${userId} `
+    HISTORY_WITHDRAW: (userId: number, page: number, perPage?: number) =>
+        `teacher/history-withdraw/${userId}?page=${page}${perPage ? `&perPage=${perPage}` : ''} `
 }

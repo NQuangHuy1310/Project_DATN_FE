@@ -9,7 +9,7 @@ export const transactionApi = {
     requestWithdraw: async (userId: number, data: IRequestWithDrawData): Promise<any> => {
         return axiosClient.post(transactionInstructorUri.REQUEST_WITHDRAW(userId), data)
     },
-    getHistoryWithDraw: async (userId: number): Promise<any> => {
-        return axiosClient.get(transactionInstructorUri.HISTORY_WITHDRAW(userId))
+    getHistoryWithDraw: async (userId: number, page: number, perPage?: number): Promise<any> => {
+        return axiosClient.get(transactionInstructorUri.HISTORY_WITHDRAW(userId, page, perPage))
     }
 }

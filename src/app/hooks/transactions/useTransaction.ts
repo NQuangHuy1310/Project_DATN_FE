@@ -69,12 +69,14 @@ export const useQuestWithdraw = () => {
 
 export const useGetHistoryWithDraw = (
     userId: number,
-    options?: Omit<UseQueryOptions<IHistoryDraw[]>, 'queryKey' | 'queryFn'>
+    page: number,
+    perPage?: number,
+    options?: Omit<UseQueryOptions<IHistoryDraw>, 'queryKey' | 'queryFn'>
 ) => {
     return useQuery({
         ...options,
         enabled: !!userId,
-        queryKey: ['instructor-transaction-history', { userId }],
-        queryFn: () => transactionApi.getHistoryWithDraw(userId)
+        queryKey: ['instructor-transaction-history', { userId, page, perPage }],
+        queryFn: () => transactionApi.getHistoryWithDraw(userId, page, perPage)
     })
 }

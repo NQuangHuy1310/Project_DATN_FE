@@ -17,7 +17,12 @@ export interface IHistory {
     status: string
     date_of_transaction: Date
 }
-
+export interface IHistoryPage {
+    data: IHistory[]
+    per_page: number
+    current_page: number
+    total: number
+}
 export interface ITeacherBalance {
     id: number
     id_user: number

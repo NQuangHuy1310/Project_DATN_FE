@@ -16,7 +16,7 @@ const CourseWishList = () => {
     const initialPage = parseInt(queryParams.get('page') || '1', 10)
     const [page, setPage] = useState(initialPage)
 
-    const { data: wishList, isLoading } = useGetWishList(page, 1)
+    const { data: wishList, isLoading } = useGetWishList(page, 6)
     useEffect(() => {
         if (page !== 1) {
             navigate(`?page=${page}`, { replace: true })
@@ -31,7 +31,7 @@ const CourseWishList = () => {
         }
     }
 
-    const totalPages = wishList?.total || 1
+    const totalPages = Math.ceil((wishList?.total ?? 0) / (wishList?.per_page ?? 0))
     const visiblePages = getVisiblePages(totalPages, page, 5)
     if (isLoading) return <Loading />
     return (

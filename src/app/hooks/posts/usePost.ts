@@ -1,7 +1,6 @@
 import { useMutation, useQuery, useQueryClient, UseQueryOptions } from '@tanstack/react-query'
 import { postsApi } from '@/app/services/posts'
-import { ICheckLikePost, ICheckSavePost, ICreatePost, IFeaturedPost, IPosts } from '@/types/post'
-import { ICheckSavePost, ICreatePost, IFeaturedPost, IListPost, IPosts } from '@/types/post'
+import { ICheckLikePost, ICheckSavePost, ICreatePost, IFeaturedPost, IListPost, IPostDetail, IPosts } from '@/types/post'
 import { IComment, ICreateComment } from '@/types'
 
 export const useGetPosts = (options?: Omit<UseQueryOptions<IListPost>, 'queryKey' | 'queryFn'>) => {
@@ -38,7 +37,7 @@ export const useUpdatePost = () => {
     })
 }
 
-export const useGetPost = (slug: string, options?: Omit<UseQueryOptions<IPosts>, 'queryKey' | 'queryFn'>) => {
+export const useGetPost = (slug: string, options?: Omit<UseQueryOptions<IPostDetail>, 'queryKey' | 'queryFn'>) => {
     return useQuery({
         ...options,
         enabled: !!slug,

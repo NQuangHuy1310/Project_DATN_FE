@@ -1,4 +1,4 @@
-import { IHistory, IRequestWithDrawData, ITeacherBalance, ITransaction } from '@/types/transaction'
+import { IHistoryDraw, IHistoryPage, IRequestWithDrawData, ITeacherBalance, ITransaction } from '@/types/transaction'
 import { transactionsClientApi, transactionApi } from '@/app/services/transaction'
 import { useMutation, useQuery, useQueryClient, UseQueryOptions } from '@tanstack/react-query'
 import { toast } from 'sonner'
@@ -29,12 +29,14 @@ export const usePostPaymentClient = () => {
 
 export const useGetHistoryClient = (
     id: number,
-    options?: Omit<UseQueryOptions<IHistory[]>, 'queryKey' | 'queryFn'>
+    page: number,
+    perPage?: number,
+    options?: Omit<UseQueryOptions<IHistoryPage>, 'queryKey' | 'queryFn'>
 ) => {
-    return useQuery<IHistory[]>({
+    return useQuery<IHistoryPage>({
         ...options,
-        queryKey: ['history-transaction', { id }],
-        queryFn: () => transactionsClientApi.getHistory(id)
+        queryKey: ['history-transaction', { id, page, perPage }],
+        queryFn: () => transactionsClientApi.getHistory(id, page, perPage)
     })
 }
 

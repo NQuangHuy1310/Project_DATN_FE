@@ -16,8 +16,12 @@ export interface IPosts {
     title: string
     user_id: number
     views: number
-    likes:number
+    likes: number
     created_at: string
+}
+export interface IPostDetail extends IPosts {
+    username: string
+    avatar: string
 }
 export interface IListPost {
     current_page: number

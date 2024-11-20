@@ -2,7 +2,7 @@ import { postUri } from '@/app/services/Uri/posts'
 import axiosClient from '@/configs/axiosClient'
 import { IComment, ICreateComment } from '@/types'
 
-import { ICreatePost, IFeaturedPost, IListPost, IPosts } from '@/types/post'
+import { ICreatePost, IFeaturedPost, IListPost, IPostDetail, IPosts } from '@/types/post'
 
 export const postsApi = {
     getAllPost: async (): Promise<IListPost> => {
@@ -17,7 +17,7 @@ export const postsApi = {
         return axiosClient.post(`${postUri.POST}${postSlug}`, postData)
     },
 
-    getPostDetail: async (postSlug: string): Promise<any> => {
+    getPostDetail: async (postSlug: string): Promise<IPostDetail> => {
         return axiosClient.get(`${postUri.POST}${postSlug}`)
     },
 

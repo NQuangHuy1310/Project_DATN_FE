@@ -4,7 +4,7 @@ import { IoIosDocument } from 'react-icons/io'
 import { useSortable } from '@dnd-kit/sortable'
 import { FaExchangeAlt } from 'react-icons/fa'
 import { FaPen, FaRegTrashAlt } from 'react-icons/fa'
-import { FaBars, FaRegCirclePlay } from 'react-icons/fa6'
+import { FaBars, FaRegCirclePlay, FaFileCircleCheck } from 'react-icons/fa6'
 
 import { ILesson } from '@/types/instructor'
 import { Button } from '@/components/ui/button'
@@ -22,7 +22,7 @@ interface LessonItemProps {
 }
 
 const LessonItem = ({ lesson, canEdit }: LessonItemProps) => {
-    const { id, content_type, title } = lesson
+    const { id, content_type, title, lessonable } = lesson
     const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
         id: lesson.position,
         data: { ...lesson }
@@ -90,6 +90,13 @@ const LessonItem = ({ lesson, canEdit }: LessonItemProps) => {
                         <h4 className="text-base font-medium">
                             Bài giảng: <strong>{title}</strong>
                         </h4>
+                        {lessonable.resourse_path && (
+                            <div className="flex items-center gap-2">
+                                {' - '}
+                                <FaFileCircleCheck className="size-4 text-secondaryGreen" />
+                                <p className="text-sm font-semibold">File đính kèm</p>
+                            </div>
+                        )}
                     </div>
                     <div className="flex items-center gap-2">
                         <Select value={selectedLessonType} onValueChange={handleChangeSelectedLessonType}>

@@ -24,10 +24,10 @@ const LessonOptions = ({ handleClose, moduleId, isHasQuiz }: LessonOptionsProps)
     const [lessonType, setLessonType] = useState<lessonTypes | undefined>(undefined)
 
     const handleClickButton = (type: lessonTypes) => {
-        if (isHasQuiz) {
+        if (isHasQuiz && lessonType === 'quizzes') {
             toast.error('Chương học này đã có bài tập không thể thêm bài tập nữa!')
-            return
         }
+
         setLessonType(type)
         setIsShowLesson(true)
     }
@@ -63,7 +63,7 @@ const LessonOptions = ({ handleClose, moduleId, isHasQuiz }: LessonOptionsProps)
                     {lessonType === 'document' && (
                         <LessonDocument moduleId={moduleId} handleHiddenLesson={setIsShowLesson} canEdit={true} />
                     )}
-                    {lessonType === 'quizzes' && (
+                    {lessonType === 'quizzes' && !isHasQuiz && (
                         <LessonQuizzes moduleId={moduleId} handleHiddenLesson={setIsShowLesson} canEdit={true} />
                     )}
                     {lessonType === 'coding' && <LessonCoding />}

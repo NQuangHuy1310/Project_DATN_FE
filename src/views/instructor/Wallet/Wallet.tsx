@@ -257,7 +257,7 @@ const Wallet = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {historyWithDraw?.data && historyWithDraw?.data.length > 0 ? (
+                        {historyWithDraw && historyWithDraw?.data && historyWithDraw?.data.length > 0 ? (
                             historyWithDraw?.data.map((item, index) => (
                                 <tr key={index} className="border-b bg-white hover:bg-gray-50">
                                     <th scope="row" className="whitespace-nowrap px-6 py-4 font-medium text-gray-900">

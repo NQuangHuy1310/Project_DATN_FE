@@ -84,6 +84,14 @@ export const useCoursePopulate = (options?: Omit<UseQueryOptions<ICourse[]>, 'qu
     })
 }
 
+export const useCourseRelated = (slug: string, options?: Omit<UseQueryOptions<ICourse[]>, 'queryKey' | 'queryFn'>) => {
+    return useQuery<ICourse[]>({
+        ...options,
+        queryKey: ['course-related'],
+        queryFn: () => courseApi.relatedCourse(slug)
+    })
+}
+
 //COMMENT
 export const useGetCommentCourse = (
     id: number,

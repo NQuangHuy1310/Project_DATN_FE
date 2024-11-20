@@ -9,5 +9,8 @@ export const postUri = {
     FEATURED_POST: 'post-outstanding',
     SAVE_POST: (slug: string) => `${POST_URL}save/${slug}`,
     UN_SAVE_POST: (slug: string) => `${POST_URL}unsave/${slug}`,
-    CHECK_SAVE_POST: (slug: string) => `${POST_URL}check-saved/${slug}`
+    CHECK_SAVE_POST: (slug: string) => `${POST_URL}check-saved/${slug}`,
+    LIKE_POST: (slug: string) => `${POST_URL}like/${slug}`,
+    UNLIKE_POST: (slug: string) => `${POST_URL}unlike/${slug}`,
+    CHECK_LIKED_POST: (slug: string) => `${POST_URL}check-like/${slug}`
 }

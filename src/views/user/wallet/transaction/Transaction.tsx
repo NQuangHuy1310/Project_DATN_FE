@@ -248,7 +248,7 @@ const Transaction = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {history?.data?.map((data, index) => (
+                                {history && history.data && history.data.length > 0 && history.data.map((data, index) => (
                                     <tr key={index} className="border-b bg-white hover:bg-gray-50">
                                         <th scope="row" className="whitespace-nowrap px-6 py-4 font-medium text-gray-900">
                                             {index + 1}

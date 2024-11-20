@@ -9,6 +9,8 @@ export const courseUri = {
     GET_DETAIL_QUIZ: (slug: string) => `${COURSE_URL}detail/quiz/${slug}`,
     COURSE_CATEGORY_HOME: `${COURSE_URL}category-course`,
     COURSE_POPULATE: `${COURSE_URL}popular-course`,
+    COURSE_RELATED: (slug: string) => `${COURSE_URL}related-course/${slug}`,
+
     CHECK_BUY_COURSE: (userId: number, courseId: number) => `${COURSE_URL}check-buy-course/${userId}/${courseId}`,
     REGISTER_COURSE: (userId: number, courseId: number) => `transactions/register-course/${userId}/${courseId}`,
     //COMMENT COURSE

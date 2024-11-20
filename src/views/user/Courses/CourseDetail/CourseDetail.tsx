@@ -38,6 +38,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { IBuyData } from '@/types'
 import { useCheckFlowTeacher, useFlowTeacher, useUnFlowTeacher } from '@/app/hooks/accounts/useFlowTeacher'
+import CourseRelated from '@/views/user/Courses/CourseRelated/CourseRelated'
 
 const CourseDetail = () => {
     const {
@@ -140,126 +141,133 @@ const CourseDetail = () => {
 
     return (
         <div className="grid w-full grid-cols-12 gap-5">
-            <div className="card col-span-12 flex flex-col gap-5 lg:col-span-8 xl2:col-span-9">
-                <Link to={routes.course}>
-                    <HiArrowLeft className="size-6" />
-                </Link>
-                <div className="h-[300px] w-full md:h-[400px] lg:h-[500px]">
-                    <video
-                        src={getImagesUrl(courseDetail?.trailer || '')}
-                        title="YouTube video player"
-                        className="h-full w-full rounded-lg"
-                        controls
-                    ></video>
-                </div>
-                <div className="flex flex-col gap-7 px-2">
-                    <div className="flex flex-col gap-5">
-                        <h4 className="text-lg font-bold md:text-xl lg:text-2xl">{courseDetail?.name}</h4>
-
-                        <div className="flex flex-wrap items-center justify-between gap-5">
-                            <div className="flex items-center gap-5">
-                                <div className="flex items-center gap-2.5">
-                                    <Avatar className="size-8">
-                                        <AvatarImage
-                                            src={getImagesUrl(courseDetail?.user?.avatar || '')}
-                                            alt={courseDetail?.user?.name}
-                                            className="h-full w-full object-cover"
-                                        />
-                                        <AvatarFallback>{courseDetail?.user?.name?.slice(0, 2)}</AvatarFallback>
-                                    </Avatar>
-                                    <h6 className="whitespace-nowrap md:text-base">{courseDetail?.user?.name}</h6>
-                                </div>
-                                {user?.id !== courseDetail?.user?.id && (
-                                    <>
-                                        {checkFollow?.action === 'follow' && (
-                                            <Button
-                                                variant="default"
-                                                className="w-full py-3"
-                                                onClick={handleFlowTeacher}
-                                            >
-                                                {TeacherStatus.follow}
-                                            </Button>
-                                        )}
-                                        {checkFollow?.action === 'unfollow' && (
-                                            <Button
-                                                variant="outline"
-                                                className="w-full py-3 duration-500 hover:bg-red-400 hover:text-white"
-                                                onClick={handleUnFlowTeacher}
-                                            >
-                                                {TeacherStatus.unFollow}
-                                            </Button>
-                                        )}
-                                    </>
-                                )}
-                            </div>
-                            <div className="flex items-center gap-1">
-                                <IoIosStar className="size-5 text-primary" />
-                                <span>
-                                    {courseDetail?.ratings_avg_rate ?? 0} ({courseDetail?.ratings_count} đánh giá)
-                                </span>
-                            </div>
-
-                            <div className="block md:hidden">
-                                <CourseLevel courseLevel={courseDetail?.level || ''} />
-                            </div>
-                        </div>
-                        <div className="flex items-center justify-between">
-                            <div className="flex w-full items-center justify-between gap-5 md:w-auto">
-                                <div className="flex items-center gap-1.5">
-                                    <FaRegUser className="size-4 text-darkGrey" />
-                                    <p className="text-xs font-medium text-black md:text-base">
-                                        {courseDetail?.total_student} học viên
-                                    </p>
-                                </div>
-                                <div className="flex items-center gap-1.5">
-                                    <FaRegCirclePlay className="size-4 text-darkGrey" />
-                                    <p className="text-xs font-medium text-black md:text-base">
-                                        Tổng số {courseDetail?.total_lessons} bài giảng
-                                    </p>
-                                </div>
-                                <div className="flex items-center gap-1.5">
-                                    <IoTimeOutline className="size-4 text-darkGrey" />
-                                    <p className="text-xs font-medium text-black md:text-base">
-                                        Thời lượng {totalTime}
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="hidden md:block">
-                                <CourseLevel courseLevel={courseDetail?.level ?? level.Beginner} />
-                            </div>
-                        </div>
+            <div className=" col-span-12 flex flex-col gap-5 lg:col-span-8 xl2:col-span-9">
+                <div className='card'>
+                    <Link to={routes.course}>
+                        <HiArrowLeft className="size-6" />
+                    </Link>
+                    <div className="h-[300px] w-full md:h-[400px] lg:h-[500px] py-4">
+                        <video
+                            src={getImagesUrl(courseDetail?.trailer || '')}
+                            title="YouTube video player"
+                            className="h-full w-full rounded-lg"
+                            controls
+                        ></video>
                     </div>
-                    {/* Tabs */}
-                    <Tabs defaultValue="about" className="flex flex-col gap-4">
-                        <TabsList className="scrollbar-hide flex w-full items-start justify-start gap-2 overflow-x-auto">
-                            <TabsTrigger value="about" className="min-w-max shrink-0 px-4 py-2">
-                                Thông tin
-                            </TabsTrigger>
-                            <TabsTrigger value="content" className="min-w-max shrink-0 px-4 py-2">
-                                Nội dung
-                            </TabsTrigger>
-                            <TabsTrigger value="review" className="min-w-max shrink-0 px-4 py-2">
-                                Đánh giá
-                            </TabsTrigger>
-                        </TabsList>
-                        <div className="p-4">
-                            <TabsContent value="about">
-                                <About
-                                    goals={courseDetail?.goals ?? []}
-                                    description={courseDetail?.description ?? ''}
-                                    requirements={courseDetail?.requirements ?? []}
-                                    audiences={courseDetail?.audiences ?? []}
-                                />
-                            </TabsContent>
-                            <TabsContent value="content">
-                                <Content modules={courseDetail?.modules ?? []} />
-                            </TabsContent>
-                            <TabsContent value="review">
-                                <Reviews idDetailCourse={courseDetail?.id || 0} />
-                            </TabsContent>
+                    <div className="flex flex-col gap-7 px-2">
+                        <div className="flex flex-col gap-5">
+                            <h4 className="text-lg font-bold md:text-xl lg:text-2xl">{courseDetail?.name}</h4>
+
+                            <div className="flex flex-wrap items-center justify-between gap-5">
+                                <div className="flex items-center gap-5">
+                                    <div className="flex items-center gap-2.5 cursor-pointer" onClick={() => {
+                                        if (courseDetail?.user?.id) {
+                                            navigate(routes.instructorDetail.replace(':id', String(courseDetail.user.id)))
+                                        }
+                                    }}>
+                                        <Avatar className="size-8" >
+                                            <AvatarImage
+                                                src={getImagesUrl(courseDetail?.user?.avatar || '')}
+                                                alt={courseDetail?.user?.name}
+                                                className="h-full w-full object-cover"
+                                            />
+                                            <AvatarFallback>{courseDetail?.user?.name?.slice(0, 2)}</AvatarFallback>
+                                        </Avatar>
+                                        <h6 className="whitespace-nowrap md:text-base">{courseDetail?.user?.name}</h6>
+                                    </div>
+                                    {user?.id !== courseDetail?.user?.id && (
+                                        <>
+                                            {checkFollow?.action === 'follow' && (
+                                                <Button
+                                                    variant="default"
+                                                    className="w-full py-3"
+                                                    onClick={handleFlowTeacher}
+                                                >
+                                                    {TeacherStatus.follow}
+                                                </Button>
+                                            )}
+                                            {checkFollow?.action === 'unfollow' && (
+                                                <Button
+                                                    variant="outline"
+                                                    className="w-full py-3 duration-500 hover:bg-red-400 hover:text-white"
+                                                    onClick={handleUnFlowTeacher}
+                                                >
+                                                    {TeacherStatus.unFollow}
+                                                </Button>
+                                            )}
+                                        </>
+                                    )}
+                                </div>
+                                <div className="flex items-center gap-1">
+                                    <IoIosStar className="size-5 text-primary" />
+                                    <span>
+                                        {courseDetail?.ratings_avg_rate ?? 0} ({courseDetail?.ratings_count} đánh giá)
+                                    </span>
+                                </div>
+
+                                <div className="block md:hidden">
+                                    <CourseLevel courseLevel={courseDetail?.level || ''} />
+                                </div>
+                            </div>
+                            <div className="flex items-center justify-between">
+                                <div className="flex w-full items-center justify-between gap-5 md:w-auto">
+                                    <div className="flex items-center gap-1.5">
+                                        <FaRegUser className="size-4 text-darkGrey" />
+                                        <p className="text-xs font-medium text-black md:text-base">
+                                            {courseDetail?.total_student} học viên
+                                        </p>
+                                    </div>
+                                    <div className="flex items-center gap-1.5">
+                                        <FaRegCirclePlay className="size-4 text-darkGrey" />
+                                        <p className="text-xs font-medium text-black md:text-base">
+                                            Tổng số {courseDetail?.total_lessons} bài giảng
+                                        </p>
+                                    </div>
+                                    <div className="flex items-center gap-1.5">
+                                        <IoTimeOutline className="size-4 text-darkGrey" />
+                                        <p className="text-xs font-medium text-black md:text-base">
+                                            Thời lượng {totalTime}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="hidden md:block">
+                                    <CourseLevel courseLevel={courseDetail?.level ?? level.Beginner} />
+                                </div>
+                            </div>
                         </div>
-                    </Tabs>
+                        {/* Tabs */}
+                        <Tabs defaultValue="about" className="flex flex-col gap-4">
+                            <TabsList className="scrollbar-hide flex w-full items-start justify-start gap-2 overflow-x-auto">
+                                <TabsTrigger value="about" className="min-w-max shrink-0 px-4 py-2">
+                                    Thông tin
+                                </TabsTrigger>
+                                <TabsTrigger value="content" className="min-w-max shrink-0 px-4 py-2">
+                                    Nội dung
+                                </TabsTrigger>
+                                <TabsTrigger value="review" className="min-w-max shrink-0 px-4 py-2">
+                                    Đánh giá
+                                </TabsTrigger>
+                            </TabsList>
+                            <div className="p-4">
+                                <TabsContent value="about">
+                                    <About
+                                        goals={courseDetail?.goals ?? []}
+                                        description={courseDetail?.description ?? ''}
+                                        requirements={courseDetail?.requirements ?? []}
+                                        audiences={courseDetail?.audiences ?? []}
+                                    />
+                                </TabsContent>
+                                <TabsContent value="content">
+                                    <Content modules={courseDetail?.modules ?? []} />
+                                </TabsContent>
+                                <TabsContent value="review">
+                                    <Reviews idDetailCourse={courseDetail?.id || 0} />
+                                </TabsContent>
+                            </div>
+                        </Tabs>
+                    </div>
                 </div>
+                <CourseRelated />
             </div>
             <div className="sticky top-[80px] col-span-12 h-fit w-full lg:col-span-4 xl2:col-span-3">
                 <div className="hidden w-full flex-shrink-0 transition-transform duration-500 lg:block">
@@ -668,6 +676,7 @@ const CourseDetail = () => {
                     )}
                 </div>
             </div>
+
         </div>
     )
 }

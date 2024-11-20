@@ -1,8 +1,7 @@
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import { TbCoinFilled } from 'react-icons/tb'
-import { convertToVnd, getImagesUrl } from '@/lib'
+import { convertToVnd, getImagesUrl, getVisiblePages } from '@/lib'
 
-import NoContentImage from '@/assets/no-content.jpg'
 import { useGetBanks } from '@/app/hooks/others'
 import { Button } from '@/components/ui/button.tsx'
 import { Input } from '@/components/ui/input.tsx'
@@ -19,12 +18,23 @@ import {
 } from '@/components/ui/select'
 import { useGetBalance, useGetHistoryWithDraw, useQuestWithdraw } from '@/app/hooks/transactions/useTransaction.ts'
 import Loading from '@/components/Common/Loading/Loading.tsx'
+import NoContent from '@/components/shared/NoContent/NoContent'
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 const Wallet = () => {
+    const navigate = useNavigate()
+    const location = useLocation()
+
+    const queryParams = new URLSearchParams(location.search)
+    const initialPage = parseInt(queryParams.get('page') || '1', 10)
+
+    const [page, setPage] = useState(initialPage)
     const { user } = useGetUserProfile()
     const { data: bankData } = useGetBanks()
     const { data: teacherBalanceData } = useGetBalance(user?.id ?? 0)
-    const { data: historyWithDraw, isLoading } = useGetHistoryWithDraw(user?.id ?? 0)
+    const { data: historyWithDraw, isLoading } = useGetHistoryWithDraw(user?.id ?? 0, page, 10)
+
     const { mutateAsync: createRequestWithDraw, isPending } = useQuestWithdraw()
 
     const [selectedBank, setSelectedBank] = useState<string>('')
@@ -72,6 +82,23 @@ const Wallet = () => {
         }
     }
 
+    useEffect(() => {
+        if (page !== 1) {
+            navigate(`?page=${page}`, { replace: true })
+        } else {
+            navigate(location.pathname, { replace: true })
+        }
+    }, [page, navigate, location.pathname])
+
+    const handlePageChange = (newPage: number) => {
+        if (newPage !== page && newPage >= 1 && newPage <= (historyWithDraw?.total || 1)) {
+            setPage(newPage)
+        }
+    }
+
+    const totalPages = Math.ceil((historyWithDraw?.total ?? 0) / (historyWithDraw?.per_page ?? 0))
+    const visiblePages = getVisiblePages(totalPages, page, 5)
+
     if (isLoading) return <Loading />
 
     return (
@@ -106,16 +133,16 @@ const Wallet = () => {
                             <h4 className="text-lg font-medium">Tỉ lệ quy đổi từ tiền sang xu</h4>
                             <div className="flex flex-col gap-3 font-medium text-black">
                                 <span className="flex items-center gap-1">
-                                    <TbCoinFilled className="size-4" /> 10 = 10.000 VNĐ
+                                    <TbCoinFilled className="size-4 text-secondaryYellow" /> 10 = 10.000 VNĐ
                                 </span>
                                 <span className="flex items-center gap-1">
-                                    <TbCoinFilled className="size-4" /> 50 = 50.000 VNĐ
+                                    <TbCoinFilled className="size-4 text-secondaryYellow" /> 50 = 50.000 VNĐ
                                 </span>
                                 <span className="flex items-center gap-1">
-                                    <TbCoinFilled className="size-4" /> 100 = 100.000 VNĐ
+                                    <TbCoinFilled className="size-4 text-secondaryYellow" /> 100 = 100.000 VNĐ
                                 </span>
                                 <span className="flex items-center gap-1">
-                                    <TbCoinFilled className="size-4" /> 500 = 500.000 VNĐ
+                                    <TbCoinFilled className="size-4 text-secondaryYellow" /> 500 = 500.000 VNĐ
                                 </span>
                             </div>
                         </div>
@@ -171,13 +198,13 @@ const Wallet = () => {
                                 min={0}
                                 maxLength={5}
                                 type="number"
-                                placeholder="Nhập số tiền mà bạn muốn rút (bội số của 100)"
+                                placeholder="Nhập số xu mà bạn muốn rút (bội số của 100)"
                                 className="w-full pr-12"
                                 value={coin !== undefined ? coin : ''}
                                 onChange={handlePointChange}
                             />
                             <span className="absolute right-2 top-1/2 -translate-y-1/2 transform font-medium text-darkGrey">
-                                Xu
+                                <TbCoinFilled className="size-5 text-secondaryYellow" />
                             </span>
                         </div>
 
@@ -230,25 +257,69 @@ const Wallet = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {historyWithDraw && historyWithDraw.length > 0 ? (
-                            historyWithDraw.map((item, index) => (
+                        {historyWithDraw?.data && historyWithDraw?.data.length > 0 ? (
+                            historyWithDraw?.data.map((item, index) => (
                                 <tr key={index} className="border-b bg-white hover:bg-gray-50">
                                     <th scope="row" className="whitespace-nowrap px-6 py-4 font-medium text-gray-900">
                                         {index + 1}
                                     </th>
-                                    <td className="px-6 py-4">{parseFloat(item.coin.toString())} Xu</td>
-                                    <td className="px-6 py-4">{Math.floor(item.amount).toLocaleString('vi-VN')} VNĐ</td>
+                                    <td className="px-6 py-4 flex gap-1 items-center">
+                                        <TbCoinFilled className="size-5 text-secondaryYellow" />
+                                        {parseFloat(item.coin.toString())} </td>
+                                    <td className="px-6 py-4">{Math.floor(item?.amount).toLocaleString('vi-VN')} VNĐ</td>
                                     <td className="px-6 py-4">{item.status}</td>
                                 </tr>
                             ))
-                        ) : (
-                            <div className="flex w-full flex-col items-center justify-center text-center">
-                                <img alt="" src={NoContentImage} />
-                                <span className="text-base font-semibold">Bạn chưa có giao dịch nào</span>
-                            </div>
-                        )}
+                        ) : <NoContent />
+                        }
                     </tbody>
                 </table>
+                {totalPages > 1 && (
+                    <div className="mt-4 flex justify-center">
+                        <Pagination>
+                            <PaginationContent>
+                                <PaginationItem>
+                                    <PaginationPrevious
+                                        onClick={() => handlePageChange(page - 1)}
+                                        className={page === 1 ? 'border' : 'cursor-pointer border bg-darkGrey/90'}
+                                    />
+                                </PaginationItem>
+
+                                {visiblePages[0] > 1 && (
+                                    <PaginationItem>
+                                        <span className="px-2">...</span>
+                                    </PaginationItem>
+                                )}
+
+                                {visiblePages.map((pageNumber: number) => (
+                                    <PaginationItem key={pageNumber} className="cursor-pointer">
+                                        <PaginationLink
+                                            isActive={page === pageNumber}
+                                            onClick={() => handlePageChange(pageNumber)}
+                                        >
+                                            {pageNumber}
+                                        </PaginationLink>
+                                    </PaginationItem>
+                                ))}
+
+                                {visiblePages[visiblePages.length - 1] < totalPages && (
+                                    <PaginationItem>
+                                        <span className="px-2">...</span>
+                                    </PaginationItem>
+                                )}
+
+                                <PaginationItem>
+                                    <PaginationNext
+                                        onClick={() => handlePageChange(page + 1)}
+                                        className={
+                                            page === totalPages ? 'border' : 'cursor-pointer border bg-darkGrey/90'
+                                        }
+                                    />
+                                </PaginationItem>
+                            </PaginationContent>
+                        </Pagination>
+                    </div>
+                )}
             </div>
         </div>
     )

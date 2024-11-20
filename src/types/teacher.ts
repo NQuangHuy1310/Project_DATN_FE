@@ -11,7 +11,7 @@ export interface ITeacher {
 }
 
 export interface ITeacherAll {
-    teachers: ITeacher[]
+    data: ITeacher[]
     current_page: number
     total_pages: number
     total_count: number

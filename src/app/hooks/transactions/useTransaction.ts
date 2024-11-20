@@ -1,4 +1,4 @@
-import { IHistory, IRequestWithDrawData, ITeacherBalance, ITransaction } from '@/types/transaction'
+import { IHistoryDraw, IHistoryPage, IRequestWithDrawData, ITeacherBalance, ITransaction } from '@/types/transaction'
 import { transactionsClientApi, transactionApi } from '@/app/services/transaction'
 import { useMutation, useQuery, useQueryClient, UseQueryOptions } from '@tanstack/react-query'
 import { toast } from 'sonner'
@@ -29,12 +29,14 @@ export const usePostPaymentClient = () => {
 
 export const useGetHistoryClient = (
     id: number,
-    options?: Omit<UseQueryOptions<IHistory[]>, 'queryKey' | 'queryFn'>
+    page: number,
+    perPage?: number,
+    options?: Omit<UseQueryOptions<IHistoryPage>, 'queryKey' | 'queryFn'>
 ) => {
-    return useQuery<IHistory[]>({
+    return useQuery<IHistoryPage>({
         ...options,
-        queryKey: ['history-transaction', { id }],
-        queryFn: () => transactionsClientApi.getHistory(id)
+        queryKey: ['history-transaction', { id, page, perPage }],
+        queryFn: () => transactionsClientApi.getHistory(id, page, perPage)
     })
 }
 
@@ -67,12 +69,14 @@ export const useQuestWithdraw = () => {
 
 export const useGetHistoryWithDraw = (
     userId: number,
-    options?: Omit<UseQueryOptions<IHistoryDraw[]>, 'queryKey' | 'queryFn'>
+    page: number,
+    perPage?: number,
+    options?: Omit<UseQueryOptions<IHistoryDraw>, 'queryKey' | 'queryFn'>
 ) => {
     return useQuery({
         ...options,
         enabled: !!userId,
-        queryKey: ['instructor-transaction-history', { userId }],
-        queryFn: () => transactionApi.getHistoryWithDraw(userId)
+        queryKey: ['instructor-transaction-history', { userId, page, perPage }],
+        queryFn: () => transactionApi.getHistoryWithDraw(userId, page, perPage)
     })
 }

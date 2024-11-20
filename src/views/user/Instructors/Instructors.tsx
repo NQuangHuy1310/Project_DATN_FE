@@ -27,7 +27,6 @@ const Instructor = () => {
     const [page, setPage] = useState(initialPage)
 
     const { data, isLoading } = useInstructor(page)
-
     useEffect(() => {
         if (page !== 1) {
             navigate(`?page=${page}`, { replace: true })
@@ -63,14 +62,14 @@ const Instructor = () => {
                 <>
                     <div className="flex flex-wrap gap-10">
                         <Suspense fallback={<div>Loading teachers</div>}>
-                            {data?.teachers &&
-                                data.teachers.map((item, index) => (
+                            {data?.data &&
+                                data.data.map((item, index) => (
                                     <Teacher
                                         key={index}
                                         id={item.id}
                                         name={item.name}
                                         avatar={item.avatar}
-                                        average_rating={item.average_rating}
+                                        ratings_avg_rate={item.ratings_avg_rate}
                                         total_ratings={item.total_ratings}
                                         total_courses={item.total_courses}
                                     />

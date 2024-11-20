@@ -17,7 +17,12 @@ export interface IHistory {
     status: string
     date_of_transaction: Date
 }
-
+export interface IHistoryPage {
+    data: IHistory[]
+    per_page: number
+    current_page: number
+    total: number
+}
 export interface ITeacherBalance {
     id: number
     id_user: number
@@ -26,22 +31,21 @@ export interface ITeacherBalance {
 }
 
 export interface IRequestWithDrawData {
-    coin: number
-    bank_name: string
-    account_number: string
-    account_holder: string
-}
-
-export interface IHistoryDraw {
     id: number
     coin: number
     amount: number
-    back_name: string
-    account_name: string
+    bank_name: string
+    account_number: number
     account_holder: string
-    status: string
-    note: string
     name: string
+    status: string
+}
+
+export interface IHistoryDraw {
+    data: IRequestWithDrawData[]
+    per_page: number
+    current_page: number
+    total: number
 }
 
 export interface ITeacherHistoryDraw {

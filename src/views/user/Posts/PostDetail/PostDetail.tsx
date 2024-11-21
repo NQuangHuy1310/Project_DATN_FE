@@ -11,7 +11,15 @@ import Loading from '@/components/Common/Loading/Loading'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 
-import { useCheckLikedPost, useCheckSavedPost, useGetPost, useLikePost, useSavePosts, useUnLikePost, useUnSavePosts } from '@/app/hooks/posts'
+import {
+    useCheckLikedPost,
+    useCheckSavedPost,
+    useGetPost,
+    useLikePost,
+    useSavePosts,
+    useUnLikePost,
+    useUnSavePosts
+} from '@/app/hooks/posts'
 import { useState } from 'react'
 import { GoComment } from 'react-icons/go'
 import { PiHeartStraight, PiHeartStraightFill } from 'react-icons/pi'
@@ -44,33 +52,17 @@ const PostDetail = () => {
     const calculateReadingTime = (content: string) => {
         const wordsPerMinute = 200
         const words = content.trim().split(/\s+/).length
-        return Math.ceil((words / wordsPerMinute))
+        return Math.ceil(words / wordsPerMinute)
     }
     const handleTotalComment = (total: number) => {
         setTotalComment(total)
     }
     //SAVE POST
-    const handleSavePost = async () => {
-        if (postDetailData?.slug) {
-            await savePost(postDetailData?.slug)
-        }
-    }
-    const handleUnSavePost = async () => {
-        if (postDetailData?.slug) {
-            await unSavePost(postDetailData?.slug)
-        }
-    }
+    const handleUnSavePost = async () => postDetailData && (await unSavePost(postDetailData.slug))
+    const handleSavePost = async () => postDetailData && (await savePost(postDetailData.slug))
     //LIKE POST
-    const handleLikePost = async () => {
-        if (postDetailData?.slug) {
-            await likePost(postDetailData?.slug)
-        }
-    }
-    const handleUnLikePost = async () => {
-        if (postDetailData?.slug) {
-            await unLikePost(postDetailData?.slug)
-        }
-    }
+    const handleLikePost = async () => postDetailData && (await likePost(postDetailData?.slug))
+    const handleUnLikePost = async () => postDetailData && (await unLikePost(postDetailData?.slug))
 
     if (isLoading) return <Loading />
 
@@ -80,11 +72,13 @@ const PostDetail = () => {
                 <div className="fixed hidden w-2/12 flex-col gap-5 md:flex">
                     <h3 className="border-b-2 py-2 text-xl font-bold">{postDetailData?.username}</h3>
                     <div className="flex items-center gap-5 font-medium text-darkGrey">
-                        <div className="flex items-center cursor-pointer gap-1">
+                        <div className="flex cursor-pointer items-center gap-1">
                             <div className="cursor-pointer">
-                                {checkLikedPost?.action === 'unlike' ?
-                                    <PiHeartStraightFill onClick={handleUnLikePost} className='size-6 text-red-600' /> : <PiHeartStraight onClick={handleLikePost} className='size-6' />
-                                }
+                                {checkLikedPost?.action === 'unlike' ? (
+                                    <PiHeartStraightFill onClick={handleUnLikePost} className="size-6 text-red-600" />
+                                ) : (
+                                    <PiHeartStraight onClick={handleLikePost} className="size-6" />
+                                )}
                             </div>
                             <span>{postDetailData?.likes}</span>
                         </div>
@@ -95,7 +89,7 @@ const PostDetail = () => {
                     </div>
                 </div>
 
-                <div className='ms-0 flex w-full flex-col gap-10 md:ms-[25%] md:w-7/12'>
+                <div className="ms-0 flex w-full flex-col gap-10 md:ms-[25%] md:w-7/12">
                     <div className="">
                         <h1 className="text-3xl font-bold">{postDetailData?.title}</h1>
                         <div className="flex flex-col gap-10">
@@ -111,7 +105,9 @@ const PostDetail = () => {
                                         </AvatarFallback>
                                     </Avatar>
                                     <div className="flex flex-col">
-                                        <p className="text-[16px] font-semibold md:text-lg">{postDetailData?.username}</p>
+                                        <p className="text-[16px] font-semibold md:text-lg">
+                                            {postDetailData?.username}
+                                        </p>
                                         <div className="flex items-center gap-1 font-medium text-darkGrey">
                                             <p>{formatTime(postDetailData?.published_at)}</p>
                                             <LuDot />
@@ -120,17 +116,23 @@ const PostDetail = () => {
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-5">
-                                    <div className='cursor-pointer'>
-                                        {checkSavedPost?.action === 'unsave' ?
-                                            <FaBookmark onClick={handleUnSavePost} className='size-6 text-primary' /> : <FaRegBookmark onClick={handleSavePost} className='size-6' />
-                                        }
+                                    <div className="cursor-pointer">
+                                        {checkSavedPost?.action === 'unsave' ? (
+                                            <FaBookmark onClick={handleUnSavePost} className="size-6 text-primary" />
+                                        ) : (
+                                            <FaRegBookmark onClick={handleSavePost} className="size-6" />
+                                        )}
                                     </div>
                                     <div className="mb-2">
                                         <DropdownMenu>
                                             <DropdownMenuTrigger className="mt-1">
                                                 <BsThreeDots className="size-5" />
                                             </DropdownMenuTrigger>
-                                            <DropdownMenuContent align="end" sideOffset={5} className="flex flex-col gap-3">
+                                            <DropdownMenuContent
+                                                align="end"
+                                                sideOffset={5}
+                                                className="flex flex-col gap-3"
+                                            >
                                                 <DropdownMenuItem className="flex gap-2">
                                                     <FaFacebookSquare /> Chia sẻ lên Facebook
                                                 </DropdownMenuItem>
@@ -165,16 +167,20 @@ const PostDetail = () => {
                                 </div>
                             </div>
                         </div>
-
                     </div>
                     <div>
                         <div className="mt-5 flex justify-between md:hidden">
                             <div className="flex items-center gap-5 font-medium text-darkGrey">
                                 <div className="flex gap-1">
                                     <div className="cursor-pointer">
-                                        {checkLikedPost?.action === 'unlike' ?
-                                            <PiHeartStraightFill onClick={handleUnLikePost} className='size-7 text-red-600' /> : <PiHeartStraight onClick={handleLikePost} className='size-7' />
-                                        }
+                                        {checkLikedPost?.action === 'unlike' ? (
+                                            <PiHeartStraightFill
+                                                onClick={handleUnLikePost}
+                                                className="size-7 text-red-600"
+                                            />
+                                        ) : (
+                                            <PiHeartStraight onClick={handleLikePost} className="size-7" />
+                                        )}
                                     </div>
                                     <span>{postDetailData?.likes}</span>
                                 </div>
@@ -194,9 +200,7 @@ const PostDetail = () => {
                     {relatedPosts && relatedPosts.length > 0 && (
                         <Carousel className="w-full" opts={{ align: 'start' }}>
                             <div className="flex justify-between">
-                                <h5 className="text-lg font-medium text-black md:text-xl">
-                                    Bài viết cùng tác giả
-                                </h5>
+                                <h5 className="text-lg font-medium text-black md:text-xl">Bài viết cùng tác giả</h5>
                                 <div className="flex w-20 gap-2 text-right">
                                     <CarouselPrevious className="!translate-y-0 !shadow-none" />
                                     <CarouselNext className="!translate-y-0 !shadow-none" />
@@ -205,7 +209,10 @@ const PostDetail = () => {
                             <div className="w-full">
                                 <CarouselContent className="w-full gap-4">
                                     {relatedPosts.map((post, index) => (
-                                        <CarouselItem key={index} className="w-full min-w-0 basis-full md:basis-[367px]">
+                                        <CarouselItem
+                                            key={index}
+                                            className="w-full min-w-0 basis-full md:basis-[367px]"
+                                        >
                                             <PostOutStanding
                                                 image={post.thumbnail}
                                                 title={post.title}
@@ -221,10 +228,8 @@ const PostDetail = () => {
                             </div>
                         </Carousel>
                     )}
-
                 </div>
             </div>
-
         </div>
     )
 }

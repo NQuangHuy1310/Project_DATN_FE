@@ -17,18 +17,10 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 const Post = ({ data }: { data: IPosts }) => {
     const { mutateAsync: savePost } = useSavePosts()
     const { mutateAsync: unSavePost } = useUnSavePosts()
-    const handleSavePost = async () => {
-        if (data?.slug) {
-            await savePost(data?.slug)
-        }
-    }
-    const handleUnSavePost = async () => {
-        if (data?.slug) {
-            await unSavePost(data?.slug)
-        }
-    }
-
     const { data: checkSavedPost } = useCheckSavedPost(data?.slug || '')
+
+    const handleSavePost = async () => data && await savePost(data?.slug)
+    const handleUnSavePost = async () => data && await unSavePost(data?.slug)
 
     const formatTime = (date: any) => {
         return formatDistanceToNow(new Date(date), { addSuffix: true, locale: vi })

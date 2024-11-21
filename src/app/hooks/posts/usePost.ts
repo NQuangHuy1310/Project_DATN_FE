@@ -7,7 +7,8 @@ import {
     IFeaturedPost,
     IListPost,
     IPostDetail,
-    IPosts
+    IPosts,
+    IPostsCategory
 } from '@/types/post'
 import { IComment, ICreateComment } from '@/types'
 
@@ -185,7 +186,7 @@ export const useCheckLikedPost = (
 
 export const useGetPostsByCategory = (
     slug: string,
-    options?: Omit<UseQueryOptions<IPosts[]>, 'queryKey' | 'queryFn'>
+    options?: Omit<UseQueryOptions<IPostsCategory>, 'queryKey' | 'queryFn'>
 ) => {
     return useQuery({
         ...options,

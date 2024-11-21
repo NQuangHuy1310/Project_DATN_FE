@@ -19,6 +19,9 @@ export interface IPosts {
     likes: number
     created_at: string
 }
+export interface IPostsCategory {
+    data: IPosts[]
+}
 export interface IPostDetail extends IPosts {
     username: string
     avatar: string

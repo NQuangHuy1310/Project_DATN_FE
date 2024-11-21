@@ -78,3 +78,21 @@ export interface HistoryLeaning {
     course: LessonHistory[]
     total_lessons: number
 }
+
+interface ICoursePath {
+    id: number
+    name: string
+    slug: string
+    thumbnail: string
+    id_category: number
+    id_user: number
+    progress: {
+        id_course: number
+        progress_percent: number
+        id_user: number
+    }[]
+}
+
+export interface ICategoryLeaningPath extends ICategory {
+    courses: ICoursePath[]
+}

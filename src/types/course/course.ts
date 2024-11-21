@@ -235,3 +235,16 @@ export interface ICourseWishList {
     per_page: number
     total: number
 }
+
+interface CoursePath extends ICourse {
+    is_course_bought: boolean
+}
+
+export interface ICourseLearningPath {
+    courses: {
+        listCourseBeginner: CoursePath[]
+        listCourseIntermediate: CoursePath[]
+        listCourseMaster: CoursePath[]
+    }
+    category: ICategory
+}

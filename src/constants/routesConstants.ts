@@ -63,6 +63,8 @@ import CourseWishList from '@/views/user/Courses/CourseWishList'
 import PerformanceStudents from '@/views/instructor/Performance/PerformanceStudents'
 import Certification from '@/views/user/Certification/Certification'
 import CourseHistory from '@/views/user/Courses/CourseHistory'
+import LearningPath from '@/views/user/LearningPath'
+import LearningPathCourse from '@/views/user/LearningPath/LearningPathCourse'
 
 // Routes không cần đăng nhập
 export const publicRoutes = [
@@ -118,6 +120,15 @@ export const privateRoutes = [
     },
     // wallet
     { path: routes.wallet, layout: UserDashboardLayout, element: Transaction, title: 'Nạp tiền vào tài khoản' },
+
+    // LearningPath
+    { path: routes.learningPaths, layout: UserDashboardLayout, element: LearningPath, title: 'Lộ trình học tập' },
+    {
+        path: routes.courseLeaningPath,
+        layout: UserDashboardLayout,
+        element: LearningPathCourse,
+        title: 'Lộ trình học tập'
+    },
 
     // Certification
     { path: routes.certification, layout: UserDashboardLayout, element: Certification, title: 'Chứng chỉ' },

@@ -11,7 +11,7 @@ import { AiOutlineQuestionCircle } from 'react-icons/ai'
 import { TbMessageDots, TbUserHexagon } from 'react-icons/tb'
 import { HiBookOpen, HiOutlineTemplate } from 'react-icons/hi'
 import { IoMdHelpCircleOutline, IoMdHome } from 'react-icons/io'
-import { FaAddressBook, FaHeart, FaRegBell, FaUserCog } from 'react-icons/fa'
+import { FaAddressBook, FaHeart, FaRegBell, FaRoad, FaUserCog } from 'react-icons/fa'
 import { IoSettingsOutline, IoChatboxEllipsesOutline } from 'react-icons/io5'
 import { FaRegCircleQuestion, FaRegCircleCheck, FaChartSimple, FaBookAtlas } from 'react-icons/fa6'
 
@@ -78,6 +78,11 @@ export const sidebarList = [
                 path: routes.myBookmarks
             }
         ]
+    },
+    {
+        title: 'Lộ trình',
+        icon: FaRoad,
+        path: routes.learningPaths
     },
     {
         title: 'Ví',
@@ -218,6 +223,8 @@ export enum CourseLevel {
     Intermediate = 'Trung cấp',
     Master = 'Chuyên gia'
 }
+
+export const faceBookGroupUrl = 'https://www.facebook.com/share/g/1895SjEM68/?mibextid=WaXdOe'
 
 export enum TeacherStatus {
     follow = 'Theo dõi',

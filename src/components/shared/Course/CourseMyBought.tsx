@@ -9,6 +9,7 @@ import { CourseLevel } from '@/components/shared/Course/CourseLevel'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import { formatDuration, getImagesUrl } from '@/lib'
 import { ICourseMyBought } from '@/types/user'
+import routes from '@/configs/routes'
 
 const CourseMyBought = ({ data, progressLesson }: { data: ICourseMyBought; progressLesson?: number }) => {
     const totalTime = formatDuration((data?.total_duration_video as unknown as number) || 0)
@@ -22,7 +23,7 @@ const CourseMyBought = ({ data, progressLesson }: { data: ICourseMyBought; progr
 
     return (
         <Link
-            to={`/leaning/${data.slug}`}
+            to={routes.courseDetail.replace(':slug', data.slug)}
             className="card flex w-full cursor-text flex-col gap-4 shadow-md hover:shadow-[0px_40px_100px_0px_#0000000d] hover:transition-all md:w-[360px]"
         >
             <div className="relative h-[160px] flex-shrink-0 cursor-pointer">

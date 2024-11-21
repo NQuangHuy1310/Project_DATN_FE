@@ -1,18 +1,35 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import routes from '@/configs/routes'
-import { getImagesUrl } from '@/lib'
-import { IPosts } from '@/types/post'
-import { formatDistanceToNow } from 'date-fns'
-import { vi } from 'date-fns/locale'
-import { BsThreeDots } from 'react-icons/bs'
-import { CiBookmark } from 'react-icons/ci'
-import { FaFacebookSquare, FaLink } from 'react-icons/fa'
-import { IoFlagSharp } from 'react-icons/io5'
-import { LuDot } from 'react-icons/lu'
 import { Link } from 'react-router-dom'
 
+import { vi } from 'date-fns/locale'
+import { getImagesUrl } from '@/lib'
+import routes from '@/configs/routes'
+import { IPosts } from '@/types/post'
+import { formatDistanceToNow } from 'date-fns'
+
+import { LuDot } from 'react-icons/lu'
+import { BsThreeDots } from 'react-icons/bs'
+import { IoFlagSharp } from 'react-icons/io5'
+import { FaBookmark, FaFacebookSquare, FaLink, FaRegBookmark } from 'react-icons/fa'
+import { useCheckSavedPost, useSavePosts, useUnSavePosts } from '@/app/hooks/posts'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+
 const Post = ({ data }: { data: IPosts }) => {
+    const { mutateAsync: savePost } = useSavePosts()
+    const { mutateAsync: unSavePost } = useUnSavePosts()
+    const handleSavePost = async () => {
+        if (data?.slug) {
+            await savePost(data?.slug)
+        }
+    }
+    const handleUnSavePost = async () => {
+        if (data?.slug) {
+            await unSavePost(data?.slug)
+        }
+    }
+
+    const { data: checkSavedPost } = useCheckSavedPost(data?.slug || '')
+
     const formatTime = (date: any) => {
         return formatDistanceToNow(new Date(date), { addSuffix: true, locale: vi })
     }
@@ -41,7 +58,11 @@ const Post = ({ data }: { data: IPosts }) => {
                                 <span className="text-xs font-semibold">{data?.user?.name}</span>
                             </div>
                             <div className="flex items-center gap-5">
-                                <CiBookmark className="size-6" />
+                                <div className='cursor-pointer'>
+                                    {checkSavedPost?.action === 'unsave' ?
+                                        <FaBookmark onClick={handleUnSavePost} className='size-6 text-primary' /> : <FaRegBookmark onClick={handleSavePost} className='size-6' />
+                                    }
+                                </div>
                                 <div className="mb-2">
                                     <DropdownMenu>
                                         <DropdownMenuTrigger className="mt-1">
@@ -69,7 +90,6 @@ const Post = ({ data }: { data: IPosts }) => {
                                 </div>
                             </div>
                         </div>
-
                         <div className="grid grid-cols-12 gap-10 text-xs">
                             <div className="col-span-9 flex flex-col gap-5">
                                 <div className="flex flex-col gap-1">

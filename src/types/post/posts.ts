@@ -23,6 +23,7 @@ export interface IPostsCategory {
     data: IPosts[]
 }
 export interface IPostDetail extends IPosts {
+    related_posts: IPosts[]
     username: string
     avatar: string
 }

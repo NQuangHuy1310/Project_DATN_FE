@@ -31,7 +31,6 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 
 const PostDetail = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false)
-    const [totalComment, setTotalComment] = useState<number>(0)
 
     const slug = useGetSlugParams('slug')
 
@@ -53,9 +52,6 @@ const PostDetail = () => {
         const wordsPerMinute = 200
         const words = content.trim().split(/\s+/).length
         return Math.ceil(words / wordsPerMinute)
-    }
-    const handleTotalComment = (total: number) => {
-        setTotalComment(total)
     }
     //SAVE POST
     const handleUnSavePost = async () => postDetailData && (await unSavePost(postDetailData.slug))
@@ -84,7 +80,7 @@ const PostDetail = () => {
                         </div>
                         <div className="flex cursor-pointer items-center gap-1">
                             <GoComment onClick={() => setIsOpen(true)} className="size-6" />
-                            <span>{totalComment}</span>
+                            <span>{postDetailData?.count_comment}</span>
                         </div>
                     </div>
                 </div>
@@ -186,7 +182,7 @@ const PostDetail = () => {
                                 </div>
                                 <div className="flex items-center gap-1">
                                     <GoComment onClick={() => setIsOpen(true)} className="size-4" />
-                                    <span>{totalComment}</span>
+                                    <span>{postDetailData?.count_comment}</span>
                                 </div>
                             </div>
                         </div>
@@ -194,7 +190,6 @@ const PostDetail = () => {
                             commentId={postDetailData?.id || 0}
                             isOpen={isOpen}
                             setIsOpen={setIsOpen}
-                            onUpdateTotalComments={handleTotalComment}
                         />
                     </div>
                     {relatedPosts && relatedPosts.length > 0 && (
@@ -206,9 +201,10 @@ const PostDetail = () => {
                                     <CarouselNext className="!translate-y-0 !shadow-none" />
                                 </div>
                             </div>
+
                             <div className="w-full">
                                 <CarouselContent className="w-full gap-4">
-                                    {relatedPosts.map((post, index) => (
+                                    {relatedPosts && relatedPosts.length > 0 && relatedPosts.map((post, index) => (
                                         <CarouselItem
                                             key={index}
                                             className="w-full min-w-0 basis-full md:basis-[367px]"

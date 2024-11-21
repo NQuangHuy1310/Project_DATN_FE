@@ -16,8 +16,13 @@ export interface IPosts {
     title: string
     user_id: number
     views: number
-    likes: number
     created_at: string
+}
+export interface ISavedPosts {
+    current_page: number
+    data: IPosts[]
+    total: number
+    per_page: number
 }
 export interface IPostsCategory {
     data: IPosts[]
@@ -26,6 +31,8 @@ export interface IPostDetail extends IPosts {
     related_posts: IPosts[]
     username: string
     avatar: string
+    likes: number
+    count_comment: number
 }
 export interface IListPost {
     current_page: number

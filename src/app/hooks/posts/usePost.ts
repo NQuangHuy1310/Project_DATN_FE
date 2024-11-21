@@ -8,15 +8,20 @@ import {
     IListPost,
     IPostDetail,
     IPosts,
-    IPostsCategory
+    IPostsCategory,
+    ISavedPosts
 } from '@/types/post'
 import { IComment, ICreateComment } from '@/types'
 
-export const useGetPosts = (options?: Omit<UseQueryOptions<IListPost>, 'queryKey' | 'queryFn'>) => {
+export const useGetPosts = (
+    page: number,
+    perPage?: number,
+    options?: Omit<UseQueryOptions<IListPost>, 'queryKey' | 'queryFn'>
+) => {
     return useQuery<IListPost>({
         ...options,
-        queryKey: ['posts'],
-        queryFn: postsApi.getAllPost
+        queryKey: ['posts', page, perPage],
+        queryFn: () => postsApi.getAllPost(page, perPage)
     })
 }
 
@@ -112,8 +117,11 @@ export const useSavePosts = () => {
         mutationFn: async (slug: string) => {
             return postsApi.savePost(slug)
         },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['saved-post'] })
+        onSuccess: async () => {
+            await Promise.all([
+                queryClient.refetchQueries({ queryKey: ['saved-post'] }),
+                queryClient.invalidateQueries({ queryKey: ['check-saved-post'] })
+            ])
         }
     })
 }
@@ -124,8 +132,11 @@ export const useUnSavePosts = () => {
         mutationFn: async (slug: string) => {
             return postsApi.unSavePost(slug)
         },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['saved-post'] })
+        onSuccess: async () => {
+            await Promise.all([
+                queryClient.invalidateQueries({ queryKey: ['saved-post'] }),
+                queryClient.invalidateQueries({ queryKey: ['check-saved-post'] })
+            ])
         }
     })
 }
@@ -136,7 +147,7 @@ export const useCheckSavedPost = (
 ) => {
     return useQuery<ICheckSavePost>({
         ...options,
-        queryKey: ['saved-post', slug],
+        queryKey: ['check-saved-post', slug],
         enabled: !!slug,
         queryFn: () => postsApi.checkSavedPost(slug)
     })
@@ -192,5 +203,17 @@ export const useGetPostsByCategory = (
         ...options,
         queryKey: ['post-by-category', slug],
         queryFn: () => postsApi.getPostByCategory(slug)
+    })
+}
+
+export const useGetPostsSaved = (
+    page: number,
+    perPage?: number,
+    options?: Omit<UseQueryOptions<ISavedPosts>, 'queryKey' | 'queryFn'>
+) => {
+    return useQuery({
+        ...options,
+        queryKey: ['saved-post', page, perPage],
+        queryFn: () => postsApi.getPostSaved(page, perPage)
     })
 }

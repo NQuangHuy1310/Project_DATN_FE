@@ -76,9 +76,10 @@ const Home = () => {
                             image={post.thumbnail}
                             title={post.title}
                             avatar={post.avatar}
-                            userName={post.name}
+                            name={post.name}
                             slug={post.slug}
                             views={post.views}
+                            content={post.content}
                         />
                     ))}
                 </div>

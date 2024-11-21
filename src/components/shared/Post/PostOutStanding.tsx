@@ -7,13 +7,19 @@ interface PostProps {
     image: string
     category?: string
     title: string
-    userName: string
+    name: string
     avatar: string
     slug: string
     views?: number
+    content: string
 }
 
-const PostOutStanding = ({ image, title, userName, avatar, slug }: PostProps) => {
+const PostOutStanding = ({ image, title, name, avatar, slug, content }: PostProps) => {
+    const calculateReadingTime = (content: string) => {
+        const wordsPerMinute = 200
+        const words = content.trim().split(/\s+/).length
+        return Math.ceil((words / wordsPerMinute))
+    }
     return (
         <div className="flex w-full max-w-[360px] cursor-pointer flex-col gap-4 rounded-lg border p-4 shadow-md">
             <div className="h-[170px] w-full overflow-hidden rounded-lg">
@@ -31,15 +37,16 @@ const PostOutStanding = ({ image, title, userName, avatar, slug }: PostProps) =>
                         <Avatar className="size-7 cursor-pointer md:size-10">
                             <AvatarImage
                                 className="object-cover"
-                                src={getImagesUrl(avatar|| '')}
-                                alt={userName}
+                                src={getImagesUrl(avatar || '')}
+                                alt={name}
                             />
                             <AvatarFallback className="bg-slate-500/50 text-xl font-semibold text-white">
-                                {userName.charAt(0)}
+                                {name.charAt(0)}
                             </AvatarFallback>
                         </Avatar>
-                        <span className="text-xs font-semibold">{userName}</span>
+                        <span className="text-xs font-semibold">{name}</span>
                     </div>
+                    <span>{calculateReadingTime(content)} phút đọc</span>
                 </div>
             </div>
         </div>

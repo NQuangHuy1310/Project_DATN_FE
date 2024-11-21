@@ -10,7 +10,6 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 const LearningPath = () => {
     const navigate = useNavigate()
     const { data: cateLearningPath, isLoading } = useGetCateLearningPath()
-    console.log(cateLearningPath)
     const radius = (64 - 8) / 2
     const circumference = 2 * Math.PI * radius
     if (isLoading) return <Loading />
@@ -41,7 +40,6 @@ const LearningPath = () => {
                                 </div>
                                 <div className="flex gap-2 pb-4">
                                     {item.courses.map((course) => {
-                                        console.log(course?.progress[0]?.progress_percent)
                                         return (
                                             <div
                                                 className="relative flex items-center justify-center"

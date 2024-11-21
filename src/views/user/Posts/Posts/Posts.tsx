@@ -94,11 +94,7 @@ const Posts = () => {
                     </div>
                     <div className="my-14 rounded-3xl">
                         <img src="https://s.net.vn/PVTz" alt="" className="my-10 rounded-3xl" />
-                        <img
-                            src="https://files.fullstack.edu.vn/f8-prod/banners/25/63dc61d4caec2.png"
-                            alt=""
-                            className="rounded-3xl"
-                        />
+                        <img src="https://s.net.vn/whBU" alt="" className="rounded-3xl" />
                     </div>
                 </div>
             </div>

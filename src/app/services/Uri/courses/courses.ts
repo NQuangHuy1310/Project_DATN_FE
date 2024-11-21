@@ -10,6 +10,7 @@ export const courseUri = {
     COURSE_CATEGORY_HOME: `${COURSE_URL}category-course`,
     COURSE_POPULATE: `${COURSE_URL}popular-course`,
     COURSE_RELATED: (slug: string) => `${COURSE_URL}related-course/${slug}`,
+    COURSE_FREE: `${COURSE_URL}free-course`,
 
     CHECK_BUY_COURSE: (userId: number, courseId: number) => `${COURSE_URL}check-buy-course/${userId}/${courseId}`,
     REGISTER_COURSE: (userId: number, courseId: number) => `transactions/register-course/${userId}/${courseId}`,

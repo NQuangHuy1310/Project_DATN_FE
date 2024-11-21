@@ -2,15 +2,19 @@ import routes from '@/configs/routes'
 import Course from '@/components/shared/Course'
 import Loading from '@/components/Common/Loading/Loading'
 import Teacher from '@/components/shared/Teacher'
-import { useCoursePopulate } from '@/app/hooks/courses/useCourse'
+import { useCourseFree, useCoursePopulate } from '@/app/hooks/courses/useCourse'
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
 import CourseToday from '@/components/shared/Course/CourseToday'
 import { useInstructorMonth } from '@/app/hooks/instructors'
+import { useGetFeaturedPosts } from '@/app/hooks/posts'
+import PostOutStanding from '@/components/shared/Post/PostOutStanding'
 
 const Dashboard = () => {
     const { data: coursePopulate, isLoading } = useCoursePopulate()
     const { data: instructorMonth } = useInstructorMonth()
-
+    const { data: courseFree } = useCourseFree()
+    const { data: postFeatured } = useGetFeaturedPosts()
+    console.log(coursePopulate)
     if (isLoading) return <Loading />
 
     return (
@@ -66,14 +70,87 @@ const Dashboard = () => {
                     </div>
                     <div className="w-full">
                         <CarouselContent className="w-full gap-4">
-                            {coursePopulate?.map((item, index) => (
-                                <CarouselItem key={index} className="w-full min-w-0 basis-full md:basis-[367px]">
-                                    <Course data={item} page={routes.courseDetail} />
-                                </CarouselItem>
-                            ))}
+                            {coursePopulate &&
+                                coursePopulate.length > 0 &&
+                                coursePopulate?.map((item, index) => (
+                                    <CarouselItem key={index} className="w-full min-w-0 basis-full md:basis-[367px]">
+                                        <Course data={item} page={routes.courseDetail} />
+                                    </CarouselItem>
+                                ))}
                         </CarouselContent>
                     </div>
                 </Carousel>
+                {courseFree && courseFree.length > 0 ? (
+                    <Carousel
+                        className="w-full"
+                        opts={{
+                            align: 'start'
+                        }}
+                    >
+                        <div className="flex justify-between">
+                            <h5 className="text-lg font-medium text-black md:text-xl">Khoá học miễn phí</h5>
+                            <div className="flex w-20 gap-2 text-right">
+                                <CarouselPrevious className="!translate-y-0 !shadow-none" />
+                                <CarouselNext className="!translate-y-0 !shadow-none" />
+                            </div>
+                        </div>
+                        <div className="w-full">
+                            <CarouselContent className="w-full gap-4">
+                                {courseFree &&
+                                    courseFree.length > 0 &&
+                                    courseFree?.map((item, index) => (
+                                        <CarouselItem
+                                            key={index}
+                                            className="w-full min-w-0 basis-full md:basis-[367px]"
+                                        >
+                                            <Course data={item} page={routes.courseDetail} />
+                                        </CarouselItem>
+                                    ))}
+                            </CarouselContent>
+                        </div>
+                    </Carousel>
+                ) : (
+                    ''
+                )}
+                {postFeatured && postFeatured.length > 0 ? (
+                    <Carousel
+                        className="w-full"
+                        opts={{
+                            align: 'start'
+                        }}
+                    >
+                        <div className="flex justify-between">
+                            <h5 className="text-lg font-medium text-black md:text-xl">Bài viết nổi bật</h5>
+                            <div className="flex w-20 gap-2 text-right">
+                                <CarouselPrevious className="!translate-y-0 !shadow-none" />
+                                <CarouselNext className="!translate-y-0 !shadow-none" />
+                            </div>
+                        </div>
+                        <div className="w-full">
+                            <CarouselContent className="w-full gap-4">
+                                {postFeatured &&
+                                    postFeatured.length > 0 &&
+                                    postFeatured?.map((post, index) => (
+                                        <CarouselItem
+                                            key={index}
+                                            className="w-full min-w-0 basis-full md:basis-[367px]"
+                                        >
+                                            <PostOutStanding
+                                                image={post.thumbnail}
+                                                title={post.title}
+                                                avatar={post.avatar}
+                                                name={post.name}
+                                                slug={post.slug}
+                                                views={post.views}
+                                                content={post.content} />
+                                        </CarouselItem>
+                                    ))}
+                            </CarouselContent>
+                        </div>
+                    </Carousel>
+                ) : (
+                    ''
+                )}
             </div>
             <div className="card col-span-12 w-full md:col-span-5 lg:col-span-3">
                 <Carousel

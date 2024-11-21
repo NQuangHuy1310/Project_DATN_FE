@@ -26,6 +26,7 @@ import {
     BreadcrumbList,
     BreadcrumbSeparator
 } from '@/components/ui/breadcrumb'
+import CourseRelated from '@/views/user/Courses/CourseRelated/CourseRelated'
 
 const CourseDetailNoLogin = () => {
     const slug = useGetSlugParams('slug')
@@ -159,6 +160,7 @@ const CourseDetailNoLogin = () => {
                                 </div>
                             </Tabs>
                         </div>
+                        <CourseRelated/>
                     </div>
 
                     <div className="col-span-12 w-full lg:col-span-4">

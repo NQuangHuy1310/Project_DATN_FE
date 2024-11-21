@@ -9,7 +9,14 @@ import { useGetCategoriesPost } from '@/app/hooks/categories'
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { getVisiblePages } from '@/lib'
-import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination'
+import {
+    Pagination,
+    PaginationContent,
+    PaginationItem,
+    PaginationLink,
+    PaginationNext,
+    PaginationPrevious
+} from '@/components/ui/pagination'
 
 const Posts = () => {
     const navigate = useNavigate()
@@ -28,8 +35,7 @@ const Posts = () => {
         setSelectedCategory(categorySlug)
     }
     const pageTitle = selectedCategory
-        ? `${categories?.find((category) => category.slug === selectedCategory)?.name || ''
-        }`
+        ? `${categories?.find((category) => category.slug === selectedCategory)?.name || ''}`
         : 'Danh sách bài viết'
 
     useEffect(() => {
@@ -87,13 +93,9 @@ const Posts = () => {
                         ))}
                     </div>
                     <div className="my-14 rounded-3xl">
+                        <img src="https://s.net.vn/PVTz" alt="" className="my-10 rounded-3xl" />
                         <img
                             src="https://files.fullstack.edu.vn/f8-prod/banners/25/63dc61d4caec2.png"
-                            alt=""
-                            className="my-10 rounded-3xl"
-                        />
-                        <img
-                            src="https://files.fullstack.edu.vn/f8-prod/banners/32/6421144f7b504.png"
                             alt=""
                             className="rounded-3xl"
                         />
@@ -137,9 +139,7 @@ const Posts = () => {
                             <PaginationItem>
                                 <PaginationNext
                                     onClick={() => handlePageChange(page + 1)}
-                                    className={
-                                        page === totalPages ? 'border' : 'cursor-pointer border bg-darkGrey/90'
-                                    }
+                                    className={page === totalPages ? 'border' : 'cursor-pointer border bg-darkGrey/90'}
                                 />
                             </PaginationItem>
                         </PaginationContent>

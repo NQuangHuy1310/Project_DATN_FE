@@ -13,7 +13,6 @@ import { LuDot } from 'react-icons/lu'
 import { Link } from 'react-router-dom'
 
 const Post = ({ data }: { data: IPosts }) => {
-    console.log(data)
     const formatTime = (date: any) => {
         return formatDistanceToNow(new Date(date), { addSuffix: true, locale: vi })
     }

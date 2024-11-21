@@ -9,3 +9,10 @@ export const useGetCategories = (options?: Omit<UseQueryOptions<ICategory[]>, 'q
         queryFn: categoryApis.getCategories
     })
 }
+export const useGetCategoriesPost = (options?: Omit<UseQueryOptions<ICategory[]>, 'queryKey' | 'queryFn'>) => {
+    return useQuery<ICategory[]>({
+        ...options,
+        queryKey: ['categories-post'],
+        queryFn: categoryApis.getCategoriesPost
+    })
+}

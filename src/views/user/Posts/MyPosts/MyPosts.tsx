@@ -21,10 +21,6 @@ const MyPosts = () => {
         toast.success('Xóa bài viết thành công!', { description: 'Bài viết đã được xóa khỏi hệ thống.' })
     }
 
-    const handleNavigate = (postSlug: string) => () => {
-        const postDetailUrl = routes.editPost.replace(':slug', postSlug)
-        navigate(postDetailUrl)
-    }
     const handleDetail = (postSlug: string) => () => {
         const postDetailUrl = routes.postsDetail.replace(':slug', postSlug)
         navigate(postDetailUrl)

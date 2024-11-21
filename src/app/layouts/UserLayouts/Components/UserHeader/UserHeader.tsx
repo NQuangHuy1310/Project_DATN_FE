@@ -2,6 +2,7 @@ import { FaBars } from 'react-icons/fa'
 
 import UserButton from '@/components/shared/UserButton'
 import NotificationButton from '@/components/shared/NotificationButton'
+import CourseHistoryButton from '@/components/shared/CourseHistoryButton/CourseHistoryButton'
 
 function UserHeader({
     isSidebar,
@@ -21,6 +22,7 @@ function UserHeader({
                 <h2 className="text-xl font-medium">{title}</h2>
             </div>
             <div className="flex items-center gap-5">
+                <CourseHistoryButton />
                 <NotificationButton />
                 <UserButton />
             </div>

@@ -1,7 +1,7 @@
 import { userApis } from '@/app/services/accounts'
 import { useUserStore } from '@/app/store/userStore'
 import routes from '@/configs/routes'
-import { HistoryLeaning, LessonHistory } from '@/types'
+import { HistoryLeaning } from '@/types'
 import { useMutation, useQuery, UseQueryOptions } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 

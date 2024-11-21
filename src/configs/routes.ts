@@ -37,6 +37,10 @@ const routes = {
     wallet: '/wallet',
     transaction: '/transaction',
 
+    // Leaning-path
+    learningPaths: '/learning-paths',
+    courseLeaningPath: '/learning-paths/:slug',
+
     //Payment
     payment: '/payment/course/:slug',
 

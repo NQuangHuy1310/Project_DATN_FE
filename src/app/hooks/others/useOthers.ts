@@ -1,8 +1,9 @@
-import { CertificateData, IBankData, IBanner } from '@/types/others'
-import { bannerApi, getBanks } from '@/app/services/others/others'
+import { CertificateData, IBankData, IBanner, ICategoryLeaningPath } from '@/types/others'
+import { bannerApi, getBanks, learningPathApi } from '@/app/services/others/others'
 
 import { useMutation, useQuery, UseQueryOptions } from '@tanstack/react-query'
 import { certificationApis } from '@/app/services/certificates/certificates'
+import { ICourseLearningPath } from '@/types/course/course'
 
 export const useGetBanners = (options?: Omit<UseQueryOptions<IBanner[]>, 'queryKey' | 'queryFn'>) => {
     return useQuery<IBanner[]>({
@@ -49,5 +50,27 @@ export const useGetCertificationImage = (
         queryKey: ['certificate-pdf', code_certificate],
         enabled: !!code_certificate,
         queryFn: () => certificationApis.getCertificationImage(code_certificate, type)
+    })
+}
+
+export const useGetCateLearningPath = (
+    options?: Omit<UseQueryOptions<ICategoryLeaningPath[]>, 'queryKey' | 'queryFn'>
+) => {
+    return useQuery({
+        ...options,
+        queryKey: ['cate-learning-path'],
+        queryFn: learningPathApi.getCateLearningPath
+    })
+}
+
+export const useGetCourseLearningPath = (
+    cate: string,
+    options?: Omit<UseQueryOptions<ICourseLearningPath>, 'queryKey' | 'queryFn'>
+) => {
+    return useQuery({
+        ...options,
+        enabled: !!cate,
+        queryKey: ['course-learning-path', cate],
+        queryFn: () => learningPathApi.getCourseLearningPath(cate)
     })
 }

@@ -3,6 +3,7 @@ export const postUri = {
     POST: (page: number, perPage?: number) => `${POST_URL}?page=${page}${perPage ? `&perPage=${perPage}` : ''}`,
     GET_POST_DETAIL: (slug: string) => `${POST_URL}${slug}`,
     ADD_POST: `${POST_URL}`,
+    UPDATE_POST: (postSlug: string) => `${POST_URL}${postSlug}`,
     MY_POST: 'user/posts',
     GET_POST_BY_USER_ID: (userId: string) => `user/posts/${userId}`,
     DELETE_POST: (postSlug: string) => `${POST_URL}${postSlug}`,

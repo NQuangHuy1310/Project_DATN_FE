@@ -4,19 +4,11 @@ import { CiViewList } from 'react-icons/ci'
 
 import routes from '@/configs/routes'
 import { ITeacher } from '@/types'
-import useGetUserProfile from '@/app/hooks/accounts/useGetUser'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { getImagesUrl } from '@/lib'
 
 const Teacher = ({ name, avatar, total_courses, total_ratings, id, ratings_avg_rate }: ITeacher) => {
-    const { user } = useGetUserProfile()
     const detailInstructorUrl = id ? routes.instructorDetail.replace(':id', id.toString()) : ''
-
-    const handleLinkClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
-        if (user?.id === id) {
-            event.preventDefault()
-        }
-    }
 
     const stars = [...Array(5)].map((_, index) => {
         const fullStar = index < Math.floor(ratings_avg_rate!)
@@ -28,7 +20,6 @@ const Teacher = ({ name, avatar, total_courses, total_ratings, id, ratings_avg_r
             <div className="flex flex-wrap items-center justify-between gap-y-4">
                 <Link
                     to={`${detailInstructorUrl}`}
-                    onClick={handleLinkClick}
                     className="flex flex-shrink-0 items-center gap-3 truncate"
                 >
                     <Avatar className="size-7 md:size-9">

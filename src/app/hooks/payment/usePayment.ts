@@ -24,13 +24,16 @@ export const useBuyCourse = () => {
         mutationFn: async ([userId, courseId, buyData]) => {
             return paymentApi.buyCourse(userId, courseId, buyData)
         },
-        onSuccess(data) {
+        onSuccess: async (data) => {
+            await Promise.all([
+                queryClient.invalidateQueries({ queryKey: ['course-my-bought'] }),
+                queryClient.invalidateQueries({ queryKey: ['transaction-user'] })
+            ])
             if (data.status === 'success') {
                 navigate(routes.myCourses)
             } else if (data.status === 'error') {
                 toast.error(data.message)
             }
-            queryClient.invalidateQueries({ queryKey: ['course-my-bought'] })
         }
     })
 }

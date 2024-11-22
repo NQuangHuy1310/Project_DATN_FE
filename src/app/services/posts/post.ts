@@ -14,7 +14,7 @@ export const postsApi = {
     },
 
     updatePost: async (postSlug: string, postData: ICreatePost): Promise<any> => {
-        return axiosClient.post(`${postUri.POST}${postSlug}`, postData)
+        return axiosClient.post(postUri.UPDATE_POST(postSlug), postData)
     },
 
     getPostDetail: async (postSlug: string): Promise<IPostDetail> => {

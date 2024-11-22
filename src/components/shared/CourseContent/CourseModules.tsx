@@ -63,16 +63,25 @@ const CourseModules = ({
                 <div className="flex items-center gap-5">
                     <div className="flex items-center gap-3">
                         <h5 className="text-base font-semibold">Tên chương: {module.title}</h5>
-                        {' - '}
                         <div className="flex items-center gap-3">
-                            <h6 className="flex items-center gap-1 text-base font-semibold">
-                                <FaRegRectangleList className="size-5 text-primary" /> {module.total_lessons} Bài học
-                            </h6>
-                            {' | '}
+                            {module.total_lessons > 0 && (
+                                <>
+                                    {' - '}
+                                    <h6 className="flex items-center gap-1 text-base font-semibold">
+                                        <FaRegRectangleList className="size-5 text-primary" /> {module.total_lessons}{' '}
+                                        Bài học
+                                    </h6>
+                                </>
+                            )}
                             {module.quiz && (
-                                <h6 className="flex items-center gap-1 text-base font-semibold">
-                                    <MdOutlineQuiz className="size-5 text-secondaryGreen" /> Đã Có Bài tập
-                                </h6>
+                                <>
+                                    {' | '}
+                                    {module.quiz && (
+                                        <h6 className="flex items-center gap-1 text-base font-semibold">
+                                            <MdOutlineQuiz className="size-5 text-secondaryGreen" /> Đã Có Bài tập
+                                        </h6>
+                                    )}
+                                </>
                             )}
                         </div>
                     </div>

@@ -83,7 +83,9 @@ const CourseCard = ({ name, id, status, thumbnail, submited_at: submittedAt, cat
                                     {is_active === 0 ? 'Hiển thị' : 'Ẩn'} khoá học
                                 </DropdownMenuItem>
                             ) : null}
-                            <DropdownMenuItem onClick={() => setIsShowConfirm(true)}>Xóa khoá học</DropdownMenuItem>
+                            {status === 'draft' && (
+                                <DropdownMenuItem onClick={() => setIsShowConfirm(true)}>Xóa khoá học</DropdownMenuItem>
+                            )}
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>

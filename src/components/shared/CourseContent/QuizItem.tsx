@@ -40,9 +40,7 @@ const QuizItem = ({ lesson, moduleId, canEdit }: QuizItemProps) => {
     const handleDownload = () => {
         Papa.parse('', {
             download: true,
-            complete: function (results: any) {
-                console.log(results)
-            }
+            complete: function (results: any) {}
         })
     }
 
@@ -52,10 +50,10 @@ const QuizItem = ({ lesson, moduleId, canEdit }: QuizItemProps) => {
         if (files && files.length > 0) {
             const file = files[0]
 
-            Papa.parse(file, {
+            Papa.parse<File>(file, {
                 header: true,
                 skipEmptyLines: true,
-                complete: async (results: { data: any[]; meta: { fields: string[] } }) => {
+                complete: async (results: any) => {
                     const data = results.data
 
                     for (const row of data) {
@@ -132,10 +130,14 @@ const QuizItem = ({ lesson, moduleId, canEdit }: QuizItemProps) => {
                             <h4>
                                 Bài tập: <strong>{title}</strong>
                             </h4>
-                            {'-'}
-                            <h4>
-                                Số lượng câu hỏi: <strong>{data?.quiz?.questions.length}</strong>
-                            </h4>
+                            {data && data?.quiz?.questions.length > 0 && (
+                                <>
+                                    {'-'}
+                                    <h4>
+                                        Số lượng câu hỏi: <strong>{data?.quiz?.questions.length}</strong>
+                                    </h4>
+                                </>
+                            )}
                         </div>
                     </div>
                     <div className="flex items-center gap-2">

@@ -20,7 +20,9 @@ export const MessageErrors = {
     invalidValue: 'Giá trị không hợp lệ.',
     invalidDate: 'Ngày không hợp lệ. Ngày phải là ngày hiện tại hoặc trong quá khứ.',
     canEdit: 'Bạn không có quyền chỉnh sửa thông tin khoá học.',
-    descriptionCanEdit: 'Xin vui lòng xác nhận lại trạng thái của khoá học.'
+    descriptionCanEdit: 'Xin vui lòng xác nhận lại trạng thái của khoá học.',
+    priceSaleInvalid: 'Giá khuyến mãi không được lớn hơn giá gốc.',
+    priceMustBeZeroOrPositive: 'Giá phải là 0 hoặc lớn hơn 0.'
 }
 
 export const ApiMessages = {

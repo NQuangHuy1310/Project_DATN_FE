@@ -1,7 +1,7 @@
 import { toast } from 'sonner'
 import ReactQuill from 'react-quill'
 import { useParams } from 'react-router-dom'
-import { ChangeEvent, memo, useEffect, useRef, useState } from 'react'
+import { ChangeEvent, memo, useCallback, useEffect, useRef, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
@@ -83,10 +83,10 @@ const CourseOverview = memo(({ status }: { status: ICourseStatus }) => {
         }
     }
 
-    const hasIncompleteFields = () => {
+    const hasIncompleteFields = useCallback(() => {
         const values = getValues()
         return !values.name || !values.description || !values.level || !values.id_category || !values.price
-    }
+    }, [getValues])
 
     const handleSubmitForm: SubmitHandler<courseOverview> = async (data) => {
         const isEdit = canEditCourse(status)
@@ -94,7 +94,7 @@ const CourseOverview = memo(({ status }: { status: ICourseStatus }) => {
             const payload: IOverviewCourseData = {
                 ...data,
                 price: +data.price,
-                price_sale: +data.price_sale,
+                price_sale: data.price_sale ? +data.price_sale : 0,
                 _method: 'PUT'
             }
 
@@ -160,7 +160,7 @@ const CourseOverview = memo(({ status }: { status: ICourseStatus }) => {
         return () => {
             window.removeEventListener('beforeunload', handleBeforeUnload)
         }
-    }, [getValues])
+    }, [getValues, hasIncompleteFields])
 
     const isDisabled = status === 'pending' || status === 'approved'
 
@@ -329,6 +329,9 @@ const CourseOverview = memo(({ status }: { status: ICourseStatus }) => {
                                 {...register('price_sale')}
                                 readOnly={isDisabled}
                             />
+                            {errors.price_sale ? (
+                                <div className="text-sm text-red-500">{errors.price_sale.message}</div>
+                            ) : null}
 
                             <span className="text-xs text-darkGrey">Giá khuyến mãi của khoá học</span>
                         </div>

@@ -30,7 +30,7 @@ export const useBuyCourse = () => {
             } else if (data.status === 'error') {
                 toast.error(data.message)
             }
-            queryClient.invalidateQueries({ queryKey: ['buy-course'] })
+            queryClient.invalidateQueries({ queryKey: ['course-my-bought'] })
         }
     })
 }
@@ -45,17 +45,17 @@ export const useGetNewVoucher = (options?: Omit<UseQueryOptions<IVoucher>, 'quer
 
 export const useApplyVoucher = () => {
     const queryClient = useQueryClient()
-
+    const navigate = useNavigate()
     return useMutation<any, Error, [number, string]>({
         mutationFn: async ([userId, voucher]) => {
             return paymentApi.applyVoucher(userId, voucher)
         },
-        onSuccess(data) {
-            queryClient.invalidateQueries({ queryKey: ['buy-course'] })
-            if (data?.status === 'error') {
+        onSuccess: async (data) => {
+            await queryClient.refetchQueries({ queryKey: ['course-my-bought'] })
+            if (data.status === 'success') {
+                navigate(routes.myCourses)
+            } else if (data.status === 'error') {
                 toast.error(data.message)
-            } else if (data?.message) {
-                toast.success(data.message)
             }
         }
     })

@@ -56,14 +56,13 @@ const CourseDetail = () => {
     const navigate = useNavigate()
     const slug = useGetSlugParams('slug')
     const [isOpen, setIsOpen] = useState<boolean>(false)
-    const [isLiked, setIsLiked] = useState<boolean>(false)
     const [isProcessing, setIsProcessing] = useState<boolean>(false)
     const handleToggleCourse = () => setToggleCourse(!toggleCourse)
     const [toggleCourse, setToggleCourse] = useState<boolean>(false)
 
     const { user } = useGetUserProfile()
     const { data: courseDetail, isLoading: LoadingCourse } = useCourseDetailNoLoginBySlug(slug!)
-    const { data: isPurchased } = useCheckBuyCourse(user?.id || 0, courseDetail?.id || 0)
+    const { data: isPurchased, isLoading: LoadingPurchased } = useCheckBuyCourse(user?.id || 0, courseDetail?.id || 0)
     const { data: checkRating } = useCheckRatingUser(user?.id || 0, courseDetail?.id || 0)
 
     const { mutateAsync: addRating } = useCreateRating()
@@ -123,7 +122,6 @@ const CourseDetail = () => {
         setIsProcessing(true)
         if (courseDetail?.id) {
             await addWishList(courseDetail?.id)
-            setIsLiked((prev) => !prev)
             setIsProcessing(false)
         }
     }
@@ -132,12 +130,11 @@ const CourseDetail = () => {
         setIsProcessing(true)
         if (courseDetail?.id) {
             await unWishList(courseDetail?.id)
-            setIsLiked(false)
             setIsProcessing(false)
         }
     }
 
-    if (LoadingCourse) return <Loading />
+    if (LoadingCourse || LoadingPurchased) return <Loading />
 
     return (
         <div className="grid w-full grid-cols-12 gap-5">
@@ -384,7 +381,7 @@ const CourseDetail = () => {
                                         )}
                                     </div>
                                 ) : (!courseDetail?.price && !courseDetail?.price_sale) ||
-                                    (courseDetail?.price === 0 && courseDetail?.price_sale === 0) ? (
+                                    (Math.floor(courseDetail?.price) === 0 && Math.floor(courseDetail?.price_sale) === 0) ? (
                                     <div className="flex items-center gap-3">
                                         <Button
                                             className="block w-full rounded-md bg-primary py-2 text-center text-white"
@@ -591,9 +588,7 @@ const CourseDetail = () => {
                                             <div className="flex w-full gap-2">
                                                 <Button
                                                     className="w-full"
-                                                    onClick={() =>
-                                                        navigate(routes.courseLeaning.replace(':slug', slug!))
-                                                    }
+                                                    onClick={() => navigate(routes.courseLeaning.replace(':slug', slug!))}
                                                 >
                                                     Vào học
                                                 </Button>
@@ -616,13 +611,30 @@ const CourseDetail = () => {
                                                 )}
                                             </div>
                                         ) : (!courseDetail?.price && !courseDetail?.price_sale) ||
-                                            (courseDetail?.price === 0 && courseDetail?.price_sale === 0) ? (
-                                            <Button
-                                                className="block w-full rounded-md bg-primary py-2 text-center text-white"
-                                                onClick={handleLearnNow}
-                                            >
-                                                Đăng ký học
-                                            </Button>
+                                            (Math.floor(courseDetail?.price) === 0 && Math.floor(courseDetail?.price_sale) === 0) ? (
+                                            <div className="flex items-center gap-3">
+                                                <Button
+                                                    className="block w-full rounded-md bg-primary py-2 text-center text-white"
+                                                    onClick={handleLearnNow}
+                                                >
+                                                    Đăng ký học
+                                                </Button>
+                                                <div className="flex h-9 w-11 cursor-pointer items-center justify-center rounded-md border-2">
+                                                    {isProcessing ? (
+                                                        <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent"></div>
+                                                    ) : checkWishList?.action === 'unfavorite' ? (
+                                                        <FaHeart
+                                                            onClick={handleUnWishList}
+                                                            className="size-6 rounded-md text-primary"
+                                                        />
+                                                    ) : (
+                                                        <FaRegHeart
+                                                            onClick={handleAddWishList}
+                                                            className="size-6 rounded-md text-darkGrey"
+                                                        />
+                                                    )}
+                                                </div>
+                                            </div>
                                         ) : (
                                             <div className="flex items-center gap-3">
                                                 <Link
@@ -631,18 +643,18 @@ const CourseDetail = () => {
                                                 >
                                                     Mua khoá học
                                                 </Link>
-                                                <div className="flex h-9 w-11 items-center justify-center rounded-md border-2">
+                                                <div className="flex h-9 w-11 cursor-pointer items-center justify-center rounded-md border-2">
                                                     {isProcessing ? (
                                                         <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent"></div>
-                                                    ) : isLiked ? (
+                                                    ) : checkWishList?.action === 'unfavorite' ? (
                                                         <FaHeart
                                                             onClick={handleUnWishList}
-                                                            className="size-6 cursor-pointer rounded-md text-primary"
+                                                            className="size-6 rounded-md text-primary"
                                                         />
                                                     ) : (
                                                         <FaRegHeart
                                                             onClick={handleAddWishList}
-                                                            className="size-6 cursor-pointer rounded-md text-darkGrey"
+                                                            className="size-6 rounded-md text-darkGrey"
                                                         />
                                                     )}
                                                 </div>
@@ -650,20 +662,30 @@ const CourseDetail = () => {
                                         )}
                                     </div>
                                 ) : isPurchased?.status === 'error' ? (
-                                    <Button
-                                        className="w-full"
-                                        onClick={() => navigate(routes.courseLeaning.replace(':slug', slug!))}
-                                    >
-                                        Vào học
-                                    </Button>
-                                ) : (
-                                    <Button
-                                        className="block w-full rounded-md bg-primary py-2 text-center text-white"
-                                        onClick={handleLearnNow}
-                                    >
-                                        Đăng ký học
-                                    </Button>
-                                )}
+                                    <div className="flex items-center gap-3">
+                                        <Button
+                                            className="w-full"
+                                            onClick={() => navigate(routes.courseLeaning.replace(':slug', slug!))}
+                                        >
+                                            Vào học
+                                        </Button>
+                                        <div className="flex h-9 w-11 cursor-pointer items-center justify-center rounded-md border-2">
+                                            {isProcessing ? (
+                                                <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent"></div>
+                                            ) : checkWishList?.action === 'unfavorite' ? (
+                                                <FaHeart
+                                                    onClick={handleUnWishList}
+                                                    className="size-6 rounded-md text-primary"
+                                                />
+                                            ) : (
+                                                <FaRegHeart
+                                                    onClick={handleAddWishList}
+                                                    className="size-6 rounded-md text-darkGrey"
+                                                />
+                                            )}
+                                        </div>
+                                    </div>
+                                ) : ''}
 
                                 <Dialog open={isOpen} onOpenChange={setIsOpen}>
                                     <DialogContent className="max-h-[90vh] w-[90vw] max-w-full overflow-y-scroll p-5 md:max-w-[50vw] md:p-10">

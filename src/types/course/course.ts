@@ -35,6 +35,8 @@ export interface ICourse {
     user?: IUser
     ratings_avg_rate?: number
     ratings_count: number
+    is_course_bought: boolean
+    progress_percent:number
 }
 
 export interface ICourseToday extends ICourse {

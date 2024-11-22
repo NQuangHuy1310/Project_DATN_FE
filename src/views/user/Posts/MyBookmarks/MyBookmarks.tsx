@@ -51,12 +51,12 @@ const MyBookmarks = () => {
                 <div className="w-1/4 ">
                     <div className="flex flex-col gap-10 rounded-3xl">
                         <img
-                            src="https://files.fullstack.edu.vn/f8-prod/banners/25/63dc61d4caec2.png"
+                            src="https://s.net.vn/PVTz"
                             alt=""
                             className="rounded-3xl"
                         />
                         <img
-                            src="https://files.fullstack.edu.vn/f8-prod/banners/32/6421144f7b504.png"
+                            src="https://s.net.vn/whBU"
                             alt=""
                             className="rounded-3xl"
                         />

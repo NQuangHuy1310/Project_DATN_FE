@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import { IoMdStar } from 'react-icons/io'
 import { FaRegUser } from 'react-icons/fa'
@@ -14,6 +14,7 @@ import { formatDuration, getImagesUrl } from '@/lib'
 import routes from '@/configs/routes'
 
 const Course = ({ data, progressLesson, page }: { data: ICourse; progressLesson?: number; page?: string }) => {
+    const navigate = useNavigate()
     const totalTime = formatDuration((data?.total_duration_video as unknown as number) || 0)
     const stars = [...Array(5)].map((_, index) => {
         const fullStar = index < Math.floor(data.ratings_avg_rate!)
@@ -21,49 +22,80 @@ const Course = ({ data, progressLesson, page }: { data: ICourse; progressLesson?
         return { fullStar, halfStar }
     })
     return (
-        <Link
-            to={page == routes.courseDetailNoLogin ? `/course/${data.slug}` : `/courses/${data.slug}`}
-            className="card flex w-full cursor-text flex-col gap-4 shadow-md hover:shadow-[0px_40px_100px_0px_#0000000d] hover:transition-all md:w-[360px]"
-        >
-            <div className="relative h-[160px] flex-shrink-0 cursor-pointer">
-                <img
-                    src={getImagesUrl(data.thumbnail!)}
-                    alt={data.name}
-                    className="h-full w-full rounded-lg object-cover"
-                />
-                <div className="absolute bottom-2.5 left-2.5">
-                    <CourseLevel courseLevel={data.level!} />
+        <div className="card flex w-full cursor-text flex-col gap-3 shadow-md hover:shadow-[0px_40px_100px_0px_#0000000d] hover:transition-all md:w-[360px]">
+            <Link to={page == routes.courseDetailNoLogin ? `/course/${data.slug}` : `/courses/${data.slug}`} className='flex flex-col gap-2'>
+                <div className="relative h-[160px] flex-shrink-0 cursor-pointer">
+                    <img
+                        src={getImagesUrl(data.thumbnail!)}
+                        alt={data.name}
+                        className="h-full w-full rounded-lg object-cover"
+                    />
+                    <div className="absolute bottom-2.5 left-2.5">
+                        <CourseLevel courseLevel={data.level!} />
+                    </div>
                 </div>
-            </div>
-            <div className="flex flex-col gap-2.5">
                 <h3 className="text-overflow cursor-pointer text-base font-bold text-black md:text-lg">{data.name}</h3>
-                {data.price && data.price != 0 ? (
-                    <div className="flex items-center gap-3">
-                        <div className="flex items-center gap-1">
-                            {data.price_sale && data.price_sale != 0 ? (
-                                <div className='flex items-center gap-1'>
-                                    <RiMoneyDollarCircleFill className="size-5 text-orange-500" />
-                                    <del className='font-semibold '>{Math.floor(data.price)}</del>
-                                </div>
-                            ) : (
-                                <div className='flex items-center gap-1'>
-                                    <RiMoneyDollarCircleFill className="size-5 text-orange-500" />
-                                    <p className='text-base'>{Math.floor(data.price)}</p>
-                                </div>
-                            )}
+            </Link>
+            <div className="flex flex-col gap-2.5">
+                {data.is_course_bought === true ? (
+                    <div className="flex flex-col gap-2">
+                        <div className="flex h-2 w-full items-center overflow-hidden rounded bg-darkGrey/20">
+                            <span
+                                className={`block h-full ${data.level === 'Sơ cấp'
+                                    ? 'bg-[#FFBB54]'
+                                    : data.level === 'Trung cấp'
+                                        ? 'bg-[#25C78B]'
+                                        : 'bg-red-600'
+                                    }`}
+                                style={{ width: `${data.progress_percent}%` }}
+                            ></span>
+                            <span
+                                className="block h-full bg-darkGrey/20"
+                                style={{ width: `${100 - data.progress_percent}%` }}
+                            ></span>
                         </div>
-                        {data.price_sale && data.price_sale != 0 && (
-                            <div className='flex items-center gap-1'>
-                                <RiMoneyDollarCircleFill className="size-5 text-orange-500" />
-                                <p className="font-semibold text-base text-red-600">{Math.floor(data.price_sale)}</p>
-                            </div>
-                        )}
+
+                        <span className="text-end text-[13px] font-medium">
+                            {data.progress_percent}% hoàn thành
+                        </span>
                     </div>
                 ) : (
-                    <span className="text-orange-500 text-base">Miễn phí</span>
+                    <>
+                        {data?.price && data?.price != 0 ? (
+                            <div className="flex items-center gap-3">
+                                <div className="flex items-center gap-1">
+                                    {data?.price_sale && data?.price_sale != 0 ? (
+                                        <div className="flex items-center gap-1">
+                                            <RiMoneyDollarCircleFill className="size-4 text-orange-500" />
+                                            <del className="text-[12px] font-semibold">
+                                                {Math.floor(data?.price)}
+                                            </del>
+                                        </div>
+                                    ) : (
+                                        <div className="flex items-center gap-1">
+                                            <RiMoneyDollarCircleFill className="size-4 text-orange-500" />
+                                            <p className="text-base font-semibold text-red-600">
+                                                {Math.floor(data?.price)}
+                                            </p>
+                                        </div>
+                                    )}
+                                </div>
+                                {data?.price_sale && data?.price_sale != 0 && (
+                                    <div className="flex items-center gap-1">
+                                        <RiMoneyDollarCircleFill className="size-4 text-orange-500" />
+                                        <p className="text-base font-semibold text-red-600">
+                                            {Math.floor(data?.price_sale)}
+                                        </p>
+                                    </div>
+                                )}
+                            </div>
+                        ) : (
+                            <span className="text-base font-semibold text-orange-500">Miễn phí</span>
+                        )}
+                    </>
                 )}
 
-                <div className="flex items-center justify-between">
+                <div onClick={() => navigate(routes.instructorDetail.replace(':id', String(data.id_user)))} className={`flex ${!data.is_course_bought ? 'mt-2.5' : ''} cursor-pointer`}>
                     {data.user && (
                         <div className="flex w-fit items-center gap-2">
                             <Avatar className="size-8 flex-shrink-0">
@@ -122,7 +154,7 @@ const Course = ({ data, progressLesson, page }: { data: ICourse; progressLesson?
                     </div>
                 )}
             </div>
-        </Link>
+        </div>
     )
 }
 

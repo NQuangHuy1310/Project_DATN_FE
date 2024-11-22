@@ -170,7 +170,10 @@ export const useAddWishList = () => {
             return courseApi.addWishList(courseId)
         },
         onSuccess: async () => {
-            queryClient.invalidateQueries({ queryKey: ['wishlist-course'] })
+            await Promise.all([
+                queryClient.invalidateQueries({ queryKey: ['wishlist-course'] }),
+                queryClient.invalidateQueries({ queryKey: ['check-wishlist-course'] })
+            ])
         }
     })
 }
@@ -182,7 +185,10 @@ export const useUnWishList = () => {
             return courseApi.unWishList(courseId)
         },
         onSuccess: async () => {
-            queryClient.invalidateQueries({ queryKey: ['wishlist-course'] })
+            await Promise.all([
+                queryClient.invalidateQueries({ queryKey: ['wishlist-course'] }),
+                queryClient.refetchQueries({ queryKey: ['check-wishlist-course'] })
+            ])
         }
     })
 }
@@ -193,7 +199,7 @@ export const useCheckWishList = (
 ) => {
     return useQuery<ICheckWishList>({
         ...options,
-        queryKey: ['wishlist-course', courseId],
+        queryKey: ['check-wishlist-course', courseId],
         enabled: !!courseId,
         queryFn: () => courseApi.checkWishList(courseId)
     })

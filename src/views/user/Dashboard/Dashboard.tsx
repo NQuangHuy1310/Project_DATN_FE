@@ -14,7 +14,7 @@ const Dashboard = () => {
     const { data: instructorMonth } = useInstructorMonth()
     const { data: courseFree } = useCourseFree()
     const { data: postFeatured } = useGetFeaturedPosts()
-    console.log(coursePopulate)
+
     if (isLoading) return <Loading />
 
     return (

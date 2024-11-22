@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { IoMdStar } from 'react-icons/io'
 import { FaRegUser } from 'react-icons/fa'
 import { IoTimeOutline } from 'react-icons/io5'
@@ -12,6 +12,7 @@ import { ICourseMyBought } from '@/types/user'
 import routes from '@/configs/routes'
 
 const CourseMyBought = ({ data, progressLesson }: { data: ICourseMyBought; progressLesson?: number }) => {
+    const navigate = useNavigate()
     const totalTime = formatDuration((data?.total_duration_video as unknown as number) || 0)
 
     const stars = [...Array(5)].map((_, index) => {
@@ -22,22 +23,21 @@ const CourseMyBought = ({ data, progressLesson }: { data: ICourseMyBought; progr
     })
 
     return (
-        <Link
-            to={routes.courseDetail.replace(':slug', data.slug)}
-            className="card flex w-full cursor-text flex-col gap-4 shadow-md hover:shadow-[0px_40px_100px_0px_#0000000d] hover:transition-all md:w-[360px]"
-        >
-            <div className="relative h-[160px] flex-shrink-0 cursor-pointer">
-                <img
-                    src={getImagesUrl(data.thumbnail!)}
-                    alt={data.name}
-                    className="h-full w-full rounded-lg object-cover"
-                />
-                <div className="absolute bottom-2.5 left-2.5">
-                    <CourseLevel courseLevel={data.level!} />
+        <div className="card flex w-full cursor-text flex-col gap-4 shadow-md hover:shadow-[0px_40px_100px_0px_#0000000d] hover:transition-all md:w-[360px]">
+            <Link to={routes.courseDetail.replace(':slug', data.slug)}>
+                <div className="relative h-[160px] flex-shrink-0 cursor-pointer">
+                    <img
+                        src={getImagesUrl(data.thumbnail!)}
+                        alt={data.name}
+                        className="h-full w-full rounded-lg object-cover"
+                    />
+                    <div className="absolute bottom-2.5 left-2.5">
+                        <CourseLevel courseLevel={data.level!} />
+                    </div>
                 </div>
-            </div>
-            <div className="flex flex-col gap-2.5">
                 <h3 className="text-overflow cursor-pointer text-base font-bold text-black md:text-lg">{data.name}</h3>
+            </Link>
+            <div className="flex flex-col gap-2.5">
                 <div className="flex flex-col gap-2">
                     <div className="flex h-2 w-full items-center overflow-hidden rounded bg-darkGrey/20">
                         <span
@@ -60,7 +60,7 @@ const CourseMyBought = ({ data, progressLesson }: { data: ICourseMyBought; progr
 
                 <div className="flex items-center justify-between">
                     {data.user && (
-                        <div className="flex items-center gap-2">
+                        <div onClick={() => navigate(routes.instructorDetail.replace(':id', String(data.id_user)))} className="flex items-center gap-2  cursor-pointer">
                             <Avatar className="size-8 flex-shrink-0">
                                 <AvatarImage src={getImagesUrl(data.user?.avatar || '')} alt={data.user.name} />
                                 <AvatarFallback className="flex size-8 items-center justify-center bg-slate-500/50 font-semibold">
@@ -108,7 +108,7 @@ const CourseMyBought = ({ data, progressLesson }: { data: ICourseMyBought; progr
                     </div>
                 )}
             </div>
-        </Link>
+        </div>
     )
 }
 

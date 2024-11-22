@@ -21,17 +21,14 @@ const PostOutStanding = ({ image, title, name, avatar, slug, content }: PostProp
         return Math.ceil((words / wordsPerMinute))
     }
     return (
-        <div className="flex w-full max-w-[360px] cursor-pointer flex-col gap-4 rounded-lg border p-4 shadow-md">
-            <div className="h-[170px] w-full overflow-hidden rounded-lg">
-                <img src={getImagesUrl(image)} alt={title} className="h-full w-full object-cover" />
-            </div>
-            <div className="flex flex-col gap-3">
-                <div className="flex flex-col gap-1">
-                    <Link to={routes.postsDetail.replace(':slug', slug)}>
-                        {' '}
-                        <h3 className="truncate text-lg font-semibold">{title}</h3>
-                    </Link>
+        <div className="flex w-full max-w-[360px] flex-col gap-4 rounded-lg border p-4 shadow-md">
+            <Link to={routes.postsDetail.replace(':slug', slug)} className='flex flex-col gap-2'>
+                <div className="h-[170px] w-full overflow-hidden rounded-lg">
+                    <img src={getImagesUrl(image)} alt={title} className="h-full w-full object-cover" />
                 </div>
+                <h3 className="truncate text-lg font-semibold">{title}</h3>
+            </Link>
+            <div className="flex flex-col gap-3">
                 <div className="flex items-center justify-between gap-2 text-xs text-gray-500">
                     <div className="flex items-center gap-2">
                         <Avatar className="size-7 cursor-pointer md:size-10">
@@ -49,7 +46,7 @@ const PostOutStanding = ({ image, title, name, avatar, slug, content }: PostProp
                     <span>{calculateReadingTime(content)} phút đọc</span>
                 </div>
             </div>
-        </div>
+        </div >
     )
 }
 

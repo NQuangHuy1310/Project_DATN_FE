@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { BiBook } from 'react-icons/bi'
 import { BsPlayBtn } from 'react-icons/bs'
+import { MdReviews } from 'react-icons/md'
 import { GrHistory } from 'react-icons/gr'
 import { LuUserCircle } from 'react-icons/lu'
 import { PiStudentBold } from 'react-icons/pi'
@@ -170,6 +171,11 @@ export const instructorPerformanceAside = [
         title: 'Học viên',
         icon: PiStudentBold,
         path: routes.instructorPerformanceStudent
+    },
+    {
+        title: 'Đánh giá',
+        icon: MdReviews,
+        path: routes.instructorPerformanceRating
     }
 ]
 

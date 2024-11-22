@@ -14,6 +14,8 @@ import {
     AlertDialogHeader,
     AlertDialogTitle
 } from '@/components/ui/alert-dialog'
+import { getImagesUrl } from '@/lib'
+import { Dialog, DialogContent } from '@/components/ui/dialog'
 
 const LeaningCourseQuiz = ({
     checkQuiz,
@@ -32,6 +34,7 @@ const LeaningCourseQuiz = ({
     const [incorrectOptions, setIncorrectOptions] = useState<{ [key: number]: number[] }>({})
     const [checkFinish, setCheckFinish] = useState<boolean>(false)
     const [isDisabled, setIsDisabled] = useState(true)
+    const [showImage, setShowImage] = useState<boolean>(false)
 
     const { user } = useGetUserProfile()
 
@@ -43,7 +46,6 @@ const LeaningCourseQuiz = ({
 
     // Lấy đáp án người dùng đã làm rồi
     const { data: getQuizLeaning } = useGetQuizLeaning(user?.id!, dataLesson.id, checkQuiz)
-
     useEffect(() => {
         if (checkQuiz && getQuizLeaning?.answers) {
             const answersFromAPI = getQuizLeaning.answers.reduce((acc: any, answer) => {
@@ -78,6 +80,7 @@ const LeaningCourseQuiz = ({
     }
 
     const checkAnswers = async () => {
+        setIsDisabled(true)
         const formattedAnswers = Object.keys(userAnswers).map((questionId) => {
             const answer = userAnswers[Number(questionId)]
             return {
@@ -99,7 +102,10 @@ const LeaningCourseQuiz = ({
 
         const data = await checkQuizLeaning([result])
 
+        setIsDisabled(false)
+
         if (data.total_score === 100) {
+            setIsDisabled(true)
             await quizProcess([
                 data.quiz_id,
                 {
@@ -140,36 +146,67 @@ const LeaningCourseQuiz = ({
     }, [userAnswers, dataLesson.questions])
 
     return (
-        <div className="mx-auto max-w-4xl p-4">
+        <div className="mx-auto max-w-5xl p-4">
             <h3 className="mb-4 text-2xl font-bold">{dataLesson?.title}</h3>
             {dataLesson.questions.map((question) => (
-                <div key={question.id} className="mb-6 flex flex-col gap-2">
-                    <div className="flex items-center gap-2">
-                        <h4 className="text-base font-medium">{question.question} ?</h4>
-                        <span className="text-red-400">
-                            ({question.type === 'one_choice' ? 'Chọn 1 đáp án' : 'Có thể chọn nhiều đáp án'})
-                        </span>
-                    </div>
-                    {question.options.map((option) => (
-                        <div
-                            key={option.id}
-                            onClick={() => handleOptionChange(question.id, option.id, question.type)}
-                            className={`mb-2 cursor-pointer rounded-md border-2 px-3 py-4 text-sm ${
-                                question.type === 'one_choice'
-                                    ? userAnswers[question.id] === option.id
-                                        ? 'border-primary/50'
-                                        : 'border-white'
-                                    : Array.isArray(userAnswers[question.id]) &&
-                                        (userAnswers[question.id] as number[]).includes(option.id)
-                                      ? 'border-primary/50'
-                                      : 'border-white'
-                            } ${
-                                incorrectOptions[question.id]?.includes(option.id) ? 'border-red-500' : 'bg-softGrey'
-                            } transition-all duration-200 hover:bg-blue-50`}
-                        >
-                            {option.option}
+                <div key={question.id} className="mb-6 flex flex-col gap-5">
+                    <div className="flex flex-col gap-2">
+                        <div className="flex items-center gap-2">
+                            <h4 className="text-lg font-medium">{question.question} ?</h4>
+                            <span className="text-red-400">
+                                ({question.type === 'one_choice' ? 'Chọn 1 đáp án' : 'Có thể chọn nhiều đáp án'})
+                            </span>
                         </div>
-                    ))}
+                        <Dialog open={showImage} onOpenChange={() => setShowImage(false)}>
+                            <DialogContent className="!w-[60vw]">
+                                <img src={getImagesUrl(question.image_url!)} className="w-full" alt="" />
+                            </DialogContent>
+                        </Dialog>
+                        <img
+                            onClick={() => setShowImage(true)}
+                            src={getImagesUrl(question.image_url!)}
+                            className="w-full max-w-[260px]"
+                            alt=""
+                        />
+                    </div>
+                    <div
+                        style={{ gridTemplateColumns: `repeat(${Math.min(question?.options?.length, 5)}, 1fr)` }}
+                        className="grid gap-2"
+                    >
+                        {question.options.map((option) => (
+                            <div
+                                key={option.id}
+                                onClick={() => handleOptionChange(question.id, option.id, question.type)}
+                                className={`relative mb-2 flex min-h-[220px] cursor-pointer flex-col gap-2 rounded-xl border-2 px-3 py-4 text-sm ${
+                                    question.type === 'one_choice'
+                                        ? userAnswers[question.id] === option.id
+                                            ? 'border-primary/50'
+                                            : 'border-white'
+                                        : Array.isArray(userAnswers[question.id]) &&
+                                            (userAnswers[question.id] as number[]).includes(option.id)
+                                          ? 'border-primary/50'
+                                          : 'border-white'
+                                } ${
+                                    incorrectOptions[question.id]?.includes(option.id)
+                                        ? 'border-red-500'
+                                        : 'bg-softGrey'
+                                } transition-all duration-200 hover:bg-blue-50`}
+                            >
+                                <span
+                                    className={`${!option.image_url && 'absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2'} text-base`}
+                                >
+                                    {option.option}
+                                </span>
+                                {option.image_url && (
+                                    <img
+                                        src={getImagesUrl(option.image_url)}
+                                        className="h-[80%] w-full rounded-md"
+                                        alt=""
+                                    />
+                                )}
+                            </div>
+                        ))}
+                    </div>
                 </div>
             ))}
             <AlertDialog open={checkFinish} onOpenChange={() => setCheckFinish(false)}>
@@ -183,7 +220,7 @@ const LeaningCourseQuiz = ({
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
-            <Button onClick={checkAnswers} disabled={isDisabled}>
+            <Button onClick={checkAnswers} disabled={isDisabled || getQuizLeaning ? true : false}>
                 Kiểm tra
             </Button>
         </div>

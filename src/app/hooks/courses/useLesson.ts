@@ -43,8 +43,8 @@ export const useUpdateLessonProCess = () => {
         },
         onSuccess: async () => {
             await Promise.all([
-                queryClient.invalidateQueries({ queryKey: ['lesson-process-leaning'] }),
-                queryClient.invalidateQueries({ queryKey: ['course-my-bought'] })
+                queryClient.invalidateQueries({ queryKey: ['course-history', 5] }),
+                queryClient.refetchQueries({ queryKey: ['course-my-bought'] })
             ])
         }
     })
@@ -57,8 +57,11 @@ export const useUpdateQuizProCess = () => {
         mutationFn: async ([quizId, quizData]) => {
             return lessonApi.quizProcessLeaning(quizId, quizData)
         },
-        onSuccess() {
-            queryClient.invalidateQueries({ queryKey: ['course-leaning'] })
+        onSuccess: async () => {
+            await Promise.all([
+                queryClient.invalidateQueries({ queryKey: ['course-history', 5] }),
+                queryClient.refetchQueries({ queryKey: ['course-my-bought'] })
+            ])
         }
     })
 }

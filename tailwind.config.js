@@ -94,5 +94,6 @@ export default {
             }
         }
     },
+    safelist: ['ql-syntax'],
     plugins: [require('tailwindcss-animate')]
 }

@@ -12,7 +12,15 @@
     }
 
     .container-main {
-        @apply mx-auto max-w-[1200px] px-5 lg:px-0
+        @apply mx-auto max-w-[1200px] px-5 lg:px-0;
+    }
+
+    .ql-syntax {
+        background-color: #1c1d21;
+        color: #0077ff;
+        border-radius: 10px;
+        padding: 10px;
+        font-family: 'Courier New', Courier, monospace;
     }
 
     ::-webkit-scrollbar {

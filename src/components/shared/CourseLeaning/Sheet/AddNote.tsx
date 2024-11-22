@@ -7,6 +7,7 @@ import useFormatTime from '@/app/hooks/common/useFomatTime'
 import { ILessonLeaning } from '@/types/course/course'
 import { useAddNoteLesson } from '@/app/hooks/courses/useNote'
 import { Sheet, SheetClose, SheetContent, SheetTitle } from '@/components/ui/sheet'
+import { formats, modules } from '@/constants/quillConstants'
 
 const AddNote = ({
     lessonData,
@@ -46,7 +47,12 @@ const AddNote = ({
                         <Button className="h-7">{useFormatTime(currentVideoTime)}</Button>
                     </div>
                     <div className="py-2">
-                        <ReactQuill onChange={setContent} placeholder="Nhập ghi chú" />
+                        <ReactQuill
+                            formats={formats}
+                            modules={modules}
+                            onChange={setContent}
+                            placeholder="Nhập ghi chú"
+                        />
                         <div className="mt-5 flex justify-end gap-2">
                             <SheetClose>
                                 <Button className="uppercase" variant="secondary">

@@ -4,7 +4,7 @@ import { TbUserHexagon } from 'react-icons/tb'
 import { IoSettingsOutline } from 'react-icons/io5'
 
 import routes from '@/configs/routes'
-import { getImagesUrl } from '@/lib'
+import { getImagesUrl, removeQuestion } from '@/lib'
 import useGetUserProfile from '@/app/hooks/accounts/useGetUser'
 import {
     DropdownMenu,
@@ -30,6 +30,7 @@ const UserButton = () => {
     const handleLogout = async () => {
         await authApis.logout()
         removeAccessToken()
+        removeQuestion()
         clearUserAndProfile()
         navigate(routes.home)
     }
@@ -48,7 +49,7 @@ const UserButton = () => {
                 <DropdownMenuContent align="end" className="w-72">
                     <DropdownMenuGroup className="flex flex-col gap-1.5 p-2">
                         {validRoutesMember.some((route) => location.pathname.includes(route)) &&
-                        user?.user_type === 'teacher' ? (
+                        (user?.user_type === 'teacher' || user?.user_type === 'admin') ? (
                             <Link to={routes.instructorDashboard}>
                                 <DropdownMenuItem className="flex items-center gap-2">
                                     <TbUserHexagon className="size-4" />
@@ -63,7 +64,7 @@ const UserButton = () => {
                                 </DropdownMenuItem>
                             </Link>
                         )}
-                        {user?.user_type !== 'teacher' && (
+                        {user?.user_type !== 'teacher' && user?.user_type !== 'admin' && (
                             <Link to={routes.instructorRegister}>
                                 <DropdownMenuItem className="flex items-center gap-2">
                                     <TbUserHexagon className="size-4" />

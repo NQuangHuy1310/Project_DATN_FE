@@ -25,6 +25,11 @@ export const removeAccessToken = (): void => {
     localStorage.removeItem('access_token')
 }
 
+export const removeQuestion = (): void => {
+    localStorage.removeItem('selectedOptions')
+    localStorage.removeItem('currentQuestion')
+}
+
 export const getImagesUrl = (imagePath: string): string => {
     return `${imageBaseUrl}${imagePath}`
 }

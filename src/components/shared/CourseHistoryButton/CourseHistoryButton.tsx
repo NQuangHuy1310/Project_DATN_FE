@@ -23,7 +23,10 @@ const CourseHistoryButton = () => {
             return `${date.toLocaleDateString()}`
         }
         if (type == 'hour') {
-            return `${date.getHours()}:${date.getMinutes()}`
+            const hours = date.getHours()
+            const minutes = date.getMinutes()
+            const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes
+            return `${hours}:${formattedMinutes}`
         }
     }
 
@@ -32,7 +35,7 @@ const CourseHistoryButton = () => {
         <>
             <DropdownMenu>
                 <DropdownMenuTrigger>
-                    <span className="text-sm font-medium">Lịch sử học tập</span>
+                    <span className="text-sm font-bold">Lịch sử học tập</span>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-[500px]">
                     <DropdownMenuLabel className="flex items-center justify-between">

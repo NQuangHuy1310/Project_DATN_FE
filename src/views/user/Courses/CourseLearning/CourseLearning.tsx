@@ -38,6 +38,7 @@ import {
     DropdownMenuGroup,
     DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
+import CourseHistoryButton from '@/components/shared/CourseHistoryButton/CourseHistoryButton'
 
 const CourseLearning = () => {
     const [toggleTab, setToggleTab] = useState<boolean>(true)
@@ -494,7 +495,6 @@ const CourseLearning = () => {
                             </span>
                         </div>
                     )}
-
                     <div
                         className="flex cursor-pointer items-center gap-1"
                         onClick={() => {
@@ -600,6 +600,9 @@ const CourseLearning = () => {
 
             {/* Footer */}
             <footer className="fixed bottom-0 w-full bg-neutral-200 py-2">
+                <div className="absolute left-4 top-1/2 -translate-y-1/2">
+                    <CourseHistoryButton />
+                </div>
                 <div className="flex items-center justify-center gap-2">
                     <Button
                         onClick={() => handleChangeLesson('previous')}

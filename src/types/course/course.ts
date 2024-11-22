@@ -36,7 +36,7 @@ export interface ICourse {
     ratings_avg_rate?: number
     ratings_count: number
     is_course_bought: boolean
-    progress_percent:number
+    progress_percent: number
 }
 
 export interface ICourseToday extends ICourse {
@@ -71,6 +71,7 @@ export interface ILessonAbleLeaning {
     description: string | null
     created_at: string
     updated_at: string
+    resourse_path?: string
     content?: string
     type?: 'upload' | 'url'
     url?: string

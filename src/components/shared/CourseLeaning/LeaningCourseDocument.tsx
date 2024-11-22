@@ -1,6 +1,7 @@
 import { useUpdateLessonProCess } from '@/app/hooks/courses/useLesson'
 import AddQA from '@/components/shared/CourseLeaning/Sheet/AddQA'
 import { Button } from '@/components/ui/button'
+import { backendUrl } from '@/configs/baseUrl'
 import { ILessonLeaning } from '@/types/course/course'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { HiOutlineChatAlt2 } from 'react-icons/hi'
@@ -22,6 +23,11 @@ const LeaningCourseDocument = ({
         const wordsPerMinute = 200
         const words = content.trim().split(/\s+/).length
         return Math.ceil((words / wordsPerMinute) * 60 * 1000)
+    }
+
+    const handleDownloadFile = () => {
+        const token = localStorage.getItem('access_token')
+        const filePath = dataLesson.lessonable?.resourse_path
     }
 
     useEffect(() => {
@@ -50,6 +56,11 @@ const LeaningCourseDocument = ({
                 <h2 className="text-xl font-bold">{dataLesson.lessonable!.lesson_title}</h2>
                 {dataLesson.content_type === 'document' && 'content' in dataLesson.lessonable! && (
                     <div dangerouslySetInnerHTML={{ __html: dataLesson.lessonable.content! }} />
+                )}
+                {dataLesson.lessonable?.resourse_path && (
+                    <Button className="w-fit" onClick={handleDownloadFile}>
+                        Tải xuống tải nguyên đính kèm của bài học
+                    </Button>
                 )}
             </div>
             <div className={`fixed bottom-[70px] z-50 ${toggleTab ? 'right-[2%] lg:right-[25%]' : 'right-[2%]'}`}>

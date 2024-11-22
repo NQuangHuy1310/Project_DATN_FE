@@ -11,8 +11,9 @@ export const courseUri = {
     COURSE_POPULATE: `${COURSE_URL}popular-course`,
     COURSE_RELATED: (slug: string) => `${COURSE_URL}related-course/${slug}`,
     COURSE_FREE: `${COURSE_URL}free-course`,
+    COURSE_TODAY: `${COURSE_URL}today-new`,
 
-    CHECK_BUY_COURSE: (userId: number, courseId: number) => `${COURSE_URL}check-buy-course/${userId}/${courseId}`,
+    CHECK_BUY_COURSE: (userId: number, courseId: string) => `${COURSE_URL}check-buy-course/${userId}/${courseId}`,
     REGISTER_COURSE: (userId: number, courseId: number) => `transactions/register-course/${userId}/${courseId}`,
     //COMMENT COURSE
     ADD_COMMENT_COURSE: 'comments/add-comment-lesson',

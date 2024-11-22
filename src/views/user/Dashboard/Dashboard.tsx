@@ -2,9 +2,8 @@ import routes from '@/configs/routes'
 import Course from '@/components/shared/Course'
 import Loading from '@/components/Common/Loading/Loading'
 import Teacher from '@/components/shared/Teacher'
-import { useCourseFree, useCoursePopulate } from '@/app/hooks/courses/useCourse'
+import { useCourseFree, useCoursePopulate, useCourseToday } from '@/app/hooks/courses/useCourse'
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
-import CourseToday from '@/components/shared/Course/CourseToday'
 import { useInstructorMonth } from '@/app/hooks/instructors'
 import { useGetFeaturedPosts } from '@/app/hooks/posts'
 import PostOutStanding from '@/components/shared/Post/PostOutStanding'
@@ -14,12 +13,15 @@ const Dashboard = () => {
     const { data: instructorMonth } = useInstructorMonth()
     const { data: courseFree } = useCourseFree()
     const { data: postFeatured } = useGetFeaturedPosts()
+    const { data: courseToday } = useCourseToday()
 
     if (isLoading) return <Loading />
 
     return (
         <div className="grid grid-cols-12 items-start gap-5">
-            <div className="card col-span-12 flex flex-1 flex-col gap-7 md:col-span-7 lg:col-span-9">
+            <div
+                className={`card flex flex-col gap-7 ${courseToday && courseToday.length > 0 ? 'md:col-span-7 lg:col-span-9' : 'col-span-12'}`}
+            >
                 <Carousel
                     className="w-full"
                     opts={{
@@ -142,7 +144,8 @@ const Dashboard = () => {
                                                 name={post.name}
                                                 slug={post.slug}
                                                 views={post.views}
-                                                content={post.content} />
+                                                content={post.content}
+                                            />
                                         </CarouselItem>
                                     ))}
                             </CarouselContent>
@@ -152,43 +155,34 @@ const Dashboard = () => {
                     ''
                 )}
             </div>
-            <div className="card col-span-12 w-full md:col-span-5 lg:col-span-3">
-                <Carousel
-                    className="w-full"
-                    opts={{
-                        align: 'start'
-                    }}
-                >
-                    <div className="flex justify-between">
-                        <h5 className="text-xl font-medium text-black">Hôm nay</h5>
-                        <div className="flex gap-2">
-                            <CarouselPrevious className="!translate-y-0 !shadow-none" />
-                            <CarouselNext className="!translate-y-0 !shadow-none" />
+            {courseToday && courseToday.length > 0 && (
+                <div className="card col-span-12 w-full md:col-span-5 lg:col-span-3">
+                    <Carousel
+                        className="w-full"
+                        opts={{
+                            align: 'start'
+                        }}
+                    >
+                        <div className="flex justify-between">
+                            <h5 className="text-xl font-medium text-black">Hôm nay</h5>
+                            <div className="flex gap-2">
+                                <CarouselPrevious className="!translate-y-0 !shadow-none" />
+                                <CarouselNext className="!translate-y-0 !shadow-none" />
+                            </div>
                         </div>
-                    </div>
-                    <div className="w-full gap-0">
-                        <CarouselContent className="!m-0 w-full !py-0">
-                            {coursePopulate?.slice(0, 2).map((item, index) => (
-                                <CarouselItem key={index} className="w-full min-w-0 basis-full !p-0">
-                                    <CourseToday
-                                        id={item?.id!}
-                                        total_student={item?.total_student!}
-                                        total_lessons={item?.total_lessons!}
-                                        total_duration_video={item?.total_duration_video!}
-                                        price_sale={item?.price_sale!}
-                                        name={item?.name!}
-                                        slug={item?.slug!}
-                                        user={item?.user!}
-                                        thumbnail={item?.thumbnail!}
-                                        price={item?.price!}
-                                        level={item?.level!}
-                                    />
-                                </CarouselItem>
-                            ))}
-                        </CarouselContent>
-                    </div>
-                </Carousel>
-            </div>
+                        <div className="w-full gap-0">
+                            <CarouselContent className="!m-0 w-full !py-0">
+                                {courseToday &&
+                                    courseToday?.map((item, index) => (
+                                        <CarouselItem key={index} className="w-full min-w-0 basis-full !p-0">
+                                            <Course data={item} key={index} />
+                                        </CarouselItem>
+                                    ))}
+                            </CarouselContent>
+                        </div>
+                    </Carousel>
+                </div>
+            )}
         </div>
     )
 }

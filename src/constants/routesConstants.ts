@@ -93,7 +93,14 @@ export const privateRoutes = [
     { path: routes.courseHistory, layout: UserDashboardLayout, element: CourseHistory, title: 'Lịch sử học tập' },
     { path: routes.courseLeaning, layout: CourseLayout, element: CourseLearning },
 
-    { path: routes.userDashboard, layout: UserDashboardLayout, element: UserDashboard, title: 'Xin chào ...' },
+    {
+        path: routes.userDashboard,
+        layout: UserDashboardLayout,
+        element: UserDashboard,
+        title: localStorage.getItem('user_data')
+            ? `Xin chào, ${JSON.parse(localStorage.getItem('user_data')!)?.name}`
+            : 'Xin chào'
+    },
     { path: routes.instructor, layout: UserDashboardLayout, element: Instructor, title: 'Giảng viên' },
     { path: routes.instructorDetail, layout: UserDashboardLayout, element: InstructorDetail, title: 'Người hướng dẫn' },
     { path: routes.notification, layout: UserDashboardLayout, element: Notifications, title: 'Thông báo' },

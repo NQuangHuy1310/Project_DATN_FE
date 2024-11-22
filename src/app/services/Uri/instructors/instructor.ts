@@ -45,5 +45,7 @@ export const instructorUri = {
     DELETE_QUESTION: (questionID: number) => `${INSTRUCTOR_URL}lesson/quiz/${questionID}/delete-question-and-option`,
 
     // Statistic
-    STATISTIC: `${INSTRUCTOR_URL}statistic`
+    STATISTIC: `${INSTRUCTOR_URL}statistic`,
+    GET_STUDENTS: (courseID: number) => `${INSTRUCTOR_URL}statistic/course/${courseID}/get-students`,
+    GET_RATINGS: (courseID: number) => `${INSTRUCTOR_URL}statistic/course/${courseID}/get-ratings`
 }

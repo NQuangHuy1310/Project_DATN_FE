@@ -73,6 +73,7 @@ const routes = {
     // Instructor performance
     instructorPerformanceOverview: '/instructor/performance/overview',
     instructorPerformanceStudent: '/instructor/performance/students',
+    instructorPerformanceRating: '/instructor/performance/ratings',
 
     // Instructor wallet
     instructorWallet: '/instructor/wallet',

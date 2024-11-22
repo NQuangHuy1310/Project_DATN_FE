@@ -310,3 +310,23 @@ export interface RevenueData {
     total_courses: number
     top_courses: ICourseItem[]
 }
+
+export interface StudentsCourse {
+    total_students: number
+    students: {
+        current_page: number
+        data: {
+            id: number
+            id_user: number
+            progress_percent: number
+            completed_at: string
+            created_at: string
+            updated_at: string
+            user: {
+                id: number
+                name: string
+                avatar: string | null
+            }
+        }[]
+    }
+}

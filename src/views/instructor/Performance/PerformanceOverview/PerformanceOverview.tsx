@@ -1,5 +1,9 @@
+import { FaUsers } from 'react-icons/fa'
+import { IoMdInformationCircleOutline } from 'react-icons/io'
+import { MdAttachMoney, MdOutlineSmartDisplay } from 'react-icons/md'
+
 import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
 import { useGetCourses, useStatistic } from '@/app/hooks/instructors'
 import {
@@ -15,13 +19,14 @@ import noContent from '@/assets/no-content.jpg'
 import { Button } from '@/components/ui/button'
 import { useNavigate } from 'react-router-dom'
 import routes from '@/configs/routes'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 
 const chartConfig = {
     views: {
         label: 'Tổng doanh thu: '
     },
     desktop: {
-        label: 'Doanh thu theo tháng',
+        label: 'Doanh thu',
         color: 'hsl(var(--primary))'
     }
 }
@@ -33,10 +38,12 @@ const PerformanceOverview = () => {
 
     const monthlyRevenue = statisticData?.monthly_revenue || {}
 
-    const chartData = Object.entries(monthlyRevenue).map(([month, revenue]) => ({
-        date: `2024-${month.padStart(2, '0')}-01`,
-        desktop: revenue
-    }))
+    const chartData = Object.entries(monthlyRevenue).map(([month, revenue]) => {
+        return {
+            date: `2024-${month.padStart(2, '0')}-01`,
+            desktop: parseFloat((revenue / 1).toFixed(2))
+        }
+    })
 
     return (
         <div>
@@ -45,11 +52,6 @@ const PerformanceOverview = () => {
                     <div className="flex flex-col gap-4">
                         <div className="flex flex-col gap-1">
                             <h4 className="text-xl font-semibold">Tổng quan</h4>
-                            <p className="text-base">Xem thống kê chi tiết hàng đầu về hiệu suất của bạn</p>
-                            <p className="text-base">
-                                Đây là thông tin chi tiết về doanh thu và số người đăng ký trong 12 tháng qua. Hãy theo
-                                dõi để cải thiện hiệu suất của bạn trong tương lai!
-                            </p>
                         </div>
                         <div>
                             <Select>
@@ -71,21 +73,80 @@ const PerformanceOverview = () => {
                         </div>
                     </div>
 
+                    <div className="flex items-start gap-5">
+                        <div className="flex h-[100px] min-w-[300px] items-start justify-between rounded-md border border-black/40 p-4">
+                            <div className="flex flex-col gap-2">
+                                <p className="flex items-center gap-1 text-base font-semibold">
+                                    <MdAttachMoney className="size-5" />
+                                    Doanh thu
+                                </p>
+                                <h5 className="text-3xl font-bold">
+                                    {statisticData && parseFloat((statisticData?.total_revenue / 1).toFixed(2))}
+                                </h5>
+                            </div>
+
+                            <TooltipProvider>
+                                <Tooltip>
+                                    <TooltipTrigger>
+                                        <IoMdInformationCircleOutline className="size-5 cursor-pointer" />
+                                    </TooltipTrigger>
+                                    <TooltipContent className="w-[250px] bg-card-foreground">
+                                        Doanh thu tổng cộng từ tất cả các giao dịch trên trang web của bạn.
+                                    </TooltipContent>
+                                </Tooltip>
+                            </TooltipProvider>
+                        </div>
+
+                        <div className="flex h-[100px] min-w-[300px] items-start justify-between rounded-md border border-black/40 p-4">
+                            <div className="flex flex-col gap-2">
+                                <p className="flex items-center gap-1 text-base font-semibold">
+                                    <MdOutlineSmartDisplay className="size-5" />
+                                    Tổng số khoá học
+                                </p>
+                                <h5 className="text-3xl font-bold">{statisticData && statisticData.total_courses}</h5>
+                            </div>
+
+                            <TooltipProvider>
+                                <Tooltip>
+                                    <TooltipTrigger>
+                                        <IoMdInformationCircleOutline className="size-5 cursor-pointer" />
+                                    </TooltipTrigger>
+                                    <TooltipContent className="w-[250px] bg-card-foreground">
+                                        Doanh thu tổng cộng từ tất cả các giao dịch trên trang web của bạn.
+                                    </TooltipContent>
+                                </Tooltip>
+                            </TooltipProvider>
+                        </div>
+
+                        <div className="flex h-[100px] min-w-[300px] items-start justify-between rounded-md border border-black/40 p-4">
+                            <div className="flex flex-col gap-2">
+                                <p className="flex items-center gap-1 text-base font-semibold">
+                                    <FaUsers className="size-5" />
+                                    Tổng số học viên
+                                </p>
+                                <h5 className="text-3xl font-bold">{statisticData && statisticData.total_students}</h5>
+                            </div>
+
+                            <TooltipProvider>
+                                <Tooltip>
+                                    <TooltipTrigger>
+                                        <IoMdInformationCircleOutline className="size-5 cursor-pointer" />
+                                    </TooltipTrigger>
+                                    <TooltipContent className="w-[250px] bg-card-foreground">
+                                        Doanh thu tổng cộng từ tất cả các giao dịch trên trang web của bạn.
+                                    </TooltipContent>
+                                </Tooltip>
+                            </TooltipProvider>
+                        </div>
+                    </div>
+
                     <Card>
                         <CardHeader className="flex flex-col items-stretch space-y-0 border-b p-0 sm:flex-row">
                             <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6">
-                                <CardTitle className="text-base">Thống kê doanh thu</CardTitle>
-                                <div className="flex items-center gap-4 text-base">
-                                    <p>
-                                        Tổng doanh thu: <strong>{statisticData?.total_revenue}</strong>
-                                    </p>
-                                    <p>
-                                        Tổng khoá học: <strong>{statisticData?.total_courses}</strong>
-                                    </p>
-                                    <p>
-                                        Tổng học sinh: <strong>{statisticData?.total_students}</strong>
-                                    </p>
-                                </div>
+                                <CardTitle>Biểu đồ doanh thu</CardTitle>
+                                <CardDescription>
+                                    Theo dõi doanh thu để nhận diện xu hướng và đưa ra quyết định kinh doanh tốt hơn.
+                                </CardDescription>
                             </div>
                         </CardHeader>
                         <CardContent className="px-2 sm:p-6">

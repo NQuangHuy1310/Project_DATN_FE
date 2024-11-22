@@ -23,7 +23,8 @@ import {
     ITargetCourse,
     IUpdatePositionLessonData,
     IUpdatePositionModuleData,
-    RevenueData
+    RevenueData,
+    StudentsCourse
 } from '@/types/instructor'
 
 // Mutation
@@ -446,5 +447,26 @@ export const useStatistic = (options?: Omit<UseQueryOptions<RevenueData>, 'query
         ...options,
         queryKey: ['instructorStatistic'],
         queryFn: instructorApi.instructorStatistic
+    })
+}
+
+export const useGetStudentsCourse = (
+    courseID: number,
+    options?: Omit<UseQueryOptions<StudentsCourse>, 'queryKey' | 'queryFn'>
+) => {
+    return useQuery({
+        ...options,
+        enabled: courseID !== undefined,
+        queryKey: ['instructorGetStudents', courseID],
+        queryFn: () => instructorApi.getStudentsCourse(courseID)
+    })
+}
+
+export const useGetRatingsCourse = (courseID: number, options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>) => {
+    return useQuery({
+        ...options,
+        enabled: courseID !== undefined,
+        queryKey: ['instructorGetRatings', courseID],
+        queryFn: () => instructorApi.getRatingsCourse(courseID)
     })
 }

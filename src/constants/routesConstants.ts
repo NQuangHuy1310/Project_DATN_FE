@@ -65,6 +65,7 @@ import Certification from '@/views/user/Certification/Certification'
 import CourseHistory from '@/views/user/Courses/CourseHistory'
 import LearningPath from '@/views/user/LearningPath'
 import LearningPathCourse from '@/views/user/LearningPath/LearningPathCourse'
+import PerformanceRatings from '@/views/instructor/Performance/PerformanceRatings'
 
 // Routes không cần đăng nhập
 export const publicRoutes = [
@@ -163,6 +164,12 @@ export const privateRoutes = [
         layout: InstructorPerformance,
         element: PerformanceStudents,
         title: 'Học viên'
+    },
+    {
+        path: routes.instructorPerformanceRating,
+        layout: InstructorPerformance,
+        element: PerformanceRatings,
+        title: 'Đánh giá'
     },
     {
         path: routes.instructorAnnouncements,

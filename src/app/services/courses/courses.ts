@@ -44,6 +44,10 @@ export const courseApi = {
         return axiosClient.get(courseUri.COURSE_RELATED(slug))
     },
 
+    courseFree: async (): Promise<ICourse[]> => {
+        return axiosClient.get(courseUri.COURSE_FREE)
+    },
+
     addCommentCourse: async (commentData: ICreateComment): Promise<any> => {
         return axiosClient.post(courseUri.ADD_COMMENT_COURSE, commentData)
     },

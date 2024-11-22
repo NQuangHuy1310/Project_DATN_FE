@@ -49,6 +49,8 @@ const Transaction = () => {
                 setInputValue(value)
                 if (numericValue > 0 && numericValue < 50000) {
                     setError('Số tiền phải từ 50.000 VNĐ trở lên.')
+                } else if (numericValue % 50 !== 0) {
+                    setError('Số tiền phải là bội của 50.')
                 } else {
                     setError('')
                 }
@@ -212,10 +214,10 @@ const Transaction = () => {
                                         Tổng : <b>{totalAmount.toLocaleString('vi-VN')} VNĐ</b>
                                     </span>
                                     <div>
-                                        {totalAmount >= 50000 && user ? (
+                                        {totalAmount >= 50000 && totalAmount % 50 == 0 && user ? (
                                             <ConfirmTransaction totalAmount={totalAmount} user={user} />
                                         ) : (
-                                            <Button disabled>Nạp tiền</Button>
+                                            <Button disabled >Nạp tiền</Button>
                                         )}
                                     </div>
                                 </div>

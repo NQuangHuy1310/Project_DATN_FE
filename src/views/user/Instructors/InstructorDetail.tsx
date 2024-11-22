@@ -22,7 +22,6 @@ const InstructorDetail = () => {
     const { mutateAsync: unFlowTeacher } = useUnFlowTeacher()
     const { user } = useGetUserProfile()
     const { data: checkFollow } = useCheckFlowTeacher(user?.id ?? 0, data?.dataTeacher.id ?? 0)
-
     const handleFlowTeacher = async () => {
         if (data?.dataTeacher) {
             await flowTeacher([{ following_id: data?.dataTeacher.id }])
@@ -70,24 +69,32 @@ const InstructorDetail = () => {
                     <div className="flex items-center gap-2">
                         <IoIosStar className="size-5 text-primary" />
                         <span>
-                            {data?.dataTeacher.average_rating} ({data?.dataTeacher.total_ratings} đánh giá)
+                            {data?.dataTeacher.ratings_avg_rate} ({data?.dataTeacher.total_ratings} đánh giá)
                         </span>
                     </div>
 
                     <div className="flex items-center justify-center rounded-lg bg-secondaryYellow md:justify-start md:rounded-none md:bg-white">
-                        {checkFollow && checkFollow?.action == 'follow' && (
-                            <Button variant="default" className="w-full py-3" onClick={handleFlowTeacher}>
-                                {TeacherStatus.follow}
-                            </Button>
-                        )}
-                        {checkFollow && checkFollow?.action == 'unfollow' && (
-                            <Button
-                                variant="outline"
-                                className="w-full py-3 duration-500 hover:bg-red-400 hover:text-white"
-                                onClick={handleUnFlowTeacher}
-                            >
-                                {TeacherStatus.unFollow}
-                            </Button>
+                        {user?.id !== data?.dataTeacher?.id && (
+                            <>
+                                {checkFollow?.action === 'follow' && (
+                                    <Button
+                                        variant="default"
+                                        className="w-full py-3"
+                                        onClick={handleFlowTeacher}
+                                    >
+                                        {TeacherStatus.follow}
+                                    </Button>
+                                )}
+                                {checkFollow?.action === 'unfollow' && (
+                                    <Button
+                                        variant="outline"
+                                        className="w-full py-3 duration-500 hover:bg-red-400 hover:text-white"
+                                        onClick={handleUnFlowTeacher}
+                                    >
+                                        {TeacherStatus.unFollow}
+                                    </Button>
+                                )}
+                            </>
                         )}
                     </div>
                 </div>

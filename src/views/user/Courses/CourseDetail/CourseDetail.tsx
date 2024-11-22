@@ -62,7 +62,10 @@ const CourseDetail = () => {
 
     const { user } = useGetUserProfile()
     const { data: courseDetail, isLoading: LoadingCourse } = useCourseDetailNoLoginBySlug(slug!)
-    const { data: isPurchased, isLoading: LoadingPurchased } = useCheckBuyCourse(user?.id || 0, courseDetail?.id || 0)
+    const { data: isPurchased, isLoading: LoadingPurchased } = useCheckBuyCourse(
+        user?.id || 0,
+        courseDetail?.slug || ''
+    )
     const { data: checkRating } = useCheckRatingUser(user?.id || 0, courseDetail?.id || 0)
 
     const { mutateAsync: addRating } = useCreateRating()
@@ -381,7 +384,8 @@ const CourseDetail = () => {
                                         )}
                                     </div>
                                 ) : (!courseDetail?.price && !courseDetail?.price_sale) ||
-                                    (Math.floor(courseDetail?.price) === 0 && Math.floor(courseDetail?.price_sale) === 0) ? (
+                                  (Math.floor(courseDetail?.price) === 0 &&
+                                      Math.floor(courseDetail?.price_sale) === 0) ? (
                                     <div className="flex items-center gap-3">
                                         <Button
                                             className="block w-full rounded-md bg-primary py-2 text-center text-white"
@@ -455,7 +459,9 @@ const CourseDetail = () => {
                                     )}
                                 </div>
                             </div>
-                        ) : ''}
+                        ) : (
+                            ''
+                        )}
 
                         <Dialog open={isOpen} onOpenChange={setIsOpen}>
                             <DialogContent className="max-h-[90vh] w-[90vw] max-w-full overflow-y-scroll p-5 md:max-w-[50vw] md:p-10">
@@ -471,8 +477,9 @@ const CourseDetail = () => {
                                                 <FaStar
                                                     key={star}
                                                     onClick={() => setValue('rate', star)}
-                                                    className={`cursor-pointer ${star <= rating ? 'text-yellow-500' : 'text-gray-300'
-                                                        } h-5 w-5 md:h-8 md:w-8`}
+                                                    className={`cursor-pointer ${
+                                                        star <= rating ? 'text-yellow-500' : 'text-gray-300'
+                                                    } h-5 w-5 md:h-8 md:w-8`}
                                                 />
                                             ))}
                                         </div>
@@ -588,7 +595,9 @@ const CourseDetail = () => {
                                             <div className="flex w-full gap-2">
                                                 <Button
                                                     className="w-full"
-                                                    onClick={() => navigate(routes.courseLeaning.replace(':slug', slug!))}
+                                                    onClick={() =>
+                                                        navigate(routes.courseLeaning.replace(':slug', slug!))
+                                                    }
                                                 >
                                                     Vào học
                                                 </Button>
@@ -611,7 +620,8 @@ const CourseDetail = () => {
                                                 )}
                                             </div>
                                         ) : (!courseDetail?.price && !courseDetail?.price_sale) ||
-                                            (Math.floor(courseDetail?.price) === 0 && Math.floor(courseDetail?.price_sale) === 0) ? (
+                                          (Math.floor(courseDetail?.price) === 0 &&
+                                              Math.floor(courseDetail?.price_sale) === 0) ? (
                                             <div className="flex items-center gap-3">
                                                 <Button
                                                     className="block w-full rounded-md bg-primary py-2 text-center text-white"
@@ -685,7 +695,9 @@ const CourseDetail = () => {
                                             )}
                                         </div>
                                     </div>
-                                ) : ''}
+                                ) : (
+                                    ''
+                                )}
 
                                 <Dialog open={isOpen} onOpenChange={setIsOpen}>
                                     <DialogContent className="max-h-[90vh] w-[90vw] max-w-full overflow-y-scroll p-5 md:max-w-[50vw] md:p-10">
@@ -703,8 +715,9 @@ const CourseDetail = () => {
                                                         <FaStar
                                                             key={star}
                                                             onClick={() => setValue('rate', star)}
-                                                            className={`cursor-pointer ${star <= rating ? 'text-yellow-500' : 'text-gray-300'
-                                                                } h-5 w-5 md:h-8 md:w-8`}
+                                                            className={`cursor-pointer ${
+                                                                star <= rating ? 'text-yellow-500' : 'text-gray-300'
+                                                            } h-5 w-5 md:h-8 md:w-8`}
                                                         />
                                                     ))}
                                                 </div>

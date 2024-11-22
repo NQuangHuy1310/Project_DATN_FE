@@ -40,6 +40,10 @@ export const courseApi = {
         return axiosClient.get(courseUri.COURSE_POPULATE)
     },
 
+    todayCourse: async (): Promise<ICourse[]> => {
+        return axiosClient.get(courseUri.COURSE_TODAY)
+    },
+
     relatedCourse: async (slug: string): Promise<ICourse[]> => {
         return axiosClient.get(courseUri.COURSE_RELATED(slug))
     },
@@ -56,7 +60,7 @@ export const courseApi = {
         return axiosClient.get(courseUri.GET_COMMENT(id))
     },
 
-    checkBuyCourse: async (userId: number, courseId: number): Promise<any> => {
+    checkBuyCourse: async (userId: number, courseId: string): Promise<any> => {
         return axiosClient.get(courseUri.CHECK_BUY_COURSE(userId, courseId))
     },
 

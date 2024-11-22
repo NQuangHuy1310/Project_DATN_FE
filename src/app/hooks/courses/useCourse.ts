@@ -84,6 +84,14 @@ export const useCoursePopulate = (options?: Omit<UseQueryOptions<ICourse[]>, 'qu
     })
 }
 
+export const useCourseToday = (options?: Omit<UseQueryOptions<ICourse[]>, 'queryKey' | 'queryFn'>) => {
+    return useQuery<ICourse[]>({
+        ...options,
+        queryKey: ['course-today'],
+        queryFn: () => courseApi.todayCourse()
+    })
+}
+
 export const useCourseRelated = (slug: string, options?: Omit<UseQueryOptions<ICourse[]>, 'queryKey' | 'queryFn'>) => {
     return useQuery<ICourse[]>({
         ...options,
@@ -126,14 +134,14 @@ export const useAddCommentCourse = () => {
 //CHECK BUY COURSE
 export const useCheckBuyCourse = (
     userId: number,
-    courseId: number,
+    courseSlug: string,
     options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
 ) => {
     return useQuery<any>({
         ...options,
-        enabled: !!userId && !!courseId,
-        queryKey: ['check-buy-course', userId, courseId],
-        queryFn: () => courseApi.checkBuyCourse(userId, courseId)
+        enabled: !!userId && !!courseSlug,
+        queryKey: ['check-buy-course', userId, courseSlug],
+        queryFn: () => courseApi.checkBuyCourse(userId, courseSlug)
     })
 }
 
@@ -144,8 +152,11 @@ export const useRegisterCourse = () => {
         mutationFn: async ([userId, courseId, data]) => {
             return courseApi.registerCourse(userId, courseId, data)
         },
-        onSuccess() {
-            queryClient.invalidateQueries({ queryKey: ['register-course'] })
+        onSuccess: async () => {
+            await Promise.all([
+                queryClient.invalidateQueries({ queryKey: ['register-course'] }),
+                queryClient.invalidateQueries({ queryKey: ['wishlist-course'] })
+            ])
         }
     })
 }

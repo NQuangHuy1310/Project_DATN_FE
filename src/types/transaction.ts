@@ -31,14 +31,15 @@ export interface ITeacherBalance {
 }
 
 export interface IRequestWithDrawData {
-    id: number
+    id?: number
     coin: number
-    amount: number
+    amount?: number
     bank_name: string
-    account_number: number
+    account_number: string
     account_holder: string
-    name: string
-    status: string
+    name?: string
+    status?: string
+    note?: string
 }
 
 export interface IHistoryDraw {

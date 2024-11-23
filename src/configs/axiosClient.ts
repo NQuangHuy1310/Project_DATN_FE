@@ -6,7 +6,7 @@ import { backendUrl } from '@/configs/baseUrl'
 import { ApiMessages, ApiStatusCode, MessageConfig, MessageErrors } from '@/constants'
 import { getAccessTokenFromLocalStorage, removeAccessToken, setAccessToken } from '@/lib'
 import { authApis } from '@/app/services/accounts'
-import { useNavigate } from 'react-router-dom'
+import routes from '@/configs/routes'
 
 const { clearUserAndProfile } = useUserStore.getState()
 
@@ -47,7 +47,6 @@ axiosClient.interceptors.response.use(
         }
     },
     async (error) => {
-        const navigate = useNavigate()
         const status = error.response?.status
 
         if (status === ApiStatusCode.UnprocessableEntity) {
@@ -56,8 +55,14 @@ axiosClient.interceptors.response.use(
             })
         }
 
+        if (status === ApiStatusCode.Forbidden) {
+            toast.error(ApiMessages.error.forbidden)
+            window.location.href = routes.forbidden
+        }
+
         if (status === ApiStatusCode.InternalServerError) {
             toast.error(ApiMessages.error.serverError)
+            window.location.href = routes.serverError
         }
 
         toast.error(error.response.data?.message)
@@ -71,7 +76,7 @@ axiosClient.interceptors.response.use(
                 }
             } catch {
                 toast.error(ApiMessages.error.sessionExpired)
-                navigate('/')
+                window.location.href = routes.home
                 clearUserAndProfile()
                 removeAccessToken()
             }

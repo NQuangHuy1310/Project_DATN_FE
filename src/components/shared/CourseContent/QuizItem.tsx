@@ -11,6 +11,7 @@ import ConfirmDialog from '@/components/shared/ConfirmDialog'
 import { useCreateQuestion, useDeleteLessonQuiz, useGetLessonQuiz } from '@/app/hooks/instructors'
 import DialogAddQuestion from '@/components/shared/CourseContent/Dialog/DialogAddQuestion'
 import LessonQuizzes from '@/components/shared/CourseContent/LessonQuizzes'
+import { showMessage } from '@/lib'
 
 interface QuizItemProps {
     lesson: ILessonQuiz
@@ -116,8 +117,10 @@ const QuizItem = ({ lesson, moduleId, canEdit }: QuizItemProps) => {
     }
 
     const handleDeleteLesson = async () => {
-        await deleteLessonQuiz(lesson.id)
-        setIsOpenDialog(false)
+        if (canEdit) {
+            await deleteLessonQuiz(lesson.id)
+            setIsOpenDialog(false)
+        } else showMessage()
     }
 
     return (

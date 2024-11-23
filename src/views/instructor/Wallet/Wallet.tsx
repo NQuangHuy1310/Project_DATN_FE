@@ -3,9 +3,9 @@ import { TbCoinFilled } from 'react-icons/tb'
 import { convertToVnd, getImagesUrl, getVisiblePages } from '@/lib'
 
 import { useGetBanks } from '@/app/hooks/others'
-import { Button } from '@/components/ui/button.tsx'
-import { Input } from '@/components/ui/input.tsx'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar.tsx'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import useGetUserProfile from '@/app/hooks/accounts/useGetUser.ts'
 import {
     Select,
@@ -16,10 +16,17 @@ import {
     SelectValue,
     SelectLabel
 } from '@/components/ui/select'
-import { useGetBalance, useGetHistoryWithDraw, useQuestWithdraw } from '@/app/hooks/transactions/useTransaction.ts'
-import Loading from '@/components/Common/Loading/Loading.tsx'
+import { useGetBalance, useGetHistoryWithDraw, useQuestWithdraw } from '@/app/hooks/transactions/useTransaction'
+import Loading from '@/components/Common/Loading/Loading'
 import NoContent from '@/components/shared/NoContent/NoContent'
-import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination'
+import {
+    Pagination,
+    PaginationContent,
+    PaginationItem,
+    PaginationLink,
+    PaginationNext,
+    PaginationPrevious
+} from '@/components/ui/pagination'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 const Wallet = () => {
@@ -76,7 +83,7 @@ const Wallet = () => {
         if (payload && user) {
             await createRequestWithDraw([user.id, payload])
             setSelectedBank('')
-            setAccountHolder('')
+            setAccountNumber('')
             setAccountHolder('')
             setCoin(0)
         }
@@ -98,6 +105,7 @@ const Wallet = () => {
 
     const totalPages = Math.ceil((historyWithDraw?.total ?? 0) / (historyWithDraw?.per_page ?? 0))
     const visiblePages = getVisiblePages(totalPages, page, 5)
+    const balance = parseFloat(teacherBalanceData?.balance?.toString() ?? '0')
 
     if (isLoading) return <Loading />
 
@@ -121,8 +129,7 @@ const Wallet = () => {
                                 <span className="text-lg font-medium">{user?.name}</span>
                                 <div className="flex items-center gap-1 font-medium">
                                     <span>Số dư: </span>
-                                    <TbCoinFilled className="size-4 text-secondaryYellow" />{' '}
-                                    {teacherBalanceData?.balance}
+                                    <TbCoinFilled className="size-4 text-secondaryYellow" /> {balance}
                                 </div>
                             </div>
                         </div>
@@ -254,6 +261,9 @@ const Wallet = () => {
                             <th scope="col" className="px-6 py-3">
                                 Trạng thái
                             </th>
+                            <th scope="col" className="px-6 py-3">
+                                Ghi chú
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -263,17 +273,23 @@ const Wallet = () => {
                                     <th scope="row" className="whitespace-nowrap px-6 py-4 font-medium text-gray-900">
                                         {index + 1}
                                     </th>
-                                    <td className="px-6 py-4 flex gap-1 items-center">
+                                    <td className="flex items-center gap-1 px-6 py-4">
                                         <TbCoinFilled className="size-5 text-secondaryYellow" />
-                                        {parseFloat(item.coin.toString())} </td>
-                                    <td className="px-6 py-4">{Math.floor(item?.amount).toLocaleString('vi-VN')} VNĐ</td>
+                                        {parseFloat(item.coin.toString())}
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        {Math.floor(item?.amount ?? 0).toLocaleString('vi-VN')} VNĐ
+                                    </td>
                                     <td className="px-6 py-4">{item.status}</td>
+                                    <td className="px-6 py-4">{item.note ?? 'Không có'}</td>
                                 </tr>
                             ))
-                        ) : <NoContent />
-                        }
+                        ) : (
+                            <NoContent />
+                        )}
                     </tbody>
                 </table>
+
                 {totalPages > 1 && (
                     <div className="mt-4 flex justify-center">
                         <Pagination>

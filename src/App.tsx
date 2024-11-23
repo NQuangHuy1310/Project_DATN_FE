@@ -8,6 +8,9 @@ import Login from '@/views/user/Auth/Login'
 import Dashboard from '@/app/layouts/UserLayouts/Dashboard'
 import HomeLayout from '@/app/layouts/AuthLayouts/HomeLayout'
 import NotFound from '@/views/user/NotFound'
+import Forbidden from '@/views/user/Forbidden'
+import routes from '@/configs/routes'
+import ServerError from '@/views/user/ServerError'
 
 function App() {
     const [isLogin, setIsLogin] = useState(false)
@@ -68,6 +71,8 @@ function App() {
                         )
                     })}
                     <Route path="*" element={<NotFound />} />
+                    <Route path={routes.forbidden} element={<Forbidden />} />
+                    <Route path={routes.serverError} element={<ServerError />} />
                 </Routes>
             </div>
         </Router>

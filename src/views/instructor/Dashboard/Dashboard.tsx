@@ -68,13 +68,13 @@ const Dashboard = () => {
     return (
         <>
             <div className="card flex flex-col gap-7 bg-white">
-                <h3 className="text-3xl font-semibold">Khoá học</h3>
+                <h3 className="text-3xl font-semibold">Quản lý Khoá học</h3>
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-5">
                         <div className="flex h-[50px] w-full items-center">
                             <Input
                                 placeholder="Tìm kiếm khoá học của bạn"
-                                className="h-[48px] w-[350px] rounded-none rounded-s-md"
+                                className="h-[48px] w-[400px] rounded-none rounded-s-md"
                             />
                             <Button className="h-full rounded-none rounded-e-md">
                                 <IoSearchSharp className="size-5" />
@@ -91,7 +91,6 @@ const Dashboard = () => {
                                     <SelectItem value="a-z">A - Z</SelectItem>
                                     <SelectItem value="z-a">Z - A</SelectItem>
                                     <SelectItem value="a">Đã xuất bản trước tiên</SelectItem>
-                                    <SelectItem value="b">Đã huỷ xuất bản trước tiên</SelectItem>
                                 </SelectGroup>
                             </SelectContent>
                         </Select>
@@ -115,6 +114,8 @@ const Dashboard = () => {
                     </div>
                 )}
             </div>
+
+            {/*  */}
 
             {/* Dialog add course */}
             <Dialog open={openDialog} onOpenChange={setOpenDialog}>

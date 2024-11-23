@@ -1,5 +1,7 @@
 const routes = {
     home: '/',
+    forbidden: '/forbidden',
+    serverError: '/server-error',
 
     // User authentication routes
     login: '/login',

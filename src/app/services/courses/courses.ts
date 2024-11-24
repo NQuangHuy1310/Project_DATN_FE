@@ -2,6 +2,7 @@ import axiosClient from '@/configs/axiosClient'
 import { courseUri } from '@/app/services/Uri/courses/courses'
 import {
     CourseData,
+    IAllCourse,
     ICourse,
     ICourseCategory,
     ICourseDetail,
@@ -12,6 +13,10 @@ import {
 import { IBuyData, IComment, ICreateComment } from '@/types'
 
 export const courseApi = {
+    allCourses: async (page: number, perPage?: number): Promise<IAllCourse> => {
+        return axiosClient.get(courseUri.ALL_COURSES(page, perPage))
+    },
+
     detailCourseLeaning: async (slug: string): Promise<CourseData> => {
         return axiosClient.get(courseUri.DETAIL_COURSE_LEANING(slug))
     },
@@ -60,10 +65,6 @@ export const courseApi = {
         return axiosClient.get(courseUri.GET_COMMENT(id))
     },
 
-    checkBuyCourse: async (userId: number, courseId: string): Promise<any> => {
-        return axiosClient.get(courseUri.CHECK_BUY_COURSE(userId, courseId))
-    },
-
     registerCourse: async (userId: number, courseId: number, data: IBuyData): Promise<IBuyData> => {
         return axiosClient.post(courseUri.REGISTER_COURSE(userId, courseId), data)
     },
@@ -78,9 +79,5 @@ export const courseApi = {
 
     unWishList: async (courseId: number): Promise<IWishList> => {
         return axiosClient.post(courseUri.UN_WISH_LIST(courseId))
-    },
-
-    checkWishList: async (courseId: number): Promise<any> => {
-        return axiosClient.get(courseUri.CHECK_WISH_LIST(courseId))
     }
 }

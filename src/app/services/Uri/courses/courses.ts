@@ -5,6 +5,8 @@ export const courseUri = {
     DETAIL_COURSE: (slug: string) => `${COURSE_URL}detail-login/${slug}`,
     DETAIL_COURSE_NO_LOGIN: (slug: string) => `${COURSE_URL}detail-no-login/${slug}`,
 
+    ALL_COURSES: (page: number, perPage?: number) =>
+        `${COURSE_URL}list-course-all?page=${page}${perPage ? `&perPage=${perPage}` : ''}`,
     COURSE_SALE_HOME: `${COURSE_URL}sale-course`,
     GET_DETAIL_QUIZ: (slug: string) => `${COURSE_URL}detail/quiz/${slug}`,
     COURSE_CATEGORY_HOME: `${COURSE_URL}category-course`,

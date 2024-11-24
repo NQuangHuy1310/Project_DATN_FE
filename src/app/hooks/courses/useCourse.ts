@@ -3,6 +3,7 @@ import { IBuyData } from '@/types'
 import { IComment, ICreateComment } from '@/types/common'
 import {
     CourseData,
+    IAllCourse,
     ICourse,
     ICourseCategory,
     ICourseDetail,
@@ -10,6 +11,18 @@ import {
     IQuizDetail
 } from '@/types/course/course'
 import { useMutation, useQuery, useQueryClient, UseQueryOptions } from '@tanstack/react-query'
+
+export const useGetAllCourses = (
+    page: number,
+    perPage?: number,
+    options?: Omit<UseQueryOptions<IAllCourse>, 'queryKey' | 'queryFn'>
+) => {
+    return useQuery<IAllCourse>({
+        ...options,
+        queryKey: ['course-leaning', page, perPage],
+        queryFn: () => courseApi.allCourses(page, perPage)
+    })
+}
 
 export const useCourseLeaningBySlug = (
     slug: string,
@@ -191,4 +204,3 @@ export const useUnWishList = () => {
         }
     })
 }
-

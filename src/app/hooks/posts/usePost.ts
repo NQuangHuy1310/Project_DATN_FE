@@ -201,6 +201,7 @@ export const useGetPostsByCategory = (
 ) => {
     return useQuery({
         ...options,
+        enabled: !!slug,
         queryKey: ['post-by-category', slug],
         queryFn: () => postsApi.getPostByCategory(slug)
     })

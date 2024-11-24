@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import { vi } from 'date-fns/locale'
 import { getImagesUrl } from '@/lib'
@@ -15,6 +15,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 
 const Post = ({ data }: { data: IPosts }) => {
+    const navigate = useNavigate()
     const { mutateAsync: savePost } = useSavePosts()
     const { mutateAsync: unSavePost } = useUnSavePosts()
     const { data: checkSavedPost } = useCheckSavedPost(data?.slug || '')
@@ -34,10 +35,10 @@ const Post = ({ data }: { data: IPosts }) => {
         <div className="flex w-full gap-7">
             <div className="flex flex-col gap-7 rounded-md bg-white">
                 <div className="flex w-full flex-wrap items-start gap-10">
-                    <div className="flex w-full max-w-[100%] cursor-pointer flex-col gap-4 rounded-lg border p-6 hover:shadow-md">
+                    <div className="flex w-full max-w-[100%] flex-col gap-4 rounded-lg border p-6 hover:shadow-md">
                         <div className="flex justify-between">
-                            <div className="flex items-center gap-2">
-                                <Avatar className="size-7 cursor-pointer md:size-10">
+                            <div className="flex items-center gap-2 cursor-pointer">
+                                <Avatar className="size-7  md:size-10">
                                     <AvatarImage
                                         className="object-cover"
                                         src={getImagesUrl(data?.user?.avatar || '')}
@@ -87,7 +88,7 @@ const Post = ({ data }: { data: IPosts }) => {
                                 <div className="flex flex-col gap-1">
                                     <Link to={routes.postsDetail.replace(':slug', data?.slug)}>
                                         {' '}
-                                        <h3 className="truncate text-lg font-semibold">{data?.title}</h3>
+                                        <h3 className="text-lg font-semibold">{data?.title}</h3>
                                     </Link>
                                     <p className="line-clamp-2 text-base">{data?.description}</p>
                                 </div>
@@ -102,7 +103,7 @@ const Post = ({ data }: { data: IPosts }) => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="col-span-3">
+                            <div onClick={() => navigate(routes.postsDetail.replace(':slug', data?.slug))} className="col-span-3 cursor-pointer">
                                 <img
                                     src={getImagesUrl(data?.thumbnail)}
                                     alt={data?.title}

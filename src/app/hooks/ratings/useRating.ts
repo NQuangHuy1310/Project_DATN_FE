@@ -33,11 +33,3 @@ export const useCreateRating = () => {
     })
 }
 
-export const useCheckRatingUser = (userId: number, courseId: number, options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>) => {
-    return useQuery<any>({
-        ...options,
-        enabled: !!userId && !!courseId,
-        queryKey: ['rating-check', userId, courseId],
-        queryFn: () => ratingsApi.checkRatingUser(userId, courseId)
-    })
-}

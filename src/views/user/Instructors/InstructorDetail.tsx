@@ -7,21 +7,21 @@ import { TeacherStatus } from '@/constants/constants'
 import { useGetIdParams } from '@/app/hooks/common/useCustomParams'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { useInstructorById } from '@/app/hooks/instructors/useInstructorClient'
-import { useCheckFlowTeacher, useFlowTeacher, useUnFlowTeacher } from '@/app/hooks/accounts/useFlowTeacher'
 import { FaUserFriends } from 'react-icons/fa'
 import { getImagesUrl } from '@/lib'
 import { RiUserFollowFill } from 'react-icons/ri'
 import Loading from '@/components/Common/Loading/Loading'
 import NoContent from '@/components/shared/NoContent/NoContent'
 import Course from '@/components/shared/Course'
+import { useCheckFollowTeacher, useFollowTeacher, useUnFollowTeacher } from '@/app/hooks/accounts/useFlowTeacher'
 
 const InstructorDetail = () => {
     const instructorId = useGetIdParams('id')
     const { data, isLoading } = useInstructorById(instructorId!)
-    const { mutateAsync: flowTeacher } = useFlowTeacher()
-    const { mutateAsync: unFlowTeacher } = useUnFlowTeacher()
+    const { mutateAsync: flowTeacher } = useFollowTeacher()
+    const { mutateAsync: unFlowTeacher } = useUnFollowTeacher()
     const { user } = useGetUserProfile()
-    const { data: checkFollow } = useCheckFlowTeacher(user?.id ?? 0, data?.dataTeacher.id ?? 0)
+    const { data: checkFollow } = useCheckFollowTeacher(user?.id ?? 0, data?.dataTeacher.id ?? 0)
     const handleFlowTeacher = async () => {
         if (data?.dataTeacher) {
             await flowTeacher([{ following_id: data?.dataTeacher.id }])
@@ -44,7 +44,10 @@ const InstructorDetail = () => {
                     <div className="flex items-center gap-5">
                         <div className="h-14 w-14">
                             <Avatar className="size-11 md:size-14">
-                                <AvatarImage src={getImagesUrl(data?.dataTeacher.avatar)} alt={data?.dataTeacher.avatar} />
+                                <AvatarImage
+                                    src={getImagesUrl(data?.dataTeacher.avatar)}
+                                    alt={data?.dataTeacher.avatar}
+                                />
                                 <AvatarFallback className="flex items-center justify-center bg-slate-500/50 font-semibold">
                                     {data?.dataTeacher.name?.charAt(0).toUpperCase()}
                                 </AvatarFallback>
@@ -69,7 +72,10 @@ const InstructorDetail = () => {
                     <div className="flex items-center gap-2">
                         <IoIosStar className="size-5 text-primary" />
                         <span>
-                            {data?.dataTeacher.ratings_avg_rate} ({data?.dataTeacher.total_ratings} đánh giá)
+                            {data?.dataTeacher.ratings_avg_rate % 1 === 0
+                                ? Math.floor(data?.dataTeacher.ratings_avg_rate)
+                                : data?.dataTeacher.ratings_avg_rate.toFixed(1)}
+                            ({data?.dataTeacher.total_ratings} đánh giá)
                         </span>
                     </div>
 
@@ -77,11 +83,7 @@ const InstructorDetail = () => {
                         {user?.id !== data?.dataTeacher?.id && (
                             <>
                                 {checkFollow?.action === 'follow' && (
-                                    <Button
-                                        variant="default"
-                                        className="w-full py-3"
-                                        onClick={handleFlowTeacher}
-                                    >
+                                    <Button variant="default" className="w-full py-3" onClick={handleFlowTeacher}>
                                         {TeacherStatus.follow}
                                     </Button>
                                 )}

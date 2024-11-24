@@ -1,7 +1,5 @@
 import FilterBar from '@/components/shared/FilterBar/FilterBar'
 
-import noContent from '@/assets/no-content.jpg'
-
 import Post from '@/components/shared/Post'
 import Loading from '@/components/Common/Loading/Loading'
 import { useGetPosts, useGetPostsByCategory } from '@/app/hooks/posts'
@@ -64,13 +62,8 @@ const Posts = () => {
             </div>
             <div className="flex w-full gap-20">
                 <div className="flex w-3/4 flex-col items-start gap-10">
-                    {postsToShow && postsToShow.length > 0 ? (
+                    {postsToShow && postsToShow.length > 0 && (
                         postsToShow.map((item, index) => <Post data={item} key={index} />)
-                    ) : (
-                        <div className="flex flex-col items-center justify-center">
-                            <img src={noContent} alt="No content" />
-                            <span className="text-base font-medium text-muted-foreground">Chưa có bài viết nào</span>
-                        </div>
                     )}
                 </div>
                 <div className="w-1/4">

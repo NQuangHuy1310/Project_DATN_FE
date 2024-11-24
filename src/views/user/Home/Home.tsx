@@ -14,13 +14,13 @@ import Banners from '@/components/shared/Banner/Banners'
 import { formatDistanceToNow } from 'date-fns'
 import { vi } from 'date-fns/locale'
 import PostOutStanding from '@/components/shared/Post/PostOutStanding'
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
 
 const Home = () => {
     const { data: ratings, isLoading: loadingRating } = useGetRatingHome()
     const { data: course_sales, isLoading: loadingSaleHome } = useCourseSaleHome()
     const { data: course_category = [], isLoading: loadingCourseCategory } = useCourseCategoryHome()
     const { data: postFeatured } = useGetFeaturedPosts()
-
     const formatTime = (date: any) => {
         return formatDistanceToNow(new Date(date), { addSuffix: true, locale: vi })
     }
@@ -30,17 +30,32 @@ const Home = () => {
     return (
         <div>
             <Banners />
-            <div className="mx-auto flex max-w-[1200px] items-center gap-4 px-5 py-9 lg:px-0">
-                <h3 className="text-xl font-medium md:text-2xl">Khóa học giảm giá</h3>
-                <CountdownTime hours={1} minutes={24} seconds={1} />
-            </div>
-            <div className="mx-auto flex max-w-[1200px] flex-wrap gap-8 px-5 lg:px-0">
-                {course_sales?.map((item, index) => (
-                    <Course key={index} data={item} page={routes.courseDetailNoLogin} />
-                ))}
+
+            <div className='mx-auto flex max-w-[1200px] flex-wrap gap-8 px-5 lg:px-0'>
+                <Carousel className="w-full" opts={{ align: 'start' }}>
+                    <div className="flex justify-between items-center">
+                        <div className="flex gap-4 px-5 py-5 lg:px-0">
+                            <h3 className="text-xl font-semibold md:text-2xl">Khóa học giảm giá</h3>
+                            <CountdownTime hours={1} minutes={24} seconds={1} />
+                        </div>
+                        <div className="flex w-20 gap-2 text-right">
+                            <CarouselPrevious className="!translate-y-0 !shadow-none" />
+                            <CarouselNext className="!translate-y-0 !shadow-none" />
+                        </div>
+                    </div>
+                    <div className="w-full">
+                        <CarouselContent className="w-full gap-4">
+                            {course_sales?.map((item, index) => (
+                                <CarouselItem key={index} className="w-full min-w-0 basis-full md:basis-[367px]">
+                                    <Course key={index} data={item} page={routes.courseDetailNoLogin} />
+                                </CarouselItem>
+                            ))}
+                        </CarouselContent>
+                    </div>
+                </Carousel>
             </div>
             <div className="mx-auto max-w-[1200px] py-10 lg:px-0">
-                <h3 className="text-xl font-medium md:text-2xl">Khóa học theo danh mục</h3>
+                <h3 className="text-xl font-semibold md:text-2xl">Khóa học theo danh mục</h3>
                 <Tabs defaultValue={course_category[0]?.name} className="container-main flex-col">
                     <TabsList className="scrollbar-hide flex w-full items-start justify-start gap-2 overflow-x-auto">
                         {course_category.map((category) => (
@@ -57,34 +72,52 @@ const Home = () => {
                     <div className="p-4">
                         {course_category.map((category) => (
                             <TabsContent key={category.id} value={category.name} className="flex flex-col gap-5">
-                                <div className="flex flex-wrap gap-8">
-                                    {category.courses.map((course, index) => {
-                                        return <Course data={course} key={index} page={routes.courseDetailNoLogin} />
-                                    })}
-                                </div>
+                                <Carousel className="w-full" opts={{ align: 'start' }}>
+                                    <div className="w-full">
+                                        <CarouselContent className="w-full gap-4">
+                                            {category.courses?.map((item, index) => (
+                                                <CarouselItem key={index} className="w-full min-w-0 basis-full md:basis-[367px]">
+                                                    <Course key={index} data={item} page={routes.courseDetailNoLogin} />
+                                                </CarouselItem>
+                                            ))}
+                                        </CarouselContent>
+                                    </div>
+                                </Carousel>
                             </TabsContent>
                         ))}
                     </div>
                 </Tabs>
             </div>
             <div className="container-main pb-10">
-                <h3 className="pb-7 text-xl font-medium md:text-2xl">Bài viết nổi bật</h3>
-                <div className="flex flex-wrap gap-7">
-                    {postFeatured?.map((post, index) => (
-                        <PostOutStanding
-                            key={index}
-                            image={post.thumbnail}
-                            title={post.title}
-                            avatar={post.avatar}
-                            name={post.name}
-                            slug={post.slug}
-                            views={post.views}
-                            content={post.content}
-                        />
-                    ))}
-                </div>
+                <Carousel className="w-full" opts={{ align: 'start' }}>
+                    <div className="flex justify-between items-center">
+                        <h3 className="text-xl font-semibold md:text-2xl">Bài viết nổi bật</h3>
+                        <div className="flex w-20 gap-2 text-right">
+                            <CarouselPrevious className="!translate-y-0 !shadow-none" />
+                            <CarouselNext className="!translate-y-0 !shadow-none" />
+                        </div>
+                    </div>
+                    <div className="w-full">
+                        <CarouselContent className="w-full gap-4">
+                            {postFeatured && postFeatured.length > 0 && postFeatured?.map((post, index) => (
+                                <CarouselItem key={index} className="w-full min-w-0 basis-full md:basis-[367px]">
+                                    <PostOutStanding
+                                        key={index}
+                                        image={post.thumbnail}
+                                        title={post.title}
+                                        avatar={post.avatar}
+                                        name={post.name}
+                                        slug={post.slug}
+                                        views={post.views}
+                                        content={post.content}
+                                    />
+                                </CarouselItem>
+                            ))}
+                        </CarouselContent>
+                    </div>
+                </Carousel>
             </div>
-            <div className="container-main pb-10">
+            {ratings && ratings.length > 0 ? <div className="container-main pb-10">
                 <h3 className="pb-7 text-xl font-medium md:text-2xl">Đánh giá</h3>
                 <div className="flex flex-wrap gap-3">
                     {ratings?.map((item, index) => (
@@ -115,7 +148,7 @@ const Home = () => {
                         </div>
                     ))}
                 </div>
-            </div>
+            </div> : ''}
 
             <div className="container-main rounded-md pb-10">
                 <div

@@ -13,9 +13,9 @@ import {
 import { FaRegHeart } from 'react-icons/fa'
 import { useGetWishList, useUnWishList } from '@/app/hooks/courses/useCourse'
 import { getImagesUrl } from '@/lib'
-import { RiMoneyDollarCircleFill } from 'react-icons/ri'
 import { BsThreeDots } from 'react-icons/bs'
 import { toast } from 'sonner'
+import { TbCoinFilled } from 'react-icons/tb'
 
 const CourseWishListButton = () => {
     const navigate = useNavigate()
@@ -53,19 +53,18 @@ const CourseWishListButton = () => {
                                         alt={item.name}
                                     />
                                     <div className="flex w-full flex-col gap-2">
-                                        <p className="line-clamp-2 font-semibold">
-                                            {item.name}
-                                        </p>
+                                        <p className="line-clamp-2 font-semibold">{item.name}</p>
                                         {item.is_course_bought === true ? (
                                             <div className="flex flex-col gap-2">
                                                 <div className="flex h-1 w-full items-center overflow-hidden rounded bg-darkGrey/20">
                                                     <span
-                                                        className={`block h-full ${item.level === 'Sơ cấp'
-                                                            ? 'bg-[#FFBB54]'
-                                                            : item.level === 'Trung cấp'
-                                                                ? 'bg-[#25C78B]'
-                                                                : 'bg-red-600'
-                                                            }`}
+                                                        className={`block h-full ${
+                                                            item.level === 'Sơ cấp'
+                                                                ? 'bg-[#FFBB54]'
+                                                                : item.level === 'Trung cấp'
+                                                                  ? 'bg-[#25C78B]'
+                                                                  : 'bg-red-600'
+                                                        }`}
                                                         style={{ width: `${item.progress_percent}%` }}
                                                     ></span>
                                                     <span
@@ -85,14 +84,14 @@ const CourseWishListButton = () => {
                                                         <div className="flex items-center gap-1">
                                                             {item?.price_sale && item?.price_sale != 0 ? (
                                                                 <div className="flex items-center gap-1">
-                                                                    <RiMoneyDollarCircleFill className="size-4 text-orange-500" />
+                                                                    <TbCoinFilled className="size-5 text-yellow-500" />
                                                                     <del className="text-[12px] font-semibold">
                                                                         {Math.floor(item?.price)}
                                                                     </del>
                                                                 </div>
                                                             ) : (
                                                                 <div className="flex items-center gap-1">
-                                                                    <RiMoneyDollarCircleFill className="size-4 text-orange-500" />
+                                                                    <TbCoinFilled className="size-5 text-yellow-500" />
                                                                     <p className="text-[13px] font-semibold text-red-600">
                                                                         {Math.floor(item?.price)}
                                                                     </p>
@@ -101,7 +100,7 @@ const CourseWishListButton = () => {
                                                         </div>
                                                         {item?.price_sale && item?.price_sale != 0 && (
                                                             <div className="flex items-center gap-1">
-                                                                <RiMoneyDollarCircleFill className="size-4 text-orange-500" />
+                                                                <TbCoinFilled className="size-5 text-yellow-500" />
                                                                 <p className="text-[13px] font-semibold text-red-600">
                                                                     {Math.floor(item?.price_sale)}
                                                                 </p>
@@ -120,7 +119,9 @@ const CourseWishListButton = () => {
                                                 <BsThreeDots />
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent align="end" sideOffset={5}>
-                                                <DropdownMenuItem onClick={() => handleUnWishList(item.id)}>Xóa</DropdownMenuItem>
+                                                <DropdownMenuItem onClick={() => handleUnWishList(item.id)}>
+                                                    Xóa
+                                                </DropdownMenuItem>
                                             </DropdownMenuContent>
                                         </DropdownMenu>
                                     </div>

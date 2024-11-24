@@ -21,10 +21,10 @@ export const userApis = {
     getMyCourseBought: async (): Promise<ICourseMyBought[]> => {
         return axiosClient.get(userUri.GET_MY_COURSE_BOUGHT)
     },
-    flowTeacher: async (teacher: Flow): Promise<Flow> => {
+    followTeacher: async (teacher: Flow): Promise<Flow> => {
         return axiosClient.post(userUri.FLOW_TEACHER, teacher)
     },
-    unFlowTeacher: async (teacher: Flow): Promise<Flow> => {
+    unFollowTeacher: async (teacher: Flow): Promise<Flow> => {
         return axiosClient.post(userUri.UN_FOLLOW_TEACHER, teacher)
     },
     checkFollow: async (userId: number, teacherId: number): Promise<CheckFlow> => {

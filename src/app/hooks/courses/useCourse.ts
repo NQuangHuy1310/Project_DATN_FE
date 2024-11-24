@@ -3,7 +3,6 @@ import { IBuyData } from '@/types'
 import { IComment, ICreateComment } from '@/types/common'
 import {
     CourseData,
-    ICheckWishList,
     ICourse,
     ICourseCategory,
     ICourseDetail,
@@ -131,19 +130,6 @@ export const useAddCommentCourse = () => {
         }
     })
 }
-//CHECK BUY COURSE
-export const useCheckBuyCourse = (
-    userId: number,
-    courseSlug: string,
-    options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
-) => {
-    return useQuery<any>({
-        ...options,
-        enabled: !!userId && !!courseSlug,
-        queryKey: ['check-buy-course', userId, courseSlug],
-        queryFn: () => courseApi.checkBuyCourse(userId, courseSlug)
-    })
-}
 
 export const useRegisterCourse = () => {
     const queryClient = useQueryClient()
@@ -182,6 +168,7 @@ export const useAddWishList = () => {
         },
         onSuccess: async () => {
             await Promise.all([
+                queryClient.invalidateQueries({ queryKey: ['course-detail'] }),
                 queryClient.invalidateQueries({ queryKey: ['wishlist-course'] }),
                 queryClient.invalidateQueries({ queryKey: ['check-wishlist-course'] })
             ])
@@ -197,6 +184,7 @@ export const useUnWishList = () => {
         },
         onSuccess: async () => {
             await Promise.all([
+                queryClient.invalidateQueries({ queryKey: ['course-detail'] }),
                 queryClient.invalidateQueries({ queryKey: ['wishlist-course'] }),
                 queryClient.refetchQueries({ queryKey: ['check-wishlist-course'] })
             ])
@@ -204,14 +192,3 @@ export const useUnWishList = () => {
     })
 }
 
-export const useCheckWishList = (
-    courseId: number,
-    options?: Omit<UseQueryOptions<ICheckWishList>, 'queryKey' | 'queryFn'>
-) => {
-    return useQuery<ICheckWishList>({
-        ...options,
-        queryKey: ['check-wishlist-course', courseId],
-        enabled: !!courseId,
-        queryFn: () => courseApi.checkWishList(courseId)
-    })
-}

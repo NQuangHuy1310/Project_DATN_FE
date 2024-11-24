@@ -162,6 +162,9 @@ export interface ICourseDetail extends ICourse {
     audiences: Audience[]
     modules: IModule[]
     ratings_count: number
+    is_follow: boolean
+    is_rating: boolean
+    is_favorite: boolean
 }
 
 export interface Goal {

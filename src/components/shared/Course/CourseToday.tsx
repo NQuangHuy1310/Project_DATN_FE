@@ -9,8 +9,8 @@ import { CourseLevel } from '@/components/shared/Course/CourseLevel'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { ICourseToday } from '@/types/course/course'
 import { formatDuration, getImagesUrl } from '@/lib'
-import { RiMoneyDollarCircleFill } from 'react-icons/ri'
 import useGetUserProfile from '@/app/hooks/accounts/useGetUser'
+import { TbCoinFilled } from 'react-icons/tb'
 
 const CourseToday = ({
     thumbnail,
@@ -43,28 +43,33 @@ const CourseToday = ({
                     <div className="flex items-center gap-3">
                         <div className="flex items-center gap-1">
                             {price_sale && price_sale != 0 ? (
-                                <div className='flex items-center gap-1'>
-                                    <RiMoneyDollarCircleFill className="size-5 text-orange-500" />
-                                    <del className='font-semibold '>{Math.floor(price)}</del>
+                                <div className="flex items-center gap-1">
+                                   <TbCoinFilled className="size-5 text-yellow-500" />
+                                    <del className="text-[12px] font-semibold">
+                                        {Math.floor(price)}
+                                    </del>
                                 </div>
                             ) : (
-                                <div className='flex items-center gap-1'>
-                                    <RiMoneyDollarCircleFill className="size-5 text-orange-500" />
-                                    <p className='text-base'>{Math.floor(price)}</p>
+                                <div className="flex items-center gap-1">
+                                   <TbCoinFilled className="size-5 text-yellow-500" />
+                                    <p className="text-base font-semibold text-red-600">
+                                        {Math.floor(price)}
+                                    </p>
                                 </div>
                             )}
                         </div>
                         {price_sale && price_sale != 0 && (
-                            <div className='flex items-center gap-1'>
-                                <RiMoneyDollarCircleFill className="size-5 text-orange-500" />
-                                <p className="font-semibold text-base text-red-600">{Math.floor(price_sale)}</p>
+                            <div className="flex items-center gap-1">
+                               <TbCoinFilled className="size-5 text-yellow-500" />
+                                <p className="text-base font-semibold text-red-600">
+                                    {Math.floor(price_sale)}
+                                </p>
                             </div>
                         )}
                     </div>
                 ) : (
-                    <span className="text-orange-500 text-base">Miễn phí</span>
+                    <span className="text-base font-semibold text-orange-500">Miễn phí</span>
                 )}
-
                 <div className="flex items-center gap-2">
                     <Link to="" className="flex w-full items-center gap-2.5">
                         <Avatar className="size-8 flex-shrink-0">

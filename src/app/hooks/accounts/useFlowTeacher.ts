@@ -2,14 +2,15 @@ import { userApis } from '@/app/services/accounts'
 import { CheckFlow, Flow } from '@/types/user'
 import { useMutation, useQuery, useQueryClient, UseQueryOptions } from '@tanstack/react-query'
 
-export const useFlowTeacher = () => {
+export const useFollowTeacher = () => {
     const queryClient = useQueryClient()
     return useMutation<any, Error, [Flow]>({
         mutationFn: async ([teacherId]) => {
-            return userApis.flowTeacher(teacherId)
+            return userApis.followTeacher(teacherId)
         },
         onSuccess: async () => {
             await Promise.all([
+                queryClient.invalidateQueries({ queryKey: ['course-detail'] }),
                 queryClient.invalidateQueries({ queryKey: ['instructor-detail'] }),
                 queryClient.invalidateQueries({ queryKey: ['check-follow-teacher'] }),
                 queryClient.invalidateQueries({ queryKey: ['teacher-month'] })
@@ -18,14 +19,15 @@ export const useFlowTeacher = () => {
     })
 }
 
-export const useUnFlowTeacher = () => {
+export const useUnFollowTeacher = () => {
     const queryClient = useQueryClient()
     return useMutation<any, Error, [Flow]>({
         mutationFn: async ([teacherId]) => {
-            return userApis.unFlowTeacher(teacherId)
+            return userApis.unFollowTeacher(teacherId)
         },
         onSuccess: async () => {
             await Promise.all([
+                queryClient.invalidateQueries({ queryKey: ['course-detail'] }),
                 queryClient.invalidateQueries({ queryKey: ['instructor-detail'] }),
                 queryClient.invalidateQueries({ queryKey: ['check-follow-teacher'] }),
                 queryClient.invalidateQueries({ queryKey: ['teacher-month'] })
@@ -34,7 +36,7 @@ export const useUnFlowTeacher = () => {
     })
 }
 
-export const useCheckFlowTeacher = (
+export const useCheckFollowTeacher = (
     userId: number,
     teacherId: number,
     options?: Omit<UseQueryOptions<CheckFlow>, 'queryKey' | 'queryFn'>

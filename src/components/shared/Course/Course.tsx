@@ -9,9 +9,9 @@ import CourseProgress from '@/components/shared/Course/CourseProgress'
 import { CourseLevel } from '@/components/shared/Course/CourseLevel'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import { ICourse } from '@/types/course/course'
-import { RiMoneyDollarCircleFill } from 'react-icons/ri'
 import { formatDuration, getImagesUrl } from '@/lib'
 import routes from '@/configs/routes'
+import { TbCoinFilled } from 'react-icons/tb'
 
 const Course = ({ data, progressLesson, page }: { data: ICourse; progressLesson?: number; page?: string }) => {
     const navigate = useNavigate()
@@ -23,7 +23,8 @@ const Course = ({ data, progressLesson, page }: { data: ICourse; progressLesson?
     })
     return (
         <div className="card flex w-full cursor-text flex-col gap-3 shadow-md hover:shadow-[0px_40px_100px_0px_#0000000d] hover:transition-all md:w-[360px]">
-            <Link to={page == routes.courseDetailNoLogin ? `/course/${data.slug}` : `/courses/${data.slug}`} className='flex flex-col gap-2'>
+            <Link to={page == routes.courseDetailNoLogin ? `/course/${data.slug}` : `/courses/${data.slug}`}
+                className="flex flex-col gap-2">
                 <div className="relative h-[160px] flex-shrink-0 cursor-pointer">
                     <img
                         src={getImagesUrl(data.thumbnail!)}
@@ -41,12 +42,13 @@ const Course = ({ data, progressLesson, page }: { data: ICourse; progressLesson?
                     <div className="flex flex-col gap-2">
                         <div className="flex h-2 w-full items-center overflow-hidden rounded bg-darkGrey/20">
                             <span
-                                className={`block h-full ${data.level === 'Sơ cấp'
-                                    ? 'bg-[#FFBB54]'
-                                    : data.level === 'Trung cấp'
-                                        ? 'bg-[#25C78B]'
-                                        : 'bg-red-600'
-                                    }`}
+                                className={`block h-full ${
+                                    data.level === 'Sơ cấp'
+                                        ? 'bg-[#FFBB54]'
+                                        : data.level === 'Trung cấp'
+                                          ? 'bg-[#25C78B]'
+                                          : 'bg-red-600'
+                                }`}
                                 style={{ width: `${data.progress_percent}%` }}
                             ></span>
                             <span
@@ -55,9 +57,7 @@ const Course = ({ data, progressLesson, page }: { data: ICourse; progressLesson?
                             ></span>
                         </div>
 
-                        <span className="text-end text-[13px] font-medium">
-                            {data.progress_percent}% hoàn thành
-                        </span>
+                        <span className="text-end text-[13px] font-medium">{data.progress_percent}% hoàn thành</span>
                     </div>
                 ) : (
                     <>
@@ -66,14 +66,12 @@ const Course = ({ data, progressLesson, page }: { data: ICourse; progressLesson?
                                 <div className="flex items-center gap-1">
                                     {data?.price_sale && data?.price_sale != 0 ? (
                                         <div className="flex items-center gap-1">
-                                            <RiMoneyDollarCircleFill className="size-4 text-orange-500" />
-                                            <del className="text-[12px] font-semibold">
-                                                {Math.floor(data?.price)}
-                                            </del>
+                                            <TbCoinFilled className="size-5 text-yellow-500" />
+                                            <del className="text-[12px] font-semibold">{Math.floor(data?.price)}</del>
                                         </div>
                                     ) : (
                                         <div className="flex items-center gap-1">
-                                            <RiMoneyDollarCircleFill className="size-4 text-orange-500" />
+                                            <TbCoinFilled className="size-5 text-yellow-500" />
                                             <p className="text-base font-semibold text-red-600">
                                                 {Math.floor(data?.price)}
                                             </p>
@@ -82,7 +80,7 @@ const Course = ({ data, progressLesson, page }: { data: ICourse; progressLesson?
                                 </div>
                                 {data?.price_sale && data?.price_sale != 0 && (
                                     <div className="flex items-center gap-1">
-                                        <RiMoneyDollarCircleFill className="size-4 text-orange-500" />
+                                        <TbCoinFilled className="size-5 text-yellow-500" />
                                         <p className="text-base font-semibold text-red-600">
                                             {Math.floor(data?.price_sale)}
                                         </p>
@@ -95,7 +93,10 @@ const Course = ({ data, progressLesson, page }: { data: ICourse; progressLesson?
                     </>
                 )}
 
-                <div onClick={() => navigate(routes.instructorDetail.replace(':id', String(data.id_user)))} className={`flex ${!data.is_course_bought ? 'mt-2.5' : ''} cursor-pointer`}>
+                <div
+                    onClick={() => navigate(routes.instructorDetail.replace(':id', String(data.id_user)))}
+                    className={`flex ${!data.is_course_bought ? 'mt-2.5' : ''} cursor-pointer`}
+                >
                     {data.user && (
                         <div className="flex w-fit items-center gap-2">
                             <Avatar className="size-8 flex-shrink-0">
@@ -107,14 +108,12 @@ const Course = ({ data, progressLesson, page }: { data: ICourse; progressLesson?
                             <p className="flex-1">{data.user.name}</p>
                         </div>
                     )}
-
                 </div>
                 <div className="flex items-center gap-1">
                     <span className="ml-1 font-semibold">
                         {data.ratings_avg_rate! % 1 === 0
                             ? Math.floor(data.ratings_avg_rate!)
-                            : data.ratings_avg_rate!.toFixed(1)
-                        }
+                            : data.ratings_avg_rate!.toFixed(1)}
                     </span>
 
                     {stars.map((star, starIndex) => (
@@ -129,7 +128,7 @@ const Course = ({ data, progressLesson, page }: { data: ICourse; progressLesson?
                             )}
                         </div>
                     ))}
-                    <span className="ml-1 text-darkGrey font-medium">({data.ratings_count} đánh giá)</span>
+                    <span className="ml-1 font-medium text-darkGrey">({data.ratings_count} đánh giá)</span>
                 </div>
                 {progressLesson && data.total_lessons ? (
                     <CourseProgress

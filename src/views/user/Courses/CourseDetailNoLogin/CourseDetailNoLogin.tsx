@@ -93,7 +93,10 @@ const CourseDetailNoLogin = () => {
                                     </div>
                                     <div className="flex items-center gap-1">
                                         <IoIosStar className="size-5 text-primary" />
-                                        <span>{courseDetail?.ratings_avg_rate ?? 0} ({courseDetail?.ratings_count} đánh giá)</span>
+                                        <span>
+                                            {courseDetail?.ratings_avg_rate ?? 0} ({courseDetail?.ratings_count} đánh
+                                            giá)
+                                        </span>
                                     </div>
 
                                     <div className="block md:hidden">
@@ -135,7 +138,7 @@ const CourseDetailNoLogin = () => {
                                         Thông tin
                                     </TabsTrigger>
                                     <TabsTrigger value="assignment" className="min-w-max shrink-0 px-4 py-2">
-                                        Bài tập
+                                        Nội dung
                                     </TabsTrigger>
                                     <TabsTrigger value="review" className="min-w-max shrink-0 px-4 py-2">
                                         Đánh giá
@@ -155,12 +158,12 @@ const CourseDetailNoLogin = () => {
                                         <Content modules={courseDetail?.modules ?? []} />
                                     </TabsContent>
                                     <TabsContent value="review">
-                                        <Reviews />
+                                        <Reviews idDetailCourse={courseDetail?.id || 0} />
                                     </TabsContent>
                                 </div>
                             </Tabs>
                         </div>
-                        <CourseRelated/>
+                        <CourseRelated />
                     </div>
 
                     <div className="col-span-12 w-full lg:col-span-4">
@@ -172,14 +175,14 @@ const CourseDetailNoLogin = () => {
                                     lessons_count={courseDetail?.lessons_count ?? 0}
                                     total_lessons={courseDetail?.total_lessons ?? 0}
                                     total_duration_video={courseDetail?.total_duration_video ?? 0}
-                                    price_sale={courseDetail?.price_sale || 0}
+                                    price_sale={courseDetail?.price_sale}
                                     name={courseDetail?.name || ''}
                                     module={courseDetail?.modules || []}
                                     slug={courseDetail?.slug || ''}
                                     user={courseDetail?.user}
                                     thumbnail={courseDetail?.thumbnail || ''}
                                     trailer={courseDetail?.trailer}
-                                    price={courseDetail?.price || 0}
+                                    price={courseDetail?.price}
                                     level={courseDetail?.level || ''}
                                     page={routes.courseDetailNoLogin || routes.courseDetail}
                                 />

@@ -1,59 +1,98 @@
-import Teacher from '@/components/shared/Teacher'
 import FilterBar from '@/components/shared/FilterBar/FilterBar'
-import { useCoursePopulate } from '@/app/hooks/courses/useCourse'
+import { useGetAllCourses } from '@/app/hooks/courses/useCourse'
 import Loading from '@/components/Common/Loading/Loading'
 import Course from '@/components/shared/Course'
 import routes from '@/configs/routes'
-import { useInstructorMonth } from '@/app/hooks/instructors'
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { getVisiblePages } from '@/lib'
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination'
 
 const CoursesExplore = () => {
-    const { data: coursePopulate, isLoading } = useCoursePopulate()
-    const { data: instructorMonth } = useInstructorMonth()
+    const navigate = useNavigate()
+    const location = useLocation()
+
+    const queryParams = new URLSearchParams(location.search)
+    const initialPage = parseInt(queryParams.get('page') || '1', 10)
+    const [page, setPage] = useState(initialPage)
+
+    const { data: allCourses, isLoading } = useGetAllCourses(page, 6)
+
+    useEffect(() => {
+        if (page !== 1) {
+            navigate(`?page=${page}`, { replace: true })
+        } else {
+            navigate(location.pathname, { replace: true })
+        }
+    }, [page, navigate, location.pathname])
+
+    const handlePageChange = (newPage: number) => {
+        if (newPage !== page && newPage >= 1 && newPage <= (allCourses?.total || 1)) {
+            setPage(newPage)
+        }
+    }
+
+    const totalPages = Math.ceil((allCourses?.total ?? 0) / (allCourses?.per_page ?? 0))
+    const visiblePages = getVisiblePages(totalPages, page, 5)
 
     if (isLoading) return <Loading />
+
     return (
         <div className="flex flex-col gap-8">
-            <FilterBar placeholder="Tìm kiếm khóa học và người hướng dẫn" lever />
-            <Carousel className="w-full" opts={{ align: 'start' }}>
-                <div className="flex justify-between">
-                    <h5 className="text-lg font-medium text-black md:text-xl">
-                        Người hướng dẫn nổi bật theo tháng
-                    </h5>
-                    <div className="flex w-20 gap-2 text-right">
-                        <CarouselPrevious className="!translate-y-0 !shadow-none" />
-                        <CarouselNext className="!translate-y-0 !shadow-none" />
-                    </div>
-                </div>
-                <div className="w-full">
-                    <CarouselContent className="w-full gap-4">
-                        {instructorMonth?.map((item, index) => (
-                            <CarouselItem key={index} className="w-full min-w-0 basis-full md:basis-[367px]">
-                                <Teacher
-                                    key={index}
-                                    id={item.id}
-                                    name={item.name}
-                                    avatar={item.avatar!}
-                                    ratings_avg_rate={item.ratings_avg_rate}
-                                    follow={item.follow}
-                                    total_courses={item.total_courses}
-                                    total_ratings={item.total_ratings}
-                                />
-                            </CarouselItem>
-                        ))}
-                    </CarouselContent>
-                </div>
-            </Carousel>
-            <div className="flex flex-col gap-6">
-                <h2 className="text-2xl font-semibold text-black">Khoá học hàng tháng nổi bật</h2>
-                <div className="flex flex-wrap gap-10">
-                    {coursePopulate &&
-                        coursePopulate.length > 0 &&
-                        coursePopulate.map((item, index) => (
-                            <Course data={item} key={index} page={routes.courseDetail} />
-                        ))}
-                </div>
+            <FilterBar placeholder="Tìm kiếm khóa học" lever />
+            <div className="flex flex-wrap gap-10">
+                {allCourses?.data &&
+                    allCourses?.data.length > 0 &&
+                    allCourses?.data.map((item, index) => (
+                        <Course data={item} key={index} page={routes.courseDetail} />
+                    ))}
             </div>
+            {totalPages > 1 && (
+                <div className="mt-4 flex justify-center">
+                    <Pagination>
+                        <PaginationContent>
+                            <PaginationItem>
+                                <PaginationPrevious
+                                    onClick={() => handlePageChange(page - 1)}
+                                    className={page === 1 ? 'border' : 'cursor-pointer border bg-darkGrey/90'}
+                                />
+                            </PaginationItem>
+
+                            {visiblePages[0] > 1 && (
+                                <PaginationItem>
+                                    <span className="px-2">...</span>
+                                </PaginationItem>
+                            )}
+
+                            {visiblePages.map((pageNumber: number) => (
+                                <PaginationItem key={pageNumber} className="cursor-pointer">
+                                    <PaginationLink
+                                        isActive={page === pageNumber}
+                                        onClick={() => handlePageChange(pageNumber)}
+                                    >
+                                        {pageNumber}
+                                    </PaginationLink>
+                                </PaginationItem>
+                            ))}
+
+                            {visiblePages[visiblePages.length - 1] < totalPages && (
+                                <PaginationItem>
+                                    <span className="px-2">...</span>
+                                </PaginationItem>
+                            )}
+
+                            <PaginationItem>
+                                <PaginationNext
+                                    onClick={() => handlePageChange(page + 1)}
+                                    className={
+                                        page === totalPages ? 'border' : 'cursor-pointer border bg-darkGrey/90'
+                                    }
+                                />
+                            </PaginationItem>
+                        </PaginationContent>
+                    </Pagination>
+                </div>
+            )}
         </div>
     )
 }

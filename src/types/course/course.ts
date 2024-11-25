@@ -39,6 +39,12 @@ export interface ICourse {
     progress_percent: number
 }
 
+export interface IAllCourse {
+    current_page: number
+    data: ICourse[]
+    per_page: number
+    total: number
+}
 export interface ICourseToday extends ICourse {
     module?: IModule[]
     page?: string

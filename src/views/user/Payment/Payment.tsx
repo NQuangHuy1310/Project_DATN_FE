@@ -28,8 +28,8 @@ import {
     AlertDialogHeader
 } from '@/components/ui/alert-dialog'
 import { IBuyData } from '@/types'
-import { RiMoneyDollarCircleFill } from 'react-icons/ri'
 import { FaRegCirclePlay } from 'react-icons/fa6'
+import { CourseLevel } from '@/components/shared/Course/CourseLevel'
 
 const Payment = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false)
@@ -38,11 +38,10 @@ const Payment = () => {
     const [isVoucherApplied, setIsVoucherApplied] = useState<boolean>(false)
 
     const slug = useGetSlugParams('slug')
+    const { user } = useGetUserProfile()
 
     const { data: courseData, isLoading } = usePaymentCourseBySlug(slug!)
-    const { user } = useGetUserProfile()
     const { data: transactionData } = useTransactionById(user?.id || 0)
-
     const { mutateAsync: confirmPayment } = useBuyCourse()
     const { mutateAsync: applyVoucher } = useApplyVoucher()
 
@@ -97,74 +96,94 @@ const Payment = () => {
 
     return (
         <div className="mx-auto max-w-7xl p-4">
-            <div className="flex flex-col gap-5 md:flex-row">
+            <div className="flex flex-wrap gap-5 md:flex-nowrap">
                 {/* Phần bên trái */}
                 <div className="h-fit w-full rounded-md bg-white p-5 md:w-8/12">
                     <div className="flex flex-col gap-4">
-                        <h2 className="border-b text-xl font-medium">Thông tin mua hàng</h2>
-                        <div>
-                            <div className="flex flex-col gap-10 py-2 md:flex-row">
-                                <div className="max-w-[400px]">
-                                    <img
-                                        src={getImagesUrl(courseData?.thumbnail || '')}
-                                        className="w-full rounded-md"
-                                        alt=""
-                                    />
+                        <h2 className="border-b text-xl font-medium">Thông tin khóa học</h2>
+                        <div className="flex flex-wrap gap-10 py-2">
+                            <div className="relative h-[200px] w-full flex-shrink-0 cursor-pointer md:w-[50%]">
+                                <img
+                                    src={getImagesUrl(courseData?.thumbnail || '')}
+                                    alt={courseData?.name}
+                                    className="h-full w-full rounded-lg object-cover"
+                                />
+                                <div className="absolute bottom-2.5 left-2.5">
+                                    <CourseLevel courseLevel={courseData?.level || ''} />
                                 </div>
-                                <div className="flex flex-col gap-4">
-                                    <h3 className="text-lg font-bold md:text-2xl">{courseData?.name}</h3>
+                            </div>
+                            <div className="flex flex-1 flex-col gap-4">
+                                <h3 className="text-lg font-bold md:text-2xl">{courseData?.name}</h3>
+                                <div className="flex items-center gap-2">
+                                    <button className="bg-grey text-sm font-medium px-3 py-1 rounded-full">
+                                        {courseData?.category.name}
+                                    </button>
+                                </div>
 
-                                    <div className="flex items-center gap-5">
-                                        <div className="flex items-center gap-1">
-                                            <IoIosStar className="size-5 text-primary" />
-                                            <span className="text-[16px] font-medium">
-                                                {courseData?.ratings_avg_rate}
-                                            </span>
-                                        </div>
-                                        <div>
-                                            <span className="flex items-center gap-1.5 text-base font-medium">
-                                                <FaRegCirclePlay className="size-5 text-darkGrey" />
-                                                {courseData?.total_lessons} bài học
-                                            </span>
-                                        </div>
-                                        <div className="flex items-center gap-1.5 text-base font-medium">
-                                            <IoTimeOutline className="size-5 text-darkGrey" />
-                                            <span className="text-[16px] font-medium">{totalTime}</span>
-                                        </div>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                        <Avatar className="size-7 cursor-pointer md:size-10">
-                                            <AvatarImage
-                                                className="object-cover"
-                                                src={getImagesUrl(courseData?.user?.avatar || '')}
-                                                alt={courseData?.user?.name}
-                                            />
-                                            <AvatarFallback className="bg-slate-500/50 text-xl font-semibold text-white">
-                                                {courseData?.user?.name.charAt(0)}
-                                            </AvatarFallback>
-                                        </Avatar>
-                                        <p className="text-[16px] font-medium md:text-lg">{courseData?.user?.name}</p>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                        <h4 className="text-[16px] font-medium">Giá: </h4>
+                                <div className="flex items-center gap-2">
+                                    {courseData?.price && courseData?.price != 0 ? (
                                         <div className="flex items-center gap-3">
                                             <div className="flex items-center gap-1">
                                                 {courseData?.price_sale && courseData?.price_sale != 0 ? (
-                                                    <div className='flex items-center gap-1'>
-                                                        <RiMoneyDollarCircleFill className="size-5 text-orange-500" />
-                                                        <del className='font-semibold '>{Math.floor(courseData?.price)}</del>
+                                                    <div className="flex items-center gap-1">
+                                                        <TbCoinFilled className="size-5 text-yellow-500" />
+                                                        <del className="text-[12px] font-semibold">
+                                                            {Math.floor(courseData?.price)}
+                                                        </del>
                                                     </div>
                                                 ) : (
-                                                    <p className="text-base">{Math.floor(courseData?.price ?? 0)}</p>
+                                                    <div className="flex items-center gap-1">
+                                                        <TbCoinFilled className="size-5 text-yellow-500" />
+                                                        <p className="text-base font-semibold text-red-600">
+                                                            {Math.floor(courseData?.price)}
+                                                        </p>
+                                                    </div>
                                                 )}
                                             </div>
                                             {courseData?.price_sale && courseData?.price_sale != 0 && (
-                                                <div className='flex items-center gap-1'>
-                                                    <RiMoneyDollarCircleFill className="size-5 text-orange-500" />
-                                                    <p className='font-semibold '>{Math.floor(courseData?.price_sale)}</p>
+                                                <div className="flex items-center gap-1">
+                                                    <TbCoinFilled className="size-5 text-yellow-500" />
+                                                    <p className="text-base font-semibold text-red-600">
+                                                        {Math.floor(courseData?.price_sale)}
+                                                    </p>
                                                 </div>
                                             )}
                                         </div>
+                                    ) : (
+                                        <span className="text-base font-semibold text-orange-500">
+                                            Miễn phí
+                                        </span>
+                                    )}
+                                </div>
+
+                                <div className="flex items-center gap-2">
+                                    <Avatar className="size-8 flex-shrink-0">
+                                        <AvatarImage
+                                            src={getImagesUrl(courseData?.user.avatar || '')}
+                                            alt={courseData?.user.name}
+                                        />
+                                        <AvatarFallback className="flex size-8 items-center justify-center bg-slate-500/50 font-semibold">
+                                            {courseData?.user.name.charAt(0)}
+                                        </AvatarFallback>
+                                    </Avatar>
+                                    <p className="flex-1 font-medium">{courseData?.user.name}</p>
+                                </div>
+                                <div className="flex flex-wrap items-center gap-5">
+                                    <div className="flex items-center gap-1">
+                                        <IoIosStar className="size-5 text-primary" />
+                                        <span className="text-base font-medium">
+                                            {courseData?.ratings_avg_rate}
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <span className="flex items-center gap-1.5 text-base font-medium">
+                                            <FaRegCirclePlay className="size-5 text-darkGrey" />
+                                            {courseData?.total_lessons} bài học
+                                        </span>
+                                    </div>
+                                    <div className="flex items-center gap-1.5 text-base font-medium">
+                                        <IoTimeOutline className="size-5 text-darkGrey" />
+                                        <span className="text-base font-medium">{totalTime}</span>
                                     </div>
                                 </div>
                             </div>
@@ -174,8 +193,23 @@ const Payment = () => {
                 {/* Phần bên phải */}
                 <div className="w-full rounded-md bg-white p-5 md:w-4/12">
                     <div className="flex flex-col gap-4">
-                        <h2 className="border-b text-xl font-medium">Tóm tắt</h2>
+                        <h2 className="border-b text-xl font-medium">Thanh toán</h2>
                         <section className="flex flex-col gap-3 rounded-md">
+                            <div className="flex flex-col gap-2 border-b pb-3">
+                                <div className="flex w-full justify-between gap-2 md:gap-0">
+                                    <input
+                                        type="text"
+                                        className="w-[78%] rounded-md border ps-2 outline-none md:w-[90%] lg:w-[70%]"
+                                        placeholder="Nhập mã giảm giá"
+                                        value={voucherCode}
+                                        onChange={(e) => setVoucherCode(e.target.value)}
+                                        readOnly={isVoucherApplied}
+                                    />
+                                    <Button onClick={handleApplyVoucher}>
+                                        {isVoucherApplied ? 'Đổi mã' : 'Áp dụng'}
+                                    </Button>
+                                </div>
+                            </div>
                             <div className="flex justify-between">
                                 <span className="text-[15px] font-medium">Số dư hiện tại:</span>
                                 <div className="flex gap-1">
@@ -208,21 +242,6 @@ const Payment = () => {
                                     </span>
                                 </div>
                             </div>
-                            <div className="flex flex-col gap-2 border-b border-t py-3">
-                                <div className="flex w-full justify-between">
-                                    <input
-                                        type="text"
-                                        className="w-[78%] rounded-md border ps-2 outline-none md:w-[90%] lg:w-[70%]"
-                                        placeholder="Nhập mã giảm giá"
-                                        value={voucherCode}
-                                        onChange={(e) => setVoucherCode(e.target.value)}
-                                        readOnly={isVoucherApplied}
-                                    />
-                                    <Button onClick={handleApplyVoucher}>
-                                        {isVoucherApplied ? 'Đổi mã' : 'Áp dụng'}
-                                    </Button>
-                                </div>
-                            </div>
                             <div className="flex flex-col gap-3">
                                 <Button className="w-full" onClick={() => setIsOpen(true)}>
                                     Thanh toán
@@ -234,8 +253,9 @@ const Payment = () => {
                                             Quay lại
                                         </Button>
                                     </Link>
-                                    <Link to={routes.wallet} className="w-full">
-                                        <Button className="w-full" variant="outline">
+                                    <Link to={routes.wallet} className="w-full" >
+                                        <Button className="w-full flex gap-2 items-center" variant="outline">
+                                            <TbCoinFilled className="size-4 text-yellow-500" />
                                             Nạp thêm xu
                                         </Button>
                                     </Link>
@@ -270,6 +290,7 @@ const Payment = () => {
                 </div>
             </div>
         </div>
+
     )
 }
 

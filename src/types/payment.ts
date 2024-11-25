@@ -1,6 +1,8 @@
 import { IUser } from './auth'
+import { ICategory } from './others'
 
 export interface IPayment {
+    category: ICategory
     ratings_avg_rate: string
     id: number
     name: string
@@ -10,6 +12,7 @@ export interface IPayment {
     total_lessons: number
     total_student: number
     total_duration_video: number
+    level: string
     user: IUser
 }
 export interface IBuyData {

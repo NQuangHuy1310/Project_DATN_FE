@@ -162,14 +162,16 @@ const LeaningCourseQuiz = ({
                                 <img src={getImagesUrl(question.image_url!)} className="w-full" alt="" />
                             </DialogContent>
                         </Dialog>
-                        <div className="w-fit rounded-lg border p-2">
-                            <img
-                                onClick={() => setShowImage(true)}
-                                src={getImagesUrl(question.image_url!)}
-                                className="w-full max-w-[260px] overflow-hidden rounded-lg"
-                                alt=""
-                            />
-                        </div>
+                        {question.image_url && (
+                            <div className="w-fit rounded-lg border p-2">
+                                <img
+                                    onClick={() => setShowImage(true)}
+                                    src={getImagesUrl(question.image_url!)}
+                                    className="w-full max-w-[260px] overflow-hidden rounded-lg"
+                                    alt=""
+                                />
+                            </div>
+                        )}
                     </div>
                     <div
                         style={{ gridTemplateColumns: `repeat(${Math.min(question?.options?.length, 5)}, 1fr)` }}

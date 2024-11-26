@@ -47,7 +47,7 @@ const Certification = () => {
                 const url = window.URL.createObjectURL(data)
                 const a = document.createElement('a')
                 a.href = url
-                a.download = `download-file.${type}`
+                a.download = `${detailCertification?.course.name}.${type}`
                 document.body.appendChild(a)
                 a.click()
                 document.body.removeChild(a)

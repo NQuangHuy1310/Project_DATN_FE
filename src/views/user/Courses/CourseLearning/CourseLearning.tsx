@@ -95,6 +95,7 @@ const CourseLearning = () => {
     const { data: quizLesson } = useQuizLessonById(idLesson!, isQuiz)
 
     const lessons = courseModule?.modules?.flatMap((module) => module.lessons) || []
+    const checkLesson = lessons.filter((lesson) => lesson.id === idLesson)
     const isLessonInModule = lessons.some((lesson) => lesson.id === idLesson)
     const nextLessonId = courseModule?.next_lesson?.id
 
@@ -561,6 +562,7 @@ const CourseLearning = () => {
                                 <LeaningCourseVideo
                                     setCheckNote={setCheckNote}
                                     toggleTab={toggleTab}
+                                    checkLesson={checkLesson[0].is_completed}
                                     dataLesson={courseLesson}
                                     durationNote={timeNote!}
                                     setCheckButton={setCheckButton}

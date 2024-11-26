@@ -5,6 +5,7 @@ import { backendUrl } from '@/configs/baseUrl'
 import { ILessonLeaning } from '@/types/course/course'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { HiOutlineChatAlt2 } from 'react-icons/hi'
+import { toast } from 'sonner'
 
 const LeaningCourseDocument = ({
     dataLesson,
@@ -17,6 +18,7 @@ const LeaningCourseDocument = ({
 }) => {
     const [qaSheet, setQASheet] = useState<boolean>(false)
     const { mutateAsync: lessonProcessUpdate } = useUpdateLessonProCess()
+    const [loading, setLoading] = useState<boolean>(false)
 
     // Hàm tính thời gian đọc dựa trên số từ
     const calculateReadingTime = (content: string) => {
@@ -26,8 +28,36 @@ const LeaningCourseDocument = ({
     }
 
     const handleDownloadFile = () => {
+        setLoading(true)
         const token = localStorage.getItem('access_token')
-        const filePath = dataLesson.lessonable?.resourse_path
+        fetch(`${backendUrl}lessons/${dataLesson.id}/download-resourse`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+            .then((res) => {
+                if (!res.ok) {
+                    throw new Error('Failed to fetch the file')
+                }
+                return res.blob()
+            })
+            .then((data) => {
+                const url = window.URL.createObjectURL(data)
+                const a = document.createElement('a')
+                a.href = url
+                a.download = `${dataLesson.title}.doc`
+                document.body.appendChild(a)
+                a.click()
+                document.body.removeChild(a)
+                window.URL.revokeObjectURL(url)
+                setLoading(false)
+            })
+            .catch((error) => {
+                toast.error('Error downloading file:', error)
+            })
+            .finally(() => {
+                setLoading(false)
+            })
     }
 
     useEffect(() => {
@@ -58,7 +88,7 @@ const LeaningCourseDocument = ({
                     <div dangerouslySetInnerHTML={{ __html: dataLesson.lessonable.content! }} />
                 )}
                 {dataLesson.lessonable?.resourse_path && (
-                    <Button className="w-fit" onClick={handleDownloadFile}>
+                    <Button className="w-fit" onClick={handleDownloadFile} disabled={loading}>
                         Tải xuống tải nguyên đính kèm của bài học
                     </Button>
                 )}

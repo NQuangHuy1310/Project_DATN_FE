@@ -9,10 +9,12 @@ import { ILessonLeaning } from '@/types/course/course'
 import { useUpdateLessonProCess } from '@/app/hooks/courses/useLesson'
 
 import { HiOutlineChatAlt2, HiPlusSm } from 'react-icons/hi'
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog'
 
 const LeaningCourseVideo = ({
     toggleTab,
     dataLesson,
+    checkLesson,
     durationNote,
     setCheckButton,
     setCheckNote,
@@ -21,6 +23,7 @@ const LeaningCourseVideo = ({
 }: {
     toggleTab: boolean
     dataLesson: ILessonLeaning
+    checkLesson: number
     durationNote?: number
     setCheckButton: Dispatch<SetStateAction<boolean>>
     setCheckNote: Dispatch<SetStateAction<boolean>>
@@ -32,6 +35,7 @@ const LeaningCourseVideo = ({
     const [videoWatched, setVideoWatched] = useState<boolean>(false)
     const [currentVideoTime, setCurrentVideoTime] = useState<number>(0)
     const [player, setPlayer] = useState<any>(null)
+    const [open, setOpen] = useState(false)
     const intervalRef = useRef<NodeJS.Timeout | null>(null)
     const videoRef = useRef<HTMLVideoElement | null>(null)
     const hasUpdatedProgress = useRef<boolean>(false)
@@ -45,7 +49,6 @@ const LeaningCourseVideo = ({
 
     const updateProgress = async () => {
         if (!hasUpdatedProgress.current) {
-            localStorage.removeItem(`last-time-video&${dataLesson.id}`)
             await lessonProcessUpdate([
                 dataLesson.id!,
                 {
@@ -58,36 +61,6 @@ const LeaningCourseVideo = ({
             hasUpdatedProgress.current = true
         }
     }
-
-    const saveLastVideoTime = () => {
-        const lastVideoTime = isYouTubeVideo && videoUrl ? currentVideoTime : videoRef.current?.currentTime
-        if (lastVideoTime !== undefined) {
-            localStorage.setItem(`last-time-video&${dataLesson.id}`, lastVideoTime.toString())
-        }
-    }
-
-    useEffect(() => {
-        const handleBeforeUnload = () => {
-            saveLastVideoTime()
-        }
-        window.addEventListener('beforeunload', handleBeforeUnload)
-        return () => {
-            window.removeEventListener('beforeunload', handleBeforeUnload)
-        }
-    }, [dataLesson.id, isYouTubeVideo, currentVideoTime])
-
-    useEffect(() => {
-        const lastVideoTime = localStorage.getItem(`last-time-video&${dataLesson.id}`)
-        if (lastVideoTime) {
-            const time = Number(lastVideoTime)
-            setCurrentVideoTime(time)
-            if (isYouTubeVideo && player) {
-                player.seekTo(time, true)
-            } else if (videoRef.current) {
-                videoRef.current.currentTime = time
-            }
-        }
-    }, [player, isYouTubeVideo])
 
     const createYouTubePlayer = () => {
         new window.YT.Player('youtube-player', {
@@ -142,22 +115,58 @@ const LeaningCourseVideo = ({
         onPlayVideo(playVideo)
     }, [player])
 
+    const videoStartTimeRef = useRef<number | null>(null)
+    const timeCheckRef = useRef<number>(dataLesson.lessonable!.duration! / 2)
+
     const handlePlayerStateChange = (event: any) => {
         const playerInstance = event.target
         if (event.data === window.YT.PlayerState.PLAYING) {
-            intervalRef.current = setInterval(() => {
-                const time = playerInstance.playerInfo.currentTime
-                setCurrentVideoTime(Math.floor(time))
-                if (time / dataLesson.lessonable!.duration! >= 0.8) {
-                    updateProgress()
-                }
-            }, 500)
+            if (!videoStartTimeRef.current) {
+                videoStartTimeRef.current = Date.now()
+            }
+            if (!intervalRef.current) {
+                intervalRef.current = setInterval(() => {
+                    const time = playerInstance.playerInfo.currentTime
+                    setCurrentVideoTime(Math.floor(time))
+                    if (checkLesson !== 1) {
+                        const currentTime = Date.now()
+                        const elapsedTime = (currentTime - (videoStartTimeRef.current || currentTime)) / 1000
+                        timeCheckRef.current = timeCheckRef.current + elapsedTime
+                        if (time > timeCheckRef.current) {
+                            playerInstance.pauseVideo()
+                            setOpen(true)
+                        } else if (time / dataLesson?.lessonable?.duration! > 0.8) {
+                            updateProgress()
+                        }
+                        videoStartTimeRef.current = currentTime
+                    }
+                }, 500)
+            }
         }
-        if (event.data === window.YT.PlayerState.PAUSED || event.data === window.YT.PlayerState.ENDED) {
-            clearInterval(intervalRef.current!)
-            intervalRef.current = null
+
+        if (event.data === window.YT.PlayerState.PAUSED) {
+            if (videoStartTimeRef.current) {
+                videoStartTimeRef.current = null
+            }
+            if (intervalRef.current) {
+                clearInterval(intervalRef.current)
+                intervalRef.current = null
+            }
+        }
+
+        if (event.data === window.YT.PlayerState.ENDED) {
+            if (videoStartTimeRef.current) {
+                videoStartTimeRef.current = null
+            }
+
+            if (intervalRef.current) {
+                clearInterval(intervalRef.current)
+                intervalRef.current = null
+            }
         }
     }
+
+    const handleDialogClose = () => setOpen(false)
 
     useEffect(() => {
         if (isYouTubeVideo && videoUrl) {
@@ -264,6 +273,17 @@ const LeaningCourseVideo = ({
                     }
                 }}
             />
+            <Dialog open={open} onOpenChange={handleDialogClose}>
+                <DialogContent className="w-96">
+                    <DialogTitle>Bạn đang học quá nhanh !</DialogTitle>
+                    <DialogDescription>
+                        Bạn đang tua video quá nhanh. Hãy xem video đúng tiến độ để đảm bảo học tốt hơn.
+                    </DialogDescription>
+                    <Button className="mt-2" onClick={handleDialogClose}>
+                        OK
+                    </Button>
+                </DialogContent>
+            </Dialog>
         </>
     )
 }

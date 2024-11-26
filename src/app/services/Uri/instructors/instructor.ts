@@ -46,6 +46,6 @@ export const instructorUri = {
 
     // Statistic
     STATISTIC: `${INSTRUCTOR_URL}statistic`,
-    GET_STUDENTS: (courseID: number) => `${INSTRUCTOR_URL}statistic/course/${courseID}/get-students`,
+    GET_STUDENTS: (courseID: number) => `${INSTRUCTOR_URL}statistic/course/${courseID}/get-students?course=${courseID}`,
     GET_RATINGS: (courseID: number) => `${INSTRUCTOR_URL}statistic/course/${courseID}/get-ratings`
 }

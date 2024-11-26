@@ -6,15 +6,6 @@ import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
 import { useGetCourses, useStatistic } from '@/app/hooks/instructors'
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectTrigger,
-    SelectValue
-} from '@/components/ui/select'
 import noContent from '@/assets/no-content.jpg'
 import { Button } from '@/components/ui/button'
 import { useNavigate } from 'react-router-dom'
@@ -52,24 +43,6 @@ const PerformanceOverview = () => {
                     <div className="flex flex-col gap-4">
                         <div className="flex flex-col gap-1">
                             <h4 className="text-xl font-semibold">Tổng quan</h4>
-                        </div>
-                        <div>
-                            <Select>
-                                <SelectTrigger className="flex w-[300px] items-center justify-between">
-                                    <SelectValue placeholder="Chọn khoá học" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectGroup>
-                                        <SelectLabel>Chọn khoá học</SelectLabel>
-                                        <SelectItem value="full">Tất cả khoá học</SelectItem>
-                                        {courseData.data.map((course) => (
-                                            <SelectItem key={course.id} value={course.name}>
-                                                {course.name}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectGroup>
-                                </SelectContent>
-                            </Select>
                         </div>
                     </div>
 

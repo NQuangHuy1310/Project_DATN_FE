@@ -136,3 +136,15 @@ export const canEditCourse = (status: ICourseStatus): boolean => {
 export const showMessage = () => {
     toast.error(MessageErrors.canEdit, { description: MessageErrors.descriptionCanEdit })
 }
+
+export const truncate = (text: string | undefined, length: number): string => {
+    if (!text) return ''
+    return text.length > length ? `${text.slice(0, length)}...` : text
+}
+
+export const getInfoOrPlaceholder = (info: string | undefined | number, message?: string): string => {
+    if (info === null || !info) {
+        return message || 'Chưa cập nhật thông tin'
+    }
+    return String(info)
+}

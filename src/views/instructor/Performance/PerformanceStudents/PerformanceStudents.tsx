@@ -14,7 +14,7 @@ import {
     SelectValue
 } from '@/components/ui/select'
 import routes from '@/configs/routes'
-import { getImagesUrl } from '@/lib'
+import { formatDate, getImagesUrl } from '@/lib'
 import noContent from '@/assets/no-content.jpg'
 import DialogProfile from '@/components/shared/DialogProfile'
 
@@ -28,16 +28,6 @@ const PerformanceStudents = () => {
 
     const handleSelectCourse = (value: string) => {
         setCourseId(+value)
-    }
-
-    const formatDate = (dateString: string): string => {
-        const date = new Date(dateString)
-        const options: Intl.DateTimeFormatOptions = {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric'
-        }
-        return date.toLocaleDateString('vi-VN', options)
     }
 
     useEffect(() => {

@@ -330,3 +330,25 @@ export interface StudentsCourse {
         }[]
     }
 }
+
+export interface RatingsCourse {
+    total_ratings: number
+    ratings: {
+        current_page: number
+        data: ratingCourse[]
+    }
+}
+
+export interface ratingCourse {
+    id: number
+    id_user: number
+    content: string
+    rate: number
+    created_at: string
+    updated_at: string
+    user: {
+        id: number
+        name: string
+        avatar: string | null
+    }
+}

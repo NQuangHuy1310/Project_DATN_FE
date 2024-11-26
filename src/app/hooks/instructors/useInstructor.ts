@@ -23,6 +23,7 @@ import {
     ITargetCourse,
     IUpdatePositionLessonData,
     IUpdatePositionModuleData,
+    RatingsCourse,
     RevenueData,
     StudentsCourse
 } from '@/types/instructor'
@@ -462,7 +463,10 @@ export const useGetStudentsCourse = (
     })
 }
 
-export const useGetRatingsCourse = (courseID: number, options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>) => {
+export const useGetRatingsCourse = (
+    courseID: number,
+    options?: Omit<UseQueryOptions<RatingsCourse>, 'queryKey' | 'queryFn'>
+) => {
     return useQuery({
         ...options,
         enabled: courseID !== undefined,

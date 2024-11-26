@@ -21,11 +21,14 @@ interface LessonOptionsProps {
 
 const LessonOptions = ({ handleClose, moduleId, isHasQuiz }: LessonOptionsProps) => {
     const [isShowLesson, setIsShowLesson] = useState(false)
+    const [openDialog, setOpenDialog] = useState<boolean>(false)
     const [lessonType, setLessonType] = useState<lessonTypes | undefined>(undefined)
 
     const handleClickButton = (type: lessonTypes) => {
-        if (isHasQuiz && lessonType === 'quizzes') {
+        if (isHasQuiz && type === 'quizzes') {
             toast.error('Chương học này đã có bài tập không thể thêm bài tập nữa!')
+        } else if (type === 'coding') {
+            setOpenDialog(true)
         }
 
         setLessonType(type)
@@ -66,7 +69,7 @@ const LessonOptions = ({ handleClose, moduleId, isHasQuiz }: LessonOptionsProps)
                     {lessonType === 'quizzes' && !isHasQuiz && (
                         <LessonQuizzes moduleId={moduleId} handleHiddenLesson={setIsShowLesson} canEdit={true} />
                     )}
-                    {lessonType === 'coding' && <LessonCoding />}
+                    {lessonType === 'coding' && <LessonCoding open={openDialog} setOpenDialog={setOpenDialog} />}
                 </>
             )}
         </div>

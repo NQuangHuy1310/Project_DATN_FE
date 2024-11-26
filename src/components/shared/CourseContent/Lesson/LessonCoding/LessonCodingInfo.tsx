@@ -5,7 +5,7 @@ import { SUPPORTED_LANGUAGES } from '@/constants/language'
 
 const LessonCodingInfo = () => {
     return (
-        <div className="flex max-w-[767px] flex-col gap-5">
+        <div className="mx-auto flex max-w-[767px] flex-col gap-5">
             <div className="flex flex-col gap-2">
                 <h3 className="text-base font-semibold">Lập kế hoạch cho bài tập</h3>
                 <p>
@@ -31,7 +31,9 @@ const LessonCodingInfo = () => {
                         <SelectContent>
                             <SelectGroup>
                                 {SUPPORTED_LANGUAGES.map((language) => (
-                                    <SelectItem value={language.value}>{language.label}</SelectItem>
+                                    <SelectItem value={language.value} key={language.value}>
+                                        {language.label}
+                                    </SelectItem>
                                 ))}
                             </SelectGroup>
                         </SelectContent>

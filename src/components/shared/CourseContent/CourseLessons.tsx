@@ -5,9 +5,9 @@ import { useEffect, useState } from 'react'
 
 import { ILesson, ILessonQuiz } from '@/types/instructor'
 import { Button } from '@/components/ui/button.tsx'
-import QuizItem from '@/components/shared/CourseContent/QuizItem.tsx'
-import LessonItem from '@/components/shared/CourseContent/LessonItem.tsx'
-import LessonOptions from '@/components/shared/CourseContent/LessonOptions.tsx'
+import QuizItem from '@/components/shared/CourseContent/Lesson/QuizItem'
+import LessonItem from '@/components/shared/CourseContent/Lesson/LessonItem'
+import LessonOptions from '@/components/shared/CourseContent/Lesson/LessonOptions'
 import { useUpdatePositionLesson } from '@/app/hooks/instructors'
 import { showMessage } from '@/lib'
 

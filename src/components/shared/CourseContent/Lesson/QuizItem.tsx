@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button'
 import ConfirmDialog from '@/components/shared/ConfirmDialog'
 import { useCreateQuestion, useDeleteLessonQuiz, useGetLessonQuiz } from '@/app/hooks/instructors'
 import DialogAddQuestion from '@/components/shared/CourseContent/Dialog/DialogAddQuestion'
-import LessonQuizzes from '@/components/shared/CourseContent/LessonQuizzes'
+import LessonQuizzes from '@/components/shared/CourseContent/Lesson/LessonQuizzes'
 import { showMessage } from '@/lib'
 
 interface QuizItemProps {

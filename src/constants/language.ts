@@ -1,3 +1,4 @@
+/* eslint-disable quotes */
 import { Language, Language_Snippet } from '@/types'
 
 export const LANGUAGE_VERSIONS: Language = {

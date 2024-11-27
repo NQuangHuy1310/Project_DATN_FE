@@ -39,13 +39,15 @@ const LeaningCourseDocument = ({
                 if (!res.ok) {
                     throw new Error('Failed to fetch the file')
                 }
-                return res.blob()
+                const contentType = res.headers.get('Content-Type')
+                return res.blob().then((blob) => ({ blob, contentType }))
             })
-            .then((data) => {
-                const url = window.URL.createObjectURL(data)
+            .then(({ blob, contentType }) => {
+                const url = window.URL.createObjectURL(blob)
                 const a = document.createElement('a')
                 a.href = url
-                a.download = `${dataLesson.title}.doc`
+                const extension = contentType?.split('/')[1]
+                a.download = `${dataLesson.title}.${extension}`
                 document.body.appendChild(a)
                 a.click()
                 document.body.removeChild(a)

@@ -1,7 +1,7 @@
 import { CertificateData, IBankData, IBanner, ICategoryLeaningPath } from '@/types/others'
-import { bannerApi, getBanks, learningPathApi } from '@/app/services/others/others'
+import { bannerApi, communicateChatAI, getBanks, learningPathApi } from '@/app/services/others/others'
 
-import { useMutation, useQuery, UseQueryOptions } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient, UseQueryOptions } from '@tanstack/react-query'
 import { certificationApis } from '@/app/services/certificates/certificates'
 import { ICourseLearningPath } from '@/types/course/course'
 
@@ -72,5 +72,22 @@ export const useGetCourseLearningPath = (
         enabled: !!cate,
         queryKey: ['course-learning-path', cate],
         queryFn: () => learningPathApi.getCourseLearningPath(cate)
+    })
+}
+export const useCommunicateChatAI = () => {
+    const queryClient=useQueryClient()
+    return useMutation({
+        mutationFn: async (question: string) => {
+            return communicateChatAI.chatAI(question)
+        }, onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['myPosts'] })
+        }
+    })
+}
+export const useFilterChatAI = (status: string, options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>) => {
+    return useQuery({
+        ...options,
+        queryKey: ['filter-chatai', status],
+        queryFn: () => communicateChatAI.filterChatAI(status)
     })
 }

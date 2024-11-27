@@ -38,9 +38,13 @@ const CourseHistory = () => {
                     courseHistory?.course?.map((item, index) => (
                         <div
                             key={index}
-                            onClick={() =>
-                                navigate(`${routes.courseLeaning.replace(':slug', item.slug)}?id=${item.id}`)
-                            }
+                            onClick={() => {
+                                if (item.content_type == 'document' || item.content_type == 'video') {
+                                    navigate(`${routes.courseLeaning.replace(':slug', item.slug)}?id=lesson-${item.id}`)
+                                } else {
+                                    navigate(`${routes.courseLeaning.replace(':slug', item.slug)}?id=quiz-${item.id}`)
+                                }
+                            }}
                             className="flex cursor-pointer items-center justify-between gap-5 rounded-md bg-softGrey px-5 py-3 duration-200 hover:bg-softGrey/50"
                         >
                             <div className="flex items-center gap-5">

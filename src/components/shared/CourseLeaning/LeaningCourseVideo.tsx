@@ -47,6 +47,11 @@ const LeaningCourseVideo = ({
         ? `https://www.youtube.com/embed/${dataLesson.lessonable?.video_youtube_id}`
         : getImagesUrl(dataLesson.lessonable!.url!)
 
+    const formatDate = (dateTime: string) => {
+        const date = new Date(dateTime)
+        return `${date.toLocaleDateString()}`
+    }
+
     const updateProgress = async () => {
         if (!hasUpdatedProgress.current) {
             await lessonProcessUpdate([
@@ -219,7 +224,7 @@ const LeaningCourseVideo = ({
                 <div className="mt-10 flex flex-wrap justify-between gap-4">
                     <div className="flex flex-col gap-4">
                         <h2 className="max-w-xl text-xl font-semibold md:text-2xl">{dataLesson.lessonable!.title}</h2>
-                        <span className="md:text-md text-sm">Cập nhật tháng 10 năm 2024</span>
+                        <span className="md:text-md text-sm">Cập nhật tháng {formatDate(dataLesson.created_at)}</span>
                     </div>
                     <Button
                         className="relative flex !ps-10 shadow-md"

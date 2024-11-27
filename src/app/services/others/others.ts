@@ -1,7 +1,7 @@
 import axiosClient from '@/configs/axiosClient'
-import { bannerUri, learningPathUri } from '../Uri/others/others'
+import { bannerUri, chatAIUri, learningPathUri } from '../Uri/others/others'
 
-import { IBanner, ICategory, ICategoryLeaningPath } from '@/types/others'
+import { IBanner, ICategoryLeaningPath } from '@/types/others'
 import axios from 'axios'
 import { ICourseLearningPath } from '@/types/course/course'
 
@@ -26,5 +26,14 @@ export const learningPathApi = {
     },
     getCourseLearningPath: async (cate: string): Promise<ICourseLearningPath> => {
         return axiosClient.get(learningPathUri.LIST_COURSE_LEANING_PATH(cate))
+    }
+}
+
+export const communicateChatAI = {
+    chatAI: async (question: string) => {
+        return axiosClient.post(chatAIUri.CHAT_AI, { question })
+    },
+    filterChatAI: async (status: string) => {
+        return axiosClient.get(chatAIUri.FILTER_CHAT_AI(status))
     }
 }

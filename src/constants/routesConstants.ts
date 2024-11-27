@@ -66,6 +66,7 @@ import CourseHistory from '@/views/user/Courses/CourseHistory'
 import LearningPath from '@/views/user/LearningPath'
 import LearningPathCourse from '@/views/user/LearningPath/LearningPathCourse'
 import PerformanceRatings from '@/views/instructor/Performance/PerformanceRatings'
+import Communicate from '@/views/user/ComunicateAi/Communicate'
 
 // Routes không cần đăng nhập
 export const publicRoutes = [
@@ -128,7 +129,7 @@ export const privateRoutes = [
     },
     // wallet
     { path: routes.wallet, layout: UserDashboardLayout, element: Transaction, title: 'Nạp tiền vào tài khoản' },
-
+    { path: routes.communicate, layout: UserDashboardLayout, element: Communicate, title: 'Chat AI' },
     // LearningPath
     { path: routes.learningPaths, layout: UserDashboardLayout, element: LearningPath, title: 'Lộ trình học tập' },
     {

@@ -5,7 +5,7 @@ import { MdReviews } from 'react-icons/md'
 import { GrHistory } from 'react-icons/gr'
 import { LuUserCircle } from 'react-icons/lu'
 import { PiStudentBold } from 'react-icons/pi'
-import { IoWalletSharp } from 'react-icons/io5'
+import { IoChatboxOutline, IoWalletSharp } from 'react-icons/io5'
 import { PiArticleMediumLight } from 'react-icons/pi'
 import { MdSecurity, MdArticle } from 'react-icons/md'
 import { AiOutlineQuestionCircle } from 'react-icons/ai'
@@ -94,6 +94,11 @@ export const sidebarList = [
         title: 'Tài khoản',
         icon: FaUserCog,
         path: routes.accountProfile
+    },
+    {
+        title: 'Chat AI',
+        icon: IoChatboxOutline,
+        path: routes.communicate
     }
 ]
 

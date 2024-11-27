@@ -23,6 +23,9 @@ const routes = {
     courseOutstanding: '/course-outstanding',
     courseHistory: '/course-history',
 
+    //CHAT AI
+    communicate: '/communicate',
+
     // Instructor routes
     instructor: '/instructors',
     instructorDetail: '/instructors/:id',

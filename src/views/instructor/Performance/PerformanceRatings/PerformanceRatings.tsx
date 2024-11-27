@@ -27,7 +27,7 @@ const PerformanceRatings = () => {
     const [comment, setComment] = useState<ratingCourse>()
     const [openDialog, setOpenDialog] = useState<boolean>(false)
 
-    const { data: courseData } = useGetCourses()
+    const { data: courseData } = useGetCourses(100)
     const { data: ratingsData } = useGetRatingsCourse(courseId!)
 
     const handleSelectCourse = (value: string) => {

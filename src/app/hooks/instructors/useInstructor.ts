@@ -30,8 +30,13 @@ import {
 
 // Mutation
 export const useCreateCourse = () => {
+    const queryClient = useQueryClient()
+
     return useMutation({
-        mutationFn: (data: ICreateCourseData) => instructorApi.createCourse(data)
+        mutationFn: (data: ICreateCourseData) => instructorApi.createCourse(data),
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['instructorCourse'] })
+        }
     })
 }
 
@@ -385,11 +390,18 @@ export const useChangeLessonType = () => {
 }
 
 // Queries
-export const useGetCourses = (options?: Omit<UseQueryOptions<ICourses>, 'queryKey' | 'queryFn'>) => {
+export const useGetCourses = (
+    limit: number = 4,
+    page: number = 1,
+    perPage: number = 4,
+    search: string = '',
+    sort: string = '',
+    options?: Omit<UseQueryOptions<ICourses>, 'queryKey' | 'queryFn'>
+) => {
     return useQuery({
         ...options,
-        queryKey: ['instructorCourse'],
-        queryFn: instructorApi.getCourses
+        queryKey: ['instructorCourse', page, search, sort],
+        queryFn: () => instructorApi.getCourses(limit, search, sort, page, perPage)
     })
 }
 

@@ -3,7 +3,8 @@ const INSTRUCTOR_URL = 'teacher/manage/'
 export const instructorUri = {
     // Course
     CREATE_COURSE: 'teacher/course',
-    GET_COURSES: 'teacher/course',
+    GET_COURSES: (limit: number, search: string, sort: string, page: number, perPage: number) =>
+        `teacher/course?page=${page}${perPage ? `&perPage=${perPage}` : ''}&limit=${limit}&search=${search}&sort=${sort}`,
     SUBMIT_COURSE: (courseID: string) => `${INSTRUCTOR_URL}${courseID}/submit`,
     DISABLE_COURSE: (courseID: string) => `${INSTRUCTOR_URL}${courseID}/disable-course`,
     MANAGE_MENU: (courseID: string) => `${INSTRUCTOR_URL}${courseID}/manage-menu`,
@@ -46,6 +47,6 @@ export const instructorUri = {
 
     // Statistic
     STATISTIC: `${INSTRUCTOR_URL}statistic`,
-    GET_STUDENTS: (courseID: number) => `${INSTRUCTOR_URL}statistic/course/${courseID}/get-students?course=${courseID}`,
-    GET_RATINGS: (courseID: number) => `${INSTRUCTOR_URL}statistic/course/${courseID}/get-ratings?course=${courseID}`
+    GET_STUDENTS: (courseID: number) => `${INSTRUCTOR_URL}statistic/get-students?course=${courseID}`,
+    GET_RATINGS: (courseID: number) => `${INSTRUCTOR_URL}statistic/get-ratings?course=${courseID}`
 }

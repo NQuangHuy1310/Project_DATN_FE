@@ -32,7 +32,11 @@ const PerformanceStudents = () => {
 
     useEffect(() => {
         if (courseData && courseData.data.length > 0) {
-            setCourseId(courseData.data[0].id)
+            const confirmedCourses = courseData.data.filter((course) => course.status === 'approved')
+
+            if (confirmedCourses.length > 0) {
+                setCourseId(confirmedCourses[0].id)
+            }
         }
     }, [courseData])
 
@@ -48,11 +52,13 @@ const PerformanceStudents = () => {
                             <SelectContent>
                                 <SelectGroup>
                                     <SelectLabel>Chọn khoá học</SelectLabel>
-                                    {courseData.data.map((course) => (
-                                        <SelectItem key={course.id} value={course.id.toString()}>
-                                            {course.name}
-                                        </SelectItem>
-                                    ))}
+                                    {courseData.data
+                                        .filter((course) => course.status === 'approved')
+                                        .map((course) => (
+                                            <SelectItem key={course.id} value={course.id.toString()}>
+                                                {course.name}
+                                            </SelectItem>
+                                        ))}
                                 </SelectGroup>
                             </SelectContent>
                         </Select>

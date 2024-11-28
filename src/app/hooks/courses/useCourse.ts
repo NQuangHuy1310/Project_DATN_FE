@@ -1,6 +1,6 @@
-import { courseApi } from '@/app/services/courses/courses'
 import { IBuyData } from '@/types'
 import { IComment, ICreateComment } from '@/types/common'
+import { courseApi } from '@/app/services/courses/courses'
 import {
     CourseData,
     IAllCourse,
@@ -13,14 +13,18 @@ import {
 import { useMutation, useQuery, useQueryClient, UseQueryOptions } from '@tanstack/react-query'
 
 export const useGetAllCourses = (
+    search: string,
+    category: string,
+    level: string,
+    arrange: string,
     page: number,
     perPage?: number,
     options?: Omit<UseQueryOptions<IAllCourse>, 'queryKey' | 'queryFn'>
 ) => {
     return useQuery<IAllCourse>({
         ...options,
-        queryKey: ['course-leaning', page, perPage],
-        queryFn: () => courseApi.allCourses(page, perPage)
+        queryKey: ['course-leaning', search, category, level, arrange, page, perPage],
+        queryFn: () => courseApi.allCourses(search, category, level, arrange, page, perPage)
     })
 }
 

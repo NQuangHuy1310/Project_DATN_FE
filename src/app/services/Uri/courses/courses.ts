@@ -5,8 +5,22 @@ export const courseUri = {
     DETAIL_COURSE: (slug: string) => `${COURSE_URL}detail-login/${slug}`,
     DETAIL_COURSE_NO_LOGIN: (slug: string) => `${COURSE_URL}detail-no-login/${slug}`,
 
-    ALL_COURSES: (page: number, perPage?: number) =>
-        `${COURSE_URL}list-course-all?page=${page}${perPage ? `&perPage=${perPage}` : ''}`,
+    ALL_COURSES: (
+        search?: string,
+        category?: string,
+        level?: string,
+        arrange?: string,
+        page?: number,
+        perPage?: number
+    ) =>
+        `${COURSE_URL}list-course-all${
+            category ? `?category=${category}` : ''
+        }${level ? `${category ? '&' : '?'}level=${level}` : ''}${
+            arrange ? `${category || level ? '&' : '?'}arrange=${arrange}` : ''
+        }${page ? `${category || level || arrange ? '&' : '?'}page=${page}` : ''}${
+            perPage ? `${category || level || arrange || page ? '&' : '?'}perPage=${perPage}` : ''
+        }${search ? `${category || level || arrange || page || perPage ? '&' : '?'}search=${search}` : ''}`,
+
     COURSE_SALE_HOME: `${COURSE_URL}sale-course`,
     GET_DETAIL_QUIZ: (slug: string) => `${COURSE_URL}detail/quiz/${slug}`,
     COURSE_CATEGORY_HOME: `${COURSE_URL}category-course`,
@@ -14,7 +28,6 @@ export const courseUri = {
     COURSE_RELATED: (slug: string) => `${COURSE_URL}related-course/${slug}`,
     COURSE_FREE: `${COURSE_URL}free-course`,
     COURSE_TODAY: `${COURSE_URL}today-new`,
-
     REGISTER_COURSE: (userId: number, courseId: number) => `transactions/register-course/${userId}/${courseId}`,
     //COMMENT COURSE
     ADD_COMMENT_COURSE: 'comments/add-comment-lesson',

@@ -35,11 +35,7 @@ import InstructorDetail from '@/views/user/Instructors/InstructorDetail'
 // Instructor
 import CreateCourse from '@/views/instructor/Course/CreateCourse'
 import InstructorDashboard from '@/views/instructor/Dashboard'
-import InstructorCommunicate from '@/app/layouts/InstructorLayouts/InstructorCommunicate'
-import CommunicateQa from '@/views/instructor/Communicate/CommunicateQa'
 import CommunicateMessage from '@/views/instructor/Communicate/CommunicateMessage'
-import CommunicateAnnoucement from '@/views/instructor/Communicate/CommunicateAnnoucement'
-import CommunicateAssiment from '@/views/instructor/Communicate/CommunicateAssiment'
 import InstructorWallet from '@/views/instructor/Wallet'
 
 // Post
@@ -53,7 +49,6 @@ import Transaction from '@/views/user/wallet/transaction/Transaction'
 import PostDetail from '@/views/user/Posts/PostDetail'
 import CourseDetailNoLogin from '@/views/user/Courses/CourseDetailNoLogin/CourseDetailNoLogin'
 import PerformanceOverview from '@/views/instructor/Performance/PerformanceOverview'
-import InstructorNotifications from '@/views/instructor/InstructorNotifications'
 
 import InstructorRegis from '@/views/user/InstructorRegis/InstrcutorRegisTeacher/InstructorRegisTeacher'
 import InstructorRegisQuestion from '@/views/user/InstructorRegis/InstructorRegisQuestion/InstructorRegisQuestion'
@@ -152,15 +147,13 @@ export const privateRoutes = [
         element: InstructorDashboard,
         title: 'Quản lý khoá học'
     },
-    {
-        path: routes.instructorNotifications,
-        layout: InstructorDashboardLayout,
-        element: InstructorNotifications,
-        title: 'Thông báo của tôi'
-    },
     { path: routes.createCourse, layout: InstructorDashboardLayout, element: CreateCourse, title: 'Tạo mới khoá học' },
-    { path: routes.instructorQa, layout: InstructorCommunicate, element: CommunicateQa, title: 'Hỏi đáp' },
-    { path: routes.instructorMessage, layout: InstructorCommunicate, element: CommunicateMessage, title: 'Tin nhắn' },
+    {
+        path: routes.instructorMessage,
+        layout: InstructorDashboardLayout,
+        element: CommunicateMessage,
+        title: 'Tin nhắn'
+    },
     {
         path: routes.instructorPerformanceOverview,
         layout: InstructorPerformance,
@@ -178,18 +171,6 @@ export const privateRoutes = [
         layout: InstructorPerformance,
         element: PerformanceRatings,
         title: 'Đánh giá'
-    },
-    {
-        path: routes.instructorAnnouncements,
-        layout: InstructorCommunicate,
-        element: CommunicateAnnoucement,
-        title: 'Thông báo'
-    },
-    {
-        path: routes.instructorAssignments,
-        layout: InstructorCommunicate,
-        element: CommunicateAssiment,
-        title: 'Bài tập'
     },
     {
         path: routes.instructorWallet,

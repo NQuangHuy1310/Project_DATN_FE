@@ -1,9 +1,8 @@
-import { CertificateData, IBankData, IBanner, ICategoryLeaningPath } from '@/types/others'
-import { bannerApi, communicateChatAI, getBanks, learningPathApi } from '@/app/services/others/others'
-
-import { useMutation, useQuery, useQueryClient, UseQueryOptions } from '@tanstack/react-query'
 import { certificationApis } from '@/app/services/certificates/certificates'
 import { ICourseLearningPath } from '@/types/course/course'
+import { useMutation, useQuery, useQueryClient, UseQueryOptions } from '@tanstack/react-query'
+import { CertificateData, IBankData, IBanner, ICategoryLeaningPath, IDataSearch } from '@/types/others'
+import { bannerApi, communicateChatAI, getBanks, learningPathApi, searchApi } from '@/app/services/others/others'
 
 export const useGetBanners = (options?: Omit<UseQueryOptions<IBanner[]>, 'queryKey' | 'queryFn'>) => {
     return useQuery<IBanner[]>({
@@ -74,20 +73,32 @@ export const useGetCourseLearningPath = (
         queryFn: () => learningPathApi.getCourseLearningPath(cate)
     })
 }
+
 export const useCommunicateChatAI = () => {
-    const queryClient=useQueryClient()
+    const queryClient = useQueryClient()
     return useMutation({
         mutationFn: async (question: string) => {
             return communicateChatAI.chatAI(question)
-        }, onSuccess: () => {
+        },
+        onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['myPosts'] })
         }
     })
 }
+
 export const useFilterChatAI = (status: string, options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>) => {
     return useQuery({
         ...options,
         queryKey: ['filter-chatai', status],
         queryFn: () => communicateChatAI.filterChatAI(status)
+    })
+}
+
+export const useSearch = (value: string = '', options?: Omit<UseQueryOptions<IDataSearch>, 'queryKey' | 'queryFn'>) => {
+    return useQuery<IDataSearch>({
+        ...options,
+        queryKey: ['search', value],
+        enabled: !!value && value.length > 1,
+        queryFn: () => searchApi.getDataSearch(value)
     })
 }

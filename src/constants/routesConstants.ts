@@ -165,7 +165,7 @@ export const privateRoutes = [
         path: routes.instructorPerformanceOverview,
         layout: InstructorPerformance,
         element: PerformanceOverview,
-        title: 'Tổng quan'
+        title: 'Tổng quan thống kê'
     },
     {
         path: routes.instructorPerformanceStudent,
@@ -195,7 +195,7 @@ export const privateRoutes = [
         path: routes.instructorWallet,
         layout: InstructorDashboardLayout,
         element: InstructorWallet,
-        title: 'Ví của tôi'
+        title: 'Quản lý giao dịch'
     }
 ]
 

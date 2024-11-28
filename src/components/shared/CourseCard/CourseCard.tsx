@@ -3,15 +3,29 @@ import { format } from 'date-fns'
 import { BsThreeDots } from 'react-icons/bs'
 import { useNavigate } from 'react-router-dom'
 
+import { useDeleteCourse, useDisableCourse, useEnableCourse } from '@/app/hooks/instructors'
+
+import placeholderImage from '@/assets/placeholder.jpg'
 import routes from '@/configs/routes'
-import { getImagesUrl } from '@/lib'
+import { getImagesUrl, truncate } from '@/lib'
 import { ICourseItem } from '@/types/instructor'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import ConfirmDialog from '@/components/shared/ConfirmDialog'
-import { useDeleteCourse, useDisableCourse, useEnableCourse } from '@/app/hooks/instructors'
+
+const courseStatus = (status: string) => {
+    return (
+        <strong>
+            {status === 'draft' && 'Bản nháp'}
+            {status === 'approved' && 'Đã phê duyệt'}
+            {status === 'pending' && 'Chờ phê duyệt'}
+            {status === 'rejected' && 'Từ chối phê duyệt'}
+        </strong>
+    )
+}
 
 const CourseCard = ({ name, id, status, thumbnail, submited_at: submittedAt, category, is_active }: ICourseItem) => {
     const navigate = useNavigate()
+
     const { mutateAsync: deleteCourse, isPending } = useDeleteCourse()
     const { mutateAsync: disableCourse } = useDisableCourse()
     const { mutateAsync: enableCourse } = useEnableCourse()
@@ -39,18 +53,20 @@ const CourseCard = ({ name, id, status, thumbnail, submited_at: submittedAt, cat
 
     return (
         <>
-            <div className="flex max-w-[1200px] items-center gap-4 overflow-hidden rounded-md border-[1px]">
-                <div className="h-[140px] w-[140px] flex-shrink-0">
+            <div className="flex w-full max-w-[380px] flex-col items-start gap-4 rounded-md border-[1px] p-3">
+                <div className="h-[180px] w-full flex-shrink-0">
                     <img
-                        src={thumbnail ? thumbnailImage : 'https://s.udemycdn.com/course/200_H/placeholder.jpg'}
+                        src={thumbnail ? thumbnailImage : placeholderImage}
                         alt={name}
                         className="h-full w-full rounded-md object-cover"
+                        loading="lazy"
                     />
                 </div>
-                <div className="flex h-[120px] w-full flex-1 items-start justify-between gap-20">
-                    <div className="mt-2 flex flex-col items-center">
+
+                <div className="flex w-full flex-1 items-start justify-between">
+                    <div className="flex flex-col items-center">
                         <div className="flex w-[300px] flex-shrink-0 flex-col gap-1">
-                            <h4 className="text-xl font-semibold">{name}</h4>
+                            <h4 className="text-xl font-semibold">{truncate(name, 25)}</h4>
                             <div className="flex flex-col items-start gap-1">
                                 <p className="text-sm">
                                     Danh mục: <strong>{category.name}</strong>
@@ -58,21 +74,13 @@ const CourseCard = ({ name, id, status, thumbnail, submited_at: submittedAt, cat
                                 <p className="text-sm">
                                     Ngày đăng ký: <strong>{formatDate}</strong>
                                 </p>
-                                <p className="text-sm">
-                                    Trạng thái:{' '}
-                                    <strong>
-                                        {status === 'draft' && 'Bản nháp'}
-                                        {status === 'approved' && 'Đã phê duyệt'}
-                                        {status === 'pending' && 'Chờ phê duyệt'}
-                                        {status === 'rejected' && 'Từ chối phê duyệt'}
-                                    </strong>
-                                </p>
+                                <p className="text-sm">Trạng thái: {courseStatus(status)}</p>
                             </div>
                         </div>
                     </div>
 
                     <DropdownMenu>
-                        <DropdownMenuTrigger className="mt-1 p-3">
+                        <DropdownMenuTrigger className="p-3">
                             <BsThreeDots className="size-5" />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" sideOffset={5}>

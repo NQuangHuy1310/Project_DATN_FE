@@ -210,7 +210,7 @@ const CourseOverview = memo(({ status }: { status: ICourseStatus }) => {
                 </div>
 
                 {/* Mô tả khoá học */}
-                <div className="flex flex-col gap-2 border-none">
+                <div className="flex w-full flex-col gap-2 overflow-hidden border-none">
                     <h5 className="text-base font-bold">Mô tả khoá học</h5>
                     <ReactQuill
                         ref={quillRef}
@@ -218,7 +218,7 @@ const CourseOverview = memo(({ status }: { status: ICourseStatus }) => {
                         onChange={handleChangeContent}
                         placeholder="Chèn mô tả khoá học"
                         value={getValues('description')}
-                        style={{ height: '100%', width: '80%' }}
+                        style={{ height: '100%', maxWidth: '1000px', width: '100%', overflow: 'hidden' }}
                     />
                     {errors.description ? (
                         <div className="text-sm text-red-500">{errors.description.message}</div>

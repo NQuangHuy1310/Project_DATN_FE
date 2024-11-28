@@ -27,6 +27,14 @@ const InstructorPerformance = ({ children, title }: { children: ReactNode; title
         }
     }, [isSidebarOpen])
 
+    useEffect(() => {
+        document.title = title
+
+        return () => {
+            document.title = 'Course'
+        }
+    }, [title])
+
     return (
         <div className="flex">
             <InstructorSidebar isOpen={isSidebarOpen} isSidebar={sidebar} handleSidebar={handleSidebar} />

@@ -33,7 +33,6 @@ const Header = () => {
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (boxRef.current && !boxRef.current.contains(event.target as Node)) {
-                console.log(1)
                 setVisible(false)
             }
         }

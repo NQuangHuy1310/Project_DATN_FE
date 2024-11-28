@@ -8,6 +8,7 @@ import { useGetCategories } from '@/app/hooks/categories'
 import { createNewCourse, createNewCourseSchema } from '@/validations'
 import { useCreateCourse, useGetCourses } from '@/app/hooks/instructors/useInstructor'
 
+import iconLoading from '@/assets/loading.svg'
 import noContent from '@/assets/no-content.jpg'
 import routes from '@/configs/routes'
 import { Input } from '@/components/ui/input'
@@ -58,7 +59,7 @@ const Dashboard = () => {
 
     const { mutateAsync: createNewCourse } = useCreateCourse()
     const { data: categories } = useGetCategories()
-    const { data: courseData } = useGetCourses(4, page, 4, debouncedSearchValue, sort)
+    const { data: courseData, isLoading } = useGetCourses(8, page, 4, debouncedSearchValue, sort)
 
     const totalPages = Math.ceil((courseData?.total ?? 0) / (courseData?.per_page ?? 0))
     const visiblePages = getVisiblePages(totalPages, page, 4)
@@ -80,9 +81,10 @@ const Dashboard = () => {
     }
 
     const handlePageChange = (newPage: number) => {
-        if (newPage !== page && newPage >= 1 && newPage <= (courseData?.total || 1)) {
-            setPage(newPage)
+        if (newPage < 1 || newPage > totalPages) {
+            return
         }
+        setPage(newPage)
     }
 
     useEffect(() => {
@@ -95,11 +97,11 @@ const Dashboard = () => {
 
     return (
         <>
-            <div className="card flex min-h-screen flex-col gap-7 bg-white">
+            <div className="card flex min-h-screen flex-col gap-6 bg-white">
                 <h3 className="text-3xl font-semibold">Quản lý Khoá học</h3>
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-5">
-                        <div className="flex h-[50px] w-full items-center">
+                        <div className="flex h-[50px] items-center">
                             <Input
                                 placeholder="Tìm kiếm khoá học của bạn"
                                 className="h-[48px] w-[400px] rounded-none rounded-s-md"
@@ -111,20 +113,22 @@ const Dashboard = () => {
                                 <IoSearchSharp className="size-5" />
                             </Button>
                         </div>
-                        <Select value={sort} onValueChange={handleChangeSort}>
-                            <SelectTrigger className="w-full">
-                                <SelectValue placeholder="Sắp xếp" />
-                            </SelectTrigger>
-                            <SelectContent side="bottom" align="end">
-                                <SelectGroup>
-                                    <SelectItem value="latest">Mới nhất</SelectItem>
-                                    <SelectItem value="oldest">Cũ nhất</SelectItem>
-                                    <SelectItem value="a-z">A - Z</SelectItem>
-                                    <SelectItem value="z-a">Z - A</SelectItem>
-                                    <SelectItem value="approved_first">Đã xuất bản trước tiên</SelectItem>
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select>
+                        <div className="w-[250px]">
+                            <Select value={sort} onValueChange={handleChangeSort}>
+                                <SelectTrigger className="flex w-full items-center justify-between">
+                                    <SelectValue placeholder="Sắp xếp" />
+                                </SelectTrigger>
+                                <SelectContent side="bottom" align="end">
+                                    <SelectGroup>
+                                        <SelectItem value="latest">Mới nhất</SelectItem>
+                                        <SelectItem value="oldest">Cũ nhất</SelectItem>
+                                        <SelectItem value="a-z">A - Z</SelectItem>
+                                        <SelectItem value="z-a">Z - A</SelectItem>
+                                        <SelectItem value="approved_first">Đã xuất bản trước tiên</SelectItem>
+                                    </SelectGroup>
+                                </SelectContent>
+                            </Select>
+                        </div>
                     </div>
                     <Button size="lg" onClick={() => setOpenDialog(true)}>
                         Tạo khoá học mới
@@ -132,21 +136,27 @@ const Dashboard = () => {
                 </div>
 
                 {searchValue && (
-                    <p className="text-base font-medium">
+                    <p className="text-base">
                         Kết quả tìm kiếm của <strong>{searchValue}</strong>
                     </p>
                 )}
 
-                {courseData && courseData?.data.length > 0 ? (
-                    courseData?.data.map((item) => <CourseCard key={item.id} {...item} />)
-                ) : (
+                <div className="flex h-full w-full flex-wrap gap-5">
+                    {courseData &&
+                        courseData?.data.length > 0 &&
+                        courseData?.data.map((item) => <CourseCard key={item.id} {...item} />)}{' '}
+                </div>
+
+                {courseData?.data.length === 0 && (
                     <div className="flex flex-col items-center justify-center gap-2">
                         <img src={noContent} alt="" />
                         <p className="text-base font-medium text-muted-foreground">
-                            Bạn chưa có khoá học nào, hãy tạo khoá học ngay.
+                            {searchValue
+                                ? 'Khoá học bạn tìm kiếm không tồn tại, tạo khoá học ngay'
+                                : 'Bạn chưa có khoá học nào, tạo khoá học ngay'}
                         </p>
                         <Button size="lg" onClick={() => setOpenDialog(true)}>
-                            Tạo khoá học mới
+                            Tạo khoá học ngay
                         </Button>
                     </div>
                 )}
@@ -158,7 +168,7 @@ const Dashboard = () => {
                                 <PaginationItem>
                                     <PaginationPrevious
                                         onClick={() => handlePageChange(page - 1)}
-                                        className={page === 1 ? 'border' : 'cursor-pointer border bg-softGrey'}
+                                        className={`${page === 1 ? 'cursor-not-allowed bg-grey' : 'cursor-pointer'}`}
                                     />
                                 </PaginationItem>
 
@@ -188,11 +198,18 @@ const Dashboard = () => {
                                 <PaginationItem>
                                     <PaginationNext
                                         onClick={() => handlePageChange(page + 1)}
-                                        className={page === totalPages ? 'border' : 'cursor-pointer border bg-softGrey'}
+                                        className={`${page === totalPages ? 'cursor-not-allowed bg-grey' : 'cursor-pointer'}`}
                                     />
                                 </PaginationItem>
                             </PaginationContent>
                         </Pagination>
+                    </div>
+                )}
+
+                {isLoading && (
+                    <div className="mt-32 flex flex-col items-center justify-center gap-5">
+                        <img src={iconLoading} alt="loading" width={80} height={80} />
+                        <p>Đang tải dữ liệu</p>
                     </div>
                 )}
             </div>

@@ -191,7 +191,7 @@ const Wallet = () => {
                             placeholder="Nhập số tài khoản"
                             value={accountNumber}
                             onChange={(e) => setAccountNumber(e.target.value)}
-                            type="number"
+                            type="text"
                         />
                         <Input
                             placeholder="Nhập tên tài khoản"
@@ -245,50 +245,57 @@ const Wallet = () => {
             </div>
 
             <div className="flex flex-col gap-5 border border-softGrey p-4 sm:rounded-lg">
-                <h3 className="text-2xl font-bold">Lịch sử rút tiền</h3>
-                <table className="w-full text-left text-sm text-black rtl:text-right">
-                    <thead className="bg-gray-50 text-xs uppercase text-darkGrey">
-                        <tr>
-                            <th scope="col" className="p-4">
-                                #
-                            </th>
-                            <th scope="col" className="px-6 py-3">
-                                Số xu rút
-                            </th>
-                            <th scope="col" className="px-6 py-3">
-                                Số tiền nhận được
-                            </th>
-                            <th scope="col" className="px-6 py-3">
-                                Trạng thái
-                            </th>
-                            <th scope="col" className="px-6 py-3">
-                                Ghi chú
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {historyWithDraw && historyWithDraw?.data && historyWithDraw?.data.length > 0 ? (
-                            historyWithDraw?.data.map((item, index) => (
-                                <tr key={index} className="border-b bg-white hover:bg-gray-50">
-                                    <th scope="row" className="whitespace-nowrap px-6 py-4 font-medium text-gray-900">
-                                        {index + 1}
-                                    </th>
-                                    <td className="flex items-center gap-1 px-6 py-4">
-                                        <TbCoinFilled className="size-5 text-secondaryYellow" />
-                                        {parseFloat(item.coin.toString())}
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        {Math.floor(item?.amount ?? 0).toLocaleString('vi-VN')} VNĐ
-                                    </td>
-                                    <td className="px-6 py-4">{item.status}</td>
-                                    <td className="px-6 py-4">{item.note ?? 'Không có'}</td>
-                                </tr>
-                            ))
+                <h3 className="text-xl font-semibold">Lịch sử rút tiền</h3>
+                {historyWithDraw && (
+                    <>
+                        {historyWithDraw.data && historyWithDraw.data.length > 0 ? (
+                            <table className="w-full text-left text-sm text-black rtl:text-right">
+                                <thead className="bg-gray-50 text-xs uppercase text-darkGrey">
+                                    <tr>
+                                        <th scope="col" className="p-4">
+                                            #
+                                        </th>
+                                        <th scope="col" className="px-6 py-3">
+                                            Số xu rút
+                                        </th>
+                                        <th scope="col" className="px-6 py-3">
+                                            Số tiền nhận được
+                                        </th>
+                                        <th scope="col" className="px-6 py-3">
+                                            Trạng thái
+                                        </th>
+                                        <th scope="col" className="px-6 py-3">
+                                            Ghi chú
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {historyWithDraw.data.map((item, index) => (
+                                        <tr key={index} className="border-b bg-white hover:bg-gray-50">
+                                            <th
+                                                scope="row"
+                                                className="whitespace-nowrap px-6 py-4 font-medium text-gray-900"
+                                            >
+                                                {index + 1}
+                                            </th>
+                                            <td className="flex items-center gap-1 px-6 py-4">
+                                                <TbCoinFilled className="size-5 text-secondaryYellow" />
+                                                {parseFloat(item.coin.toString())}
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                {Math.floor(item.amount ?? 0).toLocaleString('vi-VN')} VNĐ
+                                            </td>
+                                            <td className="px-6 py-4">{item.status}</td>
+                                            <td className="px-6 py-4">{item.note ?? 'Không có'}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
                         ) : (
-                            <NoContent />
+                            <NoContent description="Bạn chưa có giao dịch nào" />
                         )}
-                    </tbody>
-                </table>
+                    </>
+                )}
 
                 {totalPages > 1 && (
                     <div className="mt-4 flex justify-center">

@@ -26,6 +26,15 @@ const InstructorDashboard = ({ children, title }: { children: React.ReactNode; t
         }
     }, [isSidebarOpen])
 
+    useEffect(() => {
+        document.title = title
+
+        // cleanup
+        return () => {
+            document.title = 'Coursea'
+        }
+    }, [title])
+
     return (
         <div className="flex">
             <InstructorSidebar isOpen={isSidebarOpen} isSidebar={sidebar} handleSidebar={handleSidebar} />

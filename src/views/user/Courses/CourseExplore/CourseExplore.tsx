@@ -14,6 +14,7 @@ import {
     PaginationNext,
     PaginationPrevious
 } from '@/components/ui/pagination'
+import { Button } from '@/components/ui/button'
 
 const CoursesExplore = () => {
     const navigate = useNavigate()
@@ -69,22 +70,40 @@ const CoursesExplore = () => {
             <div className="flex flex-wrap gap-10">
                 {allCourses && allCourses?.data && allCourses.data.length > 0 ? (
                     allCourses?.data.map((item, index) => <Course data={item} key={index} page={routes.courseDetail} />)
+                ) : search.length > 0 ? (
+                    <div className="flex w-full justify-center">
+                        <div className="flex flex-col gap-2 text-center">
+                            <img
+                                src="https://gcdnb.pbrd.co/images/7xbVj5PXiOQY.png"
+                                className="mx-auto w-full max-w-[350px]"
+                                alt=""
+                            />
+                            <h2 className="text-xl font-bold">Không có kết quả nào phù hợp với tìm kiếm của bạn</h2>
+                            <div>
+                                <Button
+                                    onClick={() => {
+                                        setSearch('')
+                                        setCategory('')
+                                        setLevel('')
+                                        setArrange('')
+                                        setPage(1)
+                                    }}
+                                >
+                                    Quay lại
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
                 ) : (
-                    <div className="flex min-h-[50vh] w-full flex-col items-center justify-center text-center font-bold">
-                        <p className="text-xl">Rất tiếc, chúng tôi không thể tìm thấy bất kỳ kết quả nào</p>
-                        <p className="text-lg">Hãy thử điều chỉnh cụm từ tìm kiếm của bạn</p>
-                        <button
-                            onClick={() => {
-                                setSearch('')
-                                setCategory('')
-                                setLevel('')
-                                setArrange('')
-                                setPage(1)
-                            }}
-                            className="mt-4 rounded bg-primary px-4 py-2 text-white hover:bg-blue-600"
-                        >
-                            Quay lại
-                        </button>
+                    <div className="flex w-full justify-center">
+                        <div className="flex flex-col gap-2 text-center">
+                            <img
+                                src="https://gcdnb.pbrd.co/images/7xbVj5PXiOQY.png"
+                                className="w-full max-w-[350px]"
+                                alt=""
+                            />
+                            <h2 className="text-xl font-bold">Bạn chưa mua khóa học nào</h2>
+                        </div>
                     </div>
                 )}
             </div>

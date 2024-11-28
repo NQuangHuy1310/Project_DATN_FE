@@ -165,14 +165,18 @@ export const useRegisterCourse = () => {
 }
 
 export const useGetWishList = (
-    page: number,
+    search?: string,
+    category?: string,
+    level?: string,
+    arrange?: string,
+    page?: number,
     perPage?: number,
     options?: Omit<UseQueryOptions<ICourseWishList>, 'queryKey' | 'queryFn'>
 ) => {
     return useQuery({
         ...options,
-        queryKey: ['wishlist-course', page, perPage],
-        queryFn: () => courseApi.getWishList(page, perPage)
+        queryKey: ['wishlist-course', search, category, level, arrange, page, perPage],
+        queryFn: () => courseApi.getWishList(search, category, level, arrange, page, perPage)
     })
 }
 
@@ -186,7 +190,7 @@ export const useAddWishList = () => {
         onSuccess: async () => {
             await Promise.all([
                 queryClient.invalidateQueries({ queryKey: ['course-detail'] }),
-                queryClient.invalidateQueries({ queryKey: ['wishlist-course'] }),
+                queryClient.refetchQueries({ queryKey: ['wishlist-course'] }),
                 queryClient.invalidateQueries({ queryKey: ['check-wishlist-course'] })
             ])
         }
@@ -202,8 +206,8 @@ export const useUnWishList = () => {
         onSuccess: async () => {
             await Promise.all([
                 queryClient.invalidateQueries({ queryKey: ['course-detail'] }),
-                queryClient.invalidateQueries({ queryKey: ['wishlist-course'] }),
-                queryClient.refetchQueries({ queryKey: ['check-wishlist-course'] })
+                queryClient.refetchQueries({ queryKey: ['wishlist-course'] }),
+                queryClient.invalidateQueries({ queryKey: ['check-wishlist-course'] })
             ])
         }
     })

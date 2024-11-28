@@ -76,8 +76,15 @@ export const courseApi = {
         return axiosClient.post(courseUri.REGISTER_COURSE(userId, courseId), data)
     },
 
-    getWishList: async (page: number, perPage?: number): Promise<ICourseWishList> => {
-        return axiosClient.get(courseUri.WISH_LIST(page, perPage))
+    getWishList: async (
+        search?: string,
+        category?: string,
+        level?: string,
+        arrange?: string,
+        page?: number,
+        perPage?: number
+    ): Promise<ICourseWishList> => {
+        return axiosClient.get(courseUri.WISH_LIST(search, category, level, arrange, page, perPage))
     },
 
     addWishList: async (courseId: number): Promise<IWishList> => {

@@ -18,8 +18,15 @@ export const userApis = {
     changePassword: async (data: IChangePassword): Promise<IResponse> => {
         return axiosClient.post(userUri.CHANGE_PASSWORD, data)
     },
-    getMyCourseBought: async (): Promise<ICourseMyBought[]> => {
-        return axiosClient.get(userUri.GET_MY_COURSE_BOUGHT)
+    getMyCourseBought: async (
+        search?: string,
+        category?: string,
+        level?: string,
+        arrange?: string,
+        page?: number,
+        perPage?: number
+    ): Promise<ICourseMyBought> => {
+        return axiosClient.get(userUri.GET_MY_COURSE_BOUGHT(search, category, level, arrange, page, perPage))
     },
     followTeacher: async (teacher: Flow): Promise<Flow> => {
         return axiosClient.post(userUri.FLOW_TEACHER, teacher)

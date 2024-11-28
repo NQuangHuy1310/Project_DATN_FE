@@ -37,11 +37,6 @@ export const sidebarList = [
                 path: routes.myCourses
             },
             {
-                title: 'Tìm kiếm khoá học',
-                icon: FaBookAtlas,
-                path: routes.searchCourses
-            },
-            {
                 title: 'Khóa học yêu thích',
                 icon: FaHeart,
                 path: routes.wishList

@@ -13,8 +13,15 @@ import {
 import { IBuyData, IComment, ICreateComment } from '@/types'
 
 export const courseApi = {
-    allCourses: async (page: number, perPage?: number): Promise<IAllCourse> => {
-        return axiosClient.get(courseUri.ALL_COURSES(page, perPage))
+    allCourses: async (
+        search: string,
+        category: string,
+        level: string,
+        arrange: string,
+        page: number,
+        perPage?: number
+    ): Promise<IAllCourse> => {
+        return axiosClient.get(courseUri.ALL_COURSES(search, category, level, arrange, page, perPage))
     },
 
     detailCourseLeaning: async (slug: string): Promise<CourseData> => {

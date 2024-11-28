@@ -44,10 +44,10 @@ const Payment = () => {
     const { data: transactionData } = useTransactionById(user?.id || 0)
     const { mutateAsync: confirmPayment } = useBuyCourse()
     const { mutateAsync: applyVoucher } = useApplyVoucher()
-
     const balance = Math.floor(transactionData?.balance ?? 0)
     const totalTime = formatDuration((courseData?.total_duration_video as unknown as number) || 0)
-    const totalPrice = Math.floor(courseData?.price_sale && courseData.price_sale > 0 ? courseData.price_sale : (courseData?.price ?? 0)
+    const totalPrice = Math.floor(
+        courseData?.price_sale && courseData.price_sale > 0 ? courseData.price_sale : (courseData?.price ?? 0)
     )
 
     const handleApplyVoucher = async () => {
@@ -57,6 +57,7 @@ const Payment = () => {
             setDiscountValue(0)
         } else if (user && voucherCode) {
             const data = await applyVoucher([user?.id, voucherCode])
+            if (data.status === 'error') toast.error(data.message)
             const voucher = data.voucher
             if (voucher) {
                 const calculatedDiscount =
@@ -115,7 +116,7 @@ const Payment = () => {
                             <div className="flex flex-1 flex-col gap-4">
                                 <h3 className="text-lg font-bold md:text-2xl">{courseData?.name}</h3>
                                 <div className="flex items-center gap-2">
-                                    <button className="bg-grey text-sm font-medium px-3 py-1 rounded-full">
+                                    <button className="rounded-full bg-grey px-3 py-1 text-sm font-medium">
                                         {courseData?.category.name}
                                     </button>
                                 </div>
@@ -150,9 +151,7 @@ const Payment = () => {
                                             )}
                                         </div>
                                     ) : (
-                                        <span className="text-base font-semibold text-orange-500">
-                                            Miễn phí
-                                        </span>
+                                        <span className="text-base font-semibold text-orange-500">Miễn phí</span>
                                     )}
                                 </div>
 
@@ -171,9 +170,7 @@ const Payment = () => {
                                 <div className="flex flex-wrap items-center gap-5">
                                     <div className="flex items-center gap-1">
                                         <IoIosStar className="size-5 text-primary" />
-                                        <span className="text-base font-medium">
-                                            {courseData?.ratings_avg_rate}
-                                        </span>
+                                        <span className="text-base font-medium">{courseData?.ratings_avg_rate}</span>
                                     </div>
                                     <div>
                                         <span className="flex items-center gap-1.5 text-base font-medium">
@@ -253,8 +250,8 @@ const Payment = () => {
                                             Quay lại
                                         </Button>
                                     </Link>
-                                    <Link to={routes.wallet} className="w-full" >
-                                        <Button className="w-full flex gap-2 items-center" variant="outline">
+                                    <Link to={routes.wallet} className="w-full">
+                                        <Button className="flex w-full items-center gap-2" variant="outline">
                                             <TbCoinFilled className="size-4 text-yellow-500" />
                                             Nạp thêm xu
                                         </Button>
@@ -290,7 +287,6 @@ const Payment = () => {
                 </div>
             </div>
         </div>
-
     )
 }
 

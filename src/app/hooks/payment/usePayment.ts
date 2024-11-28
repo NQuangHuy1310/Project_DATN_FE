@@ -48,18 +48,13 @@ export const useGetNewVoucher = (options?: Omit<UseQueryOptions<IVoucher>, 'quer
 
 export const useApplyVoucher = () => {
     const queryClient = useQueryClient()
-    const navigate = useNavigate()
     return useMutation<any, Error, [number, string]>({
         mutationFn: async ([userId, voucher]) => {
             return paymentApi.applyVoucher(userId, voucher)
         },
         onSuccess: async (data) => {
-            await queryClient.refetchQueries({ queryKey: ['course-my-bought'] })
-            if (data.status === 'success') {
-                navigate(routes.myCourses)
-            } else if (data.status === 'error') {
-                toast.error(data.message)
-            }
+            queryClient.invalidateQueries({ queryKey: ['buy-course'] })
+            if (data.status === 'success') toast.success('Áp mã giảm giá thành công')
         }
     })
 }

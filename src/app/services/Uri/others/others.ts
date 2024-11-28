@@ -13,3 +13,7 @@ export const chatAIUri = {
     CHAT_AI: 'user/qna/ask',
     FILTER_CHAT_AI: (status: string) => `user/qna?status=${status}`
 }
+
+export const searchUri = {
+    SEARCH: (value: string) => `search?q=${value}`
+}

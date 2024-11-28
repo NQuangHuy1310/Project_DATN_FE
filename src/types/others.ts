@@ -1,5 +1,6 @@
 import { IUser } from '@/types/auth'
 import { ICourse } from '@/types/course/course'
+import { IPosts } from '@/types/post'
 
 export interface ICategory {
     id: number
@@ -95,4 +96,10 @@ interface ICoursePath {
 
 export interface ICategoryLeaningPath extends ICategory {
     courses: ICoursePath[]
+}
+
+export interface IDataSearch {
+    courses: ICourse[]
+    teachers: IUser[]
+    posts: IPosts[]
 }

@@ -1,9 +1,8 @@
-import axiosClient from '@/configs/axiosClient'
-import { bannerUri, chatAIUri, learningPathUri } from '../Uri/others/others'
-
-import { IBanner, ICategoryLeaningPath } from '@/types/others'
 import axios from 'axios'
+import axiosClient from '@/configs/axiosClient'
 import { ICourseLearningPath } from '@/types/course/course'
+import { IBanner, ICategoryLeaningPath, IDataSearch } from '@/types/others'
+import { bannerUri, chatAIUri, learningPathUri, searchUri } from '../Uri/others/others'
 
 export const bannerApi = {
     getBanners: async (): Promise<IBanner[]> => {
@@ -35,5 +34,11 @@ export const communicateChatAI = {
     },
     filterChatAI: async (status: string) => {
         return axiosClient.get(chatAIUri.FILTER_CHAT_AI(status))
+    }
+}
+
+export const searchApi = {
+    getDataSearch: async (value: string): Promise<IDataSearch> => {
+        return axiosClient.get(searchUri.SEARCH(value))
     }
 }

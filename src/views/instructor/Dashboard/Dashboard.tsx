@@ -97,8 +97,8 @@ const Dashboard = () => {
 
     return (
         <>
-            <div className="card flex min-h-screen flex-col gap-6 bg-white">
-                <h3 className="text-3xl font-semibold">Quản lý Khoá học</h3>
+            <div className="card flex h-full min-h-screen flex-col gap-8 bg-white">
+                <h3 className="text-2xl font-semibold capitalize">Danh sách khoá học</h3>
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-5">
                         <div className="flex h-[50px] items-center">
@@ -141,7 +141,7 @@ const Dashboard = () => {
                     </p>
                 )}
 
-                <div className="flex h-full w-full flex-wrap gap-5">
+                <div className="flex h-full w-full flex-wrap gap-6">
                     {courseData &&
                         courseData?.data.length > 0 &&
                         courseData?.data.map((item) => <CourseCard key={item.id} {...item} />)}{' '}

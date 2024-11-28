@@ -32,7 +32,8 @@ createRoot(document.getElementById('root')!).render(
                         success: 'bg-primary text-white',
                         warning: 'text-white bg-secondaryYellow',
                         info: 'bg-blue-400'
-                    }
+                    },
+                    duration: 2000
                 }}
             />
             <ReactQueryDevtools initialIsOpen={false} />

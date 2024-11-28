@@ -47,7 +47,7 @@ const Message = ({ messages, handleToggle }: { messages: IMessage[]; handleToggl
                 </div>
             </div>
             <div className="flex gap-2 border-t px-4 py-2">
-                <Input type="text" className="w-full rounded-md border p-2" placeholder="Send your message..." />
+                <Input type="text" className="w-full rounded-md border p-2" placeholder="Nhập nội dung tin nhắn ..." />
                 <Button className="h-full rounded-md bg-blue-500 px-3 py-2 text-white">
                     <RiSendPlaneFill className="size-5" />
                 </Button>

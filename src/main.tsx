@@ -30,7 +30,7 @@ createRoot(document.getElementById('root')!).render(
                         description: 'text-xs',
                         error: 'bg-red-400 text-white',
                         success: 'bg-primary text-white',
-                        warning: 'text-yellow-400',
+                        warning: 'text-white bg-secondaryYellow',
                         info: 'bg-blue-400'
                     }
                 }}

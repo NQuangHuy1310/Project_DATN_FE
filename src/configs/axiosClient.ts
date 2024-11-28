@@ -1,4 +1,5 @@
 import { toast } from 'sonner'
+import { redirect } from 'react-router-dom'
 import axios, { AxiosResponse } from 'axios'
 
 import { useUserStore } from '@/app/store'
@@ -57,12 +58,12 @@ axiosClient.interceptors.response.use(
 
         if (status === ApiStatusCode.Forbidden) {
             toast.error(ApiMessages.error.forbidden)
-            window.location.href = routes.forbidden
+            redirect(routes.forbidden)
         }
 
         if (status === ApiStatusCode.InternalServerError) {
             toast.error(ApiMessages.error.serverError)
-            window.location.href = routes.serverError
+            redirect(routes.serverError)
         }
 
         toast.error(error.response.data?.message)
@@ -76,7 +77,7 @@ axiosClient.interceptors.response.use(
                 }
             } catch {
                 toast.error(ApiMessages.error.sessionExpired)
-                window.location.href = routes.home
+                redirect(routes.home)
                 clearUserAndProfile()
                 removeAccessToken()
             }

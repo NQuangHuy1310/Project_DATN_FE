@@ -23,7 +23,7 @@ const PerformanceStudents = () => {
     const [courseId, setCourseId] = useState<number>()
     const [openDialog, setOpenDialog] = useState<boolean>(false)
 
-    const { data: courseData } = useGetCourses()
+    const { data: courseData } = useGetCourses(100)
     const { data: studentsCourse } = useGetStudentsCourse(courseId!)
 
     const handleSelectCourse = (value: string) => {

@@ -1,16 +1,18 @@
 import { FaUsers } from 'react-icons/fa'
+import { useNavigate } from 'react-router-dom'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { MdAttachMoney, MdOutlineSmartDisplay } from 'react-icons/md'
 
-import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
 import { useGetCourses, useStatistic } from '@/app/hooks/instructors'
+
+import routes from '@/configs/routes'
 import noContent from '@/assets/no-content.jpg'
 import { Button } from '@/components/ui/button'
-import { useNavigate } from 'react-router-dom'
-import routes from '@/configs/routes'
+import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts'
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
 const chartConfig = {
     views: {
@@ -21,6 +23,29 @@ const chartConfig = {
         color: 'hsl(var(--primary))'
     }
 }
+
+const statisticFilter = [
+    {
+        name: 'Hôm nay',
+        key: 'today'
+    },
+    {
+        name: 'Hôm qua',
+        key: 'today'
+    },
+    {
+        name: 'Tuần này',
+        key: 'today'
+    },
+    {
+        name: 'Tháng này',
+        key: 'today'
+    },
+    {
+        name: 'Năm nay',
+        key: 'today'
+    }
+]
 
 const PerformanceOverview = () => {
     const navigate = useNavigate()
@@ -115,11 +140,29 @@ const PerformanceOverview = () => {
 
                     <Card>
                         <CardHeader className="flex flex-col items-stretch space-y-0 border-b p-0 sm:flex-row">
-                            <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6">
-                                <CardTitle>Biểu đồ doanh thu</CardTitle>
-                                <CardDescription>
-                                    Theo dõi doanh thu để nhận diện xu hướng và đưa ra quyết định kinh doanh tốt hơn.
-                                </CardDescription>
+                            <div className="flex w-full items-center justify-between pr-4">
+                                <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6">
+                                    <CardTitle>Biểu đồ doanh thu</CardTitle>
+                                    <CardDescription>
+                                        Theo dõi doanh thu để nhận diện xu hướng và đưa ra quyết định kinh doanh tốt
+                                        hơn.
+                                    </CardDescription>
+                                </div>
+
+                                <Select>
+                                    <SelectTrigger className="flex h-[40px] w-[160px] items-center justify-between">
+                                        <SelectValue placeholder="Chọn thời gian" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectGroup>
+                                            {statisticFilter.map((item) => (
+                                                <SelectItem value={item.key} key={item.key}>
+                                                    {item.name}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectGroup>
+                                    </SelectContent>
+                                </Select>
                             </div>
                         </CardHeader>
                         <CardContent className="px-2 sm:p-6">

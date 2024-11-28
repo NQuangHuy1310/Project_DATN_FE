@@ -1,7 +1,7 @@
 import { userApis } from '@/app/services/accounts'
 import { useUserStore } from '@/app/store/userStore'
 import routes from '@/configs/routes'
-import { HistoryLeaning } from '@/types'
+import { DiscountCode, HistoryLeaning } from '@/types'
 import { useMutation, useQuery, UseQueryOptions } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 
@@ -36,5 +36,13 @@ export const useCourseHistory = (
         enabled: !!count,
         queryKey: ['course-history', count],
         queryFn: () => userApis.courseHistory(count)
+    })
+}
+
+export const useVoucherByUser = (options?: Omit<UseQueryOptions<DiscountCode[]>, 'queryKey' | 'queryFn'>) => {
+    return useQuery<DiscountCode[]>({
+        ...options,
+        queryKey: ['vouchers'],
+        queryFn: () => userApis.getVoucherUser()
     })
 }

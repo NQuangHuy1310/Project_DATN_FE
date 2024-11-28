@@ -103,3 +103,15 @@ export interface IDataSearch {
     teachers: IUser[]
     posts: IPosts[]
 }
+
+export interface DiscountCode {
+    id: number
+    code: string
+    count: number
+    used_count: number
+    description: string
+    discount: string
+    type: 'percent' | 'fixed'
+    start_time: string
+    end_time: string
+}

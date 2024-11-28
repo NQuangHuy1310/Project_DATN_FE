@@ -2,7 +2,7 @@ import { IUser } from './auth'
 import { ICategory } from './others'
 
 export interface IPayment {
-    category: ICategory
+    category?: ICategory
     ratings_avg_rate: string
     id: number
     name: string

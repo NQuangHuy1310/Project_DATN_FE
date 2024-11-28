@@ -35,5 +35,8 @@ export const userApis = {
     },
     courseHistory: async (count: number): Promise<HistoryLeaning> => {
         return axiosClient.get(userUri.COURSE_HISTORY(count))
+    },
+    getVoucherUser: async (): Promise<any> => {
+        return axiosClient.get(userUri.VOUCHER_USER)
     }
 }

@@ -8,6 +8,7 @@ export interface ICourse {
     id_category?: number
     code?: string
     name: string
+    category?: ICategory
     thumbnail: string
     trailer?: string
     description?: string

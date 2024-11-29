@@ -68,7 +68,7 @@ const UserButton = () => {
                                 </DropdownMenuItem>
                             </Link>
                         )}
-                        <Link to={routes.profileUserLogin.replace(':email', user?.email || '')}>
+                        <Link to={routes.profileUser.replace(':email', user?.email || '')}>
                             <DropdownMenuItem className="flex items-center gap-2">
                                 <CgProfile className="size-4 w-8" />
                                 <span className="text-sm font-medium text-darkGrey">Trang cá nhân</span>

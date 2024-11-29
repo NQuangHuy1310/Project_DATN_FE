@@ -33,8 +33,21 @@ export const courseUri = {
     ADD_COMMENT_COURSE: 'comments/add-comment-lesson',
     GET_COMMENT: (id: number) => `comments/comment-lesson/${id}`,
     //WISHLIST
-    WISH_LIST: (page: number, perPage?: number) =>
-        `${COURSE_URL}favorite?page=${page}${perPage ? `&perPage=${perPage}` : ''}`,
+    WISH_LIST: (
+        search?: string,
+        category?: string,
+        level?: string,
+        arrange?: string,
+        page?: number,
+        perPage?: number
+    ) =>
+        `${COURSE_URL}favorite${
+            category ? `?category=${category}` : ''
+        }${level ? `${category ? '&' : '?'}level=${level}` : ''}${
+            arrange ? `${category || level ? '&' : '?'}arrange=${arrange}` : ''
+        }${page ? `${category || level || arrange ? '&' : '?'}page=${page}` : ''}${
+            perPage ? `${category || level || arrange || page ? '&' : '?'}perPage=${perPage}` : ''
+        }${search ? `${category || level || arrange || page || perPage ? '&' : '?'}search=${search}` : ''}`,
     ADD_WISH_LIST: (courseId: number) => `${COURSE_URL}favorite/${courseId}`,
     UN_WISH_LIST: (courseId: number) => `${COURSE_URL}unfavorite/${courseId}`
 }

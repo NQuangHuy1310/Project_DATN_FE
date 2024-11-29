@@ -2,7 +2,10 @@ import { ICourse } from '@/types/course/course'
 import { ICategory } from './others'
 
 export interface ICourseMyBought extends ICourse {
-    progress_percent: number
+    current_page: number
+    data: ICourse[]
+    per_page: number
+    total: number
 }
 
 export interface ICourseUser extends ICourse {

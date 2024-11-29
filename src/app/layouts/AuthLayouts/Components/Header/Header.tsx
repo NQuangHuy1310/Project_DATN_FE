@@ -310,7 +310,7 @@ const Header = () => {
                                     <IoIosSearch className="size-4" />
                                 </div>
                                 <Input
-                                    placeholder="Tìm kiếm hoá học, bài viết, video,..."
+                                    placeholder="Tìm kiếm hoá học, bài viết, người hướng dẫn,..."
                                     className="h-8 w-full rounded-none px-5 caret-primary outline-none focus-visible:ring-0"
                                 />
                                 <HiX

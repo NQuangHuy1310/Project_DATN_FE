@@ -35,7 +35,7 @@ const CourseHistoryButton = () => {
         <>
             <DropdownMenu>
                 <DropdownMenuTrigger>
-                    <span className="text-sm font-bold">Lịch sử học tập</span>
+                    <span className="whitespace-nowrap text-sm font-bold">Lịch sử học tập</span>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-[500px]">
                     <DropdownMenuLabel className="flex items-center justify-between">

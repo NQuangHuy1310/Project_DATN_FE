@@ -57,46 +57,46 @@ const UserButton = () => {
                             <Link to={routes.instructorDashboard}>
                                 <DropdownMenuItem className="flex items-center gap-2">
                                     <FaRegUser className="size-4 w-8" />
-                                    <span className="text-sm font-medium text-darkGrey">Người hướng dẫn</span>
+                                    <span className="text-sm font-medium">Người hướng dẫn</span>
                                 </DropdownMenuItem>
                             </Link>
                         ) : (
                             <Link to={routes.userDashboard}>
                                 <DropdownMenuItem className="flex items-center gap-2">
                                     <FaRegUser className="size-4 w-8" />
-                                    <span className="text-sm font-medium text-darkGrey">Học viên</span>
+                                    <span className="text-sm font-medium">Học viên</span>
                                 </DropdownMenuItem>
                             </Link>
                         )}
                         <Link to={routes.profileUser.replace(':email', user?.email || '')}>
                             <DropdownMenuItem className="flex items-center gap-2">
                                 <CgProfile className="size-4 w-8" />
-                                <span className="text-sm font-medium text-darkGrey">Trang cá nhân</span>
+                                <span className="text-sm font-medium">Trang cá nhân</span>
                             </DropdownMenuItem>
                         </Link>
                         <Link to={routes.newPost}>
                             <DropdownMenuItem className="flex items-center gap-2">
                                 <MdPostAdd className="size-4 w-8" />
-                                <span className="text-sm font-medium text-darkGrey">Tạo bài viết</span>
+                                <span className="text-sm font-medium">Tạo bài viết</span>
                             </DropdownMenuItem>
                         </Link>
                         <Link to={routes.myPosts}>
                             <DropdownMenuItem className="flex items-center gap-2">
                                 <RiBloggerLine className="size-4 w-8" />
-                                <span className="text-sm font-medium text-darkGrey">Bài viết của tôi</span>
+                                <span className="text-sm font-medium">Bài viết của tôi</span>
                             </DropdownMenuItem>
                         </Link>
                         <Link to={routes.myBookmarks}>
                             <DropdownMenuItem className="flex items-center gap-2">
                                 <FaRegBookmark className="size-4 w-8" />
-                                <span className="text-sm font-medium text-darkGrey">Bài viết đã lưu</span>
+                                <span className="text-sm font-medium">Bài viết đã lưu</span>
                             </DropdownMenuItem>
                         </Link>
                         {user?.user_type !== 'teacher' && user?.user_type !== 'admin' && (
                             <Link to={routes.instructorRegister}>
                                 <DropdownMenuItem className="flex items-center gap-2">
                                     <TbUserHexagon className="size-4 w-8" />
-                                    <span className="whitespace-nowrap text-sm font-medium text-darkGrey">
+                                    <span className="whitespace-nowrap text-sm font-medium">
                                         Đăng ký thành giảng viên
                                     </span>
                                 </DropdownMenuItem>
@@ -105,13 +105,13 @@ const UserButton = () => {
                         <Link to={routes.accountProfile}>
                             <DropdownMenuItem className="flex items-center gap-2">
                                 <IoSettingsOutline className="size-4 w-8" />
-                                <span className="text-sm font-medium text-darkGrey">Quản lý tài khoản</span>
+                                <span className="text-sm font-medium">Quản lý tài khoản</span>
                             </DropdownMenuItem>
                         </Link>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem className="cursor-pointer" onClick={handleLogout}>
                             <LuLogOut className="mr-2 size-4 w-8" />
-                            <span className="text-sm font-medium text-darkGrey">Đăng xuất</span>
+                            <span className="text-sm font-medium">Đăng xuất</span>
                         </DropdownMenuItem>
                     </DropdownMenuGroup>
                 </DropdownMenuContent>

@@ -1,10 +1,13 @@
 import { userUri } from '@/app/services/Uri/accounts'
 import axiosClient from '@/configs/axiosClient'
 
-import { HistoryLeaning, IChangePassword, IResponse, IUpdateProfile, IUserProfile } from '@/types'
+import { HistoryLeaning, IChangePassword, IProfileUser, IResponse, IUpdateProfile, IUserProfile } from '@/types'
 import { CheckFlow, Flow, ICourseMyBought } from '@/types/user'
 
 export const userApis = {
+    getDetailProfile: async (email: string): Promise<IProfileUser> => {
+        return axiosClient.get(userUri.GET_PROFILE(email))
+    },
     getProfile: async (): Promise<IUserProfile> => {
         return axiosClient.get(userUri.PROFILE)
     },

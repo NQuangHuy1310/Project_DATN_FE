@@ -83,7 +83,7 @@ export const privateRoutes = [
     { path: routes.accountSettings, layout: ProfileLayout, element: AccountSettings, title: 'Cài đặt' },
     { path: routes.accountNotifications, layout: ProfileLayout, element: AccountNotifications, title: 'Thông báo' },
 
-    { path: routes.profileUserLogin, layout: UserDashboardLayout, element: Profile, title: 'Trang cá nhân' },
+    { path: routes.profileUser, layout: UserDashboardLayout, element: Profile, title: 'Trang cá nhân' },
     { path: routes.myCourses, layout: UserDashboardLayout, element: MyCourse, title: 'Khoá học của tôi' },
     { path: routes.wishList, layout: UserDashboardLayout, element: CourseWishList, title: 'Khoá học yêu thích' },
     { path: routes.course, layout: UserDashboardLayout, element: CourseExplore, title: 'Khám phá khoá học' },

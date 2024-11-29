@@ -72,3 +72,37 @@ export interface IChangePassword {
     new_password: string
     new_password_confirmation: string
 }
+
+export interface IProfileUser {
+    user: {
+        id: number
+        name: string
+        email: string
+        avatar: string
+        user_type: 'member' | 'admin' | 'teacher'
+        created_at: string
+        profile: {
+            phone: number
+            address: string
+            following: number
+            experience: string
+            bio: string
+        }
+    }
+    course_by_user: {
+        id: number
+        name: string
+        slug: string
+        description: string
+        thumbnail: string
+        sort_description: string
+    }[]
+    courses_user_bought: {
+        id: number
+        name: string
+        slug: string
+        description: string
+        thumbnail: string
+        sort_description: string
+    }[]
+}

@@ -1,6 +1,7 @@
 const USER_URL = 'user/'
 
 export const userUri = {
+    GET_PROFILE: (email: string) => `${USER_URL}by-email/${email}`,
     PROFILE: `${USER_URL}profile`,
     UPDATE_PROFILE: `${USER_URL}profile`,
     CHANGE_PASSWORD: `${USER_URL}change-password`,

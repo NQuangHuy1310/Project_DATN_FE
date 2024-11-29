@@ -1,17 +1,20 @@
 import { useState, useEffect, useRef } from 'react'
 import { RiSendPlaneFill } from 'react-icons/ri'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { getImagesUrl } from '@/lib'
-import { useCommunicateChatAI, useFilterChatAI } from '@/app/hooks/others'
-import useGetUserProfile from '@/app/hooks/accounts/useGetUser'
 import Loading from '@/components/Common/Loading/Loading'
+import useGetUserProfile from '@/app/hooks/accounts/useGetUser'
 import { BsLayoutSidebar, BsLayoutSidebarInset } from 'react-icons/bs'
+import { useCommunicateChatAI, useFilterChatAI } from '@/app/hooks/others'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
 const Communicate = () => {
     const historyList = ['today', 'yesterday', 'last_week', 'last_month']
 
     const [question, setQuestion] = useState<string>('')
-    const [messages, setMessages] = useState<{ text: string; type: 'user' | 'ai' }[]>([])
+    const [messages, setMessages] = useState<{ text: string; type: 'user' | 'ai'; isTyping?: boolean }[]>([
+        { text: '', type: 'ai', isTyping: true }
+    ])
+
     const [status, setStatus] = useState<string>('today')
     const [isToggle, setIsToggle] = useState<boolean>(false)
     const messagesEndRef = useRef<HTMLDivElement>(null)
@@ -42,10 +45,39 @@ const Communicate = () => {
             setQuestion('')
             setMessages((prev) => [...prev, { text: trimmedQuestion, type: 'user' }])
 
+            setMessages((prev) => [...prev, { text: '', type: 'ai', isTyping: true }])
+
             const response = await chatAI(trimmedQuestion)
             const answer = response?.answer || 'Không thể trả lời câu hỏi này.'
-            setMessages((prev) => [...prev, { text: answer, type: 'ai' }])
+
+            typeAnswer(answer)
         }
+    }
+
+    const typeAnswer = (answer: string) => {
+        let currentIndex = 0
+
+        const interval = setInterval(() => {
+            setMessages((prev) => {
+                return prev.map((msg) => {
+                    if (msg.isTyping) {
+                        const updatedText = (msg.text || '') + (answer[currentIndex] || '')
+                        return {
+                            ...msg,
+                            text: updatedText
+                        }
+                    }
+                    return msg
+                })
+            })
+
+            currentIndex += 1
+
+            if (currentIndex >= answer.length) {
+                clearInterval(interval)
+                setMessages((prev) => prev.map((msg) => (msg.isTyping ? { ...msg, isTyping: false } : msg)))
+            }
+        }, 10)
     }
 
     const handleStatusChange = (newStatus: string) => {
@@ -72,16 +104,16 @@ const Communicate = () => {
                                 />
                                 <h3 className="border-b pb-2 text-center text-xl font-semibold">Lịch sử câu hỏi</h3>
                             </div>
-                            <ul className="flex flex-col gap-5 pt-5">
+                            <ul className="flex flex-col gap-3 pt-5">
                                 {historyList.map((date) => (
                                     <li
                                         key={date}
-                                        className={`cursor-pointer rounded p-2 ${
-                                            status === date ? 'bg-primary font-semibold text-white' : ''
+                                        className={`flex cursor-pointer items-center gap-3 rounded px-2 py-2.5 ${
+                                            status === date ? 'bg-primary/70 font-semibold text-white' : ''
                                         } `}
                                         onClick={() => handleStatusChange(date)}
                                     >
-                                        <span className="me-2 rounded-full bg-slate-200 px-2 py-1 text-black">#</span>
+                                        <span className="rounded-full bg-slate-200 px-2.5 py-1 text-black">#</span>
                                         {
                                             {
                                                 today: 'Hôm nay',
@@ -136,7 +168,7 @@ const Communicate = () => {
                                         msg.type === 'user' ? 'bg-primary text-white' : 'bg-gray-200 text-gray-900'
                                     }`}
                                 >
-                                    {msg.text}
+                                    {msg.text || ''}
                                 </div>
                                 {msg.type === 'user' && (
                                     <Avatar className="size-8">

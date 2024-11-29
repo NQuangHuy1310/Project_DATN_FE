@@ -1,23 +1,19 @@
 /* eslint-disable no-unused-vars */
-import { BiBook } from 'react-icons/bi'
 import { BsPlayBtn } from 'react-icons/bs'
 import { MdReviews } from 'react-icons/md'
 import { GrHistory } from 'react-icons/gr'
 import { LuUserCircle } from 'react-icons/lu'
 import { PiStudentBold } from 'react-icons/pi'
 import { IoSettingsOutline } from 'react-icons/io5'
-import { PiArticleMediumLight } from 'react-icons/pi'
 import { MdSecurity, MdArticle } from 'react-icons/md'
-import { AiOutlineQuestionCircle } from 'react-icons/ai'
 import { TbMessageDots, TbUserHexagon } from 'react-icons/tb'
 import { HiBookOpen, HiOutlineTemplate } from 'react-icons/hi'
 import { IoMdHelpCircleOutline, IoMdHome } from 'react-icons/io'
 import { IoChatboxOutline, IoWalletSharp } from 'react-icons/io5'
-import { FaAddressBook, FaHeart, FaRegBell, FaRoad, FaUserCog } from 'react-icons/fa'
-import { FaRegCircleQuestion, FaRegCircleCheck, FaChartSimple, FaBookAtlas } from 'react-icons/fa6'
+import { FaAddressBook, FaHeart, FaRegBell, FaRoad } from 'react-icons/fa'
+import { FaRegCircleQuestion, FaRegCircleCheck, FaChartSimple } from 'react-icons/fa6'
 
 import routes from '@/configs/routes'
-import { RiBloggerLine } from 'react-icons/ri'
 import { QuestionTeacher } from '@/types/others'
 
 export const sidebarList = [
@@ -56,24 +52,7 @@ export const sidebarList = [
     {
         title: 'Bài viết',
         icon: MdArticle,
-        path: routes.posts,
-        children: [
-            {
-                title: 'Viết Blog',
-                icon: RiBloggerLine,
-                path: routes.newPost
-            },
-            {
-                title: 'Bài viết của tôi',
-                icon: RiBloggerLine,
-                path: routes.myPosts
-            },
-            {
-                title: 'Bài viết đã lưu',
-                icon: PiArticleMediumLight,
-                path: routes.myBookmarks
-            }
-        ]
+        path: routes.posts
     },
     {
         title: 'Lộ trình',
@@ -84,11 +63,6 @@ export const sidebarList = [
         title: 'Ví',
         icon: IoWalletSharp,
         path: routes.wallet
-    },
-    {
-        title: 'Tài khoản',
-        icon: FaUserCog,
-        path: routes.accountProfile
     },
     {
         title: 'Chat AI',

@@ -6,6 +6,7 @@ export interface IUser {
     avatar: string | null
     is_active: boolean
     user_type: 'member' | 'admin' | 'teacher'
+    created_at?: string
 }
 
 export interface IProfile {

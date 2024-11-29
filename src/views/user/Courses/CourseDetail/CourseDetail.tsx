@@ -56,6 +56,8 @@ const CourseDetail = () => {
     const [isProcessing, setIsProcessing] = useState<boolean>(false)
     const handleToggleCourse = () => setToggleCourse(!toggleCourse)
     const [toggleCourse, setToggleCourse] = useState<boolean>(false)
+    const [isPending, setIsPending] = useState<boolean>(false)
+
     const { user } = useGetUserProfile()
     const { data: courseDetail, isLoading: LoadingCourse } = useCourseDetailBySlug(slug!)
 
@@ -69,16 +71,25 @@ const CourseDetail = () => {
     const rating = watch('rate')
 
     const onSubmit = async (data: any) => {
-        if (courseDetail?.progress_percent !== 100) {
-            toast.error('Bạn chưa hoàn thành khóa học')
-        } else if (user?.id) {
-            const payload = {
-                ...data,
-                id_user: user.id,
-                id_course: courseDetail?.id
+        setIsPending(true)
+
+        try {
+            if (courseDetail?.progress_percent !== 100) {
+                toast.error('Bạn chưa hoàn thành khóa học')
+                return
             }
-            await addRating(payload)
-            setIsOpen(false)
+
+            if (user?.id) {
+                const payload = {
+                    ...data,
+                    id_user: user.id,
+                    id_course: courseDetail?.id
+                }
+                await addRating(payload)
+                setIsOpen(false)
+            }
+        } finally {
+            setIsPending(false)
         }
     }
 
@@ -484,50 +495,6 @@ const CourseDetail = () => {
                         ) : (
                             ''
                         )}
-
-                        <Dialog open={isOpen} onOpenChange={setIsOpen}>
-                            <DialogContent className="max-h-[90vh] w-[90vw] max-w-full overflow-y-scroll p-5 md:max-w-[50vw] md:p-10">
-                                <form onSubmit={handleSubmit(onSubmit)}>
-                                    <h1 className="text-center text-lg font-bold md:text-left md:text-3xl">Đánh giá</h1>
-                                    <div className="flex flex-col gap-5">
-                                        <span className="text-center text-sm md:text-left md:text-lg">
-                                            Bạn có hài lòng với khóa học?
-                                        </span>
-
-                                        <div className="flex justify-center gap-2 md:justify-start">
-                                            {[1, 2, 3, 4, 5].map((star) => (
-                                                <FaStar
-                                                    key={star}
-                                                    onClick={() => setValue('rate', star)}
-                                                    className={`cursor-pointer ${
-                                                        star <= rating ? 'text-yellow-500' : 'text-gray-300'
-                                                    } h-5 w-5 md:h-8 md:w-8`}
-                                                />
-                                            ))}
-                                        </div>
-
-                                        <div className="mx-auto flex w-full flex-col gap-4 md:mx-0">
-                                            <h3 className="text-sm md:text-lg">Đánh giá của bạn</h3>
-                                            <textarea
-                                                {...register('content', { required: 'Vui lòng nhập nội dung' })}
-                                                className="w-full resize-none rounded-md border-2 border-gray-300 p-2 md:p-4"
-                                                rows={4}
-                                                placeholder="Viết đánh giá của bạn ở đây..."
-                                            />
-                                            {errors.content && (
-                                                <span className="text-red-500">{errors.content.message}</span>
-                                            )}
-                                        </div>
-
-                                        <div className="flex justify-center md:justify-start">
-                                            <DialogFooter>
-                                                <Button type="submit">Gửi đánh giá</Button>
-                                            </DialogFooter>
-                                        </div>
-                                    </div>
-                                </form>
-                            </DialogContent>
-                        </Dialog>
                     </div>
                 </div>
                 <div className="card flex w-full flex-col gap-4 lg:hidden">
@@ -799,7 +766,9 @@ const CourseDetail = () => {
 
                                                 <div className="flex justify-center md:justify-start">
                                                     <DialogFooter>
-                                                        <Button type="submit">Gửi đánh giá</Button>
+                                                        <Button type="submit" disabled={isPending}>
+                                                            {isPending ? 'Đang gửi...' : 'Gửi đánh giá'}
+                                                        </Button>
                                                     </DialogFooter>
                                                 </div>
                                             </div>

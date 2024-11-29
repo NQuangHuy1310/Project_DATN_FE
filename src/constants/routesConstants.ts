@@ -62,6 +62,7 @@ import LearningPathCourse from '@/views/user/LearningPath/LearningPathCourse'
 import PerformanceRatings from '@/views/instructor/Performance/PerformanceRatings'
 import Communicate from '@/views/user/ComunicateAi/Communicate'
 import Discount from '@/views/user/Discount/Discount'
+import Profile from '@/views/user/Profile'
 
 // Routes không cần đăng nhập
 export const publicRoutes = [
@@ -82,6 +83,7 @@ export const privateRoutes = [
     { path: routes.accountSettings, layout: ProfileLayout, element: AccountSettings, title: 'Cài đặt' },
     { path: routes.accountNotifications, layout: ProfileLayout, element: AccountNotifications, title: 'Thông báo' },
 
+    { path: routes.profileUserLogin, layout: UserDashboardLayout, element: Profile, title: 'Trang cá nhân' },
     { path: routes.myCourses, layout: UserDashboardLayout, element: MyCourse, title: 'Khoá học của tôi' },
     { path: routes.wishList, layout: UserDashboardLayout, element: CourseWishList, title: 'Khoá học yêu thích' },
     { path: routes.course, layout: UserDashboardLayout, element: CourseExplore, title: 'Khám phá khoá học' },

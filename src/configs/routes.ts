@@ -36,6 +36,9 @@ const routes = {
     accountHelp: '/account/help',
     accountSettings: '/account/settings',
     accountNotifications: '/account/notifications',
+
+    //Profile
+    profileUserLogin: '/profile/:email',
     //WishList
     wishList: '/wish-list',
     // wallet

@@ -1,7 +1,7 @@
 import { ICourse } from '@/types/course/course'
 import { ICategory } from './others'
 
-export interface ICourseMyBought extends ICourse {
+export interface ICourseMyBought {
     current_page: number
     data: ICourse[]
     per_page: number

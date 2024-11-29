@@ -17,7 +17,7 @@ export const usePaymentCourseBySlug = (
     })
 }
 
-export const useBuyCourse = () => {
+export const useBuyCourse = (slug: string) => {
     const queryClient = useQueryClient()
     const navigate = useNavigate()
     return useMutation<any, Error, [number, number, IBuyData]>({
@@ -26,6 +26,7 @@ export const useBuyCourse = () => {
         },
         onSuccess: async (data) => {
             await Promise.all([
+                queryClient.invalidateQueries({ queryKey: ['course-detail', slug] }),
                 queryClient.invalidateQueries({ queryKey: ['course-my-bought'] }),
                 queryClient.invalidateQueries({ queryKey: ['transaction-user'] })
             ])

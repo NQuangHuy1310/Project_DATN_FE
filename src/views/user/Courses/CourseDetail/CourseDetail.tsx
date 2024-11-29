@@ -15,12 +15,7 @@ import { formatDuration, getImagesUrl } from '@/lib/common'
 import useGetUserProfile from '@/app/hooks/accounts/useGetUser'
 import { useGetSlugParams } from '@/app/hooks/common/useCustomParams'
 import { useCreateRating } from '@/app/hooks/ratings/useRating.ts'
-import {
-    useAddWishList,
-    useCourseDetailBySlug,
-    useRegisterCourse,
-    useUnWishList
-} from '@/app/hooks/courses/useCourse'
+import { useAddWishList, useCourseDetailBySlug, useRegisterCourse, useUnWishList } from '@/app/hooks/courses/useCourse'
 
 import About from '@/views/user/Courses/CourseDetail/About'
 import Reviews from '@/views/user/Courses/CourseDetail/Reviews'
@@ -38,6 +33,7 @@ import { IBuyData } from '@/types'
 import CourseRelated from '@/views/user/Courses/CourseRelated/CourseRelated'
 import { TbCoinFilled } from 'react-icons/tb'
 import { useFollowTeacher, useUnFollowTeacher } from '@/app/hooks/accounts/useFlowTeacher'
+import Payment from '@/components/shared/Payment/Payment'
 
 const CourseDetail = () => {
     const {
@@ -54,11 +50,12 @@ const CourseDetail = () => {
     })
     const navigate = useNavigate()
     const slug = useGetSlugParams('slug')
+    const discount = useGetSlugParams('discount')
     const [isOpen, setIsOpen] = useState<boolean>(false)
+    const [isOpenPayment, setIsOpenPayment] = useState<boolean>(false)
     const [isProcessing, setIsProcessing] = useState<boolean>(false)
     const handleToggleCourse = () => setToggleCourse(!toggleCourse)
     const [toggleCourse, setToggleCourse] = useState<boolean>(false)
-
     const { user } = useGetUserProfile()
     const { data: courseDetail, isLoading: LoadingCourse } = useCourseDetailBySlug(slug!)
 
@@ -286,19 +283,20 @@ const CourseDetail = () => {
                             <div>
                                 {courseDetail?.is_course_bought === true ? (
                                     courseDetail?.progress_percent === 100 ? (
-                                        <p className='text-base font-semibold text-orange-500'>Đã hoàn thành</p>
+                                        <p className="text-base font-semibold text-orange-500">Đã hoàn thành</p>
                                     ) : courseDetail?.progress_percent === 0 ? (
-                                        <p className='text-base font-semibold text-orange-500'>Bắt đầu học</p>
+                                        <p className="text-base font-semibold text-orange-500">Bắt đầu học</p>
                                     ) : (
                                         <div className="flex flex-col gap-2">
                                             <div className="flex h-2 w-full items-center overflow-hidden rounded bg-darkGrey/20">
                                                 <span
-                                                    className={`block h-full ${courseDetail?.level === 'Sơ cấp'
-                                                        ? 'bg-[#FFBB54]'
-                                                        : courseDetail?.level === 'Trung cấp'
-                                                            ? 'bg-[#25C78B]'
-                                                            : 'bg-red-600'
-                                                        }`}
+                                                    className={`block h-full ${
+                                                        courseDetail?.level === 'Sơ cấp'
+                                                            ? 'bg-secondaryYellow'
+                                                            : courseDetail?.level === 'Trung cấp'
+                                                              ? 'bg-secondaryGreen'
+                                                              : 'bg-secondaryRed'
+                                                    }`}
                                                     style={{ width: `${courseDetail?.progress_percent}%` }}
                                                 ></span>
                                                 <span
@@ -408,8 +406,8 @@ const CourseDetail = () => {
                                         )}
                                     </div>
                                 ) : (!courseDetail?.price && !courseDetail?.price_sale) ||
-                                    (Math.floor(courseDetail?.price) === 0 &&
-                                        Math.floor(courseDetail?.price_sale) === 0) ? (
+                                  (Math.floor(courseDetail?.price) === 0 &&
+                                      Math.floor(courseDetail?.price_sale) === 0) ? (
                                     <div className="flex items-center gap-3">
                                         <Button
                                             className="block w-full rounded-md bg-primary py-2 text-center text-white"
@@ -435,12 +433,12 @@ const CourseDetail = () => {
                                     </div>
                                 ) : (
                                     <div className="flex items-center gap-3">
-                                        <Link
+                                        <Button
                                             className="block w-full rounded-md bg-primary py-2 text-center text-white"
-                                            to={routes.payment.replace(':slug', slug!)}
+                                            onClick={() => setIsOpenPayment(true)}
                                         >
                                             Mua khoá học
-                                        </Link>
+                                        </Button>
                                         <div className="flex h-9 w-11 cursor-pointer items-center justify-center rounded-md border-2">
                                             {isProcessing ? (
                                                 <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent"></div>
@@ -501,8 +499,9 @@ const CourseDetail = () => {
                                                 <FaStar
                                                     key={star}
                                                     onClick={() => setValue('rate', star)}
-                                                    className={`cursor-pointer ${star <= rating ? 'text-yellow-500' : 'text-gray-300'
-                                                        } h-5 w-5 md:h-8 md:w-8`}
+                                                    className={`cursor-pointer ${
+                                                        star <= rating ? 'text-yellow-500' : 'text-gray-300'
+                                                    } h-5 w-5 md:h-8 md:w-8`}
                                                 />
                                             ))}
                                         </div>
@@ -561,19 +560,20 @@ const CourseDetail = () => {
                                 </h3>
                                 {courseDetail?.is_course_bought === true ? (
                                     courseDetail?.progress_percent === 100 ? (
-                                        <p className='text-base font-semibold text-orange-500'>Đã hoàn thành</p>
+                                        <p className="text-base font-semibold text-orange-500">Đã hoàn thành</p>
                                     ) : courseDetail?.progress_percent === 0 ? (
-                                        <p className='text-base font-semibold text-orange-500'>Bắt đầu học</p>
+                                        <p className="text-base font-semibold text-orange-500">Bắt đầu học</p>
                                     ) : (
                                         <div className="flex flex-col gap-2">
                                             <div className="flex h-2 w-full items-center overflow-hidden rounded bg-darkGrey/20">
                                                 <span
-                                                    className={`block h-full ${courseDetail?.level === 'Sơ cấp'
-                                                        ? 'bg-[#FFBB54]'
-                                                        : courseDetail?.level === 'Trung cấp'
-                                                            ? 'bg-[#25C78B]'
-                                                            : 'bg-red-600'
-                                                        }`}
+                                                    className={`block h-full ${
+                                                        courseDetail?.level === 'Sơ cấp'
+                                                            ? 'bg-secondaryYellow'
+                                                            : courseDetail?.level === 'Trung cấp'
+                                                              ? 'bg-secondaryYellow'
+                                                              : 'bg-secondaryRed'
+                                                    }`}
                                                     style={{ width: `${courseDetail?.progress_percent}%` }}
                                                 ></span>
                                                 <span
@@ -657,7 +657,9 @@ const CourseDetail = () => {
                                             <div className="flex w-full gap-2">
                                                 <Button
                                                     className="w-full"
-                                                    onClick={() => navigate(routes.courseLeaning.replace(':slug', slug!))}
+                                                    onClick={() =>
+                                                        navigate(routes.courseLeaning.replace(':slug', slug!))
+                                                    }
                                                 >
                                                     Vào học
                                                 </Button>
@@ -680,8 +682,8 @@ const CourseDetail = () => {
                                                 )}
                                             </div>
                                         ) : (!courseDetail?.price && !courseDetail?.price_sale) ||
-                                            (Math.floor(courseDetail?.price) === 0 &&
-                                                Math.floor(courseDetail?.price_sale) === 0) ? (
+                                          (Math.floor(courseDetail?.price) === 0 &&
+                                              Math.floor(courseDetail?.price_sale) === 0) ? (
                                             <div className="flex items-center gap-3">
                                                 <Button
                                                     className="block w-full rounded-md bg-primary py-2 text-center text-white"
@@ -707,12 +709,12 @@ const CourseDetail = () => {
                                             </div>
                                         ) : (
                                             <div className="flex items-center gap-3">
-                                                <Link
+                                                <Button
                                                     className="block w-full rounded-md bg-primary py-2 text-center text-white"
-                                                    to={routes.payment.replace(':slug', slug!)}
+                                                    onClick={() => setIsOpenPayment(true)}
                                                 >
                                                     Mua khoá học
-                                                </Link>
+                                                </Button>
                                                 <div className="flex h-9 w-11 cursor-pointer items-center justify-center rounded-md border-2">
                                                     {isProcessing ? (
                                                         <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent"></div>
@@ -775,8 +777,9 @@ const CourseDetail = () => {
                                                         <FaStar
                                                             key={star}
                                                             onClick={() => setValue('rate', star)}
-                                                            className={`cursor-pointer ${star <= rating ? 'text-yellow-500' : 'text-gray-300'
-                                                                } h-5 w-5 md:h-8 md:w-8`}
+                                                            className={`cursor-pointer ${
+                                                                star <= rating ? 'text-yellow-500' : 'text-gray-300'
+                                                            } h-5 w-5 md:h-8 md:w-8`}
                                                         />
                                                     ))}
                                                 </div>
@@ -808,6 +811,12 @@ const CourseDetail = () => {
                     )}
                 </div>
             </div>
+            <Payment
+                isOpenPayment={isOpenPayment || discount ? true : false}
+                handleIsOpen={setIsOpenPayment}
+                discount={discount!}
+                courseData={courseDetail!}
+            />
         </div>
     )
 }

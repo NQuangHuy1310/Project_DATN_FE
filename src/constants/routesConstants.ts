@@ -44,7 +44,6 @@ import MyPosts from '@/views/user/Posts/MyPosts'
 import NewPost from '@/views/user/Posts/NewPosts'
 import MyBookmarks from '@/views/user/Posts/MyBookmarks'
 
-import Payment from '@/views/user/Payment/Payment'
 import Transaction from '@/views/user/wallet/transaction/Transaction'
 import PostDetail from '@/views/user/Posts/PostDetail'
 import CourseDetailNoLogin from '@/views/user/Courses/CourseDetailNoLogin/CourseDetailNoLogin'
@@ -62,6 +61,7 @@ import LearningPath from '@/views/user/LearningPath'
 import LearningPathCourse from '@/views/user/LearningPath/LearningPathCourse'
 import PerformanceRatings from '@/views/instructor/Performance/PerformanceRatings'
 import Communicate from '@/views/user/ComunicateAi/Communicate'
+import Discount from '@/views/user/Discount/Discount'
 
 // Routes không cần đăng nhập
 export const publicRoutes = [
@@ -138,7 +138,7 @@ export const privateRoutes = [
     { path: routes.certification, layout: UserDashboardLayout, element: Certification, title: 'Chứng chỉ' },
 
     //Payment
-    { path: routes.payment, layout: UserDashboardLayout, element: Payment, title: 'Thanh toán' },
+    { path: routes.discount, layout: UserDashboardLayout, element: Discount, title: 'Mã giảm giá của bạn' },
 
     // Instructor Dashboard
     {
@@ -198,7 +198,7 @@ export const validRoutesMember = [
     routes.accountNotifications,
     routes.wallet,
     routes.transaction,
-    routes.payment,
+    routes.discount,
     routes.posts,
     routes.postsDetail,
     routes.newPost,

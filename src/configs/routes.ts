@@ -47,7 +47,7 @@ const routes = {
     courseLeaningPath: '/learning-paths/:slug',
 
     //Payment
-    payment: '/payment/course/:slug',
+    discount: '/discount/:slug',
 
     // Certification
     certification: '/certification/:code',

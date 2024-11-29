@@ -292,10 +292,10 @@ const CourseDetail = () => {
                                                 <span
                                                     className={`block h-full ${
                                                         courseDetail?.level === 'Sơ cấp'
-                                                            ? 'bg-[#FFBB54]'
+                                                            ? 'bg-secondaryYellow'
                                                             : courseDetail?.level === 'Trung cấp'
-                                                              ? 'bg-[#25C78B]'
-                                                              : 'bg-red-600'
+                                                              ? 'bg-secondaryGreen'
+                                                              : 'bg-secondaryRed'
                                                     }`}
                                                     style={{ width: `${courseDetail?.progress_percent}%` }}
                                                 ></span>
@@ -569,10 +569,10 @@ const CourseDetail = () => {
                                                 <span
                                                     className={`block h-full ${
                                                         courseDetail?.level === 'Sơ cấp'
-                                                            ? 'bg-[#FFBB54]'
+                                                            ? 'bg-secondaryYellow'
                                                             : courseDetail?.level === 'Trung cấp'
-                                                              ? 'bg-[#25C78B]'
-                                                              : 'bg-red-600'
+                                                              ? 'bg-secondaryYellow'
+                                                              : 'bg-secondaryRed'
                                                     }`}
                                                     style={{ width: `${courseDetail?.progress_percent}%` }}
                                                 ></span>

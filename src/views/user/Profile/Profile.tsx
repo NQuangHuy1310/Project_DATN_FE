@@ -38,7 +38,7 @@ const Profile = () => {
 
     return (
         <div className="flex flex-col gap-7 rounded-xl bg-white">
-            <div className="mx-auto min-h-screen max-w-7xl p-4">
+            <div className="mx-auto min-h-screen max-w-6xl p-4">
                 {/* Header */}
                 <div className="relative flex h-64 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-pink-300 text-white">
                     <p className="font-mono text-2xl md:text-3xl">document.write('Hello, World');</p>
@@ -62,30 +62,30 @@ const Profile = () => {
                     </h1>
                 </div>
 
-                {/* Main Section */}
-                <div className="mx-auto flex max-w-6xl flex-col gap-5 lg:flex-row">
+                {/* profileUser Section */}
+                <div className="mx-auto grid gap-5 md:grid-cols-12">
                     {/* Left Section */}
-                    <div className="flex w-full flex-col gap-5 lg:w-4/12">
+                    <div className="col-span-12 flex flex-col gap-5 md:col-span-4">
                         {/* About Section */}
                         <div className="rounded-xl border bg-white p-4 shadow-lg">
                             <h2 className="text-xl font-semibold">Giới thiệu</h2>
                             <div className="mt-4 flex flex-col gap-3">
                                 {user?.bio && (
                                     <div className="flex w-full justify-center border-b py-2">
-                                        <p className="text-smb text-center">{user.bio}</p>
+                                        <p className="text-smb break-words text-center">{user.bio}</p>
                                     </div>
                                 )}
-                                <p className="flex items-center gap-2 text-sm">
-                                    <IoPeople className="text-lg" /> Thành viên của<b>Coursea</b>từ{' '}
-                                    {formatTime(profileUser?.user.created_at)}
+                                <p className="flex items-center gap-2 break-words text-sm">
+                                    <IoPeople className="text-lg" />
+                                    Thành viên của Coursea từ {formatTime(profileUser?.user.created_at)}
                                 </p>
                                 {profileUser?.user.email && (
-                                    <p className="flex items-center gap-2 text-sm">
+                                    <p className="flex items-center gap-2 break-words text-sm">
                                         <MdEmail className="text-lg" /> {profileUser.user.email}
                                     </p>
                                 )}
                                 {user?.phone && (
-                                    <p className="flex items-center gap-2 text-sm">
+                                    <p className="flex items-center gap-2 break-words text-sm">
                                         <FaPhoneAlt className="text-lg" />
                                         {user.phone}
                                     </p>
@@ -101,7 +101,7 @@ const Profile = () => {
                     </div>
 
                     {/* Right Section */}
-                    <div className="flex w-full flex-col gap-5 lg:w-8/12">
+                    <div className="col-span-12 flex flex-col gap-5 md:col-span-8">
                         {/* Created Courses */}
                         <div className="rounded-xl border bg-white p-4 shadow-lg">
                             <h2 className="text-2xl font-semibold">Các khóa học đã tạo</h2>
@@ -110,16 +110,16 @@ const Profile = () => {
                                     <Link
                                         to={routes.courseDetail.replace(':slug', course.slug)}
                                         key={course.id}
-                                        className="my-2 flex flex-col gap-4 border-b pb-3 sm:flex-row"
+                                        className="my-2 flex flex-col gap-4 border-b pb-3 md:flex-row"
                                     >
-                                        <div className="w-full sm:w-5/12">
+                                        <div className="w-full md:w-5/12">
                                             <img
                                                 src={getImagesUrl(course.thumbnail || '')}
-                                                className="h-36 w-full rounded-xl object-cover"
+                                                className="h-32 w-full rounded-xl object-cover"
                                                 alt={course.name}
                                             />
                                         </div>
-                                        <div className="w-full sm:w-7/12">
+                                        <div className="w-full md:w-7/12">
                                             <h3 className="text-lg font-bold">{course.name}</h3>
                                             <p className="mt-1 line-clamp-3 text-sm text-darkGrey">
                                                 {course.description}
@@ -145,16 +145,16 @@ const Profile = () => {
                                     <Link
                                         to={routes.courseDetail.replace(':slug', course.slug)}
                                         key={course.id}
-                                        className="my-2 flex flex-col gap-4 border-b pb-3 sm:flex-row"
+                                        className="my-2 flex flex-col gap-4 border-b pb-3 md:flex-row"
                                     >
-                                        <div className="w-full sm:w-5/12">
+                                        <div className="w-full md:w-5/12">
                                             <img
                                                 src={getImagesUrl(course.thumbnail || '')}
                                                 className="h-32 w-full rounded-xl object-cover"
                                                 alt={course.name || 'Thumbnail'}
                                             />
                                         </div>
-                                        <div className="w-full sm:w-7/12">
+                                        <div className="w-full md:w-7/12">
                                             <h3 className="text-lg font-bold">{course.name}</h3>
                                             <p className="mt-1 text-sm text-darkGrey">
                                                 {course.description || 'Không có mô tả'}

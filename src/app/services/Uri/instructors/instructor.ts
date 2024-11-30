@@ -45,7 +45,7 @@ export const instructorUri = {
     CREATE_LESSON_CODING: (moduleID: number) => `${INSTRUCTOR_URL}lesson/${moduleID}/add-coding-lesson`,
     UPDATE_LESSON_CODING: (lessonID: number) => `${INSTRUCTOR_URL}lesson/${lessonID}/update-coding-lesson`,
     DELETE_LESSON_CODING: (lessonID: number) => `${INSTRUCTOR_URL}lesson/${lessonID}/delete-coding-lesson`,
-    UPDATE_CODING_CONTENT: (lessonID: number) => `${INSTRUCTOR_URL}lesson/${lessonID}/delete-coding-lesson`,
+    UPDATE_CODING_CONTENT: (lessonID: number) => `${INSTRUCTOR_URL}lesson/${lessonID}/update-coding-content`,
 
     // Question
     CREATE_QUESTION: (quizID: number) => `${INSTRUCTOR_URL}lesson/quiz/${quizID}/add-question-and-option`,

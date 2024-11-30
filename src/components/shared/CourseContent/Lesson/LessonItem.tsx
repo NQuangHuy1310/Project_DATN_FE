@@ -9,11 +9,12 @@ import { FaBars, FaRegCirclePlay, FaFileCircleCheck } from 'react-icons/fa6'
 import { ILesson } from '@/types/instructor'
 import { Button } from '@/components/ui/button'
 import ConfirmDialog from '@/components/shared/ConfirmDialog/ConfirmDialog.tsx'
-import { useDeleteLessonDoc, useDeleteLessonVideo } from '@/app/hooks/instructors'
+import { useDeleteLessonCoding, useDeleteLessonDoc, useDeleteLessonVideo } from '@/app/hooks/instructors'
 import LessonVideo from '@/components/shared/CourseContent/Lesson/LessonVideo'
 import LessonDocument from '@/components/shared/CourseContent/Lesson/LessonDocument'
 import { Select, SelectContent, SelectGroup, SelectTrigger, SelectItem } from '@/components/ui/select'
 import { showMessage } from '@/lib'
+import LessonCoding from '@/components/shared/CourseContent/Lesson/LessonCoding/LessonCoding'
 
 interface LessonItemProps {
     lesson: ILesson
@@ -29,11 +30,13 @@ const LessonItem = ({ lesson, canEdit }: LessonItemProps) => {
     })
     const { mutateAsync: deleteLessonDoc, isPending } = useDeleteLessonDoc()
     const { mutateAsync: deleteLessonVideo } = useDeleteLessonVideo()
+    const { mutateAsync: deleteLessonCoding } = useDeleteLessonCoding()
 
     const [lessonId, setLessonId] = useState<number>(id)
     const [isOpenDialog, setIsOpenDialog] = useState(false)
     const [isEditingDocument, setIsEditingDocument] = useState(false)
     const [isEditingVideo, setIsEditingVideo] = useState(false)
+    const [isEditingCoding, setIsEditingCoding] = useState(false)
     const [isSelectingLessonType, setIsSelectingLessonType] = useState(false)
     const [selectedLessonType, setSelectedLessonType] = useState<'document' | 'quiz' | 'video' | 'coding'>(content_type)
 
@@ -51,6 +54,8 @@ const LessonItem = ({ lesson, canEdit }: LessonItemProps) => {
                 await deleteLessonDoc(id)
             } else if (content_type === 'video') {
                 await deleteLessonVideo(id)
+            } else if (content_type === 'coding') {
+                await deleteLessonCoding(id)
             }
             setIsOpenDialog(false)
         } else showMessage()
@@ -67,6 +72,13 @@ const LessonItem = ({ lesson, canEdit }: LessonItemProps) => {
                 setIsSelectingLessonType(true)
             }
         } else showMessage()
+    }
+
+    const handleEditLesson = (lessonType: 'document' | 'quiz' | 'video' | 'coding', lessonID: number) => {
+        if (lessonType === 'document') setIsEditingDocument(!isEditingDocument)
+        if (lessonType === 'video') setIsEditingVideo(!isEditingVideo)
+        if (lessonType === 'coding') setIsEditingCoding(!isEditingCoding)
+        setLessonId(lessonID)
     }
 
     useEffect(() => {
@@ -120,9 +132,7 @@ const LessonItem = ({ lesson, canEdit }: LessonItemProps) => {
                             size="icon"
                             variant="ghost"
                             onClick={() => {
-                                if (content_type === 'document') setIsEditingDocument(!isEditingDocument)
-                                if (content_type === 'video') setIsEditingVideo(!isEditingVideo)
-                                setLessonId(id)
+                                handleEditLesson(content_type, id)
                             }}
                         >
                             <FaPen className="size-4" />
@@ -157,9 +167,15 @@ const LessonItem = ({ lesson, canEdit }: LessonItemProps) => {
                 <LessonVideo lessonId={lessonId} courseId={id} setIsEditLesson={setIsEditingVideo} canEdit={canEdit} />
             )}
 
+            {/* Handle edit lesson coding */}
+            {isEditingCoding && !isSelectingLessonType && (
+                <LessonCoding open={isEditingCoding} setOpenDialog={setIsEditingCoding} lessonId={lessonId} />
+            )}
+
+            {/* Change lesson type */}
             {selectedLessonType === 'document' && isSelectingLessonType && (
                 <LessonDocument
-                    lessonId={id}
+                    lessonId={lessonId}
                     courseId={id}
                     setIsSelectingLessonType={setIsSelectingLessonType}
                     isSelectingLessonType={isSelectingLessonType}
@@ -167,9 +183,10 @@ const LessonItem = ({ lesson, canEdit }: LessonItemProps) => {
                 />
             )}
 
+            {/* Change lesson type */}
             {selectedLessonType === 'video' && isSelectingLessonType && (
                 <LessonVideo
-                    lessonId={id}
+                    lessonId={lessonId}
                     courseId={id}
                     setIsSelectingLessonType={setIsSelectingLessonType}
                     isSelectingLessonType={isSelectingLessonType}

@@ -9,8 +9,8 @@ import {
     ICourses,
     ICourseStatusData,
     ICreateCourseData,
+    ILesson,
     ILessonCodingData,
-    ILessonDetail,
     ILessonDocData,
     ILessonQuiz,
     ILessonQuizData,
@@ -164,6 +164,7 @@ export const useDeleteModule = () => {
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: ['modules'] })
             await queryClient.invalidateQueries({ queryKey: ['mange-menu'] })
+            toast.success('Xoá chương học thành công!')
         }
     })
 }
@@ -220,6 +221,7 @@ export const useDeleteLessonDoc = () => {
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: ['modules'] })
             await queryClient.invalidateQueries({ queryKey: ['mange-menu'] })
+            toast.success('Xoá bài học thành công!')
         }
     })
 }
@@ -262,6 +264,7 @@ export const useDeleteLessonVideo = () => {
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: ['modules'] })
             await queryClient.invalidateQueries({ queryKey: ['mange-menu'] })
+            toast.success('Xoá bài học thành công!')
         }
     })
 }
@@ -304,6 +307,7 @@ export const useDeleteLessonQuiz = () => {
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: ['modules'] })
             await queryClient.invalidateQueries({ queryKey: ['mange-menu'] })
+            toast.success('Xoá bài tập thành công!')
         }
     })
 }
@@ -385,6 +389,7 @@ export const useDeleteLessonCoding = () => {
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: ['modules'] })
             await queryClient.invalidateQueries({ queryKey: ['mange-menu'] })
+            toast.success('Xoá bài học thành công!')
         }
     })
 }
@@ -499,10 +504,7 @@ export const useGetModule = (id: string, options?: Omit<UseQueryOptions<IModules
     })
 }
 
-export const useGetLessonDetail = (
-    id: number,
-    options?: Omit<UseQueryOptions<ILessonDetail>, 'queryKey' | 'queryFn'>
-) => {
+export const useGetLessonDetail = (id: number, options?: Omit<UseQueryOptions<ILesson>, 'queryKey' | 'queryFn'>) => {
     return useQuery({
         ...options,
         enabled: !!id,

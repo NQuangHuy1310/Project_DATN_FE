@@ -3,6 +3,10 @@ import { formats, modules } from '@/constants/quillConstants'
 import ReactQuill from 'react-quill'
 
 const LessonCodingContent = () => {
+    const handleEditorChange = (value: string) => {
+        console.log(value) // Xử lý giá trị ở đây
+    }
+
     return (
         <div className="flex w-full flex-col items-start justify-start gap-4">
             <div className="w-full space-y-1">
@@ -13,7 +17,7 @@ const LessonCodingContent = () => {
             <div className="flex w-full items-center gap-2 md:flex-wrap">
                 <div className="flex-1 space-y-1">
                     <label className="text-sm text-muted-foreground">Nhập mã nguồn mẫu</label>
-                    <CodeEditor height="300px" />
+                    <CodeEditor height="300px" onChange={handleEditorChange} />
                 </div>
                 <div className="flex-1 space-y-1">
                     <label className="text-sm text-muted-foreground">Nhập giải pháp của bạn</label>

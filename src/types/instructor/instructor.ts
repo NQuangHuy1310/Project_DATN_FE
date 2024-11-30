@@ -84,7 +84,7 @@ export interface ILesson {
     id_module: number
     title: string
     description: string
-    content_type: 'document' | 'video' | 'quiz'
+    content_type: 'document' | 'video' | 'quiz' | 'coding'
     position: number
     is_active: number
     lessonable: {
@@ -97,6 +97,11 @@ export interface ILesson {
         content?: string
         description?: string | null
         resourse_path?: string | null
+        hints?: string
+        language?: string
+        output?: string
+        sample_code?: string
+        statement: string
     }
 }
 
@@ -356,4 +361,18 @@ export interface ratingCourse {
         name: string
         avatar: string | null
     }
+}
+
+export interface ILessonCodingData {
+    title: string
+    description: string
+    language: string
+    _method?: string
+}
+
+export interface ICodingContentData {
+    statement: string
+    hints: string
+    sample_code: string
+    output: string
 }

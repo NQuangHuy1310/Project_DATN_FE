@@ -1,23 +1,31 @@
+/* eslint-disable no-unused-vars */
 import { useEffect, useRef } from 'react'
 import * as monaco from 'monaco-editor'
 
-import OneDarkPro from '@/assets/theme/OneDark-Pro.json'
 import { CODE_SNIPPETS } from '@/constants/language'
-import { Editor, Monaco } from '@monaco-editor/react'
+import { Editor } from '@monaco-editor/react'
 
 type EditorType = monaco.editor.IStandaloneCodeEditor | null
 
 interface CodeEditorProps {
-    language?: 'javascript' | 'php'
+    language?: 'javascript' | 'php' | 'typescript' | 'java' | 'python'
     height?: string
+    onChange?: (value: string) => void
 }
 
-const CodeEditor = ({ language = 'javascript', height = '200px' }: CodeEditorProps) => {
+const CodeEditor = ({ language = 'javascript', height = '200px', onChange }: CodeEditorProps) => {
     const editorRef = useRef<EditorType>(null)
 
     const onMount = (editor: monaco.editor.IStandaloneCodeEditor) => {
         editorRef.current = editor
         editor.focus()
+
+        editor.onDidChangeModelContent(() => {
+            const value = editor.getValue()
+            if (onChange) {
+                onChange(value) // Gửi giá trị lên component cha
+            }
+        })
     }
 
     monaco.languages.registerCompletionItemProvider(language, {
@@ -47,15 +55,6 @@ const CodeEditor = ({ language = 'javascript', height = '200px' }: CodeEditorPro
         }
     })
 
-    const handleEditorDidMount = (monaco: Monaco) => {
-        monaco.editor.defineTheme('OneDarkPro', {
-            base: 'vs-dark',
-            inherit: true,
-            rules: [],
-            ...OneDarkPro
-        })
-    }
-
     useEffect(() => {
         if (editorRef.current) {
             editorRef.current.setValue(CODE_SNIPPETS[language] || '')
@@ -69,8 +68,7 @@ const CodeEditor = ({ language = 'javascript', height = '200px' }: CodeEditorPro
             className="overflow-hidden rounded-md"
             language={language}
             onMount={onMount}
-            theme="OneDarkPro"
-            beforeMount={handleEditorDidMount}
+            theme="vs-dark"
             defaultValue={CODE_SNIPPETS[language]}
             options={{
                 fontFamily: 'Jetbrains-Mono',

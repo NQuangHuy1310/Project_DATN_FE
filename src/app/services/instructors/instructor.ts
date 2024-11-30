@@ -3,10 +3,12 @@ import axiosClient from '@/configs/axiosClient'
 import { instructorUri } from '@/app/services/Uri/instructors'
 import {
     IChangeLessonTypeData,
+    ICodingContentData,
     ICourses,
     ICourseStatusData,
     ICreateCourse,
     ICreateCourseData,
+    ILessonCodingData,
     ILessonDetail,
     ILessonDocData,
     ILessonQuiz,
@@ -147,6 +149,20 @@ export const instructorApi = {
     },
     deleteQuestion: async (questionId: number): Promise<any> => {
         return axiosClient.delete(instructorUri.DELETE_QUESTION(questionId))
+    },
+
+    // Api create lesson type coding
+    createLessonCoding: async (moduleID: number, lessonData: ILessonCodingData): Promise<any> => {
+        return axiosClient.post(instructorUri.CREATE_LESSON_CODING(moduleID), lessonData)
+    },
+    updateLessonCoding: async (lessonID: number, lessonData: ILessonCodingData): Promise<any> => {
+        return axiosClient.post(instructorUri.UPDATE_LESSON_CODING(lessonID), lessonData)
+    },
+    deleteLessonCoding: async (lessonID: number): Promise<any> => {
+        return axiosClient.delete(instructorUri.DELETE_LESSON_CODING(lessonID))
+    },
+    updateCodingContent: async (lessonID: number, lessonContent: ICodingContentData): Promise<any> => {
+        return axiosClient.post(instructorUri.UPDATE_CODING_CONTENT(lessonID), lessonContent)
     },
 
     // Statistic

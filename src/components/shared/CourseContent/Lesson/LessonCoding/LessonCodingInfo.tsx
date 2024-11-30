@@ -1,5 +1,8 @@
-import { SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+
+import { useCreateLessonCoding, useUpdateLessonCoding } from '@/app/hooks/instructors'
 
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -7,15 +10,29 @@ import { Textarea } from '@/components/ui/textarea'
 import { SUPPORTED_LANGUAGES } from '@/constants/language'
 import { lessonCoding, lessonCodingSchema } from '@/validations'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Dispatch, SetStateAction, useState } from 'react'
-import { useCreateLessonCoding } from '@/app/hooks/instructors'
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle
+} from '@/components/ui/alert-dialog'
 
 interface LessonCodingProps {
     moduleId: number
     setVisible: Dispatch<SetStateAction<boolean>>
+    lessonData?: {
+        title: string
+        language: string
+        description: string
+    }
+    lessonId?: number
 }
 
-const LessonCodingInfo = ({ moduleId, setVisible }: LessonCodingProps) => {
+const LessonCodingInfo = ({ moduleId, setVisible, lessonData, lessonId }: LessonCodingProps) => {
     const {
         register,
         handleSubmit,
@@ -25,83 +42,128 @@ const LessonCodingInfo = ({ moduleId, setVisible }: LessonCodingProps) => {
         resolver: zodResolver(lessonCodingSchema)
     })
 
-    const { mutateAsync } = useCreateLessonCoding()
+    const { mutateAsync: createLessonCoding } = useCreateLessonCoding()
+    const { mutateAsync: updateLessonCoding } = useUpdateLessonCoding()
     const [selectedLanguage, setSelectedLanguage] = useState<string>('')
+    const [openDialogConfirm, setOpenDialogConfirm] = useState<boolean>(false)
+    const [isUpdate, setIsUpdate] = useState<boolean>(false)
 
     const handleLanguageChange = (value: string) => {
-        setSelectedLanguage(value)
-        setValue('language', value)
+        if (lessonId && value !== lessonData?.language && lessonData) {
+            setOpenDialogConfirm(true)
+            if (isUpdate) setSelectedLanguage(value)
+            else setSelectedLanguage(lessonData.language)
+        } else {
+            setSelectedLanguage(value)
+            setValue('language', value)
+        }
     }
 
     const handleSubmitForm: SubmitHandler<lessonCoding> = async (formData) => {
-        await mutateAsync([moduleId, formData])
+        const mutate = lessonId ? updateLessonCoding : createLessonCoding
+        if (lessonId && isUpdate) {
+            const payload = {
+                ...formData,
+                _method: 'PUT'
+            }
+            await mutate([lessonId, payload])
+        } else await mutate([moduleId, formData])
     }
 
+    useEffect(() => {
+        if (lessonData) {
+            setValue('title', lessonData.title!)
+            setSelectedLanguage(lessonData.language!)
+            setValue('description', lessonData.description!)
+        }
+    }, [lessonData, setValue])
+
     return (
-        <form onSubmit={handleSubmit(handleSubmitForm)} className="mx-auto flex max-w-[767px] flex-col gap-5">
-            <div className="flex flex-col gap-2">
-                <h3 className="text-base font-semibold">Lập kế hoạch cho bài tập</h3>
-                <p>
-                    <strong>Bài tập Coding </strong> cho phép học viên của bạn thực hành một phần công việc thực tế được
-                    nhắm vào mục tiêu và nhận phản hồi ngay lập tức. Bạn nên làm theo các bước sau đây: Lập kế hoạch cho
-                    bài tập, xác định giải pháp và chỉ dẫn học viên. Điều này sẽ đảm bảo bạn định hình được vấn đề và
-                    cung cấp hướng dẫn cần thiết có lưu ý đến giải pháp.
-                </p>
-            </div>
-
-            <div className="flex flex-col gap-3">
-                <div className="flex flex-col gap-0.5">
-                    <label className="text-sm text-muted-foreground">Tên bài tập</label>
-                    <Input
-                        autoFocus
-                        type="text"
-                        {...register('title')}
-                        placeholder="Đặt tên cho bài tập này dành cho học viên."
-                        disabled={isSubmitting}
-                    />
-                    {errors.title && <div className="text-sm text-secondaryRed">{errors.title.message}</div>}
+        <>
+            <form onSubmit={handleSubmit(handleSubmitForm)} className="mx-auto flex max-w-[767px] flex-col gap-5">
+                <div className="flex flex-col gap-2">
+                    <h3 className="text-base font-semibold">Lập kế hoạch cho bài tập</h3>
+                    <p>
+                        <strong>Bài tập Coding </strong> cho phép học viên của bạn thực hành một phần công việc thực tế
+                        được nhắm vào mục tiêu và nhận phản hồi ngay lập tức. Bạn nên làm theo các bước sau đây: Lập kế
+                        hoạch cho bài tập, xác định giải pháp và chỉ dẫn học viên. Điều này sẽ đảm bảo bạn định hình
+                        được vấn đề và cung cấp hướng dẫn cần thiết có lưu ý đến giải pháp.
+                    </p>
                 </div>
 
-                <Select value={selectedLanguage} onValueChange={handleLanguageChange} disabled={isSubmitting}>
+                <div className="flex flex-col gap-3">
                     <div className="flex flex-col gap-0.5">
-                        <label className="text-sm text-muted-foreground">Chọn ngôn ngữ cho bài tập</label>
-                        <SelectTrigger className="flex h-10 w-full items-center justify-between">
-                            <SelectValue placeholder="Chọn ngôn ngữ" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectGroup>
-                                {SUPPORTED_LANGUAGES.map((language) => (
-                                    <SelectItem value={language.value} key={language.value}>
-                                        {language.label}
-                                    </SelectItem>
-                                ))}
-                            </SelectGroup>
-                        </SelectContent>
-                        {errors.language && <div className="text-sm text-secondaryRed">{errors.language.message}</div>}
+                        <label className="text-sm text-muted-foreground">Tên bài tập</label>
+                        <Input
+                            autoFocus
+                            type="text"
+                            {...register('title')}
+                            placeholder="Đặt tên cho bài tập này dành cho học viên."
+                            disabled={isSubmitting}
+                        />
+                        {errors.title && <div className="text-sm text-secondaryRed">{errors.title.message}</div>}
                     </div>
-                </Select>
 
-                <div className="flex flex-col gap-0.5">
-                    <label className="text-sm text-muted-foreground">Mục tiêu học tập</label>
-                    <Textarea
-                        {...register('description')}
-                        placeholder="Cung cấp một mục tiêu cho bài  tập coding này."
-                        rows={3}
-                        disabled={isSubmitting}
-                    />
-                    {errors.description && (
-                        <div className="text-sm text-secondaryRed">{errors.description.message}</div>
-                    )}
+                    <Select value={selectedLanguage} onValueChange={handleLanguageChange} disabled={isSubmitting}>
+                        <div className="flex flex-col gap-0.5">
+                            <label className="text-sm text-muted-foreground">Chọn ngôn ngữ cho bài tập</label>
+                            <SelectTrigger className="flex h-10 w-full items-center justify-between">
+                                <SelectValue placeholder="Chọn ngôn ngữ" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectGroup>
+                                    {SUPPORTED_LANGUAGES.map((language) => (
+                                        <SelectItem value={language.value} key={language.value}>
+                                            {language.label}
+                                        </SelectItem>
+                                    ))}
+                                </SelectGroup>
+                            </SelectContent>
+                            {errors.language && (
+                                <div className="text-sm text-secondaryRed">{errors.language.message}</div>
+                            )}
+                        </div>
+                    </Select>
+
+                    <div className="flex flex-col gap-0.5">
+                        <label className="text-sm text-muted-foreground">Mục tiêu học tập</label>
+                        <Textarea
+                            {...register('description')}
+                            placeholder="Cung cấp một mục tiêu cho bài  tập coding này."
+                            rows={3}
+                            disabled={isSubmitting}
+                        />
+                        {errors.description && (
+                            <div className="text-sm text-secondaryRed">{errors.description.message}</div>
+                        )}
+                    </div>
                 </div>
-            </div>
 
-            <div className="mt-auto flex items-center justify-end gap-2">
-                <Button variant="destructive" onClick={() => setVisible(false)}>
-                    Huỷ
-                </Button>
-                <Button type="submit">Thêm mới bài tập</Button>
-            </div>
-        </form>
+                <div className="mt-auto flex items-center justify-end gap-2">
+                    <Button variant="destructive" onClick={() => setVisible(false)}>
+                        Huỷ
+                    </Button>
+                    <Button type="submit">{lessonData ? 'Lưu bài tập' : 'Thêm mới bài tập'}</Button>
+                </div>
+            </form>
+
+            <AlertDialog open={openDialogConfirm} onOpenChange={setOpenDialogConfirm}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Xác nhận thay đổi ngôn ngữ</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            Bạn có chắc chắn muốn thay đổi ngôn ngữ không? Lưu ý rằng việc thay đổi ngôn ngữ sẽ khiến
+                            nội dung mã của bạn bị mất. Hãy chắc chắn rằng bạn đã lưu lại mọi thay đổi trước khi tiếp
+                            tục.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel onClick={() => setIsUpdate(false)}>Huỷ</AlertDialogCancel>
+                        <AlertDialogAction onClick={() => setIsUpdate(true)}>Tiếp tục</AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+        </>
     )
 }
 

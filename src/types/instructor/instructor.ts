@@ -130,8 +130,9 @@ export interface ILessonDetail {
         video_youtube_id?: string
         duration?: number | null
         content?: string
-        description?: string | null
+        description?: string
         resourse_path?: string | null
+        language?: string
     }
 }
 
@@ -372,7 +373,8 @@ export interface ILessonCodingData {
 
 export interface ICodingContentData {
     statement: string
-    hints: string
+    hints?: string
     sample_code: string
     output: string
+    _method?: string
 }

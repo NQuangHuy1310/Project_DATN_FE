@@ -8,8 +8,8 @@ import {
     ICourseStatusData,
     ICreateCourse,
     ICreateCourseData,
+    ILesson,
     ILessonCodingData,
-    ILessonDetail,
     ILessonDocData,
     ILessonQuiz,
     ILessonQuizData,
@@ -92,7 +92,7 @@ export const instructorApi = {
         return axiosClient.post(instructorUri.UPDATE_POSITION_MODULE(courseId), moduleData)
     },
 
-    getLessonDetail: async (lessonId: number): Promise<ILessonDetail> => {
+    getLessonDetail: async (lessonId: number): Promise<ILesson> => {
         return axiosClient.get(instructorUri.GET_LESSON_DETAIL(lessonId))
     },
 

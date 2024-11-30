@@ -24,6 +24,15 @@ export interface IUserProfile {
     profile: IProfile
 }
 
+export interface IUserData {
+    avatar: string
+    created_at: string
+    email: string
+    id: number
+    name: string
+    profile: IProfile
+}
+
 export interface IRefreshToken {
     access_token: string
 }

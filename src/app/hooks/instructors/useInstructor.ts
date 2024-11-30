@@ -4,6 +4,7 @@ import { toast } from 'sonner'
 import { instructorApi } from '@/app/services/instructors'
 import {
     IChangeLessonTypeData,
+    ICourseApproved,
     ICourses,
     ICourseStatusData,
     ICreateCourseData,
@@ -402,6 +403,14 @@ export const useGetCourses = (
         ...options,
         queryKey: ['instructorCourse', page, search, sort],
         queryFn: () => instructorApi.getCourses(limit, search, sort, page, perPage)
+    })
+}
+
+export const useGetCoursesApproved = (options?: Omit<UseQueryOptions<ICourseApproved[]>, 'queryKey' | 'queryFn'>) => {
+    return useQuery({
+        ...options,
+        queryKey: ['instructorCourseApproved'],
+        queryFn: instructorApi.getCoursesApproved
     })
 }
 

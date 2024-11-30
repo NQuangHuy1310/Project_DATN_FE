@@ -21,6 +21,9 @@ export const userApis = {
     changePassword: async (data: IChangePassword): Promise<IResponse> => {
         return axiosClient.post(userUri.CHANGE_PASSWORD, data)
     },
+    getUserById: async (userId: number): Promise<any> => {
+        return axiosClient.get(userUri.GET_USER_BY_ID(userId))
+    },
     getMyCourseBought: async (
         search?: string,
         category?: string,

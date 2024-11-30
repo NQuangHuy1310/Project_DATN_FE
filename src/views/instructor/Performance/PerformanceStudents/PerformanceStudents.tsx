@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { useGetCourses, useGetStudentsCourse } from '@/app/hooks/instructors'
+import { useGetCoursesApproved, useGetStudentsCourse } from '@/app/hooks/instructors'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import {
@@ -17,33 +17,36 @@ import routes from '@/configs/routes'
 import { formatDate, getImagesUrl } from '@/lib'
 import noContent from '@/assets/no-content.jpg'
 import DialogProfile from '@/components/shared/DialogProfile'
+import { ICourseApproved } from '@/types/instructor'
+import { useGetUserById } from '@/app/hooks/accounts'
+import Loading from '@/components/Common/Loading/Loading'
 
 const PerformanceStudents = () => {
     const navigate = useNavigate()
     const [courseId, setCourseId] = useState<number>()
+    const [studentId, setStudentId] = useState<number>()
     const [openDialog, setOpenDialog] = useState<boolean>(false)
 
-    const { data: courseData } = useGetCourses(100)
-    const { data: studentsCourse } = useGetStudentsCourse(courseId!)
+    const { data: courseData } = useGetCoursesApproved()
+    const { data: studentsCourse, isLoading } = useGetStudentsCourse(courseId!)
+    const { data: studentData } = useGetUserById(studentId!)
 
     const handleSelectCourse = (value: string) => {
         setCourseId(+value)
     }
 
     useEffect(() => {
-        if (courseData && courseData.data.length > 0) {
-            const confirmedCourses = courseData.data.filter((course) => course.status === 'approved')
-
-            if (confirmedCourses.length > 0) {
-                setCourseId(confirmedCourses[0].id)
-            }
+        if (courseData && courseData.length > 0) {
+            setCourseId(courseData[0].id)
         }
     }, [courseData])
+
+    if (isLoading) return <Loading />
 
     return (
         <>
             <div>
-                {courseData && courseData.data.length > 0 ? (
+                {courseData && courseData.length > 0 ? (
                     <div className="flex flex-col gap-5">
                         <Select onValueChange={handleSelectCourse} value={courseId?.toString()}>
                             <SelectTrigger className="flex w-[300px] items-center justify-between">
@@ -52,13 +55,11 @@ const PerformanceStudents = () => {
                             <SelectContent>
                                 <SelectGroup>
                                     <SelectLabel>Chọn khoá học</SelectLabel>
-                                    {courseData.data
-                                        .filter((course) => course.status === 'approved')
-                                        .map((course) => (
-                                            <SelectItem key={course.id} value={course.id.toString()}>
-                                                {course.name}
-                                            </SelectItem>
-                                        ))}
+                                    {courseData.map((course: ICourseApproved) => (
+                                        <SelectItem key={course.id} value={course.id.toString()}>
+                                            {course.name}
+                                        </SelectItem>
+                                    ))}
                                 </SelectGroup>
                             </SelectContent>
                         </Select>
@@ -107,9 +108,12 @@ const PerformanceStudents = () => {
                                             <Button
                                                 variant="outline"
                                                 size="sm"
-                                                onClick={() => setOpenDialog(!openDialog)}
+                                                onClick={() => {
+                                                    setStudentId(student.id_user)
+                                                    setOpenDialog(!openDialog)
+                                                }}
                                             >
-                                                Xem trang cá nhân
+                                                Xem thông tin
                                             </Button>
                                             <Button variant="outline" size="sm">
                                                 Nhắn tin
@@ -141,7 +145,7 @@ const PerformanceStudents = () => {
                 )}
             </div>
 
-            <DialogProfile openDialog={openDialog} setOpenDialog={setOpenDialog} />
+            <DialogProfile openDialog={openDialog} setOpenDialog={setOpenDialog} userData={studentData!} />
         </>
     )
 }

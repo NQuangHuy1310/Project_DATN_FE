@@ -3,6 +3,7 @@ const INSTRUCTOR_URL = 'teacher/manage/'
 export const instructorUri = {
     // Course
     CREATE_COURSE: 'teacher/course',
+    GET_COURSES_APPROVED: 'teacher/course/approved',
     GET_COURSES: (limit: number, search: string, sort: string, page: number, perPage: number) =>
         `teacher/course?page=${page}${perPage ? `&perPage=${perPage}` : ''}&limit=${limit}&search=${search}&sort=${sort}`,
     SUBMIT_COURSE: (courseID: string) => `${INSTRUCTOR_URL}${courseID}/submit`,

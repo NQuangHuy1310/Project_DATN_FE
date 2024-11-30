@@ -19,7 +19,7 @@ import { TbCoinFilled } from 'react-icons/tb'
 
 const CourseWishListButton = () => {
     const navigate = useNavigate()
-    const { data: wishList } = useGetWishList(1, 5)
+    const { data: wishList } = useGetWishList('', '', '', '', 1, 5)
     const { mutateAsync: unWishList } = useUnWishList()
     const handleUnWishList = async (id: number) => {
         await unWishList(id)
@@ -60,10 +60,10 @@ const CourseWishListButton = () => {
                                                     <span
                                                         className={`block h-full ${
                                                             item.level === 'Sơ cấp'
-                                                                ? 'bg-[#FFBB54]'
+                                                                ? 'bg-secondaryYellow'
                                                                 : item.level === 'Trung cấp'
-                                                                  ? 'bg-[#25C78B]'
-                                                                  : 'bg-red-600'
+                                                                  ? 'bg-secondaryGreen'
+                                                                  : 'bg-secondaryRed'
                                                         }`}
                                                         style={{ width: `${item.progress_percent}%` }}
                                                     ></span>

@@ -27,9 +27,12 @@ const Profile = () => {
         return formatDistanceToNow(new Date(date), { addSuffix: true, locale: vi })
     }
     const createdCourses = showAllCreated
-        ? profileUser?.courses_user_bought
-        : profileUser?.courses_user_bought?.slice(0, 5)
-    const joinedCourses = showAllJoined ? profileUser?.course_by_user : profileUser?.course_by_user?.slice(0, 5)
+        ? profileUser?.course_by_user || []
+        : (profileUser?.course_by_user || []).slice(0, 5)
+
+    const joinedCourses = showAllJoined
+        ? profileUser?.courses_user_bought || []
+        : (profileUser?.courses_user_bought || []).slice(0, 5)
 
     if (isLoading) return <Loading />
 
@@ -59,17 +62,17 @@ const Profile = () => {
                     </h1>
                 </div>
 
-                {/* profileUser Section */}
-                <div className="mx-auto grid gap-5 md:grid-cols-12">
+                {/* Main Section */}
+                <div className="mx-auto flex max-w-6xl flex-col gap-5 lg:flex-row">
                     {/* Left Section */}
-                    <div className="col-span-12 flex flex-col gap-5 md:col-span-4">
+                    <div className="flex w-full flex-col gap-5 lg:w-4/12">
                         {/* About Section */}
                         <div className="rounded-xl border bg-white p-4 shadow-lg">
                             <h2 className="text-xl font-semibold">Giới thiệu</h2>
                             <div className="mt-4 flex flex-col gap-3">
                                 {user?.bio && (
                                     <div className="flex w-full justify-center border-b py-2">
-                                        <p className="text-sm">{user.bio}</p>
+                                        <p className="text-smb text-center">{user.bio}</p>
                                     </div>
                                 )}
                                 <p className="flex items-center gap-2 text-sm">
@@ -98,7 +101,7 @@ const Profile = () => {
                     </div>
 
                     {/* Right Section */}
-                    <div className="col-span-12 flex flex-col gap-5 md:col-span-7">
+                    <div className="flex w-full flex-col gap-5 lg:w-8/12">
                         {/* Created Courses */}
                         <div className="rounded-xl border bg-white p-4 shadow-lg">
                             <h2 className="text-2xl font-semibold">Các khóa học đã tạo</h2>
@@ -107,16 +110,16 @@ const Profile = () => {
                                     <Link
                                         to={routes.courseDetail.replace(':slug', course.slug)}
                                         key={course.id}
-                                        className="my-2 flex flex-col gap-4 border-b pb-3 md:flex-row"
+                                        className="my-2 flex flex-col gap-4 border-b pb-3 sm:flex-row"
                                     >
-                                        <div className="w-full md:w-5/12">
+                                        <div className="w-full sm:w-5/12">
                                             <img
                                                 src={getImagesUrl(course.thumbnail || '')}
-                                                className="h-32 w-full rounded-xl object-cover"
+                                                className="h-36 w-full rounded-xl object-cover"
                                                 alt={course.name}
                                             />
                                         </div>
-                                        <div className="w-full md:w-7/12">
+                                        <div className="w-full sm:w-7/12">
                                             <h3 className="text-lg font-bold">{course.name}</h3>
                                             <p className="mt-1 line-clamp-3 text-sm text-darkGrey">
                                                 {course.description}
@@ -127,7 +130,7 @@ const Profile = () => {
                             ) : (
                                 <p className="mt-2 text-darkGrey">Chưa có khóa học nào</p>
                             )}
-                            {profileUser?.courses_user_bought && profileUser?.courses_user_bought?.length > 5 && (
+                            {profileUser?.course_by_user && profileUser?.course_by_user.length > 5 && (
                                 <Button onClick={() => setShowAllCreated(!showAllCreated)} className="mt-3">
                                     {showAllCreated ? 'Ẩn bớt' : 'Xem tất cả'}
                                 </Button>
@@ -142,16 +145,16 @@ const Profile = () => {
                                     <Link
                                         to={routes.courseDetail.replace(':slug', course.slug)}
                                         key={course.id}
-                                        className="my-2 flex flex-col gap-4 border-b pb-3 md:flex-row"
+                                        className="my-2 flex flex-col gap-4 border-b pb-3 sm:flex-row"
                                     >
-                                        <div className="w-full md:w-5/12">
+                                        <div className="w-full sm:w-5/12">
                                             <img
                                                 src={getImagesUrl(course.thumbnail || '')}
                                                 className="h-32 w-full rounded-xl object-cover"
                                                 alt={course.name || 'Thumbnail'}
                                             />
                                         </div>
-                                        <div className="w-full md:w-7/12">
+                                        <div className="w-full sm:w-7/12">
                                             <h3 className="text-lg font-bold">{course.name}</h3>
                                             <p className="mt-1 text-sm text-darkGrey">
                                                 {course.description || 'Không có mô tả'}
@@ -162,7 +165,7 @@ const Profile = () => {
                             ) : (
                                 <p className="mt-2 text-darkGrey">Chưa có khóa học nào</p>
                             )}
-                            {profileUser?.course_by_user && profileUser?.course_by_user?.length > 5 && (
+                            {profileUser?.courses_user_bought && profileUser?.courses_user_bought.length > 5 && (
                                 <Button onClick={() => setShowAllJoined(!showAllJoined)} className="mt-3">
                                     {showAllJoined ? 'Ẩn bớt' : 'Xem tất cả'}
                                 </Button>

@@ -10,7 +10,10 @@ export const useGetRatingHome = (options?: Omit<UseQueryOptions<IRating[]>, 'que
     })
 }
 
-export const useGetRatingForCourse = (id: number, options?: Omit<UseQueryOptions<IRating[]>, 'queryKey' | 'queryFn'>) => {
+export const useGetRatingForCourse = (
+    id: number,
+    options?: Omit<UseQueryOptions<IRating[]>, 'queryKey' | 'queryFn'>
+) => {
     return useQuery<IRating[]>({
         ...options,
         enabled: !!id,
@@ -27,9 +30,8 @@ export const useCreateRating = () => {
             return ratingsApi.addRatingCourse(data)
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['course-detail-no-login'] })
+            queryClient.invalidateQueries({ queryKey: ['course-detail'] })
             queryClient.invalidateQueries({ queryKey: ['rating-check'] })
         }
     })
 }
-

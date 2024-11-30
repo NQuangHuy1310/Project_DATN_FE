@@ -3,7 +3,7 @@ import { CSS } from '@dnd-kit/utilities'
 import { IoIosDocument } from 'react-icons/io'
 import { useSortable } from '@dnd-kit/sortable'
 import { FaExchangeAlt } from 'react-icons/fa'
-import { FaPen, FaRegTrashAlt } from 'react-icons/fa'
+import { FaPen, FaRegTrashAlt, FaCode } from 'react-icons/fa'
 import { FaBars, FaRegCirclePlay, FaFileCircleCheck } from 'react-icons/fa6'
 
 import { ILesson } from '@/types/instructor'
@@ -35,7 +35,7 @@ const LessonItem = ({ lesson, canEdit }: LessonItemProps) => {
     const [isEditingDocument, setIsEditingDocument] = useState(false)
     const [isEditingVideo, setIsEditingVideo] = useState(false)
     const [isSelectingLessonType, setIsSelectingLessonType] = useState(false)
-    const [selectedLessonType, setSelectedLessonType] = useState<'document' | 'quiz' | 'video'>(content_type)
+    const [selectedLessonType, setSelectedLessonType] = useState<'document' | 'quiz' | 'video' | 'coding'>(content_type)
 
     const dndKitColumnStyles = {
         transform: CSS.Translate.toString(transform),
@@ -87,8 +87,11 @@ const LessonItem = ({ lesson, canEdit }: LessonItemProps) => {
                     <div className="flex h-[36px] items-center justify-start gap-2">
                         {content_type === 'document' && <IoIosDocument className="size-5 text-primary" />}
                         {content_type === 'video' && <FaRegCirclePlay className="size-5 text-primary" />}
+                        {content_type === 'coding' && <FaCode className="size-5 text-primary" />}
                         <h4 className="text-base font-medium">
-                            Bài giảng: <strong>{title}</strong>
+                            {content_type === 'coding' ? 'Bài tập' : 'Bài giảng'}
+                            {': '}
+                            <strong>{title}</strong>
                         </h4>
                         {lessonable.resourse_path && (
                             <div className="flex items-center gap-2">

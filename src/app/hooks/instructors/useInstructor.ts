@@ -4,10 +4,12 @@ import { toast } from 'sonner'
 import { instructorApi } from '@/app/services/instructors'
 import {
     IChangeLessonTypeData,
+    ICodingContentData,
     ICourseApproved,
     ICourses,
     ICourseStatusData,
     ICreateCourseData,
+    ILessonCodingData,
     ILessonDetail,
     ILessonDocData,
     ILessonQuiz,
@@ -343,6 +345,59 @@ export const useDeleteQuestion = () => {
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: ['quiz'] })
             toast.success('Xoá câu hỏi thành công!')
+        }
+    })
+}
+
+export const useCreateLessonCoding = () => {
+    const queryClient = useQueryClient()
+
+    return useMutation<any, Error, [number, ILessonCodingData]>({
+        mutationFn: async ([moduleId, lessonData]) => {
+            return instructorApi.createLessonCoding(moduleId, lessonData)
+        },
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['modules'] })
+        }
+    })
+}
+
+export const useUpdateLessonCoding = () => {
+    const queryClient = useQueryClient()
+
+    return useMutation<any, Error, [number, ILessonCodingData]>({
+        mutationFn: async ([moduleId, lessonData]) => {
+            return instructorApi.updateLessonCoding(moduleId, lessonData)
+        },
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['modules'] })
+        }
+    })
+}
+
+export const useDeleteLessonCoding = () => {
+    const queryClient = useQueryClient()
+
+    return useMutation({
+        mutationFn: async (lessonId: number) => {
+            return instructorApi.deleteLessonCoding(lessonId)
+        },
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['modules'] })
+            await queryClient.invalidateQueries({ queryKey: ['mange-menu'] })
+        }
+    })
+}
+
+export const useUpdateCodingContent = () => {
+    const queryClient = useQueryClient()
+
+    return useMutation<any, Error, [number, ICodingContentData]>({
+        mutationFn: async ([lessonId, lessonData]) => {
+            return instructorApi.updateCodingContent(lessonId, lessonData)
+        },
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['modules'] })
         }
     })
 }

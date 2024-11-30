@@ -69,7 +69,9 @@ const LessonOptions = ({ handleClose, moduleId, isHasQuiz }: LessonOptionsProps)
                     {lessonType === 'quizzes' && !isHasQuiz && (
                         <LessonQuizzes moduleId={moduleId} handleHiddenLesson={setIsShowLesson} canEdit={true} />
                     )}
-                    {lessonType === 'coding' && <LessonCoding open={openDialog} setOpenDialog={setOpenDialog} />}
+                    {lessonType === 'coding' && (
+                        <LessonCoding moduleId={moduleId} open={openDialog} setOpenDialog={setOpenDialog} />
+                    )}
                 </>
             )}
         </div>

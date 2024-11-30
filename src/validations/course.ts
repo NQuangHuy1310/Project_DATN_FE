@@ -73,6 +73,12 @@ export const lessonQuizSchema = z.object({
     description: z.string({ required_error: MessageErrors.requiredField })
 })
 
+export const lessonCodingSchema = z.object({
+    title: z.string().min(1, MessageErrors.requiredField),
+    description: z.string().min(1, MessageErrors.requiredField),
+    language: z.string({ message: MessageErrors.requiredField })
+})
+
 export type createNewCourse = z.infer<typeof createNewCourseSchema>
 
 export type courseOverview = z.infer<typeof courseOverviewSchema>
@@ -84,3 +90,5 @@ export type lessonDoc = z.infer<typeof lessonDocSchema>
 export type lessonVideo = z.infer<typeof lessonVideoSchema>
 
 export type lessonQuiz = z.infer<typeof lessonQuizSchema>
+
+export type lessonCoding = z.infer<typeof lessonCodingSchema>

@@ -1,6 +1,5 @@
-import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 
 import LessonCodingInfo from '@/components/shared/CourseContent/Lesson/LessonCoding/LessonCodingInfo'
 import LessonCodingContent from '@/components/shared/CourseContent/Lesson/LessonCoding/LessonCodingContent'
@@ -8,10 +7,11 @@ import { Dispatch, SetStateAction } from 'react'
 
 interface LessonCodingProps {
     open: boolean
+    moduleId: number
     setOpenDialog: Dispatch<SetStateAction<boolean>>
 }
 
-const LessonCoding = ({ open, setOpenDialog }: LessonCodingProps) => {
+const LessonCoding = ({ open, setOpenDialog, moduleId }: LessonCodingProps) => {
     return (
         <Dialog open={open} onOpenChange={setOpenDialog}>
             <DialogContent
@@ -29,20 +29,13 @@ const LessonCoding = ({ open, setOpenDialog }: LessonCodingProps) => {
                             <TabsTrigger value="content">Nội dung</TabsTrigger>
                         </TabsList>
                         <TabsContent value="info">
-                            <LessonCodingInfo />
+                            <LessonCodingInfo moduleId={moduleId} setVisible={setOpenDialog} />
                         </TabsContent>
                         <TabsContent value="content">
                             <LessonCodingContent />
                         </TabsContent>
                     </Tabs>
                 </div>
-
-                <DialogFooter className="mt-auto">
-                    <Button variant="destructive" onClick={() => setOpenDialog(false)}>
-                        Huỷ
-                    </Button>
-                    <Button>Thêm mới bài tập</Button>
-                </DialogFooter>
             </DialogContent>
         </Dialog>
     )

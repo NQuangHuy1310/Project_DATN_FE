@@ -57,6 +57,11 @@ export interface ICourses {
     total: number
 }
 
+export interface ICourseApproved {
+    id: number
+    name: string
+}
+
 export interface IOverviewCourse {
     name: string
     sort_description: string

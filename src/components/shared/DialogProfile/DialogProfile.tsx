@@ -1,19 +1,24 @@
 import { Dispatch, SetStateAction } from 'react'
 
-import backgroundImage from '@/assets/background.jpg'
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { useUserStore } from '@/app/store'
-import { getImagesUrl, getInfoOrPlaceholder, truncate } from '@/lib'
+import { IUserData } from '@/types'
 import { Button } from '@/components/ui/button'
+import backgroundImage from '@/assets/background.jpg'
+import { getImagesUrl, getInfoOrPlaceholder, truncate } from '@/lib'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { useNavigate } from 'react-router-dom'
+import routes from '@/configs/routes'
 
 interface DialogProfileProps {
     openDialog: boolean
+    userData: IUserData
     setOpenDialog: Dispatch<SetStateAction<boolean>>
 }
 
-const DialogProfile = ({ openDialog, setOpenDialog }: DialogProfileProps) => {
-    const { user, profile } = useUserStore()
-    const userAvatar = getImagesUrl(user?.avatar || '')
+const DialogProfile = ({ openDialog, setOpenDialog, userData }: DialogProfileProps) => {
+    const navigate = useNavigate()
+
+    const { profile } = userData ?? {}
 
     return (
         <Dialog open={openDialog} onOpenChange={setOpenDialog}>
@@ -33,9 +38,18 @@ const DialogProfile = ({ openDialog, setOpenDialog }: DialogProfileProps) => {
                                 className="h-full w-full rounded-md object-cover shadow-md"
                             />
                             <div className="absolute bottom-0 left-0 h-[100px] w-[100px] translate-y-1/2 transform overflow-hidden rounded-full border-4 border-white shadow-lg">
-                                <img src={userAvatar} alt="" className="h-full w-full rounded-full object-cover" />
+                                <Avatar className="h-full w-full">
+                                    <AvatarImage
+                                        className="h-full w-full rounded-full object-cover"
+                                        src={getImagesUrl(userData?.avatar || '')}
+                                        alt={userData?.name}
+                                    />
+                                    <AvatarFallback className="rounded-full bg-primary text-2xl font-semibold text-white">
+                                        {userData?.name.charAt(0)}
+                                    </AvatarFallback>
+                                </Avatar>
                             </div>
-                            <h4 className="w-full text-center text-xl font-bold">{user?.name}</h4>
+                            <h4 className="w-full text-center text-xl font-bold">{userData?.name}</h4>
                         </div>
                     </div>
 
@@ -43,8 +57,12 @@ const DialogProfile = ({ openDialog, setOpenDialog }: DialogProfileProps) => {
                         <Button variant="default" className="flex-1">
                             Theo dõi
                         </Button>
-                        <Button variant="outline" className="flex-1">
-                            Nhắn tin
+                        <Button
+                            variant="outline"
+                            className="flex-1"
+                            onClick={() => navigate(routes.profileUserLogin.replace(':email', userData?.email))}
+                        >
+                            Xem trang cá nhân
                         </Button>
                     </div>
 
@@ -59,7 +77,7 @@ const DialogProfile = ({ openDialog, setOpenDialog }: DialogProfileProps) => {
                                 <p>Người theo dõi</p>
                             </div>
                             <div className="flex flex-1 flex-col gap-2 overflow-hidden">
-                                <a href={`mailto:${user?.email}`}>{getInfoOrPlaceholder(user?.email)}</a>
+                                <a href={`mailto:${userData?.email}`}>{getInfoOrPlaceholder(userData?.email)}</a>
                                 <a href={`tel:${profile?.phone}`}>{getInfoOrPlaceholder(profile?.phone)}</a>
                                 <p>{truncate(getInfoOrPlaceholder(profile?.experience), 30)}</p>
                                 <p>{truncate(getInfoOrPlaceholder(profile?.bio), 30)}</p>

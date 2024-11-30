@@ -35,6 +35,9 @@ export const instructorApi = {
     ): Promise<ICourses> => {
         return axiosClient.get(instructorUri.GET_COURSES(limit, search, sort, page, perPage))
     },
+    getCoursesApproved: async (): Promise<any> => {
+        return axiosClient.get(instructorUri.GET_COURSES_APPROVED)
+    },
     submitCourse: async (courseID: string, courseStatus: ICourseStatusData): Promise<any> => {
         return axiosClient.post(instructorUri.SUBMIT_COURSE(courseID), courseStatus)
     },

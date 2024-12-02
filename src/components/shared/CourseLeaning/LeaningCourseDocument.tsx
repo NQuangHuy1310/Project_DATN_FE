@@ -10,15 +10,18 @@ import { toast } from 'sonner'
 const LeaningCourseDocument = ({
     dataLesson,
     toggleTab,
+    checkLesson,
     setCheckButton
 }: {
     dataLesson: ILessonLeaning
     toggleTab: boolean
+    checkLesson: number
     setCheckButton: Dispatch<SetStateAction<boolean>>
 }) => {
     const [qaSheet, setQASheet] = useState<boolean>(false)
     const { mutateAsync: lessonProcessUpdate } = useUpdateLessonProCess()
     const [loading, setLoading] = useState<boolean>(false)
+    const [remainingTime, setRemainingTime] = useState<number>(0)
 
     // Hàm tính thời gian đọc dựa trên số từ
     const calculateReadingTime = (content: string) => {
@@ -63,9 +66,10 @@ const LeaningCourseDocument = ({
     }
 
     useEffect(() => {
-        // Kiểm tra nếu nội dung là document thì mới tính thời gian
         if (dataLesson.content_type === 'document' && 'content' in dataLesson.lessonable!) {
             const readingTime = calculateReadingTime(dataLesson.lessonable.content!)
+            setRemainingTime(Math.floor(readingTime / 1000))
+
             const timer = setTimeout(async () => {
                 setCheckButton(false)
                 await lessonProcessUpdate([
@@ -78,9 +82,28 @@ const LeaningCourseDocument = ({
                 ])
             }, readingTime)
 
-            return () => clearTimeout(timer)
+            const interval = setInterval(() => {
+                setRemainingTime((prev) => {
+                    if (prev <= 1) {
+                        clearInterval(interval)
+                        return 0
+                    }
+                    return Math.floor(prev - 1)
+                })
+            }, 1000)
+
+            return () => {
+                clearTimeout(timer)
+                clearInterval(interval)
+            }
         }
     }, [setCheckButton, dataLesson.id, dataLesson.content_type, dataLesson.lessonable, lessonProcessUpdate])
+
+    const formatTime = (time: number) => {
+        const minutes = Math.floor(time / 60)
+        const seconds = Math.floor(time % 60)
+        return `${minutes}:${seconds.toString().padStart(2, '0')}`
+    }
 
     return (
         <div className="mx-auto max-w-3xl pt-4">
@@ -107,6 +130,13 @@ const LeaningCourseDocument = ({
                     <span className="hidden md:block">Hỏi đáp</span>
                 </Button>
             </div>
+            {dataLesson.content_type === 'document' && remainingTime > 0 && checkLesson !== 1 && (
+                <div
+                    className={`fixed top-[80px] z-50 rounded-md bg-darkGrey/30 p-2 text-primary ${toggleTab ? 'right-[2%] lg:right-[25%]' : 'right-[2%]'}`}
+                >
+                    {formatTime(remainingTime)}
+                </div>
+            )}
             <AddQA
                 commentId={dataLesson?.id}
                 open={qaSheet}

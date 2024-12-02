@@ -38,6 +38,7 @@ const LeaningCourseVideo = ({
     const [open, setOpen] = useState(false)
     const intervalRef = useRef<NodeJS.Timeout | null>(null)
     const videoRef = useRef<HTMLVideoElement | null>(null)
+    const playerRef = useRef<any>(null)
     const hasUpdatedProgress = useRef<boolean>(false)
 
     const { mutateAsync: lessonProcessUpdate } = useUpdateLessonProCess()
@@ -70,16 +71,27 @@ const LeaningCourseVideo = ({
     const createYouTubePlayer = () => {
         new window.YT.Player('youtube-player', {
             events: {
-                onReady: (event: any) => setPlayer(event.target),
+                onReady: (event: any) => {
+                    playerRef.current = event.target
+                    setPlayer(event.target)
+                },
                 onStateChange: handlePlayerStateChange
             }
         })
+    }
+
+    const removeTimeFromUrl = () => {
+        const url = new URL(window.location.href)
+        const params = new URLSearchParams(url.search)
+        params.delete('time')
+        window.history.replaceState({}, '', `${url.pathname}?${params.toString()}`)
     }
 
     useEffect(() => {
         if (durationNote && !isNaN(Number(durationNote)) && player && typeof player.seekTo === 'function') {
             const time = Number(durationNote)
             setCurrentVideoTime(time)
+            removeTimeFromUrl()
             if (isYouTubeVideo) {
                 player.seekTo(time, true)
             } else if (videoRef.current) {
@@ -87,17 +99,6 @@ const LeaningCourseVideo = ({
             }
         }
     }, [durationNote, player])
-
-    const initYouTubePlayer = () => {
-        if (!window.YT) {
-            const script = document.createElement('script')
-            script.src = 'https://www.youtube.com/iframe_api'
-            window.onYouTubeIframeAPIReady = createYouTubePlayer
-            document.body.appendChild(script)
-        } else {
-            createYouTubePlayer()
-        }
-    }
 
     const pauseVideo = () => {
         if (isYouTubeVideo && player) {
@@ -125,6 +126,7 @@ const LeaningCourseVideo = ({
 
     const handlePlayerStateChange = (event: any) => {
         const playerInstance = event.target
+        const playerReset = playerRef.current
         if (event.data === window.YT.PlayerState.PLAYING) {
             if (!videoStartTimeRef.current) {
                 videoStartTimeRef.current = Date.now()
@@ -138,7 +140,7 @@ const LeaningCourseVideo = ({
                         const elapsedTime = (currentTime - (videoStartTimeRef.current || currentTime)) / 1000
                         timeCheckRef.current = timeCheckRef.current + elapsedTime
                         if (time > timeCheckRef.current) {
-                            playerInstance.pauseVideo()
+                            playerReset.pauseVideo()
                             setOpen(true)
                         } else if (time / dataLesson?.lessonable?.duration! > 0.8) {
                             updateProgress()
@@ -175,7 +177,7 @@ const LeaningCourseVideo = ({
 
     useEffect(() => {
         if (isYouTubeVideo && videoUrl) {
-            initYouTubePlayer()
+            createYouTubePlayer()
             return () => {
                 player?.destroy()
             }
@@ -197,7 +199,7 @@ const LeaningCourseVideo = ({
     }, [isYouTubeVideo, videoUrl])
 
     return (
-        <>
+        <div>
             <div className="bg-black">
                 {isYouTubeVideo ? (
                     <div id="youtube-player-wrapper">
@@ -289,7 +291,7 @@ const LeaningCourseVideo = ({
                     </Button>
                 </DialogContent>
             </Dialog>
-        </>
+        </div>
     )
 }
 

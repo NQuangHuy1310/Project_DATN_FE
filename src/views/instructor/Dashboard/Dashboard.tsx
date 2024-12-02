@@ -141,7 +141,7 @@ const Dashboard = () => {
                     </p>
                 )}
 
-                <div className="flex h-full w-full flex-wrap gap-6">
+                <div className="flex h-full w-full flex-wrap gap-8">
                     {courseData &&
                         courseData?.data.length > 0 &&
                         courseData?.data.map((item) => <CourseCard key={item.id} {...item} />)}{' '}

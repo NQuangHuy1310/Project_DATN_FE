@@ -53,7 +53,7 @@ const CourseCard = ({ name, id, status, thumbnail, submited_at: submittedAt, cat
 
     return (
         <>
-            <div className="flex h-fit w-full max-w-[380px] flex-col items-start gap-4 rounded-md border-[1px] p-3">
+            <div className="flex h-fit w-full max-w-[360px] flex-col items-start gap-4 rounded-md border-[1px] p-3">
                 <div className="h-[180px] w-full flex-shrink-0">
                     <img
                         src={thumbnail ? thumbnailImage : placeholderImage}

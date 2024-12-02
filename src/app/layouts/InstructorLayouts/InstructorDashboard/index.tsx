@@ -41,7 +41,7 @@ const InstructorDashboard = ({ children, title }: { children: React.ReactNode; t
             <article className={`w-full ${sidebar ? 'lg:ps-64' : 'lg:ps-24'}`}>
                 <InstructorHeader isSidebar={sidebar} toggleSidebar={toggleSidebar} title={title} />
                 <main className="mt-headerHight w-full bg-softGrey p-4">
-                    <div className="h-screen w-full rounded-md bg-white p-6">{children}</div>
+                    <div className="min-h-screen w-full rounded-md bg-white p-6">{children}</div>
                 </main>
             </article>
             {isSidebarOpen && (

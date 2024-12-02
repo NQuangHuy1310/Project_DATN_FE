@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 
-import { useCreateLessonCoding, useUpdateLessonCoding } from '@/app/hooks/instructors'
+import { useCreateLessonCoding, useGetLessonDetail, useUpdateLessonCoding } from '@/app/hooks/instructors'
 
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -10,29 +10,15 @@ import { Textarea } from '@/components/ui/textarea'
 import { SUPPORTED_LANGUAGES } from '@/constants/language'
 import { lessonCoding, lessonCodingSchema } from '@/validations'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle
-} from '@/components/ui/alert-dialog'
 
 interface LessonCodingProps {
     moduleId: number
     setVisible: Dispatch<SetStateAction<boolean>>
-    lessonData?: {
-        title: string
-        language: string
-        description: string
-    }
     lessonId?: number
+    setLessonID: Dispatch<SetStateAction<number>>
 }
 
-const LessonCodingInfo = ({ moduleId, setVisible, lessonData, lessonId }: LessonCodingProps) => {
+const LessonCodingInfo = ({ moduleId, setVisible, lessonId, setLessonID }: LessonCodingProps) => {
     const {
         register,
         handleSubmit,
@@ -42,38 +28,34 @@ const LessonCodingInfo = ({ moduleId, setVisible, lessonData, lessonId }: Lesson
         resolver: zodResolver(lessonCodingSchema)
     })
 
+    const { data: lessonData } = useGetLessonDetail(lessonId ?? 0)
     const { mutateAsync: createLessonCoding } = useCreateLessonCoding()
     const { mutateAsync: updateLessonCoding } = useUpdateLessonCoding()
     const [selectedLanguage, setSelectedLanguage] = useState<string>('')
-    const [openDialogConfirm, setOpenDialogConfirm] = useState<boolean>(false)
-    const [isUpdate, setIsUpdate] = useState<boolean>(false)
 
     const handleLanguageChange = (value: string) => {
-        if (lessonId && value !== lessonData?.language && lessonData) {
-            setOpenDialogConfirm(true)
-            if (isUpdate) setSelectedLanguage(value)
-            else setSelectedLanguage(lessonData.language)
-        } else {
-            setSelectedLanguage(value)
-            setValue('language', value)
-        }
+        setSelectedLanguage(value)
+        setValue('language', value)
     }
 
     const handleSubmitForm: SubmitHandler<lessonCoding> = async (formData) => {
         const mutate = lessonId ? updateLessonCoding : createLessonCoding
-        if (lessonId && isUpdate) {
+        if (lessonId) {
             const payload = {
                 ...formData,
                 _method: 'PUT'
             }
             await mutate([lessonId, payload])
-        } else await mutate([moduleId, formData])
+        } else {
+            const response = await mutate([moduleId, formData])
+            setLessonID(response.id)
+        }
     }
 
     useEffect(() => {
         if (lessonData) {
             setValue('title', lessonData.title!)
-            setSelectedLanguage(lessonData.language!)
+            setSelectedLanguage(lessonData.lessonable?.language ?? '')
             setValue('description', lessonData.description!)
         }
     }, [lessonData, setValue])
@@ -122,6 +104,11 @@ const LessonCodingInfo = ({ moduleId, setVisible, lessonData, lessonId }: Lesson
                             {errors.language && (
                                 <div className="text-sm text-secondaryRed">{errors.language.message}</div>
                             )}
+                            {lessonData && (
+                                <span className="text-xs text-muted-foreground">
+                                    Nếu bạn thay đổi ngôn ngữ thì mã nguồn của bạn sẽ bị xoá.
+                                </span>
+                            )}
                         </div>
                     </Select>
 
@@ -143,26 +130,9 @@ const LessonCodingInfo = ({ moduleId, setVisible, lessonData, lessonId }: Lesson
                     <Button variant="destructive" onClick={() => setVisible(false)}>
                         Huỷ
                     </Button>
-                    <Button type="submit">{lessonData ? 'Lưu bài tập' : 'Thêm mới bài tập'}</Button>
+                    <Button type="submit">{lessonId ? 'Thêm mới bài tập' : 'Lưu bài tập'}</Button>
                 </div>
             </form>
-
-            <AlertDialog open={openDialogConfirm} onOpenChange={setOpenDialogConfirm}>
-                <AlertDialogContent>
-                    <AlertDialogHeader>
-                        <AlertDialogTitle>Xác nhận thay đổi ngôn ngữ</AlertDialogTitle>
-                        <AlertDialogDescription>
-                            Bạn có chắc chắn muốn thay đổi ngôn ngữ không? Lưu ý rằng việc thay đổi ngôn ngữ sẽ khiến
-                            nội dung mã của bạn bị mất. Hãy chắc chắn rằng bạn đã lưu lại mọi thay đổi trước khi tiếp
-                            tục.
-                        </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                        <AlertDialogCancel onClick={() => setIsUpdate(false)}>Huỷ</AlertDialogCancel>
-                        <AlertDialogAction onClick={() => setIsUpdate(true)}>Tiếp tục</AlertDialogAction>
-                    </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialog>
         </>
     )
 }

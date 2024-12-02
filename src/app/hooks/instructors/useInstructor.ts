@@ -207,6 +207,7 @@ export const useUpdateLessonDoc = () => {
         onSettled: async () => {
             await queryClient.invalidateQueries({ queryKey: ['modules'] })
             await queryClient.invalidateQueries({ queryKey: ['lesson'] })
+            toast.success('Cập nhật bài học thành công!')
         }
     })
 }
@@ -250,6 +251,7 @@ export const useUpdateLessonVideo = () => {
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: ['modules'] })
             await queryClient.invalidateQueries({ queryKey: ['lesson'] })
+            toast.success('Cập nhật bài học thành công!')
         }
     })
 }
@@ -293,6 +295,7 @@ export const useUpdateLessonQuiz = () => {
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: ['modules'] })
             await queryClient.invalidateQueries({ queryKey: ['quiz'] })
+            toast.success('Cập nhật bài học thành công!')
         }
     })
 }
@@ -375,6 +378,8 @@ export const useUpdateLessonCoding = () => {
         },
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: ['modules'] })
+            await queryClient.invalidateQueries({ queryKey: ['lesson'] })
+            toast.success('Cập nhật bài học thành công!')
         }
     })
 }
@@ -403,6 +408,8 @@ export const useUpdateCodingContent = () => {
         },
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: ['modules'] })
+            await queryClient.invalidateQueries({ queryKey: ['lesson'] })
+            toast.success('Thêm nội dung bài học thành công!')
         }
     })
 }

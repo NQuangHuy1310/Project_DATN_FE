@@ -48,21 +48,25 @@ const PerformanceStudents = () => {
             <div>
                 {courseData && courseData.length > 0 ? (
                     <div className="flex flex-col gap-5">
-                        <Select onValueChange={handleSelectCourse} value={courseId?.toString()}>
-                            <SelectTrigger className="flex w-[300px] items-center justify-between">
-                                <SelectValue placeholder="Chọn khoá học" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectGroup>
-                                    <SelectLabel>Chọn khoá học</SelectLabel>
-                                    {courseData.map((course: ICourseApproved) => (
-                                        <SelectItem key={course.id} value={course.id.toString()}>
-                                            {course.name}
-                                        </SelectItem>
-                                    ))}
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select>
+                        <div className="space-y-1">
+                            <h6 className="mt-1 text-sm text-muted-foreground">Lựa chọn khoá học</h6>
+                            <Select onValueChange={handleSelectCourse} value={courseId?.toString()}>
+                                <SelectTrigger className="flex w-[300px] items-center justify-between">
+                                    <SelectValue placeholder="Chọn khoá học" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectGroup>
+                                        <SelectLabel>Chọn khoá học</SelectLabel>
+                                        {courseData.map((course: ICourseApproved) => (
+                                            <SelectItem key={course.id} value={course.id.toString()}>
+                                                {course.name}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectGroup>
+                                </SelectContent>
+                            </Select>
+                        </div>
+
                         <div className="flex flex-wrap items-center gap-5">
                             {studentsCourse &&
                                 studentsCourse.students.data.length > 0 &&
@@ -97,10 +101,14 @@ const PerformanceStudents = () => {
                                             <p className="text-gray-500">
                                                 Thời gian đăng ký: {formatDate(student.created_at)}
                                             </p>
-                                            {student.completed_at ? (
-                                                <p className="font-semibold text-green-500">Đã hoàn thành khoá học</p>
+                                            {student.progress_percent === 100 ? (
+                                                <span className="font-semibold text-green-500">
+                                                    Đã hoàn thành khoá học
+                                                </span>
                                             ) : (
-                                                <p className="font-semibold text-red-500">Chưa hoàn thành khoá học</p>
+                                                <span className="font-semibold text-red-500">
+                                                    Chưa hoàn thành khoá học
+                                                </span>
                                             )}
                                         </div>
 

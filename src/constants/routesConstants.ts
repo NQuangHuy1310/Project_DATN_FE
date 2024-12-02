@@ -12,6 +12,7 @@ import Home from '@/views/user/Home'
 // Authentication
 import Login from '@/views/user/Auth/Login'
 import Register from '@/views/user/Auth/Register'
+import ChangePassword from '@/views/user/Auth/ChangePassword'
 import ForgotPassword from '@/views/user/Auth/ForgotPassword'
 
 // Account
@@ -68,6 +69,7 @@ import Profile from '@/views/user/Profile'
 export const publicRoutes = [
     { path: routes.home, layout: HomeLayout, element: Home },
     { path: routes.login, layout: HomeLayout, element: Login },
+    { path: routes.resetPassword, layout: HomeLayout, element: ChangePassword },
     { path: routes.register, layout: HomeLayout, element: Register },
     { path: routes.forgotPassword, layout: HomeLayout, element: ForgotPassword },
     { path: routes.courseDetailNoLogin, layout: HomeLayout, element: CourseDetailNoLogin },

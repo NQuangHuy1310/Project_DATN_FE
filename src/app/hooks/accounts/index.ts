@@ -1,3 +1,3 @@
 export * from './useGetUser'
-export * from './useProfile'
+export * from './useAuth'
 export * from './useUser'

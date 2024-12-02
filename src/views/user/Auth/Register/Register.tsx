@@ -1,19 +1,19 @@
-import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
-import { SubmitHandler, useForm } from 'react-hook-form'
-import { FaFacebook } from 'react-icons/fa'
+import { Link } from 'react-router-dom'
 import { FcGoogle } from 'react-icons/fc'
+import { FaFacebook } from 'react-icons/fa'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import { IoEyeOffSharp, IoEyeSharp } from 'react-icons/io5'
-import { Link, useNavigate } from 'react-router-dom'
 
-import { authApis } from '@/app/services/accounts'
-import { useUserStore } from '@/app/store'
-import OTPDialog from '@/components/shared/OTPDialog'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import routes from '@/configs/routes'
+import { useUserStore } from '@/app/store'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import OTPDialog from '@/components/shared/OTPDialog'
 
 import { setAccessToken } from '@/lib'
+import { useRegister, useResendOtp, useVerifyOtp } from '@/app/hooks/accounts'
 import { RegisterFormFields, registerSchema } from '@/validations'
 
 const Register = () => {
@@ -22,12 +22,14 @@ const Register = () => {
         setError,
         getValues,
         handleSubmit,
-        formState: { isSubmitting, errors },
-        reset
+        formState: { isSubmitting, errors }
     } = useForm<RegisterFormFields>({ resolver: zodResolver(registerSchema) })
-    const navigate = useNavigate()
     const setUser = useUserStore((state) => state.setUser)
     const setProfile = useUserStore((state) => state.setProfile)
+
+    const { mutateAsync } = useRegister()
+    const { mutateAsync: verifyOpt } = useVerifyOtp()
+    const { mutateAsync: resendOtp } = useResendOtp()
 
     const [showPassword, setShowPassword] = useState(false)
     const [open, setOpen] = useState(false)
@@ -38,7 +40,7 @@ const Register = () => {
 
     const onSubmit: SubmitHandler<RegisterFormFields> = async (data) => {
         try {
-            await authApis.register(data)
+            await mutateAsync(data)
             setOpen(true)
         } catch (error: any) {
             if (error.data && error.data.errors) {
@@ -57,19 +59,15 @@ const Register = () => {
 
     const handleOtpSubmit = async (otp_code: string) => {
         const email = getValues('email')
-        const response = await authApis.verifyOtp({ email, otp_code })
-        if (response) {
-            setUser(response.user)
-            setProfile(response.profile)
-            setAccessToken(response.access_token)
-            navigate(routes.userDashboard)
-            reset()
-        }
+        const response = await verifyOpt({ email, otp_code })
+        setUser(response.user)
+        setProfile(response.profile)
+        setAccessToken(response.access_token)
     }
 
     const handleResendOtp = async () => {
         const email = getValues('email')
-        await authApis.resendOtp({ email })
+        await resendOtp({ email })
     }
 
     return (
@@ -97,7 +95,7 @@ const Register = () => {
                                     disabled={isSubmitting}
                                     autoFocus
                                 />
-                                {errors.name && <div className="text-sm text-red-500">{errors.name?.message}</div>}
+                                {errors.name && <div className="text-sm text-secondaryRed">{errors.name?.message}</div>}
                             </div>
                             <div className="w-full">
                                 <Input
@@ -109,7 +107,9 @@ const Register = () => {
                                     className="w-full"
                                     disabled={isSubmitting}
                                 />
-                                {errors.email && <div className="text-sm text-red-500">{errors.email.message}</div>}
+                                {errors.email && (
+                                    <div className="text-sm text-secondaryRed">{errors.email.message}</div>
+                                )}
                             </div>
                             <div className="relative w-full">
                                 <Input
@@ -123,7 +123,7 @@ const Register = () => {
                                     autoComplete="current-password"
                                 />
                                 {errors.password && (
-                                    <div className="text-sm text-red-500">{errors.password.message}</div>
+                                    <div className="text-sm text-secondaryRed">{errors.password.message}</div>
                                 )}
                                 {showPassword ? (
                                     <IoEyeOffSharp
@@ -149,7 +149,9 @@ const Register = () => {
                                     autoComplete="current-password"
                                 />
                                 {errors.password_confirmation && (
-                                    <div className="text-sm text-red-500">{errors.password_confirmation.message}</div>
+                                    <div className="text-sm text-secondaryRed">
+                                        {errors.password_confirmation.message}
+                                    </div>
                                 )}
                                 {showPassword ? (
                                     <IoEyeOffSharp

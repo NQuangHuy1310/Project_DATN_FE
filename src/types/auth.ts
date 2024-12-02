@@ -60,8 +60,7 @@ export interface IUserEmail {
 }
 
 export interface IResetPassword {
-    email: string
-    otp_code: string
+    token: string
     new_password: string
     new_password_confirmation: string
 }

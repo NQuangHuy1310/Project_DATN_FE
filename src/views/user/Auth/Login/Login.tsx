@@ -1,18 +1,17 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { FcGoogle } from 'react-icons/fc'
 import { FaFacebook } from 'react-icons/fa'
-import { Link, useNavigate } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { IoEyeOffSharp, IoEyeSharp } from 'react-icons/io5'
 
 import routes from '@/configs/routes'
-import { authApis } from '@/app/services/accounts'
-import { useUserStore } from '@/app/store'
-import { setAccessToken } from '@/lib'
+
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { LoginFormFields, loginSchema } from '@/validations'
+import { useLogin } from '@/app/hooks/accounts'
 
 const Login = () => {
     const {
@@ -21,10 +20,8 @@ const Login = () => {
         handleSubmit,
         formState: { isSubmitting, errors }
     } = useForm<LoginFormFields>({ resolver: zodResolver(loginSchema) })
-    const navigate = useNavigate()
 
-    const setUser = useUserStore((state) => state.setUser)
-    const setProfile = useUserStore((state) => state.setProfile)
+    const { mutateAsync } = useLogin()
 
     const [showPassword, setShowPassword] = useState(false)
 
@@ -34,13 +31,7 @@ const Login = () => {
 
     const onSubmit: SubmitHandler<LoginFormFields> = async (data) => {
         try {
-            const response = await authApis.login(data)
-            if (response) {
-                navigate(routes.userDashboard)
-                setUser(response.user)
-                setProfile(response.profile)
-                setAccessToken(response.access_token)
-            }
+            await mutateAsync(data)
         } catch (error: any) {
             if (error.data && error.data.errors) {
                 error.data.errors.forEach((errorItem: any) => {
@@ -79,7 +70,7 @@ const Login = () => {
                                 disabled={isSubmitting}
                                 autoFocus
                             />
-                            {errors.email && <div className="text-sm text-red-500">{errors.email.message}</div>}
+                            {errors.email && <div className="text-sm text-secondaryRed">{errors.email.message}</div>}
                         </div>
                         <div className="relative w-full">
                             <Input
@@ -92,7 +83,9 @@ const Login = () => {
                                 disabled={isSubmitting}
                                 autoComplete="current-password"
                             />
-                            {errors.password && <div className="text-sm text-red-500">{errors.password.message}</div>}
+                            {errors.password && (
+                                <div className="text-sm text-secondaryRed">{errors.password.message}</div>
+                            )}
                             {showPassword ? (
                                 <IoEyeOffSharp
                                     onClick={togglePasswordVisibility}

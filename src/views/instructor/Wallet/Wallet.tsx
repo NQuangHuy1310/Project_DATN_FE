@@ -267,6 +267,9 @@ const Wallet = () => {
                                         <th scope="col" className="px-6 py-3">
                                             Ghi chú
                                         </th>
+                                        <th scope="col" className="px-6 py-3">
+                                            Người duyệt
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -287,6 +290,7 @@ const Wallet = () => {
                                             </td>
                                             <td className="px-6 py-4">{item.status}</td>
                                             <td className="px-6 py-4">{item.note ?? 'Không có'}</td>
+                                            <td className="px-6 py-4">{item.approver_name ?? 'Chưa có người duyệt'}</td>
                                         </tr>
                                     ))}
                                 </tbody>

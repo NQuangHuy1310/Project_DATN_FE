@@ -40,6 +40,7 @@ export interface IRequestWithDrawData {
     name?: string
     status?: string
     note?: string
+    approver_name?: string | null
 }
 
 export interface IHistoryDraw {

@@ -102,6 +102,7 @@ export interface ILesson {
         output?: string
         sample_code?: string
         statement: string
+        result_code?: string
     }
 }
 
@@ -376,5 +377,6 @@ export interface ICodingContentData {
     hints?: string
     sample_code: string
     output: string
+    result_code: string
     _method?: string
 }

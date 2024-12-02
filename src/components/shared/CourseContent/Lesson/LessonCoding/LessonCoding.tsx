@@ -18,7 +18,7 @@ const LessonCoding = ({ open, setOpenDialog, moduleId, lessonId }: LessonCodingP
     return (
         <Dialog open={open} onOpenChange={setOpenDialog}>
             <DialogContent
-                className="flex h-full max-h-[90vh] w-full max-w-screen-2xl flex-col gap-2 overflow-hidden"
+                className="flex h-full max-h-[90vh] w-full max-w-[90vw] flex-col gap-2 overflow-hidden"
                 aria-describedby={undefined}
             >
                 <DialogHeader>

@@ -1,13 +1,16 @@
-import { Dispatch, SetStateAction, useEffect } from 'react'
 import ReactQuill from 'react-quill'
-import { SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 
 import CodeEditor from '@/components/shared/CodeEditor'
 import { Button } from '@/components/ui/button'
 import { formats, modules } from '@/constants/quillConstants'
 import { useGetLessonDetail, useUpdateCodingContent } from '@/app/hooks/instructors'
 import { codingContent, codingContentSchema } from '@/validations'
+import { toast } from 'sonner'
+import { LANGUAGE_VERSIONS } from '@/constants/language'
+import axios from 'axios'
 
 interface LessonCodingContentProps {
     lessonId: number
@@ -27,6 +30,8 @@ const LessonCodingContent = ({ lessonId, setVisible }: LessonCodingContentProps)
 
     const { data: lessonData } = useGetLessonDetail(lessonId)
     const { mutateAsync } = useUpdateCodingContent()
+    const [error, setError] = useState<string>('')
+    const [output, setOutput] = useState<string>(lessonData?.lessonable.result_code ?? '')
 
     const handleCodeChange = (field: 'output' | 'sample_code') => (value: string) => {
         setValue(field, value)
@@ -36,9 +41,43 @@ const LessonCodingContent = ({ lessonId, setVisible }: LessonCodingContentProps)
         setValue(field, value)
     }
 
+    const runCode = async () => {
+        const language = lessonData?.lessonable.language
+        const sourceCode = getValues('output')
+        if (!sourceCode) return
+        try {
+            const { data: result } = await axios.post('https://emkc.org/api/v2/piston/execute', {
+                language: language,
+                version: LANGUAGE_VERSIONS[language as 'javascript' | 'php' | 'typescript' | 'java' | 'python'],
+                files: [{ content: sourceCode }]
+            })
+            if (result.run.stdout) {
+                setOutput(result.run.output)
+                setError('')
+            } else {
+                setError(result.run.stderr)
+                setOutput('')
+            }
+            toast.success('Chạy code thành công!')
+        } catch {
+            toast.error('Có lỗi trong lúc chạy code. Vui lòng kiểm tra lại mã nguồn của bạn.')
+        }
+    }
+
     const handleSubmitForm: SubmitHandler<codingContent> = async (data) => {
+        if (!output) {
+            toast.error('Bạn cần kiểm tra code trước khi lưu bài tập!')
+            return
+        }
+
+        if (error) {
+            toast.error('Code có lỗi, vui lòng kiểm tra trước khi lưu bài tập!')
+            return
+        }
+
         const payload = {
             ...data,
+            result_code: output.trim(),
             _method: 'PUT'
         }
         await mutateAsync([lessonId!, payload])
@@ -56,7 +95,7 @@ const LessonCodingContent = ({ lessonId, setVisible }: LessonCodingContentProps)
     }, [lessonData, setValue, reset])
 
     return (
-        <form onSubmit={handleSubmit(handleSubmitForm)} className="flex flex-col gap-10">
+        <form onSubmit={handleSubmit(handleSubmitForm)} className="flex flex-col gap-10 p-2">
             <div className="flex w-full flex-col gap-4">
                 <div className="w-full space-y-1">
                     <label className="text-sm text-muted-foreground">Nhập đề bài cho bài tập của bạn</label>
@@ -70,9 +109,11 @@ const LessonCodingContent = ({ lessonId, setVisible }: LessonCodingContentProps)
                     {errors.statement && <div className="text-sm text-secondaryRed">{errors.statement.message}</div>}
                 </div>
 
-                <div className="flex w-full items-center gap-2 md:flex-wrap">
+                <div className="flex w-full items-start gap-2">
                     <div className="w-full flex-1 space-y-1">
-                        <label className="text-sm text-muted-foreground">Nhập mã nguồn mẫu</label>
+                        <label className="te const [output, setOutput] = useState<string>('')xt-muted-foreground text-sm">
+                            Nhập mã nguồn mẫu
+                        </label>
                         <CodeEditor
                             height="300px"
                             onChange={handleCodeChange('sample_code')}
@@ -109,6 +150,28 @@ const LessonCodingContent = ({ lessonId, setVisible }: LessonCodingContentProps)
                     </div>
                 </div>
 
+                {output && (
+                    <div className="space-y-1">
+                        <label className="te const [output, setOutput] = useState<string>('')xt-muted-foreground text-sm">
+                            Kết quả chạy code
+                        </label>
+                        <div className="h-[40px] truncate rounded-md bg-black/90 p-2 text-white">
+                            <p className="text-sm">{output}</p>
+                        </div>
+                    </div>
+                )}
+
+                {error && (
+                    <div className="space-y-1">
+                        <label className="te const [output, setOutput] = useState<string>('')xt-muted-foreground text-sm">
+                            Lỗi khi chạy code
+                        </label>
+                        <div className="h-[40px] truncate rounded-md bg-secondaryRed/90 p-2 text-white">
+                            <p className="text-sm">{error}</p>
+                        </div>
+                    </div>
+                )}
+
                 <div className="w-full space-y-1">
                     <label className="text-sm text-muted-foreground">Gợi ý cho bài tập của bạn</label>
                     <ReactQuill
@@ -116,13 +179,16 @@ const LessonCodingContent = ({ lessonId, setVisible }: LessonCodingContentProps)
                         modules={modules}
                         value={getValues('hints')}
                         onChange={handleChangeContent('hints')}
-                        placeholder="Nhập đề bài cho bài tập..."
+                        placeholder="Nhập gợi ý cho bài tập"
                     />
                 </div>
             </div>
             <div className="mt-auto flex items-center justify-end gap-2">
                 <Button variant="destructive" disabled={isSubmitting} onClick={() => setVisible(false)}>
                     Huỷ
+                </Button>
+                <Button type="button" disabled={isSubmitting} onClick={() => runCode()}>
+                    Kiểm tra code
                 </Button>
                 <Button type="submit" disabled={isSubmitting}>
                     {lessonId ? 'Lưu bài tập' : 'Thêm mới bài tập'}

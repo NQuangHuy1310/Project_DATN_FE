@@ -86,6 +86,11 @@ export const codingContentSchema = z.object({
     output: z.string().min(1, MessageErrors.requiredField)
 })
 
+export const roadMapSchema = z.object({
+    title: z.string().min(10, MessageErrors.requiredField).max(60),
+    description: z.string().min(10, MessageErrors.requiredField).max(60)
+})
+
 export type createNewCourse = z.infer<typeof createNewCourseSchema>
 
 export type courseOverview = z.infer<typeof courseOverviewSchema>
@@ -101,3 +106,5 @@ export type lessonQuiz = z.infer<typeof lessonQuizSchema>
 export type lessonCoding = z.infer<typeof lessonCodingSchema>
 
 export type codingContent = z.infer<typeof codingContentSchema>
+
+export type roadMap = z.infer<typeof roadMapSchema>

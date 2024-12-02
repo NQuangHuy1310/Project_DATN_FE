@@ -97,7 +97,7 @@ const Dashboard = () => {
 
     return (
         <>
-            <div className="card flex h-full min-h-screen flex-col gap-8 bg-white">
+            <div className="flex h-full flex-col gap-6">
                 <h3 className="text-2xl font-semibold capitalize">Danh sách khoá học</h3>
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-5">

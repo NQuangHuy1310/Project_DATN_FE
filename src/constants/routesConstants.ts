@@ -43,10 +43,10 @@ import InstructorWallet from '@/views/instructor/Wallet'
 import Posts from '@/views/user/Posts/Posts'
 import MyPosts from '@/views/user/Posts/MyPosts'
 import NewPost from '@/views/user/Posts/NewPosts'
+import PostDetail from '@/views/user/Posts/PostDetail'
 import MyBookmarks from '@/views/user/Posts/MyBookmarks'
 
-import Transaction from '@/views/user/wallet/transaction/Transaction'
-import PostDetail from '@/views/user/Posts/PostDetail'
+import Transaction from '@/views/user/wallet/Transaction'
 import CourseDetailNoLogin from '@/views/user/Courses/CourseDetailNoLogin/CourseDetailNoLogin'
 import PerformanceOverview from '@/views/instructor/Performance/PerformanceOverview'
 
@@ -64,6 +64,8 @@ import PerformanceRatings from '@/views/instructor/Performance/PerformanceRating
 import Communicate from '@/views/user/ComunicateAi/Communicate'
 import Discount from '@/views/user/Discount/Discount'
 import Profile from '@/views/user/Profile'
+import Roadmap from '@/views/instructor/Roadmap'
+import PurchaseHistory from '@/views/instructor/PurchaseHistory'
 
 // Routes không cần đăng nhập
 export const publicRoutes = [
@@ -181,6 +183,18 @@ export const privateRoutes = [
         layout: InstructorDashboardLayout,
         element: InstructorWallet,
         title: 'Quản lý giao dịch'
+    },
+    {
+        path: routes.instructorRoadmap,
+        layout: InstructorDashboardLayout,
+        element: Roadmap,
+        title: 'Lộ trình học tập'
+    },
+    {
+        path: routes.instructorPurchaseHistory,
+        layout: InstructorDashboardLayout,
+        element: PurchaseHistory,
+        title: 'Lịch sử mua khoá học'
     }
 ]
 

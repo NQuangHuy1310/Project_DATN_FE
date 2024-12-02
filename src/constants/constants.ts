@@ -5,7 +5,7 @@ import { GrHistory } from 'react-icons/gr'
 import { LuUserCircle } from 'react-icons/lu'
 import { PiStudentBold } from 'react-icons/pi'
 import { IoSettingsOutline } from 'react-icons/io5'
-import { MdSecurity, MdArticle } from 'react-icons/md'
+import { MdSecurity, MdArticle, MdHistory } from 'react-icons/md'
 import { TbMessageDots, TbUserHexagon } from 'react-icons/tb'
 import { HiBookOpen, HiOutlineTemplate } from 'react-icons/hi'
 import { IoMdHelpCircleOutline, IoMdHome } from 'react-icons/io'
@@ -78,6 +78,11 @@ export const sidebarListInstructor = [
         path: routes.instructorDashboard
     },
     {
+        title: 'Lộ trình',
+        icon: FaRoad,
+        path: routes.instructorRoadmap
+    },
+    {
         title: 'Tin nhắn',
         icon: TbMessageDots,
         path: routes.instructorMessage
@@ -91,6 +96,11 @@ export const sidebarListInstructor = [
         title: 'Quản lý ví',
         icon: IoWalletSharp,
         path: routes.instructorWallet
+    },
+    {
+        title: 'Lịch sử mua',
+        icon: MdHistory,
+        path: routes.instructorPurchaseHistory
     }
 ]
 

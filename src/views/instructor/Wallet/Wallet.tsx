@@ -110,7 +110,7 @@ const Wallet = () => {
     if (isLoading) return <Loading />
 
     return (
-        <div className="flex flex-col gap-5 rounded-md bg-white p-7">
+        <div className="flex flex-col gap-5">
             <div className="flex justify-between gap-5">
                 <div className="flex w-3/12 flex-col gap-5">
                     <div className="rounded-md bg-secondary text-foreground">

@@ -18,7 +18,7 @@ const CommunicateMessage = () => {
     }
 
     return (
-        <div className="relative grid h-[90vh] w-full grid-cols-12 rounded-md">
+        <div className="relative grid h-[90vh] w-full grid-cols-12">
             <div
                 className={`scrollbar-hide fixed inset-y-0 left-0 z-40 col-span-4 h-screen w-1/2 transform overflow-y-auto border-r transition-transform ${togglePage ? 'translate-x-0' : '-translate-x-full'} md:relative md:col-span-4 md:h-full md:w-full md:translate-x-0`}
             >

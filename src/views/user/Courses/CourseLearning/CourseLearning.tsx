@@ -571,6 +571,7 @@ const CourseLearning = () => {
                             {isQuizCheck == false && courseLesson.content_type === 'document' && (
                                 <LeaningCourseDocument
                                     dataLesson={courseLesson}
+                                    checkLesson={checkLesson[0].is_completed}
                                     setCheckButton={setCheckButton}
                                     toggleTab={toggleTab}
                                 />

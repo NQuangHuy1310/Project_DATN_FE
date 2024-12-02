@@ -60,7 +60,7 @@ const DialogProfile = ({ openDialog, setOpenDialog, userData }: DialogProfilePro
                         <Button
                             variant="outline"
                             className="flex-1"
-                            onClick={() => navigate(routes.profileUserLogin.replace(':email', userData?.email))}
+                            onClick={() => navigate(routes.profileUser.replace(':email', userData?.email))}
                         >
                             Xem trang cá nhân
                         </Button>

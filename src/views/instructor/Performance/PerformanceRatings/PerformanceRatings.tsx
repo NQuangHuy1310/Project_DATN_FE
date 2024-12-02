@@ -4,7 +4,7 @@ import { FaRegHeart, FaStar, FaStarHalfAlt } from 'react-icons/fa'
 
 import routes from '@/configs/routes'
 import noContent from '@/assets/no-content.jpg'
-import { useGetCourses, useGetRatingsCourse } from '@/app/hooks/instructors'
+import { useGetCoursesApproved, useGetRatingsCourse } from '@/app/hooks/instructors'
 import {
     Select,
     SelectContent,
@@ -18,7 +18,7 @@ import { Button } from '@/components/ui/button'
 import { formatDate, getImagesUrl } from '@/lib'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { ratingCourse } from '@/types/instructor'
+import { ICourseApproved, ratingCourse } from '@/types/instructor'
 import { Textarea } from '@/components/ui/textarea'
 
 const PerformanceRatings = () => {
@@ -27,45 +27,42 @@ const PerformanceRatings = () => {
     const [comment, setComment] = useState<ratingCourse>()
     const [openDialog, setOpenDialog] = useState<boolean>(false)
 
-    const { data: courseData } = useGetCourses(100)
+    const { data: courseData } = useGetCoursesApproved()
     const { data: ratingsData } = useGetRatingsCourse(courseId!)
+
+    useEffect(() => {
+        if (courseData && courseData.length > 0) {
+            setCourseId(courseData[0].id)
+        }
+    }, [courseData])
 
     const handleSelectCourse = (value: string) => {
         setCourseId(+value)
     }
 
-    useEffect(() => {
-        if (courseData && courseData.data.length > 0) {
-            const confirmedCourses = courseData.data.filter((course) => course.status === 'approved')
-
-            if (confirmedCourses.length > 0) {
-                setCourseId(confirmedCourses[0].id)
-            }
-        }
-    }, [courseData])
-
     return (
         <>
             <div>
-                {courseData && courseData.data.length > 0 ? (
+                {courseData && courseData.length > 0 ? (
                     <div className="flex flex-col gap-5">
-                        <Select onValueChange={handleSelectCourse} value={courseId?.toString()}>
-                            <SelectTrigger className="flex w-[300px] items-center justify-between">
-                                <SelectValue placeholder="Chọn khoá học" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectGroup>
-                                    <SelectLabel>Chọn khoá học</SelectLabel>
-                                    {courseData.data
-                                        .filter((course) => course.status === 'approved')
-                                        .map((course) => (
+                        <div className="space-y-1">
+                            <h6 className="mt-1 text-sm text-muted-foreground">Lựa chọn khoá học</h6>
+                            <Select onValueChange={handleSelectCourse} value={courseId?.toString()}>
+                                <SelectTrigger className="flex w-[300px] items-center justify-between">
+                                    <SelectValue placeholder="Chọn khoá học" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectGroup>
+                                        <SelectLabel>Chọn khoá học</SelectLabel>
+                                        {courseData.map((course: ICourseApproved) => (
                                             <SelectItem key={course.id} value={course.id.toString()}>
                                                 {course.name}
                                             </SelectItem>
                                         ))}
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select>
+                                    </SelectGroup>
+                                </SelectContent>
+                            </Select>
+                        </div>
 
                         <div className="flex flex-wrap items-center gap-5">
                             {ratingsData &&

@@ -17,7 +17,7 @@ interface CodeEditorProps {
 
 const CodeEditor = ({ language = 'javascript', height = '200px', onChange, title, value }: CodeEditorProps) => {
     const editorRef = useRef<EditorType>(null)
-    const initialValue = value || CODE_SNIPPETS[language]
+    const initialValue = value !== undefined && value !== null ? value : CODE_SNIPPETS[language]
 
     const onMount = (editor: monaco.editor.IStandaloneCodeEditor) => {
         editorRef.current = editor

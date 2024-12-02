@@ -1,10 +1,9 @@
+import { Dispatch, SetStateAction, useState } from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 
 import LessonCodingInfo from '@/components/shared/CourseContent/Lesson/LessonCoding/LessonCodingInfo'
 import LessonCodingContent from '@/components/shared/CourseContent/Lesson/LessonCoding/LessonCodingContent'
-import { Dispatch, SetStateAction } from 'react'
-import { useGetLessonDetail } from '@/app/hooks/instructors'
 
 interface LessonCodingProps {
     open: boolean
@@ -14,21 +13,7 @@ interface LessonCodingProps {
 }
 
 const LessonCoding = ({ open, setOpenDialog, moduleId, lessonId }: LessonCodingProps) => {
-    const { data: lessonData } = useGetLessonDetail(lessonId ?? 0)
-
-    const lessonInfoData = {
-        title: lessonData?.title ?? '',
-        language: lessonData?.lessonable.language ?? '',
-        description: lessonData?.description ?? ''
-    }
-
-    const lessonCodingContent = {
-        statement: lessonData?.lessonable.statement ?? '',
-        hints: lessonData?.lessonable.hints ?? '',
-        sample_code: lessonData?.lessonable.sample_code ?? '',
-        output: lessonData?.lessonable.output ?? '',
-        language: lessonData?.lessonable.language ?? ''
-    }
+    const [lessonID, setLessonID] = useState<number>(lessonId!)
 
     return (
         <Dialog open={open} onOpenChange={setOpenDialog}>
@@ -50,16 +35,12 @@ const LessonCoding = ({ open, setOpenDialog, moduleId, lessonId }: LessonCodingP
                             <LessonCodingInfo
                                 moduleId={moduleId!}
                                 setVisible={setOpenDialog}
-                                lessonData={lessonInfoData!}
-                                lessonId={lessonId}
+                                lessonId={lessonID}
+                                setLessonID={setLessonID}
                             />
                         </TabsContent>
                         <TabsContent value="content">
-                            <LessonCodingContent
-                                lessonData={lessonCodingContent}
-                                lessonId={lessonId}
-                                setVisible={setOpenDialog}
-                            />
+                            <LessonCodingContent lessonId={lessonID!} setVisible={setOpenDialog} />
                         </TabsContent>
                     </Tabs>
                 </div>

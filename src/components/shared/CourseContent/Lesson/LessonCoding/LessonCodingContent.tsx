@@ -6,22 +6,15 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import CodeEditor from '@/components/shared/CodeEditor'
 import { Button } from '@/components/ui/button'
 import { formats, modules } from '@/constants/quillConstants'
-import { useUpdateCodingContent } from '@/app/hooks/instructors'
+import { useGetLessonDetail, useUpdateCodingContent } from '@/app/hooks/instructors'
 import { codingContent, codingContentSchema } from '@/validations'
 
 interface LessonCodingContentProps {
-    lessonData: {
-        statement: string
-        hints: string
-        sample_code: string
-        output: string
-        language: string
-    }
-    lessonId?: number
+    lessonId: number
     setVisible: Dispatch<SetStateAction<boolean>>
 }
 
-const LessonCodingContent = ({ lessonData, lessonId, setVisible }: LessonCodingContentProps) => {
+const LessonCodingContent = ({ lessonId, setVisible }: LessonCodingContentProps) => {
     const {
         handleSubmit,
         setValue,
@@ -31,6 +24,8 @@ const LessonCodingContent = ({ lessonData, lessonId, setVisible }: LessonCodingC
     } = useForm<codingContent>({
         resolver: zodResolver(codingContentSchema)
     })
+
+    const { data: lessonData } = useGetLessonDetail(lessonId)
     const { mutateAsync } = useUpdateCodingContent()
 
     const handleCodeChange = (field: 'output' | 'sample_code') => (value: string) => {
@@ -47,15 +42,16 @@ const LessonCodingContent = ({ lessonData, lessonId, setVisible }: LessonCodingC
             _method: 'PUT'
         }
         await mutateAsync([lessonId!, payload])
+        setVisible(false)
     }
 
     useEffect(() => {
-        if (lessonData) {
+        if (lessonData?.lessonable) {
             reset()
-            setValue('statement', lessonData.statement)
-            setValue('hints', lessonData.hints)
-            setValue('sample_code', lessonData.sample_code)
-            setValue('output', lessonData.output)
+            setValue('statement', lessonData.lessonable.statement)
+            setValue('hints', lessonData.lessonable.hints)
+            setValue('sample_code', lessonData.lessonable.sample_code!)
+            setValue('output', lessonData.lessonable.output!)
         }
     }, [lessonData, setValue, reset])
 
@@ -81,7 +77,14 @@ const LessonCodingContent = ({ lessonData, lessonId, setVisible }: LessonCodingC
                             height="300px"
                             onChange={handleCodeChange('sample_code')}
                             value={getValues('sample_code')}
-                            language={lessonData.language as 'javascript' | 'php' | 'typescript' | 'java' | 'python'}
+                            language={
+                                lessonData?.lessonable.language as
+                                    | 'javascript'
+                                    | 'php'
+                                    | 'typescript'
+                                    | 'java'
+                                    | 'python'
+                            }
                         />
                         {errors.sample_code && (
                             <div className="text-sm text-secondaryRed">{errors.sample_code.message}</div>
@@ -93,7 +96,14 @@ const LessonCodingContent = ({ lessonData, lessonId, setVisible }: LessonCodingC
                             height="300px"
                             onChange={handleCodeChange('output')}
                             value={getValues('output')}
-                            language={lessonData.language as 'javascript' | 'php' | 'typescript' | 'java' | 'python'}
+                            language={
+                                lessonData?.lessonable.language as
+                                    | 'javascript'
+                                    | 'php'
+                                    | 'typescript'
+                                    | 'java'
+                                    | 'python'
+                            }
                         />
                         {errors.output && <div className="text-sm text-secondaryRed">{errors.output.message}</div>}
                     </div>
@@ -115,7 +125,7 @@ const LessonCodingContent = ({ lessonData, lessonId, setVisible }: LessonCodingC
                     Huỷ
                 </Button>
                 <Button type="submit" disabled={isSubmitting}>
-                    Lưu bài tập
+                    {lessonId ? 'Lưu bài tập' : 'Thêm mới bài tập'}
                 </Button>
             </div>
         </form>

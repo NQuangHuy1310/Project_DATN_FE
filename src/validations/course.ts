@@ -80,10 +80,10 @@ export const lessonCodingSchema = z.object({
 })
 
 export const codingContentSchema = z.object({
-    statement: z.string().min(1, MessageErrors.requiredField),
+    statement: z.string({ message: MessageErrors.requiredField }),
     hints: z.string().optional(),
-    sample_code: z.string().min(1, MessageErrors.requiredField),
-    output: z.string().min(1, MessageErrors.requiredField)
+    sample_code: z.string({ message: MessageErrors.requiredField }),
+    output: z.string({ message: MessageErrors.requiredField })
 })
 
 export const roadMapSchema = z.object({

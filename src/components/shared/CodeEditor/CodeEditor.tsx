@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+
 import { useRef } from 'react'
 import * as monaco from 'monaco-editor'
 import { Editor } from '@monaco-editor/react'
@@ -32,17 +33,16 @@ const CodeEditor = ({ language = 'javascript', height = '200px', onChange, title
     }
 
     return (
-        <div>
+        <div className="flex flex-col items-end">
             {title && <h3 className="text-lg font-semibold">{title}</h3>}
             <Editor
                 height={height}
                 className="overflow-hidden rounded-md"
                 language={language}
                 onMount={onMount}
-                defaultValue={initialValue}
+                value={initialValue}
                 theme="vs-dark"
                 options={{
-                    fontFamily: 'Jetbrains-Mono',
                     fontSize: 14,
                     lineHeight: 22,
                     fontWeight: '600',

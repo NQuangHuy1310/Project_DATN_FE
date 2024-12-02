@@ -5,12 +5,12 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
 import routes from '@/configs/routes'
-import { authApis } from '@/app/services/accounts'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import OTPDialog from '@/components/shared/OTPDialog'
 
-import { RegisterFormFields, registerSchema } from '@/validations'
+import { ForgotPasswordField, forgotPasswordSchema } from '@/validations'
+import { useForgotPassword, useVerifyOtpResetPassword } from '@/app/hooks/accounts'
 
 const ForgotPassword = () => {
     const {
@@ -19,20 +19,23 @@ const ForgotPassword = () => {
         getValues,
         handleSubmit,
         formState: { isSubmitting, errors }
-    } = useForm<RegisterFormFields>({ resolver: zodResolver(registerSchema) })
+    } = useForm<ForgotPasswordField>({ resolver: zodResolver(forgotPasswordSchema) })
+
+    const { mutateAsync: forgotPassword } = useForgotPassword()
+    const { mutateAsync: verifyOtpResetPassword } = useVerifyOtpResetPassword()
 
     const [open, setOpen] = useState(false)
 
-    const onSubmit: SubmitHandler<RegisterFormFields> = async (data) => {
+    const onSubmit: SubmitHandler<ForgotPasswordField> = async (data) => {
         try {
-            await authApis.register(data)
+            await forgotPassword(data)
             setOpen(true)
         } catch (error: any) {
             if (error.data && error.data.errors) {
                 error.data.errors.forEach((errorItem: any) => {
                     Object.entries(errorItem).forEach(([key, value]) => {
                         const message = value as string
-                        setError(key as keyof RegisterFormFields, {
+                        setError(key as keyof ForgotPasswordField, {
                             type: key,
                             message: message
                         })
@@ -42,17 +45,15 @@ const ForgotPassword = () => {
         }
     }
 
-    const handleOtpSubmit = async (otp_code: string) => {}
-
-    const handleResendOtp = async () => {
+    const handleOtpSubmit = async (otp_code: string) => {
         const email = getValues('email')
-        await authApis.resendOtp({ email })
+        await verifyOtpResetPassword({ email, otp_code })
     }
 
     return (
         <>
-            <OTPDialog open={open} setOpen={setOpen} onSubmit={handleOtpSubmit} resendOtp={handleResendOtp} />
-            <div className="flex h-full w-full items-center justify-center">
+            <OTPDialog open={open} setOpen={setOpen} onSubmit={handleOtpSubmit} />
+            <div className="flex h-screen w-full items-center justify-center">
                 <div className="mx-auto w-full max-w-[450px] rounded-xl border p-4 shadow md:p-6 lg:p-10">
                     <div className="flex flex-col items-center justify-center gap-3.5 md:gap-4 lg:gap-5">
                         <div className="flex w-full flex-col items-start gap-1">
@@ -63,7 +64,7 @@ const ForgotPassword = () => {
                             onSubmit={handleSubmit(onSubmit)}
                             className="flex w-full flex-col items-center justify-center gap-4"
                         >
-                            <div className="w-full">
+                            <div className="w-full space-y-1">
                                 <Input
                                     {...register('email')}
                                     type="email"
@@ -74,11 +75,17 @@ const ForgotPassword = () => {
                                     disabled={isSubmitting}
                                 />
                                 {errors.email && (
-                                    <div className="text-sm text-red-500 lg:text-base">{errors.email.message}</div>
+                                    <div className="text-sm text-secondaryRed">{errors.email.message}</div>
                                 )}
                             </div>
 
-                            <Button disabled={isSubmitting} variant="default" size="lg" className="w-full text-base">
+                            <Button
+                                disabled={isSubmitting}
+                                type="submit"
+                                variant="default"
+                                size="lg"
+                                className="w-full text-base"
+                            >
                                 Gửi mã
                             </Button>
                         </form>

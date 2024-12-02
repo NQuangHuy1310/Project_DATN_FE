@@ -14,7 +14,7 @@ import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp
 
 interface OTPDialogProps {
     open: boolean
-    resendOtp: () => void
+    resendOtp?: () => void
     setOpen: (open: boolean) => void
     onSubmit: (value: string) => void
 }
@@ -37,7 +37,7 @@ const OTPDialog = ({ open, setOpen, onSubmit, resendOtp }: OTPDialogProps) => {
                     <DialogTitle>Nhập code xác thực tài khoản</DialogTitle>
                     <DialogDescription>Nhập code bạn nhập được ở email để xác thực tài khoản</DialogDescription>
                 </DialogHeader>
-                <div className="flex items-center justify-center w-full">
+                <div className="flex w-full items-center justify-center">
                     <InputOTP maxLength={6} value={value} onChange={(value) => setValue(value)}>
                         <InputOTPGroup>
                             <InputOTPSlot index={0} />
@@ -50,7 +50,7 @@ const OTPDialog = ({ open, setOpen, onSubmit, resendOtp }: OTPDialogProps) => {
                     </InputOTP>
                 </div>
                 <DialogFooter>
-                    <Button type="submit" onClick={() => resendOtp()}>
+                    <Button type="submit" onClick={() => resendOtp?.()}>
                         Gửi lại
                     </Button>
                     <Button type="submit" onClick={() => handleSubmit()}>

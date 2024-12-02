@@ -72,6 +72,8 @@ const routes = {
     // Course instructor routes
     instructorCourses: '/instructor/courses',
     createCourse: '/instructor/courses/:id/manage/goals',
+    instructorRoadmap: '/instructor/learning-paths',
+    instructorPurchaseHistory: '/instructor/purchase-history',
 
     // Instructor communication
     instructorQa: '/instructor/communication/qa',

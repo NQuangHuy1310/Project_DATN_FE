@@ -46,11 +46,6 @@ const CoursesExplore = () => {
         if (level) queryParams.set('level', level)
         if (search) queryParams.set('search', search)
 
-        if (queryParams.toString()) {
-            navigate(`?${queryParams.toString()}`, { replace: true })
-        } else {
-            navigate(location.pathname, { replace: true })
-        }
     }, [page, arrange, category, level, search, navigate, location.pathname])
 
     const handlePageChange = (newPage: number) => {

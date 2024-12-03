@@ -23,8 +23,10 @@ const Course = ({ data, progressLesson, page }: { data: ICourse; progressLesson?
     })
     return (
         <div className="card flex w-full cursor-text flex-col gap-3 shadow-md hover:shadow-[0px_40px_100px_0px_#0000000d] hover:transition-all md:w-[360px]">
-            <Link to={page == routes.courseDetailNoLogin ? `/course/${data.slug}` : `/courses/${data.slug}`}
-                className="flex flex-col gap-2">
+            <Link
+                to={page == routes.dataNoLogin ? `/course/${data.slug}` : `/courses/${data.slug}`}
+                className="flex flex-col gap-2"
+            >
                 <div className="relative h-[160px] flex-shrink-0 cursor-pointer">
                     <img
                         src={getImagesUrl(data.thumbnail!)}
@@ -38,60 +40,63 @@ const Course = ({ data, progressLesson, page }: { data: ICourse; progressLesson?
                 <h3 className="text-overflow cursor-pointer text-base font-bold text-black md:text-lg">{data.name}</h3>
             </Link>
             <div className="flex flex-col gap-2.5">
-                {data.is_course_bought === true ? (
-                    <div className="flex flex-col gap-2">
-                        <div className="flex h-2 w-full items-center overflow-hidden rounded bg-darkGrey/20">
-                            <span
-                                className={`block h-full ${
-                                    data.level === 'Sơ cấp'
-                                        ? 'bg-[#FFBB54]'
-                                        : data.level === 'Trung cấp'
-                                          ? 'bg-[#25C78B]'
-                                          : 'bg-red-600'
-                                }`}
-                                style={{ width: `${data.progress_percent}%` }}
-                            ></span>
-                            <span
-                                className="block h-full bg-darkGrey/20"
-                                style={{ width: `${100 - data.progress_percent}%` }}
-                            ></span>
-                        </div>
-
-                        <span className="text-end text-[13px] font-medium">{data.progress_percent}% hoàn thành</span>
-                    </div>
-                ) : (
-                    <>
-                        {data?.price && data?.price != 0 ? (
-                            <div className="flex items-center gap-3">
-                                <div className="flex items-center gap-1">
-                                    {data?.price_sale && data?.price_sale != 0 ? (
-                                        <div className="flex items-center gap-1">
-                                            <TbCoinFilled className="size-5 text-yellow-500" />
-                                            <del className="text-[12px] font-semibold">{Math.floor(data?.price)}</del>
-                                        </div>
-                                    ) : (
-                                        <div className="flex items-center gap-1">
-                                            <TbCoinFilled className="size-5 text-yellow-500" />
-                                            <p className="text-base font-semibold text-red-600">
-                                                {Math.floor(data?.price)}
-                                            </p>
-                                        </div>
-                                    )}
+                <div>
+                    {data?.is_course_bought === true ? (
+                        data?.progress_percent === 100 ? (
+                            <p className="text-base font-semibold text-orange-500">Đã hoàn thành</p>
+                        ) : data?.progress_percent === 0 ? (
+                            <p className="text-base font-semibold text-orange-500">Bắt đầu học</p>
+                        ) : (
+                            <div className="flex flex-col gap-2">
+                                <div className="flex h-2 w-full items-center overflow-hidden rounded bg-darkGrey/20">
+                                    <span
+                                        className={`block h-full ${
+                                            data?.level === 'Sơ cấp'
+                                                ? 'bg-secondaryYellow'
+                                                : data?.level === 'Trung cấp'
+                                                  ? 'bg-secondaryGreen'
+                                                  : 'bg-secondaryRed'
+                                        }`}
+                                        style={{ width: `${data?.progress_percent}%` }}
+                                    ></span>
+                                    <span
+                                        className="block h-full bg-darkGrey/20"
+                                        style={{ width: `${100 - data?.progress_percent}%` }}
+                                    ></span>
                                 </div>
-                                {data?.price_sale && data?.price_sale != 0 && (
+                                <span className="text-end text-sm font-medium">
+                                    {data?.progress_percent}% hoàn thành
+                                </span>
+                            </div>
+                        )
+                    ) : data?.price && data?.price !== 0 ? (
+                        <div className="flex items-center gap-3">
+                            <div className="flex items-center gap-1">
+                                {data?.price_sale && data?.price_sale !== 0 ? (
+                                    <div className="flex items-center gap-1">
+                                        <TbCoinFilled className="size-5 text-yellow-500" />
+                                        <del className="font-semibold text-red-600">{Math.floor(data?.price)}</del>
+                                    </div>
+                                ) : (
                                     <div className="flex items-center gap-1">
                                         <TbCoinFilled className="size-5 text-yellow-500" />
                                         <p className="text-base font-semibold text-red-600">
-                                            {Math.floor(data?.price_sale)}
+                                            {Math.floor(data?.price)}
                                         </p>
                                     </div>
                                 )}
                             </div>
-                        ) : (
-                            <span className="text-base font-semibold text-orange-500">Miễn phí</span>
-                        )}
-                    </>
-                )}
+                            {data?.price_sale && data?.price_sale !== 0 && (
+                                <div className="flex items-center gap-1">
+                                    <TbCoinFilled className="size-5 text-yellow-500" />
+                                    <p className="text-base text-red-600">{Math.floor(data?.price_sale)}</p>
+                                </div>
+                            )}
+                        </div>
+                    ) : (
+                        <span className="text-base font-semibold text-orange-500">Miễn phí</span>
+                    )}
+                </div>
 
                 <div
                     onClick={() => navigate(routes.instructorDetail.replace(':id', String(data.id_user)))}

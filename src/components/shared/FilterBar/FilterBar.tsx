@@ -24,7 +24,7 @@ const FilterBar = ({
     placeholder: string
     lever?: boolean
     isShowFilter?: boolean
-    onFilterChange: (filters: { arrange?: string; category?: number; level?: string; search?: string }) => void
+    onFilterChange: (filters: { arrange?: string; category?: string; level?: string; search?: string }) => void
 }) => {
     const { data: course_category = [] } = useCourseCategoryHome()
     const [searchInput, setSearchInput] = useState('')
@@ -33,7 +33,7 @@ const FilterBar = ({
         onFilterChange({ level })
     }
 
-    const handleCategoryChange = (category: number) => {
+    const handleCategoryChange = (category: string) => {
         onFilterChange({ category })
     }
 
@@ -121,7 +121,7 @@ const FilterBar = ({
                                         key={category.id}
                                         variant="outline"
                                         className="text-xs"
-                                        onClick={() => handleCategoryChange(category.id)}
+                                        onClick={() => handleCategoryChange(String(category.id))}
                                     >
                                         {category.name}
                                     </Button>

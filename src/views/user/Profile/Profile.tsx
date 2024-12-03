@@ -1,5 +1,3 @@
-import { useState } from 'react'
-
 import { vi } from 'date-fns/locale'
 import { formatDistanceToNow } from 'date-fns'
 
@@ -10,15 +8,12 @@ import { useGetProfile } from '@/app/hooks/accounts'
 import { useGetSlugParams } from '@/app/hooks/common/useCustomParams'
 
 import { getImagesUrl } from '@/lib'
-import { Button } from '@/components/ui/button'
 import Loading from '@/components/Common/Loading/Loading'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Link } from 'react-router-dom'
 import routes from '@/configs/routes'
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
+import Course from '@/components/shared/Course'
 const Profile = () => {
-    const [showAllCreated, setShowAllCreated] = useState(false)
-    const [showAllJoined, setShowAllJoined] = useState(false)
-
     const email = useGetSlugParams('email')
     const { data: profileUser, isLoading } = useGetProfile(email!)
     const user = profileUser?.user.profile
@@ -26,19 +21,14 @@ const Profile = () => {
     const formatTime = (date: any) => {
         return formatDistanceToNow(new Date(date), { addSuffix: true, locale: vi })
     }
-    const createdCourses = showAllCreated
-        ? profileUser?.course_by_user || []
-        : (profileUser?.course_by_user || []).slice(0, 5)
+    const createdCourses = profileUser?.course_by_user
 
-    const joinedCourses = showAllJoined
-        ? profileUser?.courses_user_bought || []
-        : (profileUser?.courses_user_bought || []).slice(0, 5)
-
+    const joinedCourses = profileUser?.courses_user_bought
     if (isLoading) return <Loading />
 
     return (
         <div className="flex flex-col gap-7 rounded-xl bg-white">
-            <div className="mx-auto min-h-screen max-w-6xl p-4">
+            <div className="mx-auto min-h-screen w-full max-w-7xl p-4">
                 {/* Header */}
                 <div className="relative flex h-64 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-pink-300 text-white">
                     <p className="font-mono text-2xl md:text-3xl">document.write('Hello, World');</p>
@@ -63,115 +53,112 @@ const Profile = () => {
                 </div>
 
                 {/* profileUser Section */}
-                <div className="mx-auto grid gap-5 md:grid-cols-12">
-                    {/* Left Section */}
-                    <div className="col-span-12 flex flex-col gap-5 md:col-span-4">
-                        {/* About Section */}
-                        <div className="rounded-xl border bg-white p-4 shadow-lg">
-                            <h2 className="text-xl font-semibold">Giới thiệu</h2>
-                            <div className="mt-4 flex flex-col gap-3">
-                                {user?.bio && (
-                                    <div className="flex w-full justify-center border-b py-2">
-                                        <p className="text-smb break-words text-center">{user.bio}</p>
-                                    </div>
-                                )}
-                                <p className="flex items-center gap-2 break-words text-sm">
-                                    <IoPeople className="text-lg" />
-                                    Thành viên của Coursea từ {formatTime(profileUser?.user.created_at)}
-                                </p>
-                                {profileUser?.user.email && (
-                                    <p className="flex items-center gap-2 break-words text-sm">
-                                        <MdEmail className="text-lg" /> {profileUser.user.email}
-                                    </p>
-                                )}
-                                {user?.phone && (
-                                    <p className="flex items-center gap-2 break-words text-sm">
-                                        <FaPhoneAlt className="text-lg" />
-                                        {user.phone}
-                                    </p>
-                                )}
+                <div className="mx-auto flex flex-col gap-5">
+                    <div className="grid grid-cols-12 gap-5">
+                        <div className="col-span-12 md:col-span-6">
+                            {/* About Section */}
+                            <div className="rounded-xl border bg-white p-4 shadow-lg">
+                                <h2 className="text-xl font-semibold">Giới thiệu</h2>
+                                <div className="mt-4 flex flex-col gap-3">
+                                    {user?.bio && (
+                                        <div className="flex w-full justify-center border-b py-2">
+                                            <p className="text-smb break-words text-center">{user.bio}</p>
+                                        </div>
+                                    )}
+                                    <span className="flex items-center gap-2 break-words text-sm">
+                                        <IoPeople className="text-lg" />
+                                        Thành viên của <span className="font-semibold">Coursea</span> từ{' '}
+                                        {formatTime(profileUser?.user.created_at)}
+                                    </span>
+                                    {profileUser?.user.email && (
+                                        <p className="flex items-center gap-2 break-words text-sm">
+                                            <MdEmail className="text-lg" /> {profileUser.user.email}
+                                        </p>
+                                    )}
+                                    {user?.phone && (
+                                        <p className="flex items-center gap-2 break-words text-sm">
+                                            <FaPhoneAlt className="text-lg" />
+                                            {user.phone}
+                                        </p>
+                                    )}
+                                </div>
                             </div>
                         </div>
-
-                        {/* Recent Activities */}
-                        <div className="rounded-xl border bg-white p-4 shadow-lg">
-                            <h2 className="text-xl font-semibold">Hoạt động gần đây</h2>
-                            <p className="mt-2 text-darkGrey">Chưa có hoạt động gần đây</p>
+                        <div className="col-span-12 md:col-span-6">
+                            {/* About Section */}
+                            <div className="h-full rounded-xl border bg-white p-4 shadow-lg">
+                                <div className="flex flex-col gap-2">
+                                    <h2 className="text-xl font-semibold">Hoạt động gần đây</h2>
+                                    <p>Chưa có hoạt động nào</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
-
-                    {/* Right Section */}
-                    <div className="col-span-12 flex flex-col gap-5 md:col-span-8">
-                        {/* Created Courses */}
-                        <div className="rounded-xl border bg-white p-4 shadow-lg">
-                            <h2 className="text-2xl font-semibold">Các khóa học đã tạo</h2>
-                            {createdCourses && createdCourses?.length > 0 ? (
-                                createdCourses.map((course) => (
-                                    <Link
-                                        to={routes.courseDetail.replace(':slug', course.slug)}
-                                        key={course.id}
-                                        className="my-2 flex flex-col gap-4 border-b pb-3 md:flex-row"
-                                    >
-                                        <div className="w-full md:w-5/12">
-                                            <img
-                                                src={getImagesUrl(course.thumbnail || '')}
-                                                className="h-32 w-full rounded-xl object-cover"
-                                                alt={course.name}
-                                            />
-                                        </div>
-                                        <div className="w-full md:w-7/12">
-                                            <h3 className="text-lg font-bold">{course.name}</h3>
-                                            <p className="mt-1 line-clamp-3 text-sm text-darkGrey">
-                                                {course.description}
-                                            </p>
-                                        </div>
-                                    </Link>
-                                ))
-                            ) : (
-                                <p className="mt-2 text-darkGrey">Chưa có khóa học nào</p>
-                            )}
-                            {profileUser?.course_by_user && profileUser?.course_by_user.length > 5 && (
-                                <Button onClick={() => setShowAllCreated(!showAllCreated)} className="mt-3">
-                                    {showAllCreated ? 'Ẩn bớt' : 'Xem tất cả'}
-                                </Button>
-                            )}
+                    {profileUser?.course_by_user && profileUser?.course_by_user.length > 0 && (
+                        <div className="card col-span-12 flex w-full flex-1 flex-col gap-7 overflow-hidden rounded-2xl border shadow-lg md:col-span-7 lg:col-span-9">
+                            <Carousel
+                                className="w-full"
+                                opts={{
+                                    align: 'start'
+                                }}
+                            >
+                                <div className="flex justify-between">
+                                    <h5 className="text-lg font-medium text-black md:text-xl">Khoá học đã tạo</h5>
+                                    <div className="flex w-20 gap-2 text-right">
+                                        <CarouselPrevious className="!translate-y-0 !shadow-none" />
+                                        <CarouselNext className="!translate-y-0 !shadow-none" />
+                                    </div>
+                                </div>
+                                <div className="w-full">
+                                    <CarouselContent className="w-full gap-4">
+                                        {createdCourses &&
+                                            createdCourses.length > 0 &&
+                                            createdCourses?.map((item, index) => (
+                                                <CarouselItem
+                                                    key={index}
+                                                    className="w-full min-w-0 basis-full md:basis-[367px]"
+                                                >
+                                                    <Course data={item} page={routes.courseDetail} />
+                                                </CarouselItem>
+                                            ))}
+                                    </CarouselContent>
+                                </div>
+                            </Carousel>
                         </div>
+                    )}
 
-                        {/* Joined Courses */}
-                        <div className="rounded-xl border bg-white p-4 shadow-lg">
-                            <h2 className="text-2xl font-semibold">Các khóa học đã tham gia</h2>
-                            {joinedCourses && joinedCourses?.length > 0 ? (
-                                joinedCourses.map((course) => (
-                                    <Link
-                                        to={routes.courseDetail.replace(':slug', course.slug)}
-                                        key={course.id}
-                                        className="my-2 flex flex-col gap-4 border-b pb-3 md:flex-row"
-                                    >
-                                        <div className="w-full md:w-5/12">
-                                            <img
-                                                src={getImagesUrl(course.thumbnail || '')}
-                                                className="h-32 w-full rounded-xl object-cover"
-                                                alt={course.name || 'Thumbnail'}
-                                            />
-                                        </div>
-                                        <div className="w-full md:w-7/12">
-                                            <h3 className="text-lg font-bold">{course.name}</h3>
-                                            <p className="mt-1 text-sm text-darkGrey">
-                                                {course.description || 'Không có mô tả'}
-                                            </p>
-                                        </div>
-                                    </Link>
-                                ))
-                            ) : (
-                                <p className="mt-2 text-darkGrey">Chưa có khóa học nào</p>
-                            )}
-                            {profileUser?.courses_user_bought && profileUser?.courses_user_bought.length > 5 && (
-                                <Button onClick={() => setShowAllJoined(!showAllJoined)} className="mt-3">
-                                    {showAllJoined ? 'Ẩn bớt' : 'Xem tất cả'}
-                                </Button>
-                            )}
+                    {profileUser?.courses_user_bought && profileUser?.courses_user_bought.length > 0 && (
+                        <div className="card col-span-12 flex w-full flex-1 flex-col gap-7 overflow-hidden rounded-2xl border shadow-lg md:col-span-7 lg:col-span-9">
+                            <Carousel
+                                className="w-full"
+                                opts={{
+                                    align: 'start'
+                                }}
+                            >
+                                <div className="flex justify-between">
+                                    <h5 className="text-lg font-medium text-black md:text-xl">Khoá học đã tham gia</h5>
+                                    <div className="flex w-20 gap-2 text-right">
+                                        <CarouselPrevious className="!translate-y-0 !shadow-none" />
+                                        <CarouselNext className="!translate-y-0 !shadow-none" />
+                                    </div>
+                                </div>
+                                <div className="w-full">
+                                    <CarouselContent className="w-full gap-4">
+                                        {joinedCourses &&
+                                            joinedCourses.length > 0 &&
+                                            joinedCourses?.map((item, index) => (
+                                                <CarouselItem
+                                                    key={index}
+                                                    className="w-full min-w-0 basis-full md:basis-[367px]"
+                                                >
+                                                    <Course data={item} page={routes.courseDetail} />
+                                                </CarouselItem>
+                                            ))}
+                                    </CarouselContent>
+                                </div>
+                            </Carousel>
                         </div>
-                    </div>
+                    )}
                 </div>
             </div>
         </div>

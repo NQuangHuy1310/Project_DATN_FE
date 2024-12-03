@@ -46,7 +46,6 @@ import NewPost from '@/views/user/Posts/NewPosts'
 import PostDetail from '@/views/user/Posts/PostDetail'
 import MyBookmarks from '@/views/user/Posts/MyBookmarks'
 
-import Transaction from '@/views/user/wallet/Transaction'
 import CourseDetailNoLogin from '@/views/user/Courses/CourseDetailNoLogin/CourseDetailNoLogin'
 import PerformanceOverview from '@/views/instructor/Performance/PerformanceOverview'
 
@@ -66,6 +65,7 @@ import Discount from '@/views/user/Discount/Discount'
 import Profile from '@/views/user/Profile'
 import Roadmap from '@/views/instructor/Roadmap'
 import PurchaseHistory from '@/views/instructor/PurchaseHistory'
+import Transaction from '@/views/user/wallet/transaction'
 
 // Routes không cần đăng nhập
 export const publicRoutes = [

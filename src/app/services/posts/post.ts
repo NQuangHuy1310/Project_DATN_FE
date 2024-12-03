@@ -5,8 +5,8 @@ import { IComment, ICreateComment } from '@/types'
 import { ICreatePost, IFeaturedPost, IListPost, IPostDetail, IPosts, ISavedPosts } from '@/types/post'
 
 export const postsApi = {
-    getAllPost: async (page: number, perPage?: number): Promise<IListPost> => {
-        return axiosClient.get(postUri.POST(page, perPage))
+    getAllPost: async (page: number, perPage?: number, search?: string): Promise<IListPost> => {
+        return axiosClient.get(postUri.POST(page, perPage, search))
     },
 
     createPost: async (postData: ICreatePost): Promise<any> => {

@@ -6,7 +6,6 @@ import { useGetPostsSaved } from '@/app/hooks/posts'
 
 import Post from '@/components/shared/Post'
 import Loading from '@/components/Common/Loading/Loading'
-import FilterBar from '@/components/shared/FilterBar/FilterBar'
 import NoContent from '@/components/shared/NoContent/NoContent'
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination'
 
@@ -40,7 +39,6 @@ const MyBookmarks = () => {
         <div className="flex flex-col gap-7 rounded-md bg-white p-10 ">
             <div className="flex flex-col gap-5">
                 <h1 className="text-2xl font-bold"> Bài viết đã lưu</h1>
-                <FilterBar placeholder="Tìm kiếm bài viết" isShowFilter={false} />
             </div>
             <div className="flex w-full gap-20">
                 <div className="flex w-3/4 flex-col items-start gap-10">

@@ -16,12 +16,13 @@ import { IComment, ICreateComment } from '@/types'
 export const useGetPosts = (
     page: number,
     perPage?: number,
+    search?: string,
     options?: Omit<UseQueryOptions<IListPost>, 'queryKey' | 'queryFn'>
 ) => {
     return useQuery<IListPost>({
         ...options,
-        queryKey: ['posts', page, perPage],
-        queryFn: () => postsApi.getAllPost(page, perPage)
+        queryKey: ['posts', page, perPage, search],
+        queryFn: () => postsApi.getAllPost(page, perPage, search)
     })
 }
 

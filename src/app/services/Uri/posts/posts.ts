@@ -1,6 +1,7 @@
 const POST_URL = 'posts/'
 export const postUri = {
-    POST: (page: number, perPage?: number) => `${POST_URL}?page=${page}${perPage ? `&perPage=${perPage}` : ''}`,
+    POST: (page: number, perPage?: number, search?: string) =>
+        `${POST_URL}?page=${page}${perPage ? `&perPage=${perPage}` : ''}${search ? `&search=${search}` : ''}`,
     GET_POST_DETAIL: (slug: string) => `${POST_URL}detail/${slug}`,
     ADD_POST: `${POST_URL}`,
     UPDATE_POST: (postSlug: string) => `${POST_URL}${postSlug}`,

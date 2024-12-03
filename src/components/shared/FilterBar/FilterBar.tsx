@@ -48,6 +48,11 @@ const FilterBar = ({
         }
         onFilterChange({ search: searchInput })
     }
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === 'Enter') {
+            handleSearchSubmit()
+        }
+    }
 
     return (
         <div className="flex flex-wrap items-center justify-between gap-3">
@@ -58,6 +63,7 @@ const FilterBar = ({
                     placeholder={placeholder}
                     value={searchInput}
                     onChange={(e) => setSearchInput(e.target.value)}
+                    onKeyDown={handleKeyDown}
                 />
                 <IoSearchOutline
                     onClick={handleSearchSubmit}

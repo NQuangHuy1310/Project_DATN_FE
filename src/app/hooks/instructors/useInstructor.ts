@@ -409,7 +409,7 @@ export const useUpdateCodingContent = () => {
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: ['modules'] })
             await queryClient.invalidateQueries({ queryKey: ['lesson'] })
-            toast.success('Thêm nội dung bài học thành công!')
+            toast.success('Thêm nội dung bài tập thành công!')
         }
     })
 }
@@ -537,24 +537,22 @@ export const useStatistic = (options?: Omit<UseQueryOptions<RevenueData>, 'query
 }
 
 export const useGetStudentsCourse = (
-    courseID: number,
+    courseID?: number,
     options?: Omit<UseQueryOptions<StudentsCourse>, 'queryKey' | 'queryFn'>
 ) => {
     return useQuery({
         ...options,
-        enabled: courseID !== undefined,
         queryKey: ['instructorGetStudents', courseID],
         queryFn: () => instructorApi.getStudentsCourse(courseID)
     })
 }
 
 export const useGetRatingsCourse = (
-    courseID: number,
+    courseID?: number,
     options?: Omit<UseQueryOptions<RatingsCourse>, 'queryKey' | 'queryFn'>
 ) => {
     return useQuery({
         ...options,
-        enabled: courseID !== undefined,
         queryKey: ['instructorGetRatings', courseID],
         queryFn: () => instructorApi.getRatingsCourse(courseID)
     })

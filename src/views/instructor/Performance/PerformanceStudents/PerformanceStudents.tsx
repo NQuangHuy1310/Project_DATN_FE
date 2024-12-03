@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useGetCoursesApproved, useGetStudentsCourse } from '@/app/hooks/instructors'
@@ -23,23 +23,21 @@ import Loading from '@/components/Common/Loading/Loading'
 
 const PerformanceStudents = () => {
     const navigate = useNavigate()
-    const [courseId, setCourseId] = useState<number>()
-    const [studentId, setStudentId] = useState<number>()
+    const [courseId, setCourseId] = useState<number | undefined>(undefined)
+    const [studentId, setStudentId] = useState<number | undefined>(undefined)
     const [openDialog, setOpenDialog] = useState<boolean>(false)
 
     const { data: courseData } = useGetCoursesApproved()
-    const { data: studentsCourse, isLoading } = useGetStudentsCourse(courseId!)
+    const { data: studentsCourse, isLoading } = useGetStudentsCourse(courseId)
     const { data: studentData } = useGetUserById(studentId!)
 
     const handleSelectCourse = (value: string) => {
-        setCourseId(+value)
-    }
-
-    useEffect(() => {
-        if (courseData && courseData.length > 0) {
-            setCourseId(courseData[0].id)
+        if (value === 'all') {
+            setCourseId(undefined)
+        } else {
+            setCourseId(+value)
         }
-    }, [courseData])
+    }
 
     if (isLoading) return <Loading />
 
@@ -50,13 +48,17 @@ const PerformanceStudents = () => {
                     <div className="flex flex-col gap-5">
                         <div className="space-y-1">
                             <h6 className="mt-1 text-sm text-muted-foreground">Lựa chọn khoá học</h6>
-                            <Select onValueChange={handleSelectCourse} value={courseId?.toString()}>
+                            <Select
+                                onValueChange={handleSelectCourse}
+                                value={courseId === undefined ? 'all' : courseId.toString()}
+                            >
                                 <SelectTrigger className="flex w-[300px] items-center justify-between">
                                     <SelectValue placeholder="Chọn khoá học" />
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectGroup>
                                         <SelectLabel>Chọn khoá học</SelectLabel>
+                                        <SelectItem value="all">Tất cả khoá học</SelectItem>
                                         {courseData.map((course: ICourseApproved) => (
                                             <SelectItem key={course.id} value={course.id.toString()}>
                                                 {course.name}

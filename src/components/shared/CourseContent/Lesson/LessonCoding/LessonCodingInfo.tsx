@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
@@ -31,7 +32,7 @@ const LessonCodingInfo = ({ moduleId, setVisible, lessonId, setLessonID }: Lesso
     const { data: lessonData } = useGetLessonDetail(lessonId ?? 0)
     const { mutateAsync: createLessonCoding } = useCreateLessonCoding()
     const { mutateAsync: updateLessonCoding } = useUpdateLessonCoding()
-    const [selectedLanguage, setSelectedLanguage] = useState<string>('')
+    const [selectedLanguage, setSelectedLanguage] = useState<string>(lessonData?.lessonable.language ?? '')
 
     const handleLanguageChange = (value: string) => {
         setSelectedLanguage(value)
@@ -54,8 +55,8 @@ const LessonCodingInfo = ({ moduleId, setVisible, lessonId, setLessonID }: Lesso
 
     useEffect(() => {
         if (lessonData) {
+            handleLanguageChange(lessonData.lessonable?.language ?? '')
             setValue('title', lessonData.title!)
-            setSelectedLanguage(lessonData.lessonable?.language ?? '')
             setValue('description', lessonData.description!)
         }
     }, [lessonData, setValue])

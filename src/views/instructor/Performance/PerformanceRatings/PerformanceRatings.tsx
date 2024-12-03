@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { FaRegHeart, FaStar, FaStarHalfAlt } from 'react-icons/fa'
 
@@ -23,21 +23,19 @@ import { Textarea } from '@/components/ui/textarea'
 
 const PerformanceRatings = () => {
     const navigate = useNavigate()
-    const [courseId, setCourseId] = useState<number>()
+    const [courseId, setCourseId] = useState<number | undefined>(undefined)
     const [comment, setComment] = useState<ratingCourse>()
     const [openDialog, setOpenDialog] = useState<boolean>(false)
 
     const { data: courseData } = useGetCoursesApproved()
-    const { data: ratingsData } = useGetRatingsCourse(courseId!)
-
-    useEffect(() => {
-        if (courseData && courseData.length > 0) {
-            setCourseId(courseData[0].id)
-        }
-    }, [courseData])
+    const { data: ratingsData } = useGetRatingsCourse(courseId)
 
     const handleSelectCourse = (value: string) => {
-        setCourseId(+value)
+        if (value === 'all') {
+            setCourseId(undefined)
+        } else {
+            setCourseId(+value)
+        }
     }
 
     return (
@@ -47,13 +45,17 @@ const PerformanceRatings = () => {
                     <div className="flex flex-col gap-5">
                         <div className="space-y-1">
                             <h6 className="mt-1 text-sm text-muted-foreground">Lựa chọn khoá học</h6>
-                            <Select onValueChange={handleSelectCourse} value={courseId?.toString()}>
+                            <Select
+                                onValueChange={handleSelectCourse}
+                                value={courseId === undefined ? 'all' : courseId.toString()}
+                            >
                                 <SelectTrigger className="flex w-[300px] items-center justify-between">
                                     <SelectValue placeholder="Chọn khoá học" />
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectGroup>
                                         <SelectLabel>Chọn khoá học</SelectLabel>
+                                        <SelectItem value="all">Tất cả khoá học</SelectItem>
                                         {courseData.map((course: ICourseApproved) => (
                                             <SelectItem key={course.id} value={course.id.toString()}>
                                                 {course.name}

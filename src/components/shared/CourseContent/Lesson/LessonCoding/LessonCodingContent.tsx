@@ -31,9 +31,10 @@ const LessonCodingContent = ({ lessonId, setVisible }: LessonCodingContentProps)
     const { data: lessonData } = useGetLessonDetail(lessonId)
     const { mutateAsync } = useUpdateCodingContent()
     const [error, setError] = useState<string>('')
-    const [output, setOutput] = useState<string>(lessonData?.lessonable.result_code ?? '')
+    const [isLoading, setIsLoading] = useState<boolean>(false)
+    const [output, setOutput] = useState<string>(lessonData?.lessonable.output ?? '')
 
-    const handleCodeChange = (field: 'output' | 'sample_code') => (value: string) => {
+    const handleCodeChange = (field: 'result_code' | 'sample_code') => (value: string) => {
         setValue(field, value)
     }
 
@@ -43,9 +44,10 @@ const LessonCodingContent = ({ lessonId, setVisible }: LessonCodingContentProps)
 
     const runCode = async () => {
         const language = lessonData?.lessonable.language
-        const sourceCode = getValues('output')
+        const sourceCode = getValues('result_code')
         if (!sourceCode) return
         try {
+            setIsLoading(true)
             const { data: result } = await axios.post('https://emkc.org/api/v2/piston/execute', {
                 language: language,
                 version: LANGUAGE_VERSIONS[language as 'javascript' | 'php' | 'typescript' | 'java' | 'python'],
@@ -58,9 +60,12 @@ const LessonCodingContent = ({ lessonId, setVisible }: LessonCodingContentProps)
                 setError(result.run.stderr)
                 setOutput('')
             }
+            setIsLoading(false)
             toast.success('Chạy code thành công!')
         } catch {
             toast.error('Có lỗi trong lúc chạy code. Vui lòng kiểm tra lại mã nguồn của bạn.')
+        } finally {
+            setIsLoading(false)
         }
     }
 
@@ -77,9 +82,10 @@ const LessonCodingContent = ({ lessonId, setVisible }: LessonCodingContentProps)
 
         const payload = {
             ...data,
-            result_code: output.trim(),
+            output: output.trim(),
             _method: 'PUT'
         }
+
         await mutateAsync([lessonId!, payload])
         setVisible(false)
     }
@@ -90,7 +96,7 @@ const LessonCodingContent = ({ lessonId, setVisible }: LessonCodingContentProps)
             setValue('statement', lessonData.lessonable.statement)
             setValue('hints', lessonData.lessonable.hints)
             setValue('sample_code', lessonData.lessonable.sample_code!)
-            setValue('output', lessonData.lessonable.output!)
+            setValue('result_code', lessonData.lessonable.result_code!)
         }
     }, [lessonData, setValue, reset])
 
@@ -135,8 +141,8 @@ const LessonCodingContent = ({ lessonId, setVisible }: LessonCodingContentProps)
                         <label className="text-sm text-muted-foreground">Nhập giải pháp của bạn</label>
                         <CodeEditor
                             height="300px"
-                            onChange={handleCodeChange('output')}
-                            value={getValues('output')}
+                            onChange={handleCodeChange('result_code')}
+                            value={getValues('result_code')}
                             language={
                                 lessonData?.lessonable.language as
                                     | 'javascript'
@@ -146,7 +152,9 @@ const LessonCodingContent = ({ lessonId, setVisible }: LessonCodingContentProps)
                                     | 'python'
                             }
                         />
-                        {errors.output && <div className="text-sm text-secondaryRed">{errors.output.message}</div>}
+                        {errors.result_code && (
+                            <div className="text-sm text-secondaryRed">{errors.result_code.message}</div>
+                        )}
                     </div>
                 </div>
 
@@ -184,13 +192,13 @@ const LessonCodingContent = ({ lessonId, setVisible }: LessonCodingContentProps)
                 </div>
             </div>
             <div className="mt-auto flex items-center justify-end gap-2">
-                <Button variant="destructive" disabled={isSubmitting} onClick={() => setVisible(false)}>
+                <Button variant="destructive" disabled={isSubmitting || isLoading} onClick={() => setVisible(false)}>
                     Huỷ
                 </Button>
-                <Button type="button" disabled={isSubmitting} onClick={() => runCode()}>
+                <Button type="button" disabled={isSubmitting || isLoading} onClick={() => runCode()}>
                     Kiểm tra code
                 </Button>
-                <Button type="submit" disabled={isSubmitting}>
+                <Button type="submit" disabled={isSubmitting || isLoading}>
                     {lessonId ? 'Lưu bài tập' : 'Thêm mới bài tập'}
                 </Button>
             </div>

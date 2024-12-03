@@ -169,10 +169,10 @@ export const instructorApi = {
     instructorStatistic: async (): Promise<any> => {
         return axiosClient.get(instructorUri.STATISTIC)
     },
-    getStudentsCourse: async (courseID: number): Promise<any> => {
+    getStudentsCourse: async (courseID?: number): Promise<any> => {
         return axiosClient.get(instructorUri.GET_STUDENTS(courseID))
     },
-    getRatingsCourse: async (courseID: number): Promise<any> => {
+    getRatingsCourse: async (courseID?: number): Promise<any> => {
         return axiosClient.get(instructorUri.GET_RATINGS(courseID))
     }
 }

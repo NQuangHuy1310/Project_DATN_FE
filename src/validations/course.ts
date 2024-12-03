@@ -83,7 +83,7 @@ export const codingContentSchema = z.object({
     statement: z.string({ message: MessageErrors.requiredField }),
     hints: z.string().optional(),
     sample_code: z.string({ message: MessageErrors.requiredField }),
-    output: z.string({ message: MessageErrors.requiredField })
+    result_code: z.string({ message: MessageErrors.requiredField })
 })
 
 export const roadMapSchema = z.object({

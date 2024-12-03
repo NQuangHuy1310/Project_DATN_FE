@@ -4,7 +4,7 @@ import ReactQuill from 'react-quill'
 import { getImagesUrl } from '@/lib'
 import useGetUserProfile from '@/app/hooks/accounts/useGetUser'
 
-import { useGetIdParams } from '@/app/hooks/common/useCustomParams'
+import { useGetSlugParams } from '@/app/hooks/common/useCustomParams'
 import { useAddCommentCourse, useGetCommentCourse } from '@/app/hooks/courses/useCourse'
 
 import { Input } from '@/components/ui/input'
@@ -31,8 +31,11 @@ const CommentCourse = ({ isOpen, setIsOpen, commentId }: IComment) => {
     const [isExpanded, setIsExpanded] = useState<{ [key: number]: boolean }>({})
 
     const { user } = useGetUserProfile()
-    const id = useGetIdParams('id')
-    const { data: comments } = useGetCommentCourse(id!)
+    const id = useGetSlugParams('id')
+    const idLesson = id.split('-')[1]
+    const numericId = parseInt(idLesson, 10)
+    const { data: comments } = useGetCommentCourse(numericId)
+
     const { mutateAsync: addComment } = useAddCommentCourse()
     const totalComment = comments?.length
     const formatTime = (date: any) => {
@@ -100,9 +103,9 @@ const CommentCourse = ({ isOpen, setIsOpen, commentId }: IComment) => {
     return (
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetContent>
-                <div className="flex gap-3 p-3 w-full">
+                <div className="flex w-full gap-3 p-3">
                     {isOpenComment ? (
-                        <div className="flex gap-2 w-full">
+                        <div className="flex w-full gap-2">
                             <Avatar className="size-7 cursor-pointer md:size-10">
                                 <AvatarImage
                                     className="object-cover"
@@ -151,12 +154,12 @@ const CommentCourse = ({ isOpen, setIsOpen, commentId }: IComment) => {
                     <h3 className="text-lg font-semibold">{totalComment} Bình luận</h3>
                     <div className="scrollbar-hide max-h-[600px] overflow-y-scroll p-4">
                         {comments && comments.length > 0 ? (
-                            <div className="flex flex-col gap-5 w-full">
+                            <div className="flex w-full flex-col gap-5">
                                 {comments
                                     ?.filter((comment) => comment.parent_id === null)
                                     .map((comment: any) => (
-                                        <div key={comment.id} className="flex flex-col gap-3 w-full">
-                                            <div className="flex gap-2 w-full">
+                                        <div key={comment.id} className="flex w-full flex-col gap-3">
+                                            <div className="flex w-full gap-2">
                                                 <Avatar className="size-7 cursor-pointer md:size-10">
                                                     <AvatarImage
                                                         className="object-cover"
@@ -348,11 +351,6 @@ const CommentCourse = ({ isOpen, setIsOpen, commentId }: IComment) => {
                             </div>
                         ) : (
                             <div className="flex flex-col gap-4 text-center">
-                                <img
-                                    src="https://kt.city/static/img-empty-cart.png"
-                                    className="mx-auto size-36"
-                                    alt=""
-                                />
                                 <span>Chưa có bình luận nào</span>
                             </div>
                         )}

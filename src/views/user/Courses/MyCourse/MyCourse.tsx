@@ -13,6 +13,7 @@ import {
     PaginationPrevious
 } from '@/components/ui/pagination'
 import { Button } from '@/components/ui/button'
+import Loading from '@/components/Common/Loading/Loading'
 
 const MyCourses = () => {
     const navigate = useNavigate()
@@ -25,7 +26,7 @@ const MyCourses = () => {
     const [category, setCategory] = useState(queryParams.get('category') || '')
     const [level, setLevel] = useState(queryParams.get('level') || '')
     const [search, setSearch] = useState(queryParams.get('search') || '')
-    const { data: courseBought } = useCourseMyBought(search, category, level, arrange, page, 6)
+    const { data: courseBought, isLoading } = useCourseMyBought(search, category, level, arrange, page, 6)
 
     const handleFilterChange = (filters: { arrange?: string; category?: string; level?: string; search?: string }) => {
         if (filters.arrange !== undefined) setArrange(filters.arrange)
@@ -52,7 +53,7 @@ const MyCourses = () => {
 
     const totalPages = Math.ceil((courseBought?.total ?? 0) / (courseBought?.per_page ?? 0))
     const visiblePages = getVisiblePages(totalPages, page, 5)
-
+    if (isLoading) return <Loading />
     return (
         <div className="flex flex-col gap-7">
             <FilterBar onFilterChange={handleFilterChange} placeholder="Tìm kiếm khóa học và người hướng dẫn" lever />

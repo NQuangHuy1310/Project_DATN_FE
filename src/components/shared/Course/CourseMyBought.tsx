@@ -8,10 +8,10 @@ import CourseProgress from '@/components/shared/Course/CourseProgress'
 import { CourseLevel } from '@/components/shared/Course/CourseLevel'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import { formatDuration, getImagesUrl } from '@/lib'
-import { ICourseMyBought } from '@/types/user'
 import routes from '@/configs/routes'
+import { ICourse } from '@/types/course/course'
 
-const CourseMyBought = ({ data, progressLesson }: { data: ICourseMyBought; progressLesson?: number }) => {
+const CourseMyBought = ({ data, progressLesson }: { data: ICourse; progressLesson?: number }) => {
     const navigate = useNavigate()
     const totalTime = formatDuration((data?.total_duration_video as unknown as number) || 0)
 
@@ -41,12 +41,13 @@ const CourseMyBought = ({ data, progressLesson }: { data: ICourseMyBought; progr
                 <div className="flex flex-col gap-2">
                     <div className="flex h-2 w-full items-center overflow-hidden rounded bg-darkGrey/20">
                         <span
-                            className={`block h-full ${data.level === 'Sơ cấp'
-                                ? 'bg-[#FFBB54]'
-                                : data.level === 'Trung cấp'
-                                    ? 'bg-[#25C78B]'
-                                    : 'bg-red-600'
-                                }`}
+                            className={`block h-full ${
+                                data.level === 'Sơ cấp'
+                                    ? 'bg-[#FFBB54]'
+                                    : data.level === 'Trung cấp'
+                                      ? 'bg-[#25C78B]'
+                                      : 'bg-red-600'
+                            }`}
                             style={{ width: `${data.progress_percent}%` }}
                         ></span>
                         <span
@@ -60,7 +61,10 @@ const CourseMyBought = ({ data, progressLesson }: { data: ICourseMyBought; progr
 
                 <div className="flex items-center justify-between">
                     {data.user && (
-                        <div onClick={() => navigate(routes.instructorDetail.replace(':id', String(data.id_user)))} className="flex items-center gap-2  cursor-pointer">
+                        <div
+                            onClick={() => navigate(routes.instructorDetail.replace(':id', String(data.id_user)))}
+                            className="flex cursor-pointer items-center gap-2"
+                        >
                             <Avatar className="size-8 flex-shrink-0">
                                 <AvatarImage src={getImagesUrl(data.user?.avatar || '')} alt={data.user.name} />
                                 <AvatarFallback className="flex size-8 items-center justify-center bg-slate-500/50 font-semibold">

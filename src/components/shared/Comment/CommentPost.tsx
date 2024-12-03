@@ -98,9 +98,9 @@ const CommentPost = ({ isOpen, setIsOpen, commentId }: IComment) => {
     return (
         <Sheet open={isOpen} onOpenChange={() => setIsOpen(!isOpen)}>
             <SheetContent>
-                <div className="flex gap-3 p-3 w-full">
+                <div className="flex w-full gap-3 p-3">
                     {isOpenComment ? (
-                        <div className="flex gap-2 w-full">
+                        <div className="flex w-full gap-2">
                             <Avatar className="size-7 cursor-pointer md:size-10">
                                 <AvatarImage
                                     className="object-cover"
@@ -117,7 +117,6 @@ const CommentPost = ({ isOpen, setIsOpen, commentId }: IComment) => {
                                         value={contentMap[commentId] || ''}
                                         onChange={(value) => handleContentChange(commentId, value)}
                                     />
-
                                 </div>
                                 <div className="flex justify-end gap-2">
                                     <Button onClick={() => setIsOpenComment(false)} variant="outline">
@@ -154,8 +153,8 @@ const CommentPost = ({ isOpen, setIsOpen, commentId }: IComment) => {
                                 {comments
                                     ?.filter((comment) => comment.parent_id === null)
                                     .map((comment: any) => (
-                                        <div key={comment.id} className="flex flex-col gap-3  w-full">
-                                            <div className="flex gap-2 w-full">
+                                        <div key={comment.id} className="flex w-full flex-col gap-3">
+                                            <div className="flex w-full gap-2">
                                                 <Avatar className="size-7 cursor-pointer md:size-10">
                                                     <AvatarImage
                                                         className="object-cover"
@@ -202,7 +201,7 @@ const CommentPost = ({ isOpen, setIsOpen, commentId }: IComment) => {
                                                     <div className="flex w-full flex-col gap-2">
                                                         <div className="w-full">
                                                             <ReactQuill
-                                                                className='w-full'
+                                                                className="w-full"
                                                                 value={contentMap[comment.id] || ''}
                                                                 onChange={(value) =>
                                                                     handleContentChange(comment.id, value)
@@ -348,11 +347,6 @@ const CommentPost = ({ isOpen, setIsOpen, commentId }: IComment) => {
                             </div>
                         ) : (
                             <div className="flex flex-col gap-4 text-center">
-                                <img
-                                    src="https://kt.city/static/img-empty-cart.png"
-                                    className="mx-auto size-36"
-                                    alt=""
-                                />
                                 <span>Chưa có bình luận nào</span>
                             </div>
                         )}

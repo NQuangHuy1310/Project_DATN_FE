@@ -50,7 +50,7 @@ const UserButton = () => {
                         </AvatarFallback>
                     </Avatar>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-60">
+                <DropdownMenuContent align="end" className="w-70">
                     <DropdownMenuGroup className="flex flex-col gap-1.5 p-2">
                         {validRoutesMember.some((route) => location.pathname.includes(route)) &&
                         (user?.user_type === 'teacher' || user?.user_type === 'admin') ? (

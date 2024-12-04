@@ -1,8 +1,6 @@
 import axios from 'axios'
 import axiosClient from '@/configs/axiosClient'
 
-import { lessonUri } from '@/app/services/Uri/courses/lessons'
-
 import {
     ICheckQuizLeaning,
     ICheckQuizLeaningPost,
@@ -11,6 +9,7 @@ import {
     IQuizLeaning,
     IQuizProCess
 } from '@/types/course/course'
+import { lessonUri } from '@/app/services/Uri/courses/lessons'
 import { backendUrl } from '@/configs/baseUrl'
 import { getAccessTokenFromLocalStorage } from '@/lib'
 
@@ -42,5 +41,8 @@ export const lessonApi = {
     },
     getQuizLeaning: async (idUser: number, idQuiz: number): Promise<ICheckQuizLeaningPost> => {
         return axiosClient.get(lessonUri.GET_QUIZ_LEANING(idUser, idQuiz))
+    },
+    checkCodeLeaning: async (idCode: number, output: string): Promise<any> => {
+        return axiosClient.post(lessonUri.CHECK_CODE_LESSON(idCode), { output })
     }
 }

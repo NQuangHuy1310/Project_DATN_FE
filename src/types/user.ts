@@ -52,3 +52,14 @@ export interface Flow {
 export interface CheckFlow {
     action: 'follow' | 'unfollow'
 }
+
+export interface IRegisterInstructor {
+    certificates: string[]
+    qa_pairs: {
+        question: string
+        answer: string
+    }[]
+    degree: string
+    institution_name: string
+    start_date: Date
+}

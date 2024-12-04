@@ -61,7 +61,7 @@ export interface ILesson {
     position: number
     thumbnail: string | null
     title: string
-    content_type: 'video' | 'document' | 'quiz'
+    content_type: 'video' | 'document' | 'quiz' | 'coding'
 }
 
 export interface IModule {
@@ -84,6 +84,12 @@ export interface ILessonAbleLeaning {
     url?: string
     video_youtube_id?: string | null
     duration?: number
+    hints?: string
+    language?: 'javascript' | 'php' | 'typescript' | 'java' | 'python'
+    output?: string
+    result_code?: string
+    sample_code?: string
+    statement?: string
 }
 
 export interface ILessonLeaning {
@@ -92,7 +98,7 @@ export interface ILessonLeaning {
     title: string
     thumbnail: string | null
     description: string | null
-    content_type: 'document' | 'video' | 'quiz'
+    content_type: 'document' | 'video' | 'quiz' | 'coding'
     lessonable_type: string
     duration: number | null
     lessonable_id: number

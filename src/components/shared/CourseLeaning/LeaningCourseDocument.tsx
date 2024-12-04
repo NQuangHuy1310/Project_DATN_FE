@@ -3,23 +3,25 @@ import AddQA from '@/components/shared/CourseLeaning/Sheet/AddQA'
 import { Button } from '@/components/ui/button'
 import { backendUrl } from '@/configs/baseUrl'
 import { ILessonLeaning } from '@/types/course/course'
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { HiOutlineChatAlt2 } from 'react-icons/hi'
 import { toast } from 'sonner'
 
 const LeaningCourseDocument = ({
+    slug,
     dataLesson,
     toggleTab,
-    checkLesson,
-    setCheckButton
+    checkLesson
+    // setCheckButton
 }: {
+    slug: string
     dataLesson: ILessonLeaning
     toggleTab: boolean
     checkLesson: number
-    setCheckButton: Dispatch<SetStateAction<boolean>>
+    // setCheckButton: Dispatch<SetStateAction<boolean>>
 }) => {
     const [qaSheet, setQASheet] = useState<boolean>(false)
-    const { mutateAsync: lessonProcessUpdate } = useUpdateLessonProCess()
+    const { mutateAsync: lessonProcessUpdate } = useUpdateLessonProCess(slug)
     const [loading, setLoading] = useState<boolean>(false)
     const [remainingTime, setRemainingTime] = useState<number>(0)
 
@@ -71,7 +73,7 @@ const LeaningCourseDocument = ({
             setRemainingTime(Math.floor(readingTime / 1000))
 
             const timer = setTimeout(async () => {
-                setCheckButton(false)
+                // setCheckButton(false)
                 await lessonProcessUpdate([
                     dataLesson.id!,
                     {
@@ -97,7 +99,7 @@ const LeaningCourseDocument = ({
                 clearInterval(interval)
             }
         }
-    }, [setCheckButton, dataLesson.id, dataLesson.content_type, dataLesson.lessonable, lessonProcessUpdate])
+    }, [dataLesson.id, dataLesson.content_type, dataLesson.lessonable, lessonProcessUpdate])
 
     const formatTime = (time: number) => {
         const minutes = Math.floor(time / 60)

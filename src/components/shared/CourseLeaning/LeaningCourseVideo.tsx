@@ -12,20 +12,20 @@ import { HiOutlineChatAlt2, HiPlusSm } from 'react-icons/hi'
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog'
 
 const LeaningCourseVideo = ({
+    slug,
     toggleTab,
     dataLesson,
     checkLesson,
     durationNote,
-    setCheckButton,
     setCheckNote,
     onPauseVideo,
     onPlayVideo
 }: {
+    slug: string
     toggleTab: boolean
     dataLesson: ILessonLeaning
     checkLesson: number
     durationNote?: number
-    setCheckButton: Dispatch<SetStateAction<boolean>>
     setCheckNote: Dispatch<SetStateAction<boolean>>
     onPauseVideo: (pause: () => void) => void
     onPlayVideo: (play: () => void) => void
@@ -41,7 +41,7 @@ const LeaningCourseVideo = ({
     const playerRef = useRef<any>(null)
     const hasUpdatedProgress = useRef<boolean>(false)
 
-    const { mutateAsync: lessonProcessUpdate } = useUpdateLessonProCess()
+    const { mutateAsync: lessonProcessUpdate } = useUpdateLessonProCess(slug)
 
     const isYouTubeVideo = dataLesson.lessonable?.type === 'url'
     const videoUrl = isYouTubeVideo
@@ -50,7 +50,7 @@ const LeaningCourseVideo = ({
 
     const formatDate = (dateTime: string) => {
         const date = new Date(dateTime)
-        return `${date.toLocaleDateString()}`
+        return `Ngày ${date.getDay()} tháng ${date.getMonth()} năm ${date.getFullYear()}`
     }
 
     const updateProgress = async () => {
@@ -63,7 +63,6 @@ const LeaningCourseVideo = ({
                     _method: 'PUT'
                 }
             ])
-            setCheckButton(false)
             hasUpdatedProgress.current = true
         }
     }

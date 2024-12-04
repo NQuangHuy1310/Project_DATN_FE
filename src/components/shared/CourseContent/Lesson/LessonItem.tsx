@@ -169,7 +169,12 @@ const LessonItem = ({ lesson, canEdit }: LessonItemProps) => {
 
             {/* Handle edit lesson coding */}
             {isEditingCoding && !isSelectingLessonType && (
-                <LessonCoding open={isEditingCoding} setOpenDialog={setIsEditingCoding} lessonId={lessonId} />
+                <LessonCoding
+                    open={isEditingCoding}
+                    setOpenDialog={setIsEditingCoding}
+                    lessonId={lessonId}
+                    canEdit={canEdit}
+                />
             )}
 
             {/* Change lesson type */}

@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
@@ -11,15 +10,17 @@ import { Textarea } from '@/components/ui/textarea'
 import { SUPPORTED_LANGUAGES } from '@/constants/language'
 import { lessonCoding, lessonCodingSchema } from '@/validations'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { showMessage } from '@/lib'
 
 interface LessonCodingProps {
     moduleId: number
     setVisible: Dispatch<SetStateAction<boolean>>
     lessonId?: number
-    setLessonID: Dispatch<SetStateAction<number>>
+    setLessonID: Dispatch<SetStateAction<number | undefined>>
+    canEdit: boolean
 }
 
-const LessonCodingInfo = ({ moduleId, setVisible, lessonId, setLessonID }: LessonCodingProps) => {
+const LessonCodingInfo = ({ moduleId, setVisible, lessonId, setLessonID, canEdit }: LessonCodingProps) => {
     const {
         register,
         handleSubmit,
@@ -41,31 +42,38 @@ const LessonCodingInfo = ({ moduleId, setVisible, lessonId, setLessonID }: Lesso
     }
 
     const handleSubmitForm: SubmitHandler<lessonCoding> = async (formData) => {
-        const mutate = lessonId ? updateLessonCoding : createLessonCoding
-        if (lessonId) {
-            const payload = {
-                ...formData,
-                _method: 'PUT'
+        if (canEdit) {
+            const mutate = lessonId ? updateLessonCoding : createLessonCoding
+            if (lessonId) {
+                const payload = {
+                    ...formData,
+                    _method: 'PUT'
+                }
+                await mutate([lessonId, payload])
+            } else {
+                const response = await mutate([moduleId, formData])
+                setLessonID(response.id)
             }
-            await mutate([lessonId, payload])
-        } else {
-            const response = await mutate([moduleId, formData])
-            setLessonID(response.id)
-        }
+            reset()
+        } else showMessage()
     }
 
     const handleClose = () => {
         reset()
         setVisible(false)
+        setLessonID(undefined)
+        setSelectedLanguage('')
     }
 
     useEffect(() => {
-        if (lessonData) {
-            handleLanguageChange(lessonData.lessonable?.language ?? '')
-            setValue('title', lessonData.title!)
-            setValue('description', lessonData.description!)
+        if (lessonId && lessonData) {
+            reset()
+            setSelectedLanguage(lessonData.lessonable.language ?? '')
+            setValue('title', lessonData.title ?? '')
+            setValue('description', lessonData.description ?? '')
+            setValue('language', lessonData.lessonable.language ?? '')
         }
-    }, [lessonData, setValue])
+    }, [lessonData, setValue, reset, lessonId])
 
     return (
         <>

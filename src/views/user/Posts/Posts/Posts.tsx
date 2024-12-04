@@ -1,8 +1,7 @@
 import FilterBar from '@/components/shared/FilterBar/FilterBar'
-
 import Post from '@/components/shared/Post'
 import Loading from '@/components/Common/Loading/Loading'
-import { useGetPosts, useGetPostsByCategory } from '@/app/hooks/posts'
+import { useGetPosts, useGetPostsByCategory, useGetPostsBySearch } from '@/app/hooks/posts'
 import { useGetCategoriesPost } from '@/app/hooks/categories'
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -26,27 +25,40 @@ const Posts = () => {
     const [search, setSearch] = useState<string>('')
 
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
-    const { data: allPosts, isLoading } = useGetPosts(page, 6, search)
+    const { data: allPosts, isLoading } = useGetPosts(page, 6)
+    const { data: postBySearch } = useGetPostsBySearch(search)
 
     const { data: categories } = useGetCategoriesPost()
     const { data: postByCategory } = useGetPostsByCategory(selectedCategory!)
-    const postsToShow = selectedCategory ? postByCategory?.data : allPosts?.data
+    const postsToShow = search ? postBySearch?.data : selectedCategory ? postByCategory?.data : allPosts?.data
+
     const handleCategoryClick = (categorySlug: string | null) => {
-        if (categorySlug === null) {
-            setSearch('')
-            setPage(1)
-        }
+        setSearch('')
+        setPage(1)
         setSelectedCategory(categorySlug)
     }
+
     const handleSearchChange = (filters: { search?: string }) => {
         if (filters.search !== undefined) {
             setSearch(filters.search)
             setPage(1)
         }
     }
-    const pageTitle = selectedCategory
-        ? `${categories?.find((category) => category.slug === selectedCategory)?.name || ''}`
-        : 'Danh sách bài viết'
+
+    const pageTitle = search
+        ? `Kết quả cho "${search}"`
+        : selectedCategory
+            ? `${categories?.find((category) => category.slug === selectedCategory)?.name || ''}`
+            : 'Danh sách bài viết'
+
+    const handlePageChange = (newPage: number) => {
+        if (newPage !== page && newPage >= 1 && newPage <= (allPosts?.total || 1)) {
+            setPage(newPage)
+        }
+    }
+
+    const totalPages = Math.ceil((allPosts?.total ?? 0) / (allPosts?.per_page ?? 0))
+    const visiblePages = getVisiblePages(totalPages, page, 5)
 
     useEffect(() => {
         const queryParams = new URLSearchParams()
@@ -58,14 +70,8 @@ const Posts = () => {
         }
     }, [search, page, navigate, location.pathname])
 
-    const handlePageChange = (newPage: number) => {
-        if (newPage !== page && newPage >= 1 && newPage <= (allPosts?.total || 1)) {
-            setPage(newPage)
-        }
-    }
-    const totalPages = Math.ceil((allPosts?.total ?? 0) / (allPosts?.per_page ?? 0))
-    const visiblePages = getVisiblePages(totalPages, page, 5)
     if (isLoading) return <Loading />
+
     return (
         <div className="flex flex-col gap-7 rounded-md bg-white p-10 px-20">
             <div className="flex flex-col gap-5">

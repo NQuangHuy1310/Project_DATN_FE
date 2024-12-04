@@ -5,8 +5,8 @@ import { IComment, ICreateComment } from '@/types'
 import { ICreatePost, IFeaturedPost, IListPost, IPostDetail, IPosts, ISavedPosts } from '@/types/post'
 
 export const postsApi = {
-    getAllPost: async (page: number, perPage?: number, search?: string): Promise<IListPost> => {
-        return axiosClient.get(postUri.POST(page, perPage, search))
+    getAllPost: async (page: number, perPage?: number): Promise<IListPost> => {
+        return axiosClient.get(postUri.POST(page, perPage))
     },
 
     createPost: async (postData: ICreatePost): Promise<any> => {
@@ -75,5 +75,9 @@ export const postsApi = {
 
     getPostSaved: async (page: number, perPage?: number): Promise<ISavedPosts> => {
         return axiosClient.get(postUri.GET_POST_SAVED(page, perPage))
+    },
+
+    getPostBySearch: async (search?: string): Promise<IListPost> => {
+        return axiosClient.get(postUri.GET_POST_BY_SEARCH(search))
     }
 }

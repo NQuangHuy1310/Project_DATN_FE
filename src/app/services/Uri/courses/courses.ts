@@ -1,3 +1,4 @@
+import { createQueryParams } from '@/lib/utils'
 const COURSE_URL = 'courses/'
 
 export const courseUri = {
@@ -12,14 +13,10 @@ export const courseUri = {
         arrange?: string,
         page?: number,
         perPage?: number
-    ) =>
-        `${COURSE_URL}list-course-all${
-            category ? `?category=${category}` : ''
-        }${level ? `${category ? '&' : '?'}level=${level}` : ''}${
-            arrange ? `${category || level ? '&' : '?'}arrange=${arrange}` : ''
-        }${page ? `${category || level || arrange ? '&' : '?'}page=${page}` : ''}${
-            perPage ? `${category || level || arrange || page ? '&' : '?'}perPage=${perPage}` : ''
-        }${search ? `${category || level || arrange || page || perPage ? '&' : '?'}search=${search}` : ''}`,
+    ) => {
+        const queryString = createQueryParams(search, category, level, arrange, page, perPage)
+        return `${COURSE_URL}list-course-all${queryString}`
+    },
 
     COURSE_SALE_HOME: `${COURSE_URL}sale-course`,
     GET_DETAIL_QUIZ: (slug: string) => `${COURSE_URL}detail/quiz/${slug}`,
@@ -40,14 +37,10 @@ export const courseUri = {
         arrange?: string,
         page?: number,
         perPage?: number
-    ) =>
-        `${COURSE_URL}favorite${
-            category ? `?category=${category}` : ''
-        }${level ? `${category ? '&' : '?'}level=${level}` : ''}${
-            arrange ? `${category || level ? '&' : '?'}arrange=${arrange}` : ''
-        }${page ? `${category || level || arrange ? '&' : '?'}page=${page}` : ''}${
-            perPage ? `${category || level || arrange || page ? '&' : '?'}perPage=${perPage}` : ''
-        }${search ? `${category || level || arrange || page || perPage ? '&' : '?'}search=${search}` : ''}`,
+    ) => {
+        const queryString = createQueryParams(search, category, level, arrange, page, perPage)
+        return `${COURSE_URL}favorite${queryString}`
+    },
     ADD_WISH_LIST: (courseId: number) => `${COURSE_URL}favorite/${courseId}`,
     UN_WISH_LIST: (courseId: number) => `${COURSE_URL}unfavorite/${courseId}`
 }

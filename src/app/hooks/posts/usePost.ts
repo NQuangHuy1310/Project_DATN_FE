@@ -16,13 +16,12 @@ import { IComment, ICreateComment } from '@/types'
 export const useGetPosts = (
     page: number,
     perPage?: number,
-    search?: string,
     options?: Omit<UseQueryOptions<IListPost>, 'queryKey' | 'queryFn'>
 ) => {
     return useQuery<IListPost>({
         ...options,
-        queryKey: ['posts', page, perPage, search],
-        queryFn: () => postsApi.getAllPost(page, perPage, search)
+        queryKey: ['posts', page, perPage],
+        queryFn: () => postsApi.getAllPost(page, perPage)
     })
 }
 
@@ -217,5 +216,16 @@ export const useGetPostsSaved = (
         ...options,
         queryKey: ['saved-post', page, perPage],
         queryFn: () => postsApi.getPostSaved(page, perPage)
+    })
+}
+
+export const useGetPostsBySearch = (
+    search?: string,
+    options?: Omit<UseQueryOptions<IListPost>, 'queryKey' | 'queryFn'>
+) => {
+    return useQuery({
+        ...options,
+        queryKey: ['search-posts', search],
+        queryFn: () => postsApi.getPostBySearch(search)
     })
 }

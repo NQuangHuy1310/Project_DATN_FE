@@ -1,3 +1,5 @@
+import { createQueryParams } from '@/lib/utils'
+
 const USER_URL = 'user/'
 
 export const userUri = {
@@ -14,14 +16,10 @@ export const userUri = {
         arrange?: string,
         page?: number,
         perPage?: number
-    ) =>
-        `${USER_URL}my-course-bought${
-            category ? `?category=${category}` : ''
-        }${level ? `${category ? '&' : '?'}level=${level}` : ''}${
-            arrange ? `${category || level ? '&' : '?'}arrange=${arrange}` : ''
-        }${page ? `${category || level || arrange ? '&' : '?'}page=${page}` : ''}${
-            perPage ? `${category || level || arrange || page ? '&' : '?'}perPage=${perPage}` : ''
-        }${search ? `${category || level || arrange || page || perPage ? '&' : '?'}search=${search}` : ''}`,
+    ) => {
+        const queryString = createQueryParams(search, category, level, arrange, page, perPage)
+        return `${USER_URL}my-course-bought${queryString}`
+    },
     FLOW_TEACHER: `${USER_URL}follow`,
     UN_FOLLOW_TEACHER: `${USER_URL}unfollow`,
     CHECK_FOLLOW_TEACHER: (userId: number, teacherId: number) => `${USER_URL}check-follow/${userId}/${teacherId}`,

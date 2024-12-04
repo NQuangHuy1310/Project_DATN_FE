@@ -79,13 +79,13 @@ const CourseModules = ({
                                     <FaRegRectangleList className="size-5 text-primary" /> {totalLesson} Bài học
                                 </h6>
                             )}
-                            {' - '}
+                            {totalExample > 0 && ' - '}
                             {totalExample > 0 && (
                                 <h6 className="flex items-center gap-1 text-base font-semibold">
-                                    <FaCode className="size-5 text-primary" /> {totalExample} Bài tập
+                                    <FaCode className="size-5 text-blue-600" /> {totalExample} Bài tập
                                 </h6>
                             )}
-                            {' - '}
+                            {module.quiz && ' - '}
                             {module.quiz && module.quiz && (
                                 <h6 className="flex items-center gap-1 text-base font-semibold">
                                     <MdOutlineQuiz className="size-5 text-secondaryGreen" /> Có Bài kiểm tra

@@ -18,6 +18,7 @@ import {
     useGetLessonDetail,
     useUpdateLessonVideo
 } from '@/app/hooks/instructors'
+import { Switch } from '@/components/ui/switch'
 
 interface LessonVideoProps {
     moduleId?: number
@@ -61,6 +62,7 @@ const LessonVideo = ({
     const [courseVideoPath, setCourseVideoPath] = useState<string | undefined>(undefined)
     const [videoUrl, setVideoUrl] = useState<string | undefined>(undefined)
     const [videoDuration, setVideoDuration] = useState<number | null>(null)
+    const [isPreview, setIsPreview] = useState<boolean>()
     const courseVideo = useRef<HTMLInputElement | null>(null)
     const quillRef = useRef<ReactQuill>(null)
 
@@ -94,6 +96,16 @@ const LessonVideo = ({
         setValue('description', value)
     }
 
+    const handleSetPreview = (value: boolean) => {
+        setIsPreview(value)
+    }
+
+    const handleClose = () => {
+        if (lessonData) setIsEditLesson?.(false)
+        else handleHiddenLesson?.(false)
+        setIsSelectingLessonType?.(false)
+    }
+
     const handleSubmitForm: SubmitHandler<lessonVideo> = async (data) => {
         if (canEdit) {
             if (!videoUrl && !courseVideoFile) {
@@ -103,7 +115,8 @@ const LessonVideo = ({
 
             const payload: ILessonVideoData = {
                 ...data,
-                check: undefined
+                check: undefined,
+                is_preview: isPreview ? 1 : 0
             }
 
             if (videoUrl) {
@@ -136,16 +149,11 @@ const LessonVideo = ({
         } else showMessage()
     }
 
-    const handleClose = () => {
-        if (lessonData) setIsEditLesson?.(false)
-        else handleHiddenLesson?.(false)
-        setIsSelectingLessonType?.(false)
-    }
-
     useEffect(() => {
         if (lessonData) {
             setValue('title', lessonData.title)
             setValue('description', lessonData.description!)
+            setIsPreview(lessonData.is_preview === 1)
             if (lessonData?.lessonable?.type === 'upload') {
                 const videoUrl = getImagesUrl(lessonData.lessonable?.url ?? '')
                 setSelectedVideoType(lessonData?.lessonable?.type ?? '')
@@ -188,10 +196,17 @@ const LessonVideo = ({
                                 <div className="text-sm text-red-500">{errors.description.message}</div>
                             )}
                         </div>
+
+                        <div className="flex items-center gap-2">
+                            <Switch checked={isPreview} onCheckedChange={handleSetPreview} />
+                            <label className="text-xs text-muted-foreground">
+                                Cho phép người dùng xem trước video này trước khi mua
+                            </label>
+                        </div>
                     </div>
 
-                    <div className="flex flex-col gap-4 bg-white">
-                        <h5 className="text-base font-semibold">Tải lên video cho khoá học</h5>
+                    <div className="flex flex-col gap-3 bg-white">
+                        <h5 className="text-base font-medium">Tải lên video cho bài học</h5>
 
                         {/* Handle video */}
                         <Select value={selectedVideoType} onValueChange={setSelectedVideoType}>

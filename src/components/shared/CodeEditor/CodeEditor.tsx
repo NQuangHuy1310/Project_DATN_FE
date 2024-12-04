@@ -4,8 +4,6 @@ import { useRef } from 'react'
 import * as monaco from 'monaco-editor'
 import { Editor } from '@monaco-editor/react'
 
-import { CODE_SNIPPETS } from '@/constants/language'
-
 type EditorType = monaco.editor.IStandaloneCodeEditor | null
 
 interface CodeEditorProps {
@@ -18,7 +16,6 @@ interface CodeEditorProps {
 
 const CodeEditor = ({ language = 'javascript', height = '200px', onChange, title, value }: CodeEditorProps) => {
     const editorRef = useRef<EditorType>(null)
-    const initialValue = value !== undefined && value !== null ? value : CODE_SNIPPETS[language]
 
     const onMount = (editor: monaco.editor.IStandaloneCodeEditor) => {
         editorRef.current = editor
@@ -40,7 +37,7 @@ const CodeEditor = ({ language = 'javascript', height = '200px', onChange, title
                 className="overflow-hidden rounded-md"
                 language={language}
                 onMount={onMount}
-                value={initialValue}
+                value={value}
                 theme="vs-dark"
                 options={{
                     fontSize: 14,

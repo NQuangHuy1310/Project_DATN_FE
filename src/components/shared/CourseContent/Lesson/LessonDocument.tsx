@@ -28,6 +28,7 @@ import {
 } from '@/components/ui/dialog'
 import { toast } from 'sonner'
 import { MessageErrors } from '@/constants'
+import { Switch } from '@/components/ui/switch'
 
 const FILE_UPLOAD_MAX_SIZE = 10 * 1024 * 1024
 
@@ -69,11 +70,16 @@ const LessonDocument = ({
 
     const [openDialogAddFile, setOpenDialogAddFile] = useState<boolean>(false)
     const [fileUpload, setFileUpload] = useState<File | undefined>(undefined)
+    const [isPreview, setIsPreview] = useState<boolean>()
     const quillRef = useRef<ReactQuill | null>(null)
     const inputRef = useRef<HTMLInputElement>(null)
 
     const handleChangeValue = (value: string) => {
         setValue('content', value)
+    }
+
+    const handleSetPreview = (value: boolean) => {
+        setIsPreview(value)
     }
 
     const handleSubmitForm: SubmitHandler<lessonDoc> = async (data) => {
@@ -82,21 +88,23 @@ const LessonDocument = ({
                 const payload = {
                     ...data,
                     resourse_path: fileUpload,
+                    is_preview: isPreview ? 1 : 0,
                     _method: 'PUT'
                 }
                 await updateLessonDoc([courseId!, payload])
                 setIsEditLesson?.(false)
             } else if (isSelectingLessonType) {
                 const payload: IChangeLessonTypeData = {
-                    new_type: 'document',
-                    ...data
+                    ...data,
+                    new_type: 'document'
                 }
                 await changeLessonType([lessonId!, payload])
                 setIsSelectingLessonType?.(false)
             } else {
                 const payload = {
                     ...data,
-                    resourse_path: fileUpload
+                    resourse_path: fileUpload,
+                    is_preview: isPreview ? 1 : 0
                 }
                 await createLessonDoc([moduleId!, payload])
                 handleHiddenLesson?.(false)
@@ -135,6 +143,7 @@ const LessonDocument = ({
             const contentData = lessonData.lessonable.content
             setValue('title', lessonData!.title)
             setValue('content', contentData!)
+            setIsPreview(lessonData.is_preview === 1)
         }
     }, [lessonData, setValue, reset, lessonId])
 
@@ -167,6 +176,14 @@ const LessonDocument = ({
                         />
                         {errors.content && <div className="text-sm text-red-500">{errors.content.message}</div>}
                     </div>
+
+                    <div className="flex items-center gap-2">
+                        <Switch checked={isPreview} onCheckedChange={handleSetPreview} />
+                        <label className="text-xs text-muted-foreground">
+                            Cho phép người dùng xem trước video này trước khi mua
+                        </label>
+                    </div>
+
                     <div className="space-y-1">
                         <label className="text-xs text-muted-foreground">
                             Bạn có thể tải lên file đính kèm cho bài học
@@ -186,6 +203,7 @@ const LessonDocument = ({
                             </div>
                         </div>
                     </div>
+
                     <div className="space-x-4 text-end">
                         <Button variant="destructive" type="button" disabled={isSubmitting} onClick={handleClose}>
                             Huỷ

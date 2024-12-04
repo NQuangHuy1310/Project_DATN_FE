@@ -125,7 +125,8 @@ const LessonQuizzes = ({ handleHiddenLesson, moduleId, canEdit }: LessonQuizzesP
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-4">
                                         <h6 className="w-fit rounded-sm border-[1px] border-black/50 px-4 py-0.5 text-xs font-medium">
-                                            {index + 1}. Multiple Choice
+                                            {index + 1}.{' '}
+                                            {question.type === 'one_choice' ? 'Một đáp án đúng' : 'Nhiều đáp án đúng'}
                                         </h6>
                                         {question.image_url && (
                                             <div onClick={() => handleImageClick(question.image_url!)}>

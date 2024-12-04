@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 
@@ -10,10 +10,20 @@ interface LessonCodingProps {
     moduleId?: number
     lessonId?: number
     setOpenDialog: Dispatch<SetStateAction<boolean>>
+    canEdit: boolean
 }
 
-const LessonCoding = ({ open, setOpenDialog, moduleId, lessonId }: LessonCodingProps) => {
-    const [lessonID, setLessonID] = useState<number>(lessonId!)
+const LessonCoding = ({ open, setOpenDialog, moduleId, lessonId, canEdit }: LessonCodingProps) => {
+    const [lessonID, setLessonID] = useState<number | undefined>(undefined)
+
+    useEffect(() => {
+        if (open) {
+            if (!lessonId) setLessonID(undefined)
+            else setLessonID(lessonId)
+        }
+
+        return () => setLessonID(undefined)
+    }, [open, lessonId])
 
     return (
         <Dialog open={open} onOpenChange={setOpenDialog}>
@@ -37,10 +47,11 @@ const LessonCoding = ({ open, setOpenDialog, moduleId, lessonId }: LessonCodingP
                                 setVisible={setOpenDialog}
                                 lessonId={lessonID}
                                 setLessonID={setLessonID}
+                                canEdit={canEdit}
                             />
                         </TabsContent>
                         <TabsContent value="content">
-                            <LessonCodingContent lessonId={lessonID!} setVisible={setOpenDialog} />
+                            <LessonCodingContent lessonId={lessonID!} setVisible={setOpenDialog} canEdit={canEdit} />
                         </TabsContent>
                     </Tabs>
                 </div>

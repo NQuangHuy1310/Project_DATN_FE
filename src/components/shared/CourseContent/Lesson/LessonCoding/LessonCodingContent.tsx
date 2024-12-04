@@ -11,13 +11,15 @@ import { codingContent, codingContentSchema } from '@/validations'
 import { toast } from 'sonner'
 import { LANGUAGE_VERSIONS } from '@/constants/language'
 import axios from 'axios'
+import { showMessage } from '@/lib'
 
 interface LessonCodingContentProps {
     lessonId: number
     setVisible: Dispatch<SetStateAction<boolean>>
+    canEdit: boolean
 }
 
-const LessonCodingContent = ({ lessonId, setVisible }: LessonCodingContentProps) => {
+const LessonCodingContent = ({ lessonId, setVisible, canEdit }: LessonCodingContentProps) => {
     const {
         handleSubmit,
         setValue,
@@ -85,15 +87,17 @@ const LessonCodingContent = ({ lessonId, setVisible }: LessonCodingContentProps)
             return
         }
 
-        const payload = {
-            ...data,
-            output: output.trim(),
-            _method: 'PUT'
-        }
+        if (canEdit) {
+            const payload = {
+                ...data,
+                output: output.trim(),
+                _method: 'PUT'
+            }
 
-        await mutateAsync([lessonId!, payload])
-        setVisible(false)
-        reset()
+            await mutateAsync([lessonId!, payload])
+            setVisible(false)
+            reset()
+        } else showMessage()
     }
 
     useEffect(() => {

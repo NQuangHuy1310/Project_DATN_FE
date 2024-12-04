@@ -1,28 +1,22 @@
-import { userApis } from '@/app/services/accounts'
-import { useUserStore } from '@/app/store/userStore'
 import routes from '@/configs/routes'
+import { toast } from 'sonner'
+import { userApis } from '@/app/services/accounts'
+import { useNavigate } from 'react-router-dom'
+import { IRegisterInstructor } from '@/types/user'
 import { DiscountCode, HistoryLeaning } from '@/types'
 import { useMutation, useQuery, UseQueryOptions } from '@tanstack/react-query'
-import { useNavigate } from 'react-router-dom'
 
 export const useRegisterTeacher = () => {
     const navigate = useNavigate()
-    const setUserProfile = useUserStore((state) => state.setUser)
-    return useMutation<any, Error>({
-        mutationFn: async () => {
-            return userApis.registerTeacher()
+    return useMutation<any, Error, IRegisterInstructor>({
+        mutationFn: async (data) => {
+            return userApis.registerTeacher(data)
         },
         onSuccess() {
-            localStorage.removeItem('selectedOptions')
+            toast.success('Chúc mừng bạn đã đăng ký thành công!')
             localStorage.removeItem('currentQuestion')
-            const userData = localStorage.getItem('user_data')
-            if (userData) {
-                const parsedUserData = JSON.parse(userData)
-                parsedUserData.user_type = 'teacher'
-                localStorage.setItem('user_data', JSON.stringify(parsedUserData))
-                setUserProfile(parsedUserData)
-            }
-            navigate(routes.instructorDashboard)
+            localStorage.removeItem('selectedOptions')
+            navigate(routes.userDashboard)
         }
     })
 }

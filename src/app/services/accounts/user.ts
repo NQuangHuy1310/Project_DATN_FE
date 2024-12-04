@@ -1,8 +1,8 @@
 import { userUri } from '@/app/services/Uri/accounts'
 import axiosClient from '@/configs/axiosClient'
 
+import { CheckFlow, Flow, ICourseMyBought, IRegisterInstructor } from '@/types/user'
 import { HistoryLeaning, IChangePassword, IProfileUser, IResponse, IUpdateProfile, IUserProfile } from '@/types'
-import { CheckFlow, Flow, ICourseMyBought } from '@/types/user'
 
 export const userApis = {
     getDetailProfile: async (email: string): Promise<IProfileUser> => {
@@ -43,8 +43,8 @@ export const userApis = {
     checkFollow: async (userId: number, teacherId: number): Promise<CheckFlow> => {
         return axiosClient.get(userUri.CHECK_FOLLOW_TEACHER(userId, teacherId))
     },
-    registerTeacher: async (): Promise<any> => {
-        return axiosClient.post(userUri.REGISTER_TEACHER)
+    registerTeacher: async (data: IRegisterInstructor): Promise<any> => {
+        return axiosClient.post(userUri.REGISTER_TEACHER, data)
     },
     courseHistory: async (count: number): Promise<HistoryLeaning> => {
         return axiosClient.get(userUri.COURSE_HISTORY(count))

@@ -15,6 +15,7 @@ import {
 } from 'react-icons/hi'
 import logo from '@/assets/Union.svg'
 import { FaMedal } from 'react-icons/fa6'
+import { RiCodeBoxFill } from 'react-icons/ri'
 import { HiMiniCodeBracket } from 'react-icons/hi2'
 import { FaCheckCircle, FaLock } from 'react-icons/fa'
 
@@ -39,6 +40,7 @@ import {
     DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import CourseHistoryButton from '@/components/shared/CourseHistoryButton/CourseHistoryButton'
+import LeaningCourseCoding from '@/components/shared/CourseLeaning/LeaningCourseCoding'
 
 const CourseLearning = () => {
     const [toggleTab, setToggleTab] = useState<boolean>(true)
@@ -64,7 +66,7 @@ const CourseLearning = () => {
 
     const idLesson = isQuizCheck ? Number(idParam?.replace('quiz-', '')) : Number(idParam?.replace('lesson-', ''))
 
-    const { data: courseModule, isLoading, refetch } = useCourseLeaningBySlug(slug!)
+    const { data: courseModule, isLoading } = useCourseLeaningBySlug(slug!)
 
     const quizArray = useMemo(() => {
         return (
@@ -139,12 +141,6 @@ const CourseLearning = () => {
             setToggleTab(false)
         }
     }, [])
-
-    useEffect(() => {
-        if (!checkButton) {
-            refetch()
-        }
-    }, [checkButton, refetch])
 
     const handleLessonClick = useCallback(
         (lessonId: number) => {
@@ -381,12 +377,16 @@ const CourseLearning = () => {
                                                         {lesson.content_type === 'video' && (
                                                             <HiPlay className="size-4 text-primary" />
                                                         )}
+                                                        {lesson.content_type === 'coding' && (
+                                                            <RiCodeBoxFill className="size-4 rounded-full text-primary" />
+                                                        )}
                                                     </div>
                                                     <span className="text-xs">
                                                         {lesson.content_type === 'video' && (
                                                             <p>{formatDurationSecond(lesson.duration!)}</p>
                                                         )}
                                                         {lesson.content_type === 'document' && <p>2:00</p>}
+                                                        {lesson.content_type === 'coding' && <p>3:00</p>}
                                                     </span>
                                                 </div>
                                             </div>
@@ -570,31 +570,39 @@ const CourseLearning = () => {
                         <>
                             {isQuizCheck == false && courseLesson.content_type === 'document' && (
                                 <LeaningCourseDocument
+                                    slug={slug!}
                                     dataLesson={courseLesson}
                                     checkLesson={checkLesson[0].is_completed}
-                                    setCheckButton={setCheckButton}
                                     toggleTab={toggleTab}
                                 />
                             )}
                             {isQuizCheck == false && courseLesson.content_type === 'video' && (
                                 <LeaningCourseVideo
+                                    slug={slug!}
                                     setCheckNote={setCheckNote}
                                     toggleTab={toggleTab}
                                     checkLesson={checkLesson[0].is_completed}
                                     dataLesson={courseLesson}
                                     durationNote={timeNote!}
-                                    setCheckButton={setCheckButton}
                                     onPauseVideo={(pauseVideo) => setPauseVideoCallback(() => pauseVideo)}
                                     onPlayVideo={(playVideo) => setPlayVideoCallback(() => playVideo)}
+                                />
+                            )}
+                            {isQuizCheck == false && courseLesson.content_type === 'coding' && (
+                                <LeaningCourseCoding
+                                    slug={slug!}
+                                    dataLesson={courseLesson}
+                                    checkLesson={checkLesson[0].is_completed}
+                                    toggleTab={toggleTab}
                                 />
                             )}
                         </>
                     )}
                     {isQuizCheck == true && quizLesson && (
                         <LeaningCourseQuiz
+                            slug={slug!}
                             checkQuiz={checkQuizLeaning}
                             dataLesson={quizLesson}
-                            setCheckButton={setCheckButton}
                             idCourse={courseModule?.modules[0].id_course!}
                             isLastQuiz={isLastQuiz}
                         />

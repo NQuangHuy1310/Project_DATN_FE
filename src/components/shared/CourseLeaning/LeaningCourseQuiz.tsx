@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
@@ -18,17 +18,17 @@ import { getImagesUrl } from '@/lib'
 import { Dialog, DialogContent } from '@/components/ui/dialog'
 
 const LeaningCourseQuiz = ({
+    slug,
     checkQuiz,
     dataLesson,
     idCourse,
-    isLastQuiz,
-    setCheckButton
+    isLastQuiz
 }: {
+    slug: string
     dataLesson: IQuizLeaning
     checkQuiz: boolean | undefined
     idCourse: number
     isLastQuiz: number
-    setCheckButton: Dispatch<SetStateAction<boolean>>
 }) => {
     const [userAnswers, setUserAnswers] = useState<{ [key: number]: number | number[] | null }>({})
     const [incorrectOptions, setIncorrectOptions] = useState<{ [key: number]: number[] }>({})
@@ -42,7 +42,7 @@ const LeaningCourseQuiz = ({
     const { mutateAsync: checkQuizLeaning } = useCheckQuizLeaning()
 
     // Lưu tiến độ
-    const { mutateAsync: quizProcess } = useUpdateQuizProCess()
+    const { mutateAsync: quizProcess } = useUpdateQuizProCess(slug)
 
     // Lấy đáp án người dùng đã làm rồi
     const { data: getQuizLeaning } = useGetQuizLeaning(user?.id!, dataLesson.id, checkQuiz)
@@ -116,7 +116,6 @@ const LeaningCourseQuiz = ({
             if (isLastQuiz && isLastQuiz == 1) {
                 setCheckFinish(true)
             }
-            setCheckButton(false)
             toast.success('Chúc mừng bạn đã trả lời chính xác')
         } else {
             const incorrectOptionsByQuestion = data.result_details.reduce(

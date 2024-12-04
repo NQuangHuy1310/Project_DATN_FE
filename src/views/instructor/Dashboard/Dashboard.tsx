@@ -141,7 +141,7 @@ const Dashboard = () => {
                     </p>
                 )}
 
-                <div className="flex h-full w-full flex-wrap gap-8">
+                <div className="flex flex-shrink-0 flex-wrap gap-8">
                     {courseData &&
                         courseData?.data.length > 0 &&
                         courseData?.data.map((item) => <CourseCard key={item.id} {...item} />)}{' '}
@@ -162,7 +162,7 @@ const Dashboard = () => {
                 )}
 
                 {totalPages > 1 && (
-                    <div className="mt-auto flex justify-center">
+                    <div className="mt-auto flex flex-1 justify-center">
                         <Pagination>
                             <PaginationContent>
                                 <PaginationItem>

@@ -63,7 +63,7 @@ const Roadmap = () => {
 
             <Dialog open={openDialog} onOpenChange={setOpenDialog}>
                 <DialogContent className="max-w-[700px]">
-                    <form onSubmit={handleSubmit(onSubmit)}>
+                    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
                         <DialogHeader>
                             <DialogTitle className="text-xl">Thêm lộ trình</DialogTitle>
                             <DialogDescription>
@@ -71,8 +71,8 @@ const Roadmap = () => {
                                 dàng theo dõi và đạt được mục tiêu học tập của họ.
                             </DialogDescription>
                         </DialogHeader>
-                        <div className="flex flex-col gap-4">
-                            <div className="space-y-1">
+                        <div className="flex flex-col gap-2.5">
+                            <div className="space-y-0.5">
                                 <label className="text-sm text-muted-foreground">Nhập tên lộ trình học tập</label>
                                 <Input
                                     autoFocus
@@ -86,7 +86,7 @@ const Roadmap = () => {
                                 )}
                             </div>
 
-                            <div className="space-y-1">
+                            <div className="space-y-0.5">
                                 <label className="text-sm text-muted-foreground">Mô tả ngắn gọn về lộ trình này</label>
                                 <Textarea
                                     rows={3}
@@ -99,7 +99,7 @@ const Roadmap = () => {
                                 )}
                             </div>
 
-                            <div className="space-y-1">
+                            <div className="space-y-0.5">
                                 <label className="text-sm text-muted-foreground">
                                     Chọn các khoá học trong lộ trình này
                                 </label>
@@ -125,22 +125,27 @@ const Roadmap = () => {
                                             )
                                         })
                                     ) : (
-                                        <p className="text-sm text-muted-foreground">Không có khóa học nào để chọn.</p>
+                                        <p className="text-sm text-secondaryRed">
+                                            Bạn không có khoá học nào để chọn, vui lòng tạo khoá học mới.
+                                        </p>
                                     )}
                                 </div>
 
-                                {selectedCourse.length === 0 && (
-                                    <p className="text-red-500">Bạn cần chọn ít nhất một khóa học.</p>
+                                {selectedCourse.length === 0 && courseData && courseData?.length > 0 && (
+                                    <p className="text-sm text-secondaryRed">Bạn cần chọn ít nhất một khóa học.</p>
                                 )}
                             </div>
                         </div>
-                        <DialogFooter>
-                            <Button type="submit" onClick={() => setOpenDialog(false)} variant="destructive">
-                                Huỷ
-                            </Button>
-                            <Button type="submit" disabled={isSubmitting}>
-                                Lưu thông tin
-                            </Button>
+                        <DialogFooter className="flex w-full items-center !justify-between">
+                            <Button type="button">Tạo khoá học</Button>
+                            <div className="flex items-center gap-4">
+                                <Button type="submit" onClick={() => setOpenDialog(false)} variant="destructive">
+                                    Huỷ
+                                </Button>
+                                <Button type="submit" disabled={isSubmitting}>
+                                    Lưu thông tin
+                                </Button>
+                            </div>
                         </DialogFooter>
                     </form>
                 </DialogContent>

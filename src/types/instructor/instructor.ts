@@ -285,6 +285,7 @@ export interface ILessonQuizData {
     title: string
     description: string
     _method?: string
+    is_preview?: number
 }
 
 interface QuestionOptionData {

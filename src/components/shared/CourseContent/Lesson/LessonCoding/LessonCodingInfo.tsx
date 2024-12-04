@@ -11,6 +11,7 @@ import { SUPPORTED_LANGUAGES } from '@/constants/language'
 import { lessonCoding, lessonCodingSchema } from '@/validations'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { showMessage } from '@/lib'
+import { Switch } from '@/components/ui/switch'
 
 interface LessonCodingProps {
     moduleId: number
@@ -35,10 +36,22 @@ const LessonCodingInfo = ({ moduleId, setVisible, lessonId, setLessonID, canEdit
     const { mutateAsync: createLessonCoding } = useCreateLessonCoding()
     const { mutateAsync: updateLessonCoding } = useUpdateLessonCoding()
     const [selectedLanguage, setSelectedLanguage] = useState<string>(lessonData?.lessonable.language ?? '')
+    const [isPreview, setIsPreview] = useState<boolean>()
 
     const handleLanguageChange = (value: string) => {
         setSelectedLanguage(value)
         setValue('language', value)
+    }
+
+    const handleClose = () => {
+        reset()
+        setVisible(false)
+        setLessonID(undefined)
+        setSelectedLanguage('')
+    }
+
+    const handleSetPreview = (value: boolean) => {
+        setIsPreview(value)
     }
 
     const handleSubmitForm: SubmitHandler<lessonCoding> = async (formData) => {
@@ -56,13 +69,6 @@ const LessonCodingInfo = ({ moduleId, setVisible, lessonId, setLessonID, canEdit
             }
             reset()
         } else showMessage()
-    }
-
-    const handleClose = () => {
-        reset()
-        setVisible(false)
-        setLessonID(undefined)
-        setSelectedLanguage('')
     }
 
     useEffect(() => {
@@ -138,6 +144,13 @@ const LessonCodingInfo = ({ moduleId, setVisible, lessonId, setLessonID, canEdit
                         {errors.description && (
                             <div className="text-sm text-secondaryRed">{errors.description.message}</div>
                         )}
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                        <Switch checked={isPreview} onCheckedChange={handleSetPreview} />
+                        <label className="text-xs text-muted-foreground">
+                            Cho phép người dùng xem trước bài tập này trước khi mua
+                        </label>
                     </div>
                 </div>
 

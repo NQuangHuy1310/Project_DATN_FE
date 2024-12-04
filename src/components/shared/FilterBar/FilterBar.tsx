@@ -1,6 +1,5 @@
-import { useState } from 'react'
+import { useLocation } from 'react-router-dom'
 
-import { toast } from 'sonner'
 import { useCourseCategoryHome } from '@/app/hooks/courses/useCourse'
 
 import { Input } from '@/components/ui/input'
@@ -27,7 +26,12 @@ const FilterBar = ({
     onFilterChange: (filters: { arrange?: string; category?: string; level?: string; search?: string }) => void
 }) => {
     const { data: course_category = [] } = useCourseCategoryHome()
-    const [searchInput, setSearchInput] = useState('')
+    const location = useLocation()
+
+    const queryParams = new URLSearchParams(location.search)
+    const searchInput = queryParams.get('search') || ''
+    const selectedLevel = queryParams.get('level') || ''
+    const selectedCategory = queryParams.get('category') || ''
 
     const handleLevelChange = (level: string) => {
         onFilterChange({ level })
@@ -41,19 +45,6 @@ const FilterBar = ({
         onFilterChange({ arrange })
     }
 
-    const handleSearchSubmit = () => {
-        if (!searchInput.trim()) {
-            toast.error('Vui lòng nhập từ khóa bạn muốn tìm kiếm!')
-            return
-        }
-        onFilterChange({ search: searchInput })
-    }
-    const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        if (event.key === 'Enter') {
-            handleSearchSubmit()
-        }
-    }
-
     return (
         <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="relative h-[50px] w-full lg:w-1/3">
@@ -62,11 +53,9 @@ const FilterBar = ({
                     autoFocus
                     placeholder={placeholder}
                     value={searchInput}
-                    onChange={(e) => setSearchInput(e.target.value)}
-                    onKeyDown={handleKeyDown}
+                    onChange={(e) => onFilterChange({ search: e.target.value })}
                 />
                 <IoSearchOutline
-                    onClick={handleSearchSubmit}
                     className="absolute right-4 top-1/2 size-5 -translate-y-1/2 cursor-pointer"
                 />
             </div>
@@ -82,30 +71,35 @@ const FilterBar = ({
                             </DropdownMenuTrigger>
                             <DropdownMenuContent className="rounded-md border bg-white p-4" side="bottom" align="end">
                                 <DropdownMenuRadioGroup className="flex items-center gap-2">
-                                    <Button variant="outline" className="text-xs" onClick={() => handleLevelChange('')}>
+                                    <Button
+                                        variant={selectedLevel === '' ? 'default' : 'outline'}
+                                        className={`text-xs ${selectedLevel === '' ? 'bg-primary text-white' : ''}`}
+                                        onClick={() => handleLevelChange('')}
+                                    >
                                         Tất cả
                                     </Button>
                                     <Button
-                                        variant="outline"
-                                        className="text-xs"
+                                        variant={selectedLevel === 'Sơ Cấp' ? 'default' : 'outline'}
+                                        className={`text-xs ${selectedLevel === 'Sơ Cấp' ? 'bg-primary text-white' : ''}`}
                                         onClick={() => handleLevelChange('Sơ Cấp')}
                                     >
                                         Sơ Cấp
                                     </Button>
                                     <Button
-                                        variant="outline"
-                                        className="text-xs"
+                                        variant={selectedLevel === 'Trung cấp' ? 'default' : 'outline'}
+                                        className={`text-xs ${selectedLevel === 'Trung cấp' ? 'bg-primary text-white' : ''}`}
                                         onClick={() => handleLevelChange('Trung cấp')}
                                     >
                                         Trung cấp
                                     </Button>
                                     <Button
-                                        variant="outline"
-                                        className="text-xs"
+                                        variant={selectedLevel === 'Chuyên Gia' ? 'default' : 'outline'}
+                                        className={`text-xs ${selectedLevel === 'Chuyên Gia' ? 'bg-primary text-white' : ''}`}
                                         onClick={() => handleLevelChange('Chuyên Gia')}
                                     >
                                         Chuyên gia
                                     </Button>
+
                                 </DropdownMenuRadioGroup>
                             </DropdownMenuContent>
                         </DropdownMenu>
@@ -119,14 +113,14 @@ const FilterBar = ({
                         </DropdownMenuTrigger>
                         <DropdownMenuContent className="rounded-md border bg-white p-4" side="bottom" align="end">
                             <DropdownMenuRadioGroup className="flex items-center gap-2">
-                                <Button variant="outline" className="text-xs" onClick={() => handleCategoryChange(0)}>
+                                <Button variant="outline" className={`text-xs ${selectedCategory == '' && 'bg-primary text-white'}`} onClick={() => handleCategoryChange('')}>
                                     Tất cả
                                 </Button>
                                 {course_category.map((category) => (
                                     <Button
                                         key={category.id}
                                         variant="outline"
-                                        className="text-xs"
+                                        className={`text-xs ${Number(selectedCategory) === category.id && 'bg-primary text-white'}`}
                                         onClick={() => handleCategoryChange(String(category.id))}
                                     >
                                         {category.name}

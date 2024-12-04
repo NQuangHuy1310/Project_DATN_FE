@@ -25,23 +25,22 @@ const Posts = () => {
     const [search, setSearch] = useState<string>('')
 
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+
     const { data: allPosts, isLoading } = useGetPosts(page, 6)
     const { data: postBySearch } = useGetPostsBySearch(search)
-
     const { data: categories } = useGetCategoriesPost()
     const { data: postByCategory } = useGetPostsByCategory(selectedCategory!)
+
     const postsToShow = search ? postBySearch?.data : selectedCategory ? postByCategory?.data : allPosts?.data
 
     const handleCategoryClick = (categorySlug: string | null) => {
         setSearch('')
-        setPage(1)
         setSelectedCategory(categorySlug)
     }
 
     const handleSearchChange = (filters: { search?: string }) => {
         if (filters.search !== undefined) {
             setSearch(filters.search)
-            setPage(1)
         }
     }
 
@@ -63,8 +62,8 @@ const Posts = () => {
     useEffect(() => {
         const queryParams = new URLSearchParams()
         if (search) queryParams.set('search', search)
-        if (page !== 1) {
-            navigate(`?page=${page}`, { replace: true })
+        if (queryParams.toString()) {
+            navigate(`?${queryParams.toString()}`, { replace: true })
         } else {
             navigate(location.pathname, { replace: true })
         }
@@ -83,9 +82,11 @@ const Posts = () => {
                     {postsToShow && postsToShow.length > 0 ? (
                         postsToShow.map((item, index) => <Post data={item} key={index} />)
                     ) : (
-                        <div className="text-center text-lg font-medium text-gray-500">
-                            {selectedCategory ? '' : `Không có kết quả cho "${search}"`}
-                        </div>
+                        search && (
+                            <div className="text-center text-lg font-medium text-gray-500">
+                                {selectedCategory ? '' : `Không có kết quả cho "${search}"`}
+                            </div>
+                        )
                     )}
                 </div>
 

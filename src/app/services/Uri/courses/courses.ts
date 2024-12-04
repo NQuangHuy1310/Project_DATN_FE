@@ -6,15 +6,8 @@ export const courseUri = {
     DETAIL_COURSE: (slug: string) => `${COURSE_URL}detail-login/${slug}`,
     DETAIL_COURSE_NO_LOGIN: (slug: string) => `${COURSE_URL}detail-no-login/${slug}`,
 
-    ALL_COURSES: (
-        search?: string,
-        category?: string,
-        level?: string,
-        arrange?: string,
-        page?: number,
-        perPage?: number
-    ) => {
-        const queryString = createQueryParams(search, category, level, arrange, page, perPage)
+    ALL_COURSES: (category?: string, level?: string, arrange?: string, page?: number, perPage?: number) => {
+        const queryString = createQueryParams(category, level, arrange, page, perPage)
         return `${COURSE_URL}list-course-all${queryString}`
     },
 
@@ -30,17 +23,12 @@ export const courseUri = {
     ADD_COMMENT_COURSE: 'comments/add-comment-lesson',
     GET_COMMENT: (id: number) => `comments/comment-lesson/${id}`,
     //WISHLIST
-    WISH_LIST: (
-        search?: string,
-        category?: string,
-        level?: string,
-        arrange?: string,
-        page?: number,
-        perPage?: number
-    ) => {
-        const queryString = createQueryParams(search, category, level, arrange, page, perPage)
+    WISH_LIST: (category?: string, level?: string, arrange?: string, page?: number, perPage?: number) => {
+        const queryString = createQueryParams(category, level, arrange, page, perPage)
         return `${COURSE_URL}favorite${queryString}`
     },
     ADD_WISH_LIST: (courseId: number) => `${COURSE_URL}favorite/${courseId}`,
-    UN_WISH_LIST: (courseId: number) => `${COURSE_URL}unfavorite/${courseId}`
+    UN_WISH_LIST: (courseId: number) => `${COURSE_URL}unfavorite/${courseId}`,
+    GET_COURSE_BY_SEARCH: (search: string) => `${COURSE_URL}list-course-all?search=${search}`,
+    GET_WISHLIST_BY_SEARCH: (search: string) => `${COURSE_URL}favorite?search=${search}`
 }

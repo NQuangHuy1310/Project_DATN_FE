@@ -13,7 +13,6 @@ import {
 import { useMutation, useQuery, useQueryClient, UseQueryOptions } from '@tanstack/react-query'
 
 export const useGetAllCourses = (
-    search: string,
     category: string,
     level: string,
     arrange: string,
@@ -23,8 +22,8 @@ export const useGetAllCourses = (
 ) => {
     return useQuery<IAllCourse>({
         ...options,
-        queryKey: ['course-leaning', search, category, level, arrange, page, perPage],
-        queryFn: () => courseApi.allCourses(search, category, level, arrange, page, perPage)
+        queryKey: ['course-leaning', category, level, arrange, page, perPage],
+        queryFn: () => courseApi.allCourses(category, level, arrange, page, perPage)
     })
 }
 
@@ -165,7 +164,6 @@ export const useRegisterCourse = () => {
 }
 
 export const useGetWishList = (
-    search?: string,
     category?: string,
     level?: string,
     arrange?: string,
@@ -175,8 +173,8 @@ export const useGetWishList = (
 ) => {
     return useQuery({
         ...options,
-        queryKey: ['wishlist-course', search, category, level, arrange, page, perPage],
-        queryFn: () => courseApi.getWishList(search, category, level, arrange, page, perPage)
+        queryKey: ['wishlist-course', category, level, arrange, page, perPage],
+        queryFn: () => courseApi.getWishList(category, level, arrange, page, perPage)
     })
 }
 
@@ -210,5 +208,27 @@ export const useUnWishList = () => {
                 queryClient.invalidateQueries({ queryKey: ['check-wishlist-course'] })
             ])
         }
+    })
+}
+
+export const useGetCourseBySearch = (
+    search: string,
+    options?: Omit<UseQueryOptions<IAllCourse>, 'queryKey' | 'queryFn'>
+) => {
+    return useQuery({
+        ...options,
+        queryKey: ['course-by-search', search],
+        queryFn: () => courseApi.getCourseBySearch(search)
+    })
+}
+
+export const useGetWishListBySearch = (
+    search: string,
+    options?: Omit<UseQueryOptions<IAllCourse>, 'queryKey' | 'queryFn'>
+) => {
+    return useQuery({
+        ...options,
+        queryKey: ['wishlist-by-search', search],
+        queryFn: () => courseApi.getWishListBySearch(search)
     })
 }

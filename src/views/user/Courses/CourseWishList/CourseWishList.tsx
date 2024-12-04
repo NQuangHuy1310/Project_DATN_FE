@@ -1,8 +1,8 @@
-import { useGetWishList } from '@/app/hooks/courses/useCourse'
+import { useGetWishList, useGetWishListBySearch } from '@/app/hooks/courses/useCourse'
+import { useDebounce } from '@/app/hooks/custom/useDebounce'
 import Loading from '@/components/Common/Loading/Loading'
 import Course from '@/components/shared/Course'
 import FilterBar from '@/components/shared/FilterBar/FilterBar'
-import { Button } from '@/components/ui/button'
 import {
     Pagination,
     PaginationContent,
@@ -27,15 +27,27 @@ const CourseWishList = () => {
     const [level, setLevel] = useState(queryParams.get('level') || '')
     const [search, setSearch] = useState(queryParams.get('search') || '')
 
-    const { data: wishList, isLoading } = useGetWishList(search, category, level, arrange, page, 6)
+    const { data: wishList, isLoading } = useGetWishList(category, level, arrange, page, 6)
+    const debounceValue = useDebounce(search, 500)
+    const { data: wishListBySearch } = useGetWishListBySearch(debounceValue)
+
+    const wishListToShow = search ? wishListBySearch?.data : wishList?.data
+    const title = search && wishListBySearch?.data && wishListBySearch?.data.length > 0 ? `Kết quả cho "${search}"` : null
 
     const handleFilterChange = (filters: { arrange?: string; category?: string; level?: string; search?: string }) => {
         if (filters.arrange !== undefined) setArrange(filters.arrange)
         if (filters.category !== undefined) setCategory(filters.category)
         if (filters.level !== undefined) setLevel(filters.level)
         if (filters.search !== undefined) setSearch(filters.search)
-        setPage(1)
     }
+
+    const handlePageChange = (newPage: number) => {
+        if (newPage !== page && newPage >= 1 && newPage <= totalPages) {
+            setPage(newPage)
+        }
+    }
+    const totalPages = Math.ceil((wishList?.total ?? 0) / (wishList?.per_page ?? 0))
+    const visiblePages = getVisiblePages(totalPages, page, 5)
 
     useEffect(() => {
         const queryParams = new URLSearchParams()
@@ -52,59 +64,35 @@ const CourseWishList = () => {
         }
     }, [page, arrange, category, level, search, navigate, location.pathname])
 
-    const handlePageChange = (newPage: number) => {
-        if (newPage !== page && newPage >= 1 && newPage <= totalPages) {
-            setPage(newPage)
-        }
-    }
-    const totalPages = Math.ceil((wishList?.total ?? 0) / (wishList?.per_page ?? 0))
-    const visiblePages = getVisiblePages(totalPages, page, 5)
-
     if (isLoading) return <Loading />
     return (
-        <div className="flex flex-col gap-7">
+        <div className="flex flex-col gap-5">
             <FilterBar placeholder="Tìm kiếm khóa học" onFilterChange={handleFilterChange} lever />
-            {wishList?.data && wishList.data.length > 0 ? (
-                <div className="flex flex-wrap gap-10">
-                    {wishList?.data?.map((course, index) => <Course data={course} key={index} />)}
-                </div>
-            ) : search.length > 0 ? (
-                <div className="flex w-full justify-center">
-                    <div className="flex flex-col gap-2 text-center">
-                        <img
-                            src="https://gcdnb.pbrd.co/images/7xbVj5PXiOQY.png"
-                            className="mx-auto w-full max-w-[350px]"
-                            alt=""
-                        />
-                        <h2 className="text-xl font-bold">Không có kết quả nào phù hợp với tìm kiếm của bạn</h2>
-                        <div>
-                            <Button
-                                onClick={() => {
-                                    setSearch('')
-                                    setCategory('')
-                                    setLevel('')
-                                    setArrange('')
-                                    setPage(1)
-                                }}
-                            >
-                                Quay lại
-                            </Button>
+            {search && wishListBySearch?.data && wishListBySearch?.data.length > 0 ?
+                <p className='text-lg font-medium text-darkGrey'>{title}</p>
+                : null
+            }
+            <div className="flex flex-wrap gap-5">
+                {wishListToShow && wishListToShow.length > 0 ? (
+                    wishListToShow.map((item, index) => <Course data={item} key={index} />)
+                ) : search ? (
+                    <div className="text-center text-lg font-medium text-darkGrey">
+                        Không có kết quả nào phù hợp với từ khóa "{search}"
+                    </div>
+                ) : (
+                    <div className="flex w-full justify-center">
+                        <div className="flex flex-col gap-2 text-center">
+                            <img
+                                src="https://gcdnb.pbrd.co/images/7xbVj5PXiOQY.png"
+                                className="w-full max-w-[350px]"
+                                alt=""
+                            />
+                            <h2 className="text-xl font-bold">Bạn chưa yêu thích khóa học nào</h2>
                         </div>
                     </div>
-                </div>
-            ) : (
-                <div className="flex w-full justify-center">
-                    <div className="flex flex-col gap-2 text-center">
-                        <img
-                            src="https://gcdnb.pbrd.co/images/7xbVj5PXiOQY.png"
-                            className="w-full max-w-[350px]"
-                            alt=""
-                        />
-                        <h2 className="text-xl font-bold">Bạn chưa mua khóa học nào</h2>
-                    </div>
-                </div>
-            )}
-            {totalPages > 1 && (
+                )}
+            </div>
+            {search.length == 0 && totalPages > 1 && (
                 <div className="mt-4 flex justify-center">
                     <Pagination>
                         <PaginationContent>

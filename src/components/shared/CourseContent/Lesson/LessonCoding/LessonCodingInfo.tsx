@@ -24,6 +24,7 @@ const LessonCodingInfo = ({ moduleId, setVisible, lessonId, setLessonID }: Lesso
         register,
         handleSubmit,
         setValue,
+        reset,
         formState: { isSubmitting, errors }
     } = useForm<lessonCoding>({
         resolver: zodResolver(lessonCodingSchema)
@@ -51,6 +52,11 @@ const LessonCodingInfo = ({ moduleId, setVisible, lessonId, setLessonID }: Lesso
             const response = await mutate([moduleId, formData])
             setLessonID(response.id)
         }
+    }
+
+    const handleClose = () => {
+        reset()
+        setVisible(false)
     }
 
     useEffect(() => {
@@ -128,10 +134,10 @@ const LessonCodingInfo = ({ moduleId, setVisible, lessonId, setLessonID }: Lesso
                 </div>
 
                 <div className="mt-auto flex items-center justify-end gap-2">
-                    <Button variant="destructive" onClick={() => setVisible(false)}>
+                    <Button type="button" variant="destructive" onClick={handleClose}>
                         Huỷ
                     </Button>
-                    <Button type="submit">{lessonId ? 'Thêm mới bài tập' : 'Lưu bài tập'}</Button>
+                    <Button type="submit">{lessonId === undefined ? 'Thêm mới bài tập' : 'Lưu bài tập'}</Button>
                 </div>
             </form>
         </>

@@ -69,6 +69,11 @@ const LessonCodingContent = ({ lessonId, setVisible }: LessonCodingContentProps)
         }
     }
 
+    const handleClose = () => {
+        reset()
+        setVisible(false)
+    }
+
     const handleSubmitForm: SubmitHandler<codingContent> = async (data) => {
         if (!output) {
             toast.error('Bạn cần kiểm tra code trước khi lưu bài tập!')
@@ -88,6 +93,7 @@ const LessonCodingContent = ({ lessonId, setVisible }: LessonCodingContentProps)
 
         await mutateAsync([lessonId!, payload])
         setVisible(false)
+        reset()
     }
 
     useEffect(() => {
@@ -192,14 +198,14 @@ const LessonCodingContent = ({ lessonId, setVisible }: LessonCodingContentProps)
                 </div>
             </div>
             <div className="mt-auto flex items-center justify-end gap-2">
-                <Button variant="destructive" disabled={isSubmitting || isLoading} onClick={() => setVisible(false)}>
+                <Button type="button" variant="destructive" disabled={isSubmitting || isLoading} onClick={handleClose}>
                     Huỷ
                 </Button>
-                <Button type="button" disabled={isSubmitting || isLoading} onClick={() => runCode()}>
+                <Button disabled={isSubmitting || isLoading} onClick={() => runCode()}>
                     Kiểm tra code
                 </Button>
                 <Button type="submit" disabled={isSubmitting || isLoading}>
-                    {lessonId ? 'Lưu bài tập' : 'Thêm mới bài tập'}
+                    {lessonId === undefined ? 'Thêm mới bài tập' : 'Lưu bài tập'}
                 </Button>
             </div>
         </form>

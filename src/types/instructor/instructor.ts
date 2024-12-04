@@ -87,6 +87,7 @@ export interface ILesson {
     content_type: 'document' | 'video' | 'quiz' | 'coding'
     position: number
     is_active: number
+    is_preview?: number
     lessonable: {
         id: number
         title: string | null
@@ -266,6 +267,7 @@ export interface ILessonDocData {
     content: string
     resourse_path?: File
     _method?: string
+    is_preview?: number
 }
 
 export interface ILessonVideoData {
@@ -276,6 +278,7 @@ export interface ILessonVideoData {
     video_youtube_id?: string
     duration?: number
     _method?: string
+    is_preview?: number
 }
 
 export interface ILessonQuizData {

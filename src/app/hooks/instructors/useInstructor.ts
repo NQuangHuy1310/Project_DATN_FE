@@ -552,22 +552,28 @@ export const useStatistic = (options?: Omit<UseQueryOptions<RevenueData>, 'query
 
 export const useGetStudentsCourse = (
     courseID?: number,
+    limit?: number,
+    page?: number,
+    perPage?: number,
     options?: Omit<UseQueryOptions<StudentsCourse>, 'queryKey' | 'queryFn'>
 ) => {
     return useQuery({
         ...options,
-        queryKey: ['instructorGetStudents', courseID],
-        queryFn: () => instructorApi.getStudentsCourse(courseID)
+        queryKey: ['instructorGetStudents', courseID, limit, page, perPage],
+        queryFn: () => instructorApi.getStudentsCourse(courseID, limit, page, perPage)
     })
 }
 
 export const useGetRatingsCourse = (
     courseID?: number,
+    limit?: number,
+    page?: number,
+    perPage?: number,
     options?: Omit<UseQueryOptions<RatingsCourse>, 'queryKey' | 'queryFn'>
 ) => {
     return useQuery({
         ...options,
-        queryKey: ['instructorGetRatings', courseID],
-        queryFn: () => instructorApi.getRatingsCourse(courseID)
+        queryKey: ['instructorGetRatings', courseID, limit, page, perPage],
+        queryFn: () => instructorApi.getRatingsCourse(courseID, limit, page, perPage)
     })
 }

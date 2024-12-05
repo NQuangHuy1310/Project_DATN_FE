@@ -44,7 +44,7 @@ const Posts = () => {
         }
     }
 
-    const pageTitle = search
+    const pageTitle = search && postBySearch?.data && postBySearch?.data.length > 0
         ? `Kết quả cho "${search}"`
         : selectedCategory
             ? `${categories?.find((category) => category.slug === selectedCategory)?.name || ''}`

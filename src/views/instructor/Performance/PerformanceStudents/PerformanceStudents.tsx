@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import { useGetCoursesApproved, useGetStudentsCourse } from '@/app/hooks/instructors'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -14,21 +14,28 @@ import {
     SelectValue
 } from '@/components/ui/select'
 import routes from '@/configs/routes'
-import { formatDate, getImagesUrl } from '@/lib'
+import { formatDate, getImagesUrl, getVisiblePages } from '@/lib'
 import noContent from '@/assets/no-content.jpg'
 import DialogProfile from '@/components/shared/DialogProfile'
 import { ICourseApproved } from '@/types/instructor'
 import { useGetUserById } from '@/app/hooks/accounts'
 import Loading from '@/components/Common/Loading/Loading'
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination'
 
 const PerformanceStudents = () => {
     const navigate = useNavigate()
+    const location = useLocation()
+
+    const queryParams = new URLSearchParams(location.search)
+    const initialPage = parseInt(queryParams.get('page') || '1', 10)
+    const [page, setPage] = useState(initialPage)
+
     const [courseId, setCourseId] = useState<number | undefined>(undefined)
     const [studentId, setStudentId] = useState<number | undefined>(undefined)
     const [openDialog, setOpenDialog] = useState<boolean>(false)
 
     const { data: courseData } = useGetCoursesApproved()
-    const { data: studentsCourse, isLoading } = useGetStudentsCourse(courseId)
+    const { data: studentsCourse, isLoading } = useGetStudentsCourse(courseId, 8, page, 4)
     const { data: studentData } = useGetUserById(studentId!)
 
     const handleSelectCourse = (value: string) => {
@@ -38,6 +45,14 @@ const PerformanceStudents = () => {
             setCourseId(+value)
         }
     }
+
+    const handlePageChange = (newPage: number) => {
+        if (newPage !== page && newPage >= 1 && newPage <= totalPages) {
+            setPage(newPage)
+        }
+    }
+    const totalPages = Math.ceil((studentsCourse?.students.total ?? 0) / (studentsCourse?.students?.per_page ?? 0))
+    const visiblePages = getVisiblePages(totalPages, page, 5)
 
     if (isLoading) return <Loading />
 
@@ -151,6 +166,50 @@ const PerformanceStudents = () => {
                         <Button size="lg" onClick={() => navigate(routes.createCourse)}>
                             Tạo khoá học mới
                         </Button>
+                    </div>
+                )}
+                {totalPages > 1 && (
+                    <div className="mt-4 flex justify-center">
+                        <Pagination>
+                            <PaginationContent>
+                                <PaginationItem>
+                                    <PaginationPrevious
+                                        onClick={() => handlePageChange(page - 1)}
+                                        className={page === 1 ? 'border' : 'cursor-pointer border bg-darkGrey/90'}
+                                    />
+                                </PaginationItem>
+
+                                {visiblePages[0] > 1 && (
+                                    <PaginationItem>
+                                        <span className="px-2">...</span>
+                                    </PaginationItem>
+                                )}
+
+                                {visiblePages.map((pageNumber: number) => (
+                                    <PaginationItem key={pageNumber} className="cursor-pointer">
+                                        <PaginationLink
+                                            isActive={page === pageNumber}
+                                            onClick={() => handlePageChange(pageNumber)}
+                                        >
+                                            {pageNumber}
+                                        </PaginationLink>
+                                    </PaginationItem>
+                                ))}
+
+                                {visiblePages[visiblePages.length - 1] < totalPages && (
+                                    <PaginationItem>
+                                        <span className="px-2">...</span>
+                                    </PaginationItem>
+                                )}
+
+                                <PaginationItem>
+                                    <PaginationNext
+                                        onClick={() => handlePageChange(page + 1)}
+                                        className={page === totalPages ? 'border' : 'cursor-pointer border bg-darkGrey/90'}
+                                    />
+                                </PaginationItem>
+                            </PaginationContent>
+                        </Pagination>
                     </div>
                 )}
             </div>

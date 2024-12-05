@@ -344,6 +344,8 @@ export interface StudentsCourse {
                 avatar: string | null
             }
         }[]
+        per_page: number
+        total: number
     }
 }
 
@@ -352,6 +354,8 @@ export interface RatingsCourse {
     ratings: {
         current_page: number
         data: ratingCourse[]
+        total: number
+        per_page: number
     }
 }
 

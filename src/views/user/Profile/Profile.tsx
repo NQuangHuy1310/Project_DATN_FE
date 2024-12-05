@@ -13,6 +13,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import routes from '@/configs/routes'
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
 import Course from '@/components/shared/Course'
+import CourseMyBought from '@/components/shared/Course/CourseMyBought'
 const Profile = () => {
     const email = useGetSlugParams('email')
     const { data: profileUser, isLoading } = useGetProfile(email!)
@@ -21,9 +22,10 @@ const Profile = () => {
     const formatTime = (date: any) => {
         return formatDistanceToNow(new Date(date), { addSuffix: true, locale: vi })
     }
-    const createdCourses = profileUser?.course_by_user
-
+    const createdCourses = profileUser?.courses_by_user
     const joinedCourses = profileUser?.courses_user_bought
+    console.log(joinedCourses)
+
     if (isLoading) return <Loading />
 
     return (
@@ -94,7 +96,7 @@ const Profile = () => {
                             </div>
                         </div>
                     </div>
-                    {profileUser?.course_by_user && profileUser?.course_by_user.length > 0 && (
+                    {profileUser?.courses_by_user && profileUser?.courses_by_user.length > 0 && (
                         <div className="card col-span-12 flex w-full flex-1 flex-col gap-7 overflow-hidden rounded-2xl border shadow-lg md:col-span-7 lg:col-span-9">
                             <Carousel
                                 className="w-full"
@@ -151,7 +153,7 @@ const Profile = () => {
                                                     key={index}
                                                     className="w-full min-w-0 basis-full md:basis-[367px]"
                                                 >
-                                                    <Course data={item} page={routes.courseDetail} />
+                                                    <CourseMyBought data={item} page={routes.courseDetail} />
                                                 </CarouselItem>
                                             ))}
                                     </CarouselContent>

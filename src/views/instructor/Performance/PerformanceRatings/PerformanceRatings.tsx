@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { FaRegHeart, FaStar, FaStarHalfAlt } from 'react-icons/fa'
 
 import routes from '@/configs/routes'
@@ -15,20 +15,27 @@ import {
     SelectValue
 } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
-import { formatDate, getImagesUrl } from '@/lib'
+import { formatDate, getImagesUrl, getVisiblePages } from '@/lib'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { ICourseApproved, ratingCourse } from '@/types/instructor'
 import { Textarea } from '@/components/ui/textarea'
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination'
 
 const PerformanceRatings = () => {
     const navigate = useNavigate()
+    const location = useLocation()
+
+    const queryParams = new URLSearchParams(location.search)
+    const initialPage = parseInt(queryParams.get('page') || '1', 10)
+    const [page, setPage] = useState(initialPage)
+
     const [courseId, setCourseId] = useState<number | undefined>(undefined)
     const [comment, setComment] = useState<ratingCourse>()
     const [openDialog, setOpenDialog] = useState<boolean>(false)
 
     const { data: courseData } = useGetCoursesApproved()
-    const { data: ratingsData } = useGetRatingsCourse(courseId)
+    const { data: ratingsData } = useGetRatingsCourse(courseId, 8, page, 4)
 
     const handleSelectCourse = (value: string) => {
         if (value === 'all') {
@@ -37,6 +44,14 @@ const PerformanceRatings = () => {
             setCourseId(+value)
         }
     }
+
+    const handlePageChange = (newPage: number) => {
+        if (newPage !== page && newPage >= 1 && newPage <= totalPages) {
+            setPage(newPage)
+        }
+    }
+    const totalPages = Math.ceil((ratingsData?.ratings.total ?? 0) / (ratingsData?.ratings?.per_page ?? 0))
+    const visiblePages = getVisiblePages(totalPages, page, 5)
 
     return (
         <>
@@ -155,6 +170,50 @@ const PerformanceRatings = () => {
                         <Button size="lg" onClick={() => navigate(routes.createCourse)}>
                             Tạo khoá học mới
                         </Button>
+                    </div>
+                )}
+                {totalPages > 1 && (
+                    <div className="mt-4 flex justify-center">
+                        <Pagination>
+                            <PaginationContent>
+                                <PaginationItem>
+                                    <PaginationPrevious
+                                        onClick={() => handlePageChange(page - 1)}
+                                        className={page === 1 ? 'border' : 'cursor-pointer border bg-darkGrey/90'}
+                                    />
+                                </PaginationItem>
+
+                                {visiblePages[0] > 1 && (
+                                    <PaginationItem>
+                                        <span className="px-2">...</span>
+                                    </PaginationItem>
+                                )}
+
+                                {visiblePages.map((pageNumber: number) => (
+                                    <PaginationItem key={pageNumber} className="cursor-pointer">
+                                        <PaginationLink
+                                            isActive={page === pageNumber}
+                                            onClick={() => handlePageChange(pageNumber)}
+                                        >
+                                            {pageNumber}
+                                        </PaginationLink>
+                                    </PaginationItem>
+                                ))}
+
+                                {visiblePages[visiblePages.length - 1] < totalPages && (
+                                    <PaginationItem>
+                                        <span className="px-2">...</span>
+                                    </PaginationItem>
+                                )}
+
+                                <PaginationItem>
+                                    <PaginationNext
+                                        onClick={() => handlePageChange(page + 1)}
+                                        className={page === totalPages ? 'border' : 'cursor-pointer border bg-darkGrey/90'}
+                                    />
+                                </PaginationItem>
+                            </PaginationContent>
+                        </Pagination>
                     </div>
                 )}
             </div>

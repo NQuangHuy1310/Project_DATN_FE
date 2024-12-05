@@ -55,7 +55,9 @@ export const instructorUri = {
 
     // Statistic
     STATISTIC: `${INSTRUCTOR_URL}statistic`,
-    GET_STUDENTS: (courseID?: number) =>
-        `${INSTRUCTOR_URL}statistic/get-students${courseID ? `?course=${courseID}` : ''}`,
-    GET_RATINGS: (courseID?: number) => `${INSTRUCTOR_URL}statistic/get-ratings${courseID ? `?course=${courseID}` : ''}`
+    GET_STUDENTS: (courseID?: number, limit?: number, page?: number, perPage?: number) =>
+        `${INSTRUCTOR_URL}statistic/get-students${courseID ? `?course=${courseID}` : ''}?page=${page}${perPage ? `&perPage=${perPage}` : ''}&limit=${limit}`,
+
+    GET_RATINGS: (courseID?: number, limit?: number, page?: number, perPage?: number) =>
+        `${INSTRUCTOR_URL}statistic/get-ratings${courseID ? `?course=${courseID}` : ''}?page=${page}${perPage ? `&perPage=${perPage}` : ''}&limit=${limit}`
 }

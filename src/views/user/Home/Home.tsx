@@ -88,7 +88,7 @@ const Home = () => {
                     </div>
                 </Tabs>
             </div>
-            <div className="container-main pb-10">
+            {postFeatured && postFeatured.length > 0 ? <div className="container-main pb-10">
                 <Carousel className="w-full" opts={{ align: 'start' }}>
                     <div className="flex justify-between items-center">
                         <h3 className="text-xl font-semibold md:text-2xl">Bài viết nổi bật</h3>
@@ -116,7 +116,8 @@ const Home = () => {
                         </CarouselContent>
                     </div>
                 </Carousel>
-            </div>
+            </div> : ''}
+
             {ratings && ratings.length > 0 ? <div className="container-main pb-10">
                 <h3 className="pb-7 text-xl font-medium md:text-2xl">Đánh giá</h3>
                 <div className="flex flex-wrap gap-3">

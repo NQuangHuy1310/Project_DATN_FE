@@ -12,5 +12,8 @@ export const instructorClientApi = {
     },
     getTeacherMonth: async (): Promise<ITeacher[]> => {
         return axiosClient.get(instructorClientUri.GET_TEACHER_MONTH)
+    },
+    getTeacherBySearch: async (search: string): Promise<ITeacherAll> => {
+        return axiosClient.get(instructorClientUri.GET_TEACHER_BY_SEARCH(search))
     }
 }

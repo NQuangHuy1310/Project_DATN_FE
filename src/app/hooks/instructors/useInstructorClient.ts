@@ -33,3 +33,13 @@ export const useInstructorMonth = (options?: Omit<UseQueryOptions<ITeacher[]>, '
         queryFn: instructorClientApi.getTeacherMonth
     })
 }
+export const useGetInstructorBySearch = (
+    search: string,
+    options?: Omit<UseQueryOptions<ITeacherAll>, 'queryKey' | 'queryFn'>
+) => {
+    return useQuery<ITeacherAll>({
+        ...options,
+        queryKey: ['instructor-by-search', search],
+        queryFn: () => instructorClientApi.getTeacherBySearch(search)
+    })
+}

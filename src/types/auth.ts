@@ -97,7 +97,7 @@ export interface IProfileUser {
             bio: string
         }
     }
-    course_by_user: {
+    courses_by_user: {
         id: number
         name: string
         slug: string

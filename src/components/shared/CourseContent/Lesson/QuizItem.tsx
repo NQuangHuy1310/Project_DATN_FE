@@ -5,10 +5,10 @@ import { ChangeEvent, useRef, useState } from 'react'
 import { FaPen, FaRegTrashAlt } from 'react-icons/fa'
 import { FaRegCircleQuestion } from 'react-icons/fa6'
 
-import { ILessonQuiz } from '@/types/instructor'
+import { ILessonQuiz, IQuestionData } from '@/types/instructor'
 import { Button } from '@/components/ui/button'
 import ConfirmDialog from '@/components/shared/ConfirmDialog'
-import { useCreateQuestion, useDeleteLessonQuiz, useGetLessonQuiz } from '@/app/hooks/instructors'
+import { useDeleteLessonQuiz, useGetLessonQuiz, useImportQuestions } from '@/app/hooks/instructors'
 import DialogAddQuestion from '@/components/shared/CourseContent/Dialog/DialogAddQuestion'
 import LessonQuizzes from '@/components/shared/CourseContent/Lesson/LessonQuizzes'
 import { showMessage } from '@/lib'
@@ -25,7 +25,7 @@ const QuizItem = ({ lesson, moduleId, canEdit }: QuizItemProps) => {
     const { title } = lesson
     const { data } = useGetLessonQuiz(moduleId)
     const { mutateAsync: deleteLessonQuiz, isPending } = useDeleteLessonQuiz()
-    const { mutateAsync: createQuestion } = useCreateQuestion()
+    const { mutateAsync: importQuestions } = useImportQuestions()
 
     const inputRef = useRef<HTMLInputElement | null>(null)
     const [isEditQuiz, setIsEditQuiz] = useState(false)
@@ -50,69 +50,90 @@ const QuizItem = ({ lesson, moduleId, canEdit }: QuizItemProps) => {
 
         if (files && files.length > 0) {
             const file = files[0]
+            const optionsData: IQuestionData[] = []
 
-            Papa.parse<File>(file, {
-                header: true,
-                skipEmptyLines: true,
-                complete: async (results: any) => {
-                    const data = results.data
+            await new Promise<void>((resolve, reject) => {
+                Papa.parse<File>(file, {
+                    header: true,
+                    skipEmptyLines: true,
+                    complete: async (results: any) => {
+                        const data = results.data
 
-                    for (const row of data) {
-                        const missingFields = fieldsImport.filter((field) => !(field in row))
-                        if (missingFields.length > 0) {
-                            toast.error('File tải lên không hợp lệ!', {
-                                description: 'Bạn cần tải lên file có dạng .csv và đúng định dạng'
-                            })
-                            return
-                        }
+                        for (const row of data) {
+                            const missingFields = fieldsImport.filter((field) => !(field in row))
+                            if (missingFields.length > 0) {
+                                toast.error('File tải lên không hợp lệ!', {
+                                    description: 'Bạn cần tải lên file có dạng .csv và đúng định dạng'
+                                })
+                                reject()
+                                return
+                            }
 
-                        const options = ['option 1', 'option 2', 'option 3', 'option 4', 'option 5']
-                        const presentOptions = options.filter((option) => option in row).length
+                            const options = ['option 1', 'option 2', 'option 3', 'option 4', 'option 5']
+                            const presentOptions = options.filter((option) => option in row).length
 
-                        if (presentOptions < 2) {
-                            toast.error('Cần ít nhất 2 options cho câu hỏi: ' + row.question)
-                            return
-                        }
+                            if (presentOptions < 2) {
+                                toast.error('Cần ít nhất 2 options cho câu hỏi: ' + row.question)
+                                reject()
+                                return
+                            }
 
-                        if (presentOptions > 5) {
-                            toast.error('Tối đa chỉ được 5 options cho câu hỏi: ' + row.question)
-                            return
-                        }
+                            if (presentOptions > 5) {
+                                toast.error('Tối đa chỉ được 5 options cho câu hỏi: ' + row.question)
+                                reject()
+                                return
+                            }
 
-                        const optionsArray = options
-                            .map((option) => {
-                                if (option in row) {
-                                    return {
-                                        text: row[option],
-                                        image: row.image || undefined,
-                                        remove_image: row.remove_image || false
+                            const optionsArray = options
+                                .map((option, index) => {
+                                    if (option in row) {
+                                        const imageKey = `image ${index + 1}`
+                                        return {
+                                            text: row[option],
+                                            image: row[imageKey] || undefined,
+                                            remove_image: row.remove_image || false
+                                        }
                                     }
-                                }
-                                return null
-                            })
-                            .filter((option) => option !== null)
+                                    return null
+                                })
+                                .filter((option) => option !== null)
 
-                        let correctAnswer: number | number[]
+                            let correctAnswer: number | number[]
 
-                        if (row.question_type === 'one_choice') {
-                            correctAnswer = Number(row.correct_answer)
-                        } else {
-                            correctAnswer = row.correct_answer.split(',').map((answer: any) => Number(answer.trim()))
+                            if (row.question_type === 'one_choice') {
+                                correctAnswer = Number(row.correct_answer)
+                            } else {
+                                correctAnswer = row.correct_answer
+                                    .split(',')
+                                    .map((answer: string) => Number(answer.trim()))
+                            }
+
+                            const payload = {
+                                question: {
+                                    question: row.question,
+                                    type: row.question_type,
+                                    correct_answer: correctAnswer,
+                                    image: row.question_image
+                                },
+                                options: optionsArray
+                            }
+
+                            optionsData.push(payload)
                         }
-
-                        const payload = {
-                            question: {
-                                question: row.question,
-                                type: row.question_type,
-                                correct_answer: correctAnswer,
-                                image: row.image
-                            },
-                            options: optionsArray
-                        }
-                        await createQuestion([lesson.id!, payload])
+                        resolve()
+                    },
+                    error: (error) => {
+                        toast.error('Có lỗi xảy ra khi phân tích tệp!')
+                        reject(error) // Kết thúc Promise nếu có lỗi
                     }
-                }
+                })
             })
+
+            // Gọi API ở đây sau khi đã hoàn thành việc phân tích
+            if (optionsData.length > 0) {
+                // await importQuestions([lesson.id, optionsData])
+                console.log(optionsData)
+            }
         }
     }
 

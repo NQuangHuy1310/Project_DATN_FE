@@ -144,6 +144,9 @@ export const instructorApi = {
     createQuestion: async (quizId: number, questionData: IQuestionData): Promise<IQuestion> => {
         return axiosClient.post(instructorUri.CREATE_QUESTION(quizId), questionData)
     },
+    importQuestions: async (quizId: number, questionsData: IQuestionData[]): Promise<any> => {
+        return axiosClient.post(instructorUri.IMPORT_QUESTIONS(quizId), questionsData)
+    },
     updateQuestion: async (questionId: number, questionData: IQuestionData): Promise<IQuestion> => {
         return axiosClient.post(instructorUri.UPDATE_QUESTION(questionId), questionData)
     },

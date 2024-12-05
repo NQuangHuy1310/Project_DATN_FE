@@ -12,13 +12,11 @@ const LeaningCourseDocument = ({
     dataLesson,
     toggleTab,
     checkLesson
-    // setCheckButton
 }: {
     slug: string
     dataLesson: ILessonLeaning
     toggleTab: boolean
     checkLesson: number
-    // setCheckButton: Dispatch<SetStateAction<boolean>>
 }) => {
     const [qaSheet, setQASheet] = useState<boolean>(false)
     const { mutateAsync: lessonProcessUpdate } = useUpdateLessonProCess(slug)
@@ -30,6 +28,11 @@ const LeaningCourseDocument = ({
         const wordsPerMinute = 200
         const words = content.trim().split(/\s+/).length
         return Math.ceil((words / wordsPerMinute) * 60 * 1000)
+    }
+
+    const formatDate = (dateTime: string) => {
+        const date = new Date(dateTime)
+        return `Ngày ${date.getDay()} tháng ${date.getMonth()} năm ${date.getFullYear()}`
     }
 
     const handleDownloadFile = () => {
@@ -110,7 +113,10 @@ const LeaningCourseDocument = ({
     return (
         <div className="mx-auto max-w-3xl pt-4">
             <div className="flex flex-col gap-5">
-                <h2 className="text-xl font-bold">{dataLesson.lessonable!.lesson_title}</h2>
+                <div className="flex flex-col gap-2">
+                    <h2 className="text-xl font-bold">{dataLesson.title}</h2>
+                    <span className="text-darkGrey">{formatDate(dataLesson.created_at)}</span>
+                </div>
                 {dataLesson.content_type === 'document' && 'content' in dataLesson.lessonable! && (
                     <div dangerouslySetInnerHTML={{ __html: dataLesson.lessonable.content! }} />
                 )}

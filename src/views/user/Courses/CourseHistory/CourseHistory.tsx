@@ -9,7 +9,7 @@ import Loading from '@/components/Common/Loading/Loading'
 import NoContent from '@/components/shared/NoContent/NoContent'
 import { Button } from '@/components/ui/button'
 import { useCourseHistory } from '@/app/hooks/accounts/useRegisterTeacher'
-import { RiQuestionFill } from 'react-icons/ri'
+import { RiCodeBoxFill, RiQuestionFill } from 'react-icons/ri'
 
 const CourseHistory = () => {
     const [limit, setLimit] = useState<number>(5)
@@ -39,7 +39,11 @@ const CourseHistory = () => {
                         <div
                             key={index}
                             onClick={() => {
-                                if (item.content_type == 'document' || item.content_type == 'video') {
+                                if (
+                                    item.content_type == 'document' ||
+                                    item.content_type == 'video' ||
+                                    item.content_type == 'coding'
+                                ) {
                                     navigate(`${routes.courseLeaning.replace(':slug', item.slug)}?id=lesson-${item.id}`)
                                 } else {
                                     navigate(`${routes.courseLeaning.replace(':slug', item.slug)}?id=quiz-${item.id}`)
@@ -49,14 +53,16 @@ const CourseHistory = () => {
                         >
                             <div className="flex items-center gap-5">
                                 <span className="w-4">{index + 1}</span>
-                                <span>{formatDate('hour', item.created_at)}</span>
+                                <span className="block w-10">{formatDate('hour', item.created_at)}</span>
                                 {item.content_type == 'document' && <TiDocumentText className="size-6 text-primary" />}
                                 {item.content_type == 'video' && <IoIosPlayCircle className="size-6 text-primary" />}
+                                {item.content_type == 'coding' && <RiCodeBoxFill className="size-6 text-primary" />}
                                 {!item.content_type && <RiQuestionFill className="size-6 text-primary" />}
                                 <div className="flex flex-col gap-1">
                                     <h2 className="text-base font-semibold">{item.title}</h2>
                                     {item.content_type == 'document' && <span>Tài liệu kết thúc</span>}
                                     {item.content_type == 'video' && <span>Video kết thúc</span>}
+                                    {item.content_type == 'coding' && <span>Bài tập kết thúc</span>}
                                     {!item.content_type && <span>Câu hỏi kết thúc</span>}
                                 </div>
                             </div>

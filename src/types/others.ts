@@ -66,7 +66,7 @@ export interface LessonHistory {
     title: string
     thumbnail: string | null
     description: string | null
-    content_type: 'document' | 'video'
+    content_type: 'document' | 'video' | 'coding'
     lessonable_type: string
     lessonable_id: number
     slug: string

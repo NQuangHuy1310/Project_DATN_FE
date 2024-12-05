@@ -75,5 +75,9 @@ export const postsApi = {
 
     getPostSaved: async (page: number, perPage?: number): Promise<ISavedPosts> => {
         return axiosClient.get(postUri.GET_POST_SAVED(page, perPage))
+    },
+
+    getPostBySearch: async (search?: string): Promise<IListPost> => {
+        return axiosClient.get(postUri.GET_POST_BY_SEARCH(search))
     }
 }

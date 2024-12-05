@@ -1,3 +1,4 @@
+import { createQueryParams } from '@/lib/utils'
 const COURSE_URL = 'courses/'
 
 export const courseUri = {
@@ -5,21 +6,10 @@ export const courseUri = {
     DETAIL_COURSE: (slug: string) => `${COURSE_URL}detail-login/${slug}`,
     DETAIL_COURSE_NO_LOGIN: (slug: string) => `${COURSE_URL}detail-no-login/${slug}`,
 
-    ALL_COURSES: (
-        search?: string,
-        category?: string,
-        level?: string,
-        arrange?: string,
-        page?: number,
-        perPage?: number
-    ) =>
-        `${COURSE_URL}list-course-all${
-            category ? `?category=${category}` : ''
-        }${level ? `${category ? '&' : '?'}level=${level}` : ''}${
-            arrange ? `${category || level ? '&' : '?'}arrange=${arrange}` : ''
-        }${page ? `${category || level || arrange ? '&' : '?'}page=${page}` : ''}${
-            perPage ? `${category || level || arrange || page ? '&' : '?'}perPage=${perPage}` : ''
-        }${search ? `${category || level || arrange || page || perPage ? '&' : '?'}search=${search}` : ''}`,
+    ALL_COURSES: (category?: string, level?: string, arrange?: string, page?: number, perPage?: number) => {
+        const queryString = createQueryParams(category, level, arrange, page, perPage)
+        return `${COURSE_URL}list-course-all${queryString}`
+    },
 
     COURSE_SALE_HOME: `${COURSE_URL}sale-course`,
     GET_DETAIL_QUIZ: (slug: string) => `${COURSE_URL}detail/quiz/${slug}`,
@@ -33,21 +23,12 @@ export const courseUri = {
     ADD_COMMENT_COURSE: 'comments/add-comment-lesson',
     GET_COMMENT: (id: number) => `comments/comment-lesson/${id}`,
     //WISHLIST
-    WISH_LIST: (
-        search?: string,
-        category?: string,
-        level?: string,
-        arrange?: string,
-        page?: number,
-        perPage?: number
-    ) =>
-        `${COURSE_URL}favorite${
-            category ? `?category=${category}` : ''
-        }${level ? `${category ? '&' : '?'}level=${level}` : ''}${
-            arrange ? `${category || level ? '&' : '?'}arrange=${arrange}` : ''
-        }${page ? `${category || level || arrange ? '&' : '?'}page=${page}` : ''}${
-            perPage ? `${category || level || arrange || page ? '&' : '?'}perPage=${perPage}` : ''
-        }${search ? `${category || level || arrange || page || perPage ? '&' : '?'}search=${search}` : ''}`,
+    WISH_LIST: (category?: string, level?: string, arrange?: string, page?: number, perPage?: number) => {
+        const queryString = createQueryParams(category, level, arrange, page, perPage)
+        return `${COURSE_URL}favorite${queryString}`
+    },
     ADD_WISH_LIST: (courseId: number) => `${COURSE_URL}favorite/${courseId}`,
-    UN_WISH_LIST: (courseId: number) => `${COURSE_URL}unfavorite/${courseId}`
+    UN_WISH_LIST: (courseId: number) => `${COURSE_URL}unfavorite/${courseId}`,
+    GET_COURSE_BY_SEARCH: (search: string) => `${COURSE_URL}list-course-all?search=${search}`,
+    GET_WISHLIST_BY_SEARCH: (search: string) => `${COURSE_URL}favorite?search=${search}`
 }

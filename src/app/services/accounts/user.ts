@@ -25,14 +25,17 @@ export const userApis = {
         return axiosClient.get(userUri.GET_USER_BY_ID(userId))
     },
     getMyCourseBought: async (
-        search?: string,
         category?: string,
         level?: string,
         arrange?: string,
         page?: number,
         perPage?: number
     ): Promise<ICourseMyBought> => {
-        return axiosClient.get(userUri.GET_MY_COURSE_BOUGHT(search, category, level, arrange, page, perPage))
+        return axiosClient.get(userUri.GET_MY_COURSE_BOUGHT(category, level, arrange, page, perPage))
+    },
+
+    getMyCourseBySearch: async (search?: string): Promise<any> => {
+        return axiosClient.get(userUri.GET_MY_COURSE_BY_SEARCH(search))
     },
     followTeacher: async (teacher: Flow): Promise<Flow> => {
         return axiosClient.post(userUri.FLOW_TEACHER, teacher)

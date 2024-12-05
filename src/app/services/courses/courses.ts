@@ -14,14 +14,13 @@ import { IBuyData, IComment, ICreateComment } from '@/types'
 
 export const courseApi = {
     allCourses: async (
-        search: string,
         category: string,
         level: string,
         arrange: string,
         page: number,
         perPage?: number
     ): Promise<IAllCourse> => {
-        return axiosClient.get(courseUri.ALL_COURSES(search, category, level, arrange, page, perPage))
+        return axiosClient.get(courseUri.ALL_COURSES(category, level, arrange, page, perPage))
     },
 
     detailCourseLeaning: async (slug: string): Promise<CourseData> => {
@@ -77,14 +76,16 @@ export const courseApi = {
     },
 
     getWishList: async (
-        search?: string,
         category?: string,
         level?: string,
         arrange?: string,
         page?: number,
         perPage?: number
     ): Promise<ICourseWishList> => {
-        return axiosClient.get(courseUri.WISH_LIST(search, category, level, arrange, page, perPage))
+        return axiosClient.get(courseUri.WISH_LIST(category, level, arrange, page, perPage))
+    },
+    getWishListBySearch: async (search: string): Promise<ICourseWishList> => {
+        return axiosClient.get(courseUri.GET_WISHLIST_BY_SEARCH(search))
     },
 
     addWishList: async (courseId: number): Promise<IWishList> => {
@@ -93,5 +94,9 @@ export const courseApi = {
 
     unWishList: async (courseId: number): Promise<IWishList> => {
         return axiosClient.post(courseUri.UN_WISH_LIST(courseId))
+    },
+
+    getCourseBySearch: async (search: string): Promise<IAllCourse> => {
+        return axiosClient.get(courseUri.GET_COURSE_BY_SEARCH(search))
     }
 }

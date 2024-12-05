@@ -1,8 +1,7 @@
 import FilterBar from '@/components/shared/FilterBar/FilterBar'
-
 import Post from '@/components/shared/Post'
 import Loading from '@/components/Common/Loading/Loading'
-import { useGetPosts, useGetPostsByCategory } from '@/app/hooks/posts'
+import { useGetPosts, useGetPostsByCategory, useGetPostsBySearch } from '@/app/hooks/posts'
 import { useGetCategoriesPost } from '@/app/hooks/categories'
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -23,49 +22,74 @@ const Posts = () => {
     const queryParams = new URLSearchParams(location.search)
     const initialPage = parseInt(queryParams.get('page') || '1', 10)
     const [page, setPage] = useState(initialPage)
+    const [search, setSearch] = useState<string>('')
 
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+
     const { data: allPosts, isLoading } = useGetPosts(page, 6)
+    const { data: postBySearch } = useGetPostsBySearch(search)
     const { data: categories } = useGetCategoriesPost()
     const { data: postByCategory } = useGetPostsByCategory(selectedCategory!)
-    const postsToShow = selectedCategory ? postByCategory?.data : allPosts?.data
-    const handleCategoryClick = (categorySlug: string) => {
+
+    const postsToShow = search ? postBySearch?.data : selectedCategory ? postByCategory?.data : allPosts?.data
+
+    const handleCategoryClick = (categorySlug: string | null) => {
+        setSearch('')
         setSelectedCategory(categorySlug)
     }
-    const pageTitle = selectedCategory
-        ? `${categories?.find((category) => category.slug === selectedCategory)?.name || ''}`
-        : 'Danh sách bài viết'
 
-    useEffect(() => {
-        if (page !== 1) {
-            navigate(`?page=${page}`, { replace: true })
-        } else {
-            navigate(location.pathname, { replace: true })
+    const handleSearchChange = (filters: { search?: string }) => {
+        if (filters.search !== undefined) {
+            setSearch(filters.search)
         }
-    }, [page, navigate, location.pathname])
+    }
+
+    const pageTitle = search
+        ? `Kết quả cho "${search}"`
+        : selectedCategory
+            ? `${categories?.find((category) => category.slug === selectedCategory)?.name || ''}`
+            : 'Danh sách bài viết'
 
     const handlePageChange = (newPage: number) => {
         if (newPage !== page && newPage >= 1 && newPage <= (allPosts?.total || 1)) {
             setPage(newPage)
         }
     }
+
     const totalPages = Math.ceil((allPosts?.total ?? 0) / (allPosts?.per_page ?? 0))
     const visiblePages = getVisiblePages(totalPages, page, 5)
-    if (isLoading) {
-        return <Loading />
-    }
+
+    useEffect(() => {
+        const queryParams = new URLSearchParams()
+        if (search) queryParams.set('search', search)
+        if (queryParams.toString()) {
+            navigate(`?${queryParams.toString()}`, { replace: true })
+        } else {
+            navigate(location.pathname, { replace: true })
+        }
+    }, [search, page, navigate, location.pathname])
+
+    if (isLoading) return <Loading />
+
     return (
         <div className="flex flex-col gap-7 rounded-md bg-white p-10 px-20">
             <div className="flex flex-col gap-5">
                 <h1 className="text-2xl font-bold"> {pageTitle}</h1>
-                <FilterBar placeholder="Tìm kiếm bài viết" isShowFilter={false} />
+                <FilterBar placeholder="Tìm kiếm bài viết" onFilterChange={handleSearchChange} isShowFilter={false} />
             </div>
             <div className="flex w-full gap-20">
                 <div className="flex w-3/4 flex-col items-start gap-10">
-                    {postsToShow && postsToShow.length > 0 && (
+                    {postsToShow && postsToShow.length > 0 ? (
                         postsToShow.map((item, index) => <Post data={item} key={index} />)
+                    ) : (
+                        search && (
+                            <div className="text-center text-lg font-medium text-gray-500">
+                                {selectedCategory ? '' : `Không có kết quả cho "${search}"`}
+                            </div>
+                        )
                     )}
                 </div>
+
                 <div className="w-1/4">
                     <h3 className="text-lg font-medium text-darkGrey">XEM CÁC BÀI VIẾT THEO CHỦ ĐỀ</h3>
                     <div className="mt-8 flex flex-wrap gap-2">

@@ -3,7 +3,6 @@ import { ICourseMyBought } from '@/types/user'
 import { useQuery, UseQueryOptions } from '@tanstack/react-query'
 
 export const useCourseMyBought = (
-    search?: string,
     category?: string,
     level?: string,
     arrange?: string,
@@ -13,7 +12,17 @@ export const useCourseMyBought = (
 ) => {
     return useQuery<ICourseMyBought>({
         ...options,
-        queryKey: ['course-my-bought', search, category, level, arrange, page, perPage],
-        queryFn: () => userApis.getMyCourseBought(search, category, level, arrange, page, perPage)
+        queryKey: ['course-my-bought', category, level, arrange, page, perPage],
+        queryFn: () => userApis.getMyCourseBought(category, level, arrange, page, perPage)
+    })
+}
+export const useGetMyCourseBySearch = (
+    search: string,
+    options?: Omit<UseQueryOptions<ICourseMyBought>, 'queryKey' | 'queryFn'>
+) => {
+    return useQuery<ICourseMyBought>({
+        ...options,
+        queryKey: ['course-my-bought', search],
+        queryFn: () => userApis.getMyCourseBySearch(search)
     })
 }

@@ -27,7 +27,7 @@ export const useBuyCourse = (slug: string) => {
         onSuccess: async (data) => {
             await Promise.all([
                 queryClient.invalidateQueries({ queryKey: ['course-detail', slug] }),
-                queryClient.invalidateQueries({ queryKey: ['course-my-bought'] }),
+                queryClient.refetchQueries({ queryKey: ['course-my-bought'] }),
                 queryClient.invalidateQueries({ queryKey: ['transaction-user'] })
             ])
             if (data.status === 'success') {

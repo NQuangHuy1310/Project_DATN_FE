@@ -13,7 +13,7 @@ import { formatDuration, getImagesUrl } from '@/lib'
 import routes from '@/configs/routes'
 import { TbCoinFilled } from 'react-icons/tb'
 
-const Course = ({ data, progressLesson, page }: { data: ICourse; progressLesson?: number; page?: string }) => {
+const Course = ({ data, progressLesson }: { data: ICourse; progressLesson?: number; page?: string }) => {
     const navigate = useNavigate()
     const totalTime = formatDuration((data?.total_duration_video as unknown as number) || 0)
     const stars = [...Array(5)].map((_, index) => {
@@ -24,7 +24,7 @@ const Course = ({ data, progressLesson, page }: { data: ICourse; progressLesson?
     return (
         <div className="card flex w-full cursor-text flex-col gap-3 shadow-md hover:shadow-[0px_40px_100px_0px_#0000000d] hover:transition-all md:w-[360px]">
             <Link
-                to={page == routes.dataNoLogin ? `/course/${data.slug}` : `/courses/${data.slug}`}
+                to={routes.courseDetail.replace(':slug', data.slug)}
                 className="flex flex-col gap-2"
             >
                 <div className="relative h-[160px] flex-shrink-0 cursor-pointer">
@@ -50,13 +50,12 @@ const Course = ({ data, progressLesson, page }: { data: ICourse; progressLesson?
                             <div className="flex flex-col gap-2">
                                 <div className="flex h-2 w-full items-center overflow-hidden rounded bg-darkGrey/20">
                                     <span
-                                        className={`block h-full ${
-                                            data?.level === 'Sơ cấp'
+                                        className={`block h-full ${data?.level === 'Sơ cấp'
                                                 ? 'bg-secondaryYellow'
                                                 : data?.level === 'Trung cấp'
-                                                  ? 'bg-secondaryGreen'
-                                                  : 'bg-secondaryRed'
-                                        }`}
+                                                    ? 'bg-secondaryGreen'
+                                                    : 'bg-secondaryRed'
+                                            }`}
                                         style={{ width: `${data?.progress_percent}%` }}
                                     ></span>
                                     <span

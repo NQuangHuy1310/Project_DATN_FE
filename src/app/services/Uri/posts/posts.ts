@@ -18,5 +18,6 @@ export const postUri = {
     CHECK_LIKED_POST: (slug: string) => `${POST_URL}check-like/${slug}`,
     GET_POST_BY_CATEGORY: (slug: string) => `${POST_URL}by-category-posts/${slug}`,
     GET_POST_SAVED: (page: number, perPage?: number) =>
-        `${POST_URL}saved?page=${page}${perPage ? `&perPage=${perPage}` : ''}`
+        `${POST_URL}saved?page=${page}${perPage ? `&perPage=${perPage}` : ''}`,
+    GET_POST_BY_SEARCH: (search?: string) => `${POST_URL}?search=${search}`
 }

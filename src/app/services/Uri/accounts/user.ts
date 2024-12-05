@@ -1,3 +1,5 @@
+import { createQueryParams } from '@/lib/utils'
+
 const USER_URL = 'user/'
 
 export const userUri = {
@@ -7,21 +9,11 @@ export const userUri = {
     CHANGE_PASSWORD: `${USER_URL}change-password`,
     GET_USER_BY_ID: (userId: number) => `${USER_URL}${userId}/show`,
     GET_BALANCE: (userId: number) => `${USER_URL}balance/${userId}`,
-    GET_MY_COURSE_BOUGHT: (
-        search?: string,
-        category?: string,
-        level?: string,
-        arrange?: string,
-        page?: number,
-        perPage?: number
-    ) =>
-        `${USER_URL}my-course-bought${
-            category ? `?category=${category}` : ''
-        }${level ? `${category ? '&' : '?'}level=${level}` : ''}${
-            arrange ? `${category || level ? '&' : '?'}arrange=${arrange}` : ''
-        }${page ? `${category || level || arrange ? '&' : '?'}page=${page}` : ''}${
-            perPage ? `${category || level || arrange || page ? '&' : '?'}perPage=${perPage}` : ''
-        }${search ? `${category || level || arrange || page || perPage ? '&' : '?'}search=${search}` : ''}`,
+    GET_MY_COURSE_BOUGHT: (category?: string, level?: string, arrange?: string, page?: number, perPage?: number) => {
+        const queryString = createQueryParams(category, level, arrange, page, perPage)
+        return `${USER_URL}my-course-bought${queryString}`
+    },
+    GET_MY_COURSE_BY_SEARCH: (search?: string) => `${USER_URL}my-course-bought?search=${search}`,
     FLOW_TEACHER: `${USER_URL}follow`,
     UN_FOLLOW_TEACHER: `${USER_URL}unfollow`,
     CHECK_FOLLOW_TEACHER: (userId: number, teacherId: number) => `${USER_URL}check-follow/${userId}/${teacherId}`,

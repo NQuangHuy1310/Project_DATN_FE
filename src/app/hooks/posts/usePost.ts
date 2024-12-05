@@ -218,3 +218,14 @@ export const useGetPostsSaved = (
         queryFn: () => postsApi.getPostSaved(page, perPage)
     })
 }
+
+export const useGetPostsBySearch = (
+    search?: string,
+    options?: Omit<UseQueryOptions<IListPost>, 'queryKey' | 'queryFn'>
+) => {
+    return useQuery({
+        ...options,
+        queryKey: ['search-posts', search],
+        queryFn: () => postsApi.getPostBySearch(search)
+    })
+}

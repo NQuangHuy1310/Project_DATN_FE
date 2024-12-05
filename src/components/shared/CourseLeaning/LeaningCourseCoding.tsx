@@ -41,6 +41,12 @@ const LeaningCourseCoding = ({
     }
 
     useEffect(() => {
+        if (checkLesson == 1) {
+            setSourceCode(dataLesson.lessonable?.result_code!)
+        }
+    }, [checkLesson])
+
+    useEffect(() => {
         const handleBeforeUnload = () => {
             localStorage.setItem(`sourceCode&id=${dataLesson.id}`, sourceCode)
         }
@@ -50,6 +56,11 @@ const LeaningCourseCoding = ({
             window.removeEventListener('beforeunload', handleBeforeUnload)
         }
     }, [sourceCode])
+
+    const CapitalizeFirstLetter = (str: string): string => {
+        if (!str) return ''
+        return str.charAt(0).toUpperCase() + str.slice(1)
+    }
 
     const runCode = async (): Promise<string | null> => {
         if (isLoading) return null
@@ -144,7 +155,15 @@ const LeaningCourseCoding = ({
                             className="text-base"
                             dangerouslySetInnerHTML={{ __html: dataLesson?.lessonable?.statement || '' }}
                         />
-                        <div className="mt-4">
+                        <div className="mt-2">
+                            <p className="flex items-center gap-2 text-base font-semibold">
+                                Ngôn ngữ:{' '}
+                                <span className="block rounded-md bg-primary px-2 py-1 text-white">
+                                    {CapitalizeFirstLetter(dataLesson.lessonable?.language!)}
+                                </span>
+                            </p>
+                        </div>
+                        <div className="mt-2">
                             <span className="text-base font-semibold">Gợi ý:</span>
                             <div
                                 className="text-base"

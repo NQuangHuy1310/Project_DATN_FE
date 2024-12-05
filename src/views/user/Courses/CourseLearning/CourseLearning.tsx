@@ -426,7 +426,7 @@ const CourseLearning = () => {
                                         <div className="flex max-w-44 flex-col gap-3">
                                             <div>
                                                 <h4 className="lg:text-md text-sm font-medium">
-                                                    {index + 1}.{courseModule.modules.length - 1} {module.quiz.title}
+                                                    {index + 1}. {module.quiz.title}
                                                 </h4>
                                             </div>
                                             <div className="flex gap-2">

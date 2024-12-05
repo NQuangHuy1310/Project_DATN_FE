@@ -331,13 +331,12 @@ export const useCreateQuestion = () => {
 export const useImportQuestions = () => {
     const queryClient = useQueryClient()
 
-    return useMutation<any, Error, [number, IQuestionData[]]>({
+    return useMutation<any, Error, [number, IQuestionData]>({
         mutationFn: async ([quizId, questionsData]) => {
             return instructorApi.importQuestions(quizId, questionsData)
         },
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: ['quiz'] })
-            toast.success('Import câu hỏi thành công!')
         }
     })
 }

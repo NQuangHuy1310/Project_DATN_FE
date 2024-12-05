@@ -9,6 +9,7 @@ import {
     ICourses,
     ICourseStatusData,
     ICreateCourseData,
+    IImportQuestionData,
     ILesson,
     ILessonCodingData,
     ILessonDocData,
@@ -331,7 +332,7 @@ export const useCreateQuestion = () => {
 export const useImportQuestions = () => {
     const queryClient = useQueryClient()
 
-    return useMutation<any, Error, [number, IQuestionData]>({
+    return useMutation<any, Error, [number, IImportQuestionData]>({
         mutationFn: async ([quizId, questionsData]) => {
             return instructorApi.importQuestions(quizId, questionsData)
         },
@@ -536,6 +537,7 @@ export const useGetLessonDetail = (id: number, options?: Omit<UseQueryOptions<IL
 export const useGetLessonQuiz = (id: number, options?: Omit<UseQueryOptions<IQuiz>, 'queryKey' | 'queryFn'>) => {
     return useQuery({
         ...options,
+        enabled: !!id,
         queryKey: ['quiz', id],
         queryFn: () => instructorApi.getLessonQuiz(id)
     })

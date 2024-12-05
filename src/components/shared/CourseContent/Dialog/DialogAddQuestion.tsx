@@ -117,7 +117,7 @@ const DialogAddQuestion = ({ openDialog, setOpenDialog, quizId, question }: Dial
     }
 
     const isValidQuestion = (questionText: string, answers: Answer[]): boolean => {
-        return !!questionText && answers.some((answer) => answer.text.trim() !== '')
+        return !!questionText && answers.some((answer) => answer.text?.trim() !== '')
     }
 
     const handleSubmit = async () => {
@@ -184,8 +184,8 @@ const DialogAddQuestion = ({ openDialog, setOpenDialog, quizId, question }: Dial
             setAnswers(
                 question.options.map((option) => ({
                     text: option.option,
-                    image: option.image_url ? getImagesUrl(option.image_url) : undefined,
-                    id: option.id
+                    image: option?.image_url ? getImagesUrl(option.image_url) : undefined,
+                    id: option?.id
                 }))
             )
             setCorrectAnswers(correctAnswers)
@@ -210,7 +210,7 @@ const DialogAddQuestion = ({ openDialog, setOpenDialog, quizId, question }: Dial
             <Dialog open={openDialog} onOpenChange={setOpenDialog}>
                 <DialogContent className="sm:max-w-screen-lg" aria-describedby={undefined}>
                     <DialogHeader>
-                        <DialogTitle>Thêm câu hỏi</DialogTitle>
+                        <DialogTitle>{question ? 'Sửa câu hỏi' : 'Thêm câu hỏi'}</DialogTitle>
                     </DialogHeader>
                     <div className="grid gap-4 py-4">
                         <div className="flex h-[150px] flex-col gap-1">

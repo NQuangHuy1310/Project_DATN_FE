@@ -214,7 +214,7 @@ const QuizItem = ({ lesson, moduleId, canEdit }: QuizItemProps) => {
             <DialogAddQuestion openDialog={isOpenAddDialog} setOpenDialog={setIsOpenAddDialog} quizId={lesson.id!} />
 
             {/* LessonQuizzes */}
-            {isEditQuiz && <LessonQuizzes moduleId={moduleId!} canEdit={canEdit} />}
+            {isEditQuiz && <LessonQuizzes moduleId={moduleId} canEdit={canEdit} />}
         </>
     )
 }

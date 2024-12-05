@@ -75,8 +75,8 @@ const LessonQuizzes = ({ handleHiddenLesson, moduleId, canEdit }: LessonQuizzesP
 
     useEffect(() => {
         if (data?.quiz) {
-            setValue('title', data.quiz.title ?? '')
-            setValue('description', data.quiz.description ?? '')
+            setValue('title', data.quiz.title)
+            setValue('description', data.quiz.description)
         }
     }, [data?.quiz, setValue])
 

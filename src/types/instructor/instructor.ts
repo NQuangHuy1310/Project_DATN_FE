@@ -301,11 +301,17 @@ interface QuestionData {
     correct_answer: number[] | number
 }
 
-export interface IQuestionData {
+export interface IImportQuestionData {
     questions: {
         question: QuestionData
         options: QuestionOptionData
     }[]
+    _method?: string
+}
+
+export interface IQuestionData {
+    question: QuestionData
+    options: QuestionOptionData[]
     _method?: string
 }
 

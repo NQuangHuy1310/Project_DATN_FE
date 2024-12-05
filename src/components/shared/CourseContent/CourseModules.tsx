@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { useState } from 'react'
 import { CSS } from '@dnd-kit/utilities'
-import { FaCode } from 'react-icons/fa6'
 import { MdOutlineQuiz } from 'react-icons/md'
 import { useSortable } from '@dnd-kit/sortable'
 import { FaRegRectangleList } from 'react-icons/fa6'
@@ -38,14 +37,6 @@ const CourseModules = ({
     const [selectedId, setSelectedId] = useState<string>('')
     const { mutateAsync: deleteModule, isPending } = useDeleteModule()
 
-    const totalLesson = module.lessons.reduce((acc, lesson) => {
-        return acc + (lesson.content_type === 'document' || lesson.content_type === 'video' ? 1 : 0)
-    }, 0)
-
-    const totalExample = module.lessons.reduce((acc, lesson) => {
-        return acc + (lesson.content_type === 'coding' ? 1 : 0)
-    }, 0)
-
     const dndKitColumnStyles = {
         transform: CSS.Translate.toString(transform),
         transition,
@@ -74,18 +65,13 @@ const CourseModules = ({
                         <h5 className="text-base font-semibold">Thông tin chương: {module.title}</h5>
                         {' | '}
                         <div className="flex items-center gap-3">
-                            {totalExample > 0 && (
+                            {module.total_lessons > 0 && (
                                 <h6 className="flex items-center gap-1 text-base font-semibold">
-                                    <FaRegRectangleList className="size-5 text-primary" /> {totalLesson} Bài học
+                                    <FaRegRectangleList className="size-5 text-primary" /> {module.total_lessons} Bài
+                                    học
                                 </h6>
                             )}
-                            {totalExample > 0 && ' - '}
-                            {totalExample > 0 && (
-                                <h6 className="flex items-center gap-1 text-base font-semibold">
-                                    <FaCode className="size-5 text-blue-600" /> {totalExample} Bài tập
-                                </h6>
-                            )}
-                            {module.quiz && ' - '}
+                            {module.total_lessons > 0 && ' - '}
                             {module.quiz && module.quiz && (
                                 <h6 className="flex items-center gap-1 text-base font-semibold">
                                     <MdOutlineQuiz className="size-5 text-secondaryGreen" /> Có Bài kiểm tra

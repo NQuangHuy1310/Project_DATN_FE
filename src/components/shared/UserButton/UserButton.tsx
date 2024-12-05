@@ -52,6 +52,19 @@ const UserButton = () => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-70">
                     <DropdownMenuGroup className="flex flex-col gap-1.5 p-2">
+                        <Link to={routes.profileUser.replace(':email', user?.email || '')}>
+                            <DropdownMenuItem className="flex items-center gap-2">
+                                <CgProfile className="size-4 w-8" />
+                                <span className="text-sm font-medium">Trang cá nhân</span>
+                            </DropdownMenuItem>
+                        </Link>
+                        <Link to={routes.accountProfile}>
+                            <DropdownMenuItem className="flex items-center gap-2">
+                                <IoSettingsOutline className="size-4 w-8" />
+                                <span className="text-sm font-medium">Quản lý tài khoản</span>
+                            </DropdownMenuItem>
+                        </Link>
+                        <DropdownMenuSeparator />
                         {validRoutesMember.some((route) => location.pathname.includes(route)) &&
                         (user?.user_type === 'teacher' || user?.user_type === 'admin') ? (
                             <Link to={routes.instructorDashboard}>
@@ -68,12 +81,18 @@ const UserButton = () => {
                                 </DropdownMenuItem>
                             </Link>
                         )}
-                        <Link to={routes.profileUser.replace(':email', user?.email || '')}>
-                            <DropdownMenuItem className="flex items-center gap-2">
-                                <CgProfile className="size-4 w-8" />
-                                <span className="text-sm font-medium">Trang cá nhân</span>
-                            </DropdownMenuItem>
-                        </Link>
+
+                        {user?.user_type !== 'teacher' && user?.user_type !== 'admin' && (
+                            <Link to={routes.instructorRegister}>
+                                <DropdownMenuItem className="flex items-center gap-2">
+                                    <TbUserHexagon className="size-4 w-8" />
+                                    <span className="whitespace-nowrap text-sm font-medium">
+                                        Đăng ký thành giảng viên
+                                    </span>
+                                </DropdownMenuItem>
+                            </Link>
+                        )}
+                        <DropdownMenuSeparator />
                         <Link to={routes.newPost}>
                             <DropdownMenuItem className="flex items-center gap-2">
                                 <MdPostAdd className="size-4 w-8" />
@@ -90,22 +109,6 @@ const UserButton = () => {
                             <DropdownMenuItem className="flex items-center gap-2">
                                 <FaRegBookmark className="size-4 w-8" />
                                 <span className="text-sm font-medium">Bài viết đã lưu</span>
-                            </DropdownMenuItem>
-                        </Link>
-                        {user?.user_type !== 'teacher' && user?.user_type !== 'admin' && (
-                            <Link to={routes.instructorRegister}>
-                                <DropdownMenuItem className="flex items-center gap-2">
-                                    <TbUserHexagon className="size-4 w-8" />
-                                    <span className="whitespace-nowrap text-sm font-medium">
-                                        Đăng ký thành giảng viên
-                                    </span>
-                                </DropdownMenuItem>
-                            </Link>
-                        )}
-                        <Link to={routes.accountProfile}>
-                            <DropdownMenuItem className="flex items-center gap-2">
-                                <IoSettingsOutline className="size-4 w-8" />
-                                <span className="text-sm font-medium">Quản lý tài khoản</span>
                             </DropdownMenuItem>
                         </Link>
                         <DropdownMenuSeparator />

@@ -302,8 +302,10 @@ interface QuestionData {
 }
 
 export interface IQuestionData {
-    question: QuestionData
-    options: QuestionOptionData[]
+    questions: {
+        question: QuestionData
+        options: QuestionOptionData
+    }[]
     _method?: string
 }
 

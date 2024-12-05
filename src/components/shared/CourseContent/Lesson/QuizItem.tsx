@@ -5,13 +5,15 @@ import { ChangeEvent, useRef, useState } from 'react'
 import { FaPen, FaRegTrashAlt } from 'react-icons/fa'
 import { FaRegCircleQuestion } from 'react-icons/fa6'
 
-import { ILessonQuiz, IQuestionData } from '@/types/instructor'
-import { Button } from '@/components/ui/button'
-import ConfirmDialog from '@/components/shared/ConfirmDialog'
-import { useDeleteLessonQuiz, useGetLessonQuiz, useImportQuestions } from '@/app/hooks/instructors'
-import DialogAddQuestion from '@/components/shared/CourseContent/Dialog/DialogAddQuestion'
-import LessonQuizzes from '@/components/shared/CourseContent/Lesson/LessonQuizzes'
+import { ILessonQuiz } from '@/types/instructor'
+
 import { showMessage } from '@/lib'
+import { Button } from '@/components/ui/button'
+import Loading from '@/components/Common/Loading/Loading'
+import ConfirmDialog from '@/components/shared/ConfirmDialog'
+import LessonQuizzes from '@/components/shared/CourseContent/Lesson/LessonQuizzes'
+import DialogAddQuestion from '@/components/shared/CourseContent/Dialog/DialogAddQuestion'
+import { useDeleteLessonQuiz, useGetLessonQuiz, useImportQuestions } from '@/app/hooks/instructors'
 
 interface QuizItemProps {
     lesson: ILessonQuiz
@@ -25,7 +27,7 @@ const QuizItem = ({ lesson, moduleId, canEdit }: QuizItemProps) => {
     const { title } = lesson
     const { data } = useGetLessonQuiz(moduleId)
     const { mutateAsync: deleteLessonQuiz, isPending } = useDeleteLessonQuiz()
-    const { mutateAsync: importQuestions } = useImportQuestions()
+    const { mutateAsync: importQuestions, isPending: isLoadingImport } = useImportQuestions()
 
     const inputRef = useRef<HTMLInputElement | null>(null)
     const [isEditQuiz, setIsEditQuiz] = useState(false)
@@ -50,7 +52,7 @@ const QuizItem = ({ lesson, moduleId, canEdit }: QuizItemProps) => {
 
         if (files && files.length > 0) {
             const file = files[0]
-            const optionsData: IQuestionData[] = []
+            const optionsData: any = []
 
             await new Promise<void>((resolve, reject) => {
                 Papa.parse<File>(file, {
@@ -109,12 +111,10 @@ const QuizItem = ({ lesson, moduleId, canEdit }: QuizItemProps) => {
                             }
 
                             const payload = {
-                                question: {
-                                    question: row.question,
-                                    type: row.question_type,
-                                    correct_answer: correctAnswer,
-                                    image: row.question_image
-                                },
+                                question: row.question,
+                                type: row.question_type,
+                                correct_answer: correctAnswer,
+                                image: row.question_image,
                                 options: optionsArray
                             }
 
@@ -131,8 +131,10 @@ const QuizItem = ({ lesson, moduleId, canEdit }: QuizItemProps) => {
 
             // Gọi API ở đây sau khi đã hoàn thành việc phân tích
             if (optionsData.length > 0) {
-                // await importQuestions([lesson.id, optionsData])
-                console.log(optionsData)
+                const payload = {
+                    questions: optionsData
+                }
+                await importQuestions([lesson.id, payload])
             }
         }
     }
@@ -143,6 +145,8 @@ const QuizItem = ({ lesson, moduleId, canEdit }: QuizItemProps) => {
             setIsOpenDialog(false)
         } else showMessage()
     }
+
+    if (isLoadingImport) return <Loading message="Đang import tài liệu, vui lòng chờ..." />
 
     return (
         <>

@@ -17,7 +17,6 @@ import DialogAddQuestion from '@/components/shared/CourseContent/Dialog/DialogAd
 import PreviewImage from '@/components/shared/PreviewImage'
 import { getImagesUrl, showMessage } from '@/lib'
 import ConfirmDialog from '@/components/shared/ConfirmDialog'
-import { Switch } from '@/components/ui/switch'
 
 interface LessonQuizzesProps {
     moduleId: number
@@ -46,7 +45,6 @@ const LessonQuizzes = ({ handleHiddenLesson, moduleId, canEdit }: LessonQuizzesP
     const [confirmDeleteQuestion, setConfirmDeleteQuestion] = useState<boolean>(false)
     const [imagePreview, setImagePreview] = useState<string>('')
     const [questionID, setQuestionID] = useState<number>(0)
-    const [isPreview, setIsPreview] = useState<boolean>()
 
     const handleDeleteQuiz = async () => {
         if (canEdit) {
@@ -60,16 +58,11 @@ const LessonQuizzes = ({ handleHiddenLesson, moduleId, canEdit }: LessonQuizzesP
         setOpenDialogPreview(true)
     }
 
-    const handleSetPreview = (value: boolean) => {
-        setIsPreview(value)
-    }
-
     const handleSubmitForm: SubmitHandler<lessonQuiz> = async (formData) => {
         if (canEdit) {
             const payload = {
                 ...formData,
-                _method: data?.quiz ? 'PUT' : undefined,
-                is_preview: isPreview ? 1 : 0
+                _method: data?.quiz ? 'PUT' : undefined
             }
             if (data?.quiz) {
                 await updateLessonQuiz([data.quiz.id, payload])
@@ -122,12 +115,6 @@ const LessonQuizzes = ({ handleHiddenLesson, moduleId, canEdit }: LessonQuizzesP
                             {errors.description && (
                                 <div className="text-sm text-secondaryRed">{errors.description.message}</div>
                             )}
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <Switch checked={isPreview} onCheckedChange={handleSetPreview} />
-                            <label className="text-xs text-muted-foreground">
-                                Cho phép người dùng xem trước video này trước khi mua
-                            </label>
                         </div>
                     </div>
 

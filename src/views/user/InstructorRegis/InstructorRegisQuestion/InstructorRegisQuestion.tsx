@@ -117,7 +117,7 @@ const InstructorRegisQuestion = () => {
     }
 
     const onSubmit: SubmitHandler<registerInstructor> = async (data) => {
-        const { certificates, degree, institution_name, start_date } = data
+        const { certificates } = data
 
         if (certificates.length === 0 || !certificates[0].file) {
             toast.error('Vui lòng tải lên ít nhất một chứng chỉ.')
@@ -138,13 +138,11 @@ const InstructorRegisQuestion = () => {
         )
 
         const payload = {
-            certificates: certificates.map((cert) => cert.file?.name || ''),
-            qa_pairs: formattedQaPairs,
-            degree,
-            institution_name,
-            start_date
+            ...data,
+            certificates: certificates.map((cert) => cert.file || ''),
+            qa_pairs: formattedQaPairs
         }
-        await registerTeacher(payload)
+        await registerTeacher([payload])
     }
 
     return (
@@ -249,18 +247,6 @@ const InstructorRegisQuestion = () => {
                         {errors.institution_name && (
                             <p className="text-secondaryRed">{errors.institution_name.message}</p>
                         )}
-                    </div>
-
-                    <div className="mt-3 flex flex-col gap-2">
-                        <label className="text-base font-medium">
-                            Năm hoàn thành <span className="text-secondaryRed">*</span>
-                        </label>
-                        <Input
-                            type="date"
-                            placeholder="Đừng quên ghi lại năm bạn đã hoàn thành chương trình học."
-                            {...register('start_date')}
-                        />
-                        {errors.start_date && <p className="text-secondaryRed">{errors.start_date.message}</p>}
                     </div>
                     <label className="block py-3 text-base font-medium">
                         Tải lên chứng chỉ <span className="text-secondaryRed">*</span>

@@ -19,5 +19,5 @@ export const userUri = {
     CHECK_FOLLOW_TEACHER: (userId: number, teacherId: number) => `${USER_URL}check-follow/${userId}/${teacherId}`,
     REGISTER_TEACHER: `${USER_URL}register-teacher`,
     COURSE_HISTORY: (count: number) => `${USER_URL}check-history-learning?limit=${count}`,
-    VOUCHER_USER: `${USER_URL}vouchers`
+    VOUCHER_USER: (slug: string) => `${USER_URL}vouchers?slug=${slug}`
 }

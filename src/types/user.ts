@@ -54,7 +54,7 @@ export interface CheckFlow {
 }
 
 export interface IRegisterInstructor {
-    certificates: string[]
+    certificates: File[] | string[]
     qa_pairs: {
         question: string
         answer: string

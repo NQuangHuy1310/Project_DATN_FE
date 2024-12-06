@@ -115,3 +115,8 @@ export interface DiscountCode {
     start_time: string
     end_time: string
 }
+
+export interface IVoucherDiscount {
+    listVoucherAllCourse: DiscountCode[]
+    listVoucherPrivateCourse: DiscountCode[]
+}

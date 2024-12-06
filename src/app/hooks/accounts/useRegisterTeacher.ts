@@ -3,7 +3,7 @@ import { toast } from 'sonner'
 import { userApis } from '@/app/services/accounts'
 import { useNavigate } from 'react-router-dom'
 import { IRegisterInstructor } from '@/types/user'
-import { DiscountCode, HistoryLeaning } from '@/types'
+import { HistoryLeaning, IVoucherDiscount } from '@/types'
 import { useMutation, useQuery, UseQueryOptions } from '@tanstack/react-query'
 
 export const useRegisterTeacher = () => {
@@ -33,10 +33,13 @@ export const useCourseHistory = (
     })
 }
 
-export const useVoucherByUser = (options?: Omit<UseQueryOptions<DiscountCode[]>, 'queryKey' | 'queryFn'>) => {
-    return useQuery<DiscountCode[]>({
+export const useVoucherByUser = (
+    slug: string,
+    options?: Omit<UseQueryOptions<IVoucherDiscount>, 'queryKey' | 'queryFn'>
+) => {
+    return useQuery<IVoucherDiscount>({
         ...options,
-        queryKey: ['vouchers'],
-        queryFn: () => userApis.getVoucherUser()
+        queryKey: ['vouchers', slug],
+        queryFn: () => userApis.getVoucherUser(slug)
     })
 }

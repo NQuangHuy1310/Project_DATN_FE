@@ -2,7 +2,7 @@ import { userUri } from '@/app/services/Uri/accounts'
 import axiosClient from '@/configs/axiosClient'
 
 import { CheckFlow, Flow, ICourseMyBought, IRegisterInstructor } from '@/types/user'
-import { HistoryLeaning, IChangePassword, IProfileUser, IResponse, IUpdateProfile, IUserProfile } from '@/types'
+import { HistoryLeaning, IChangePassword, IProfileUser, IResponse, IUpdateProfile, IUserProfile, IVoucherDiscount } from '@/types'
 
 export const userApis = {
     getDetailProfile: async (email: string): Promise<IProfileUser> => {
@@ -52,7 +52,7 @@ export const userApis = {
     courseHistory: async (count: number): Promise<HistoryLeaning> => {
         return axiosClient.get(userUri.COURSE_HISTORY(count))
     },
-    getVoucherUser: async (): Promise<any> => {
-        return axiosClient.get(userUri.VOUCHER_USER)
+    getVoucherUser: async (slug:string): Promise<IVoucherDiscount> => {
+        return axiosClient.get(userUri.VOUCHER_USER(slug))
     }
 }

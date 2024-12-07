@@ -301,12 +301,13 @@ const CourseDetail = () => {
                                         <div className="flex flex-col gap-2">
                                             <div className="flex h-2 w-full items-center overflow-hidden rounded bg-darkGrey/20">
                                                 <span
-                                                    className={`block h-full ${courseDetail?.level === 'Sơ cấp'
+                                                    className={`block h-full ${
+                                                        courseDetail?.level === 'Sơ cấp'
                                                             ? 'bg-secondaryYellow'
                                                             : courseDetail?.level === 'Trung cấp'
-                                                                ? 'bg-secondaryGreen'
-                                                                : 'bg-secondaryRed'
-                                                        }`}
+                                                              ? 'bg-secondaryGreen'
+                                                              : 'bg-secondaryRed'
+                                                    }`}
                                                     style={{ width: `${courseDetail?.progress_percent}%` }}
                                                 ></span>
                                                 <span
@@ -320,7 +321,7 @@ const CourseDetail = () => {
                                         </div>
                                     )
                                 ) : (courseDetail?.price && courseDetail?.price > 0) ||
-                                    (courseDetail?.price_sale && courseDetail?.price_sale > 0) ? (
+                                  (courseDetail?.price_sale && courseDetail?.price_sale > 0) ? (
                                     <div className="flex items-center gap-3">
                                         <div className="flex items-center gap-1">
                                             <div className="flex items-center gap-1">
@@ -408,8 +409,8 @@ const CourseDetail = () => {
                                         )}
                                     </div>
                                 ) : (!courseDetail?.price && !courseDetail?.price_sale) ||
-                                    (Math.floor(courseDetail?.price) === 0 &&
-                                        Math.floor(courseDetail?.price_sale) === 0) ? (
+                                  (Math.floor(courseDetail?.price) === 0 &&
+                                      Math.floor(courseDetail?.price_sale) === 0) ? (
                                     <div className="flex items-center gap-3">
                                         <Button
                                             className="block w-full rounded-md bg-primary py-2 text-center text-white"
@@ -525,12 +526,13 @@ const CourseDetail = () => {
                                         <div className="flex flex-col gap-2">
                                             <div className="flex h-2 w-full items-center overflow-hidden rounded bg-darkGrey/20">
                                                 <span
-                                                    className={`block h-full ${courseDetail?.level === 'Sơ cấp'
+                                                    className={`block h-full ${
+                                                        courseDetail?.level === 'Sơ cấp'
                                                             ? 'bg-secondaryYellow'
                                                             : courseDetail?.level === 'Trung cấp'
-                                                                ? 'bg-secondaryYellow'
-                                                                : 'bg-secondaryRed'
-                                                        }`}
+                                                              ? 'bg-secondaryYellow'
+                                                              : 'bg-secondaryRed'
+                                                    }`}
                                                     style={{ width: `${courseDetail?.progress_percent}%` }}
                                                 ></span>
                                                 <span
@@ -639,8 +641,8 @@ const CourseDetail = () => {
                                                 )}
                                             </div>
                                         ) : (!courseDetail?.price && !courseDetail?.price_sale) ||
-                                            (Math.floor(courseDetail?.price) === 0 &&
-                                                Math.floor(courseDetail?.price_sale) === 0) ? (
+                                          (Math.floor(courseDetail?.price) === 0 &&
+                                              Math.floor(courseDetail?.price_sale) === 0) ? (
                                             <div className="flex items-center gap-3">
                                                 <Button
                                                     className="block w-full rounded-md bg-primary py-2 text-center text-white"
@@ -734,8 +736,9 @@ const CourseDetail = () => {
                                                         <FaStar
                                                             key={star}
                                                             onClick={() => setValue('rate', star)}
-                                                            className={`cursor-pointer ${star <= rating ? 'text-yellow-500' : 'text-gray-300'
-                                                                } h-5 w-5 md:h-8 md:w-8`}
+                                                            className={`cursor-pointer ${
+                                                                star <= rating ? 'text-yellow-500' : 'text-gray-300'
+                                                            } h-5 w-5 md:h-8 md:w-8`}
                                                         />
                                                     ))}
                                                 </div>

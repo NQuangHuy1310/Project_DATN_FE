@@ -47,10 +47,10 @@ const TopBar = ({ endTime, voucherCode }: CountdownProps) => {
                 onClick={() => setIsVisible(false)}
                 className="absolute right-4 top-4 text-xl font-medium hover:text-darkGrey"
             >
-                <IoClose className='text-2xl' />
+                <IoClose className="text-2xl" />
             </button>
             <span className="text-base font-medium">
-                Sử dụng mã giảm giá: <b>{voucherCode}</b> | Giảm giá cho mọi khóa học
+                Mã giảm giá mới: <b>{voucherCode}</b> | Giảm giá cho mọi khóa học
             </span>
             <span className="text-base font-bold">
                 Mã giảm giá kết thúc sau: {formatNumber(hours)} giờ {formatNumber(minutes)} phút {formatNumber(seconds)}{' '}

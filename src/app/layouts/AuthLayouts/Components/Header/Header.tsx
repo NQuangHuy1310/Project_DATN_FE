@@ -21,6 +21,9 @@ import { useGetNewVoucher } from '@/app/hooks/payment'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { getAccessTokenFromLocalStorage, getImagesUrl } from '@/lib/common'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import Pusher from 'pusher-js'
+import { PUSHER_KEY } from '@/configs/pusher'
+import { useQueryClient } from '@tanstack/react-query'
 
 const Header = () => {
     const [menuOpen, setMenuOpen] = useState(false)
@@ -29,6 +32,8 @@ const Header = () => {
     const [search, setSearch] = useState<string>('')
     const [visible, setVisible] = useState(false)
     const boxRef = useRef<HTMLDivElement>(null)
+
+    const queryClient = useQueryClient()
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -66,6 +71,27 @@ const Header = () => {
             document.body.style.overflow = 'auto'
         }
     }, [menuOpen, openSearch])
+
+    useEffect(() => {
+        Pusher.logToConsole = true
+        const pusher = new Pusher(PUSHER_KEY, {
+            cluster: 'ap1'
+        })
+        const channel = pusher.subscribe('vouchers')
+        channel.bind('App\\Events\\VoucherCreated', (data: any) => {
+            if (data) {
+                queryClient.invalidateQueries({
+                    queryKey: ['voucher'],
+                    exact: true
+                })
+            }
+        })
+        return () => {
+            channel.unbind_all()
+            channel.unsubscribe()
+            pusher.disconnect()
+        }
+    }, [])
 
     return (
         <header>

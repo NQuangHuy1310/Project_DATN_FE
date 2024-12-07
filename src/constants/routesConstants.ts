@@ -1,4 +1,5 @@
 import routes from '@/configs/routes'
+import { IUser } from '@/types'
 
 import HomeLayout from '@/app/layouts/AuthLayouts/HomeLayout'
 import CourseLayout from '@/app/layouts/AuthLayouts/CourseLayouts'
@@ -80,7 +81,7 @@ export const publicRoutes = [
 ]
 
 // Routes cần đăng nhập
-export const privateRoutes = [
+export const privateRoutes = (user: IUser) => [
     // User dashboard
     { path: routes.accountHelp, layout: ProfileLayout, element: AccountHelp, title: 'Hỗ trợ' },
     { path: routes.accountProfile, layout: ProfileLayout, element: AccountProfile, title: 'Thông tin cá nhân' },
@@ -91,7 +92,12 @@ export const privateRoutes = [
     { path: routes.myCourses, layout: UserDashboardLayout, element: MyCourse, title: 'Khoá học của tôi' },
     { path: routes.wishList, layout: UserDashboardLayout, element: CourseWishList, title: 'Khoá học yêu thích' },
     { path: routes.course, layout: UserDashboardLayout, element: CourseExplore, title: 'Khám phá khoá học' },
-    { path: routes.searchCourses, layout: UserDashboardLayout, element: CourseMyCourses, title: 'Tìm kiếm khoá học' },
+    {
+        path: routes.searchCourses,
+        layout: UserDashboardLayout,
+        element: CourseMyCourses,
+        title: 'Tìm kiếm khoá học'
+    },
     { path: routes.courseDetail, layout: UserDashboardLayout, element: CourseDetail, title: 'Chi tiết khoá học' },
     { path: routes.courseHistory, layout: UserDashboardLayout, element: CourseHistory, title: 'Lịch sử học tập' },
     { path: routes.courseLeaning, layout: CourseLayout, element: CourseLearning },
@@ -100,12 +106,15 @@ export const privateRoutes = [
         path: routes.userDashboard,
         layout: UserDashboardLayout,
         element: UserDashboard,
-        title: localStorage.getItem('user_data')
-            ? `Xin chào, ${JSON.parse(localStorage.getItem('user_data')!)?.name}`
-            : 'Xin chào'
+        title: user ? `Xin chào, ${user.name}` : 'Xin chào'
     },
     { path: routes.instructor, layout: UserDashboardLayout, element: Instructor, title: 'Giảng viên' },
-    { path: routes.instructorDetail, layout: UserDashboardLayout, element: InstructorDetail, title: 'Người hướng dẫn' },
+    {
+        path: routes.instructorDetail,
+        layout: UserDashboardLayout,
+        element: InstructorDetail,
+        title: 'Người hướng dẫn'
+    },
     { path: routes.notification, layout: UserDashboardLayout, element: Notifications, title: 'Thông báo' },
 
     { path: routes.newPost, layout: UserDashboardLayout, element: NewPost, title: 'Tạo bài viết' },
@@ -153,7 +162,12 @@ export const privateRoutes = [
         element: InstructorDashboard,
         title: 'Quản lý khoá học'
     },
-    { path: routes.createCourse, layout: InstructorDashboardLayout, element: CreateCourse, title: 'Tạo mới khoá học' },
+    {
+        path: routes.createCourse,
+        layout: InstructorDashboardLayout,
+        element: CreateCourse,
+        title: 'Tạo mới khoá học'
+    },
     {
         path: routes.instructorMessage,
         layout: InstructorDashboardLayout,

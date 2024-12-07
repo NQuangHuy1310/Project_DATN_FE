@@ -24,7 +24,6 @@ const Profile = () => {
     }
     const createdCourses = profileUser?.courses_by_user
     const joinedCourses = profileUser?.courses_user_bought
-    console.log(joinedCourses)
 
     if (isLoading) return <Loading />
 

@@ -7,9 +7,28 @@ import { MdOutlinePlayCircleOutline } from 'react-icons/md'
 import { IModule } from '@/types/course/course.ts'
 import { formatDuration } from '@/lib'
 import { HiQuestionMarkCircle } from 'react-icons/hi'
+import LessonPreview from '@/components/shared/LessonPreview/LessonPreview'
 
 const CourseModule = ({ module }: { module: IModule }) => {
     const [isShowLesson, setIsShowLesson] = useState<boolean>(false)
+    const [selectedLesson, setSelectedLesson] = useState<any>(null)
+    const [isDialogOpen, setIsDialogOpen] = useState(false)
+
+    const openLessonDialog = (lesson: number) => {
+        setSelectedLesson(lesson)
+        setIsDialogOpen(true)
+    }
+
+    const closeLessonDialog = () => {
+        setSelectedLesson(null)
+        setIsDialogOpen(false)
+    }
+
+    const calculateReadingTime = (content: string) => {
+        const wordsPerMinute = 200
+        const words = content.trim().split(/\s+/).length
+        return Math.ceil((words / wordsPerMinute) * 60)
+    }
 
     return (
         <div>
@@ -41,8 +60,19 @@ const CourseModule = ({ module }: { module: IModule }) => {
                                 {item.content_type === 'document' && <IoIosDocument className="size-5 text-primary" />}
                                 <h6 className="text-sm font-semibold">{item.title}</h6>
                             </div>
-                            {item.content_type === 'document' && '01 phút'}
-                            {formatDuration(item.duration)}
+                            <div className="flex items-center gap-4">
+                                {item.is_preview == 1 && (
+                                    <span
+                                        onClick={() => openLessonDialog(item.id)}
+                                        className="cursor-pointer text-xs font-semibold text-primary"
+                                    >
+                                        Xem trước
+                                    </span>
+                                )}
+                                {item.content_type === 'document' &&
+                                    `${calculateReadingTime(item.lessonable.content!)} phút`}
+                                {formatDuration(item.lessonable.duration!)}
+                            </div>
                         </div>
                     ))}
                 {isShowLesson && module.quiz && (
@@ -54,7 +84,7 @@ const CourseModule = ({ module }: { module: IModule }) => {
                     </div>
                 )}
             </div>
-
+            <LessonPreview isOpen={isDialogOpen} onClose={closeLessonDialog} idLesson={selectedLesson} />
         </div>
     )
 }

@@ -19,6 +19,7 @@ const InstructorRegisQuestion = () => {
     const [currentQuestion, setCurrentQuestion] = useState<number>(0)
     const [selectedOptions, setSelectedOptions] = useState<number[]>([])
     const [isAnswered, setIsAnswered] = useState<boolean>(false)
+    const [checkLoading, setCheckLoading] = useState<boolean>(false)
 
     const { mutateAsync: registerTeacher } = useRegisterTeacher()
 
@@ -117,6 +118,7 @@ const InstructorRegisQuestion = () => {
     }
 
     const onSubmit: SubmitHandler<registerInstructor> = async (data) => {
+        setCheckLoading(true)
         const { certificates } = data
 
         if (certificates.length === 0 || !certificates[0].file) {
@@ -143,6 +145,7 @@ const InstructorRegisQuestion = () => {
             qa_pairs: formattedQaPairs
         }
         await registerTeacher([payload])
+        setCheckLoading(false)
     }
 
     return (
@@ -310,6 +313,7 @@ const InstructorRegisQuestion = () => {
                         <Button
                             type="submit"
                             className="rounded bg-primary px-4 py-2 font-semibold text-white hover:bg-primary/90"
+                            disabled={checkLoading}
                         >
                             Gửi đăng ký
                         </Button>

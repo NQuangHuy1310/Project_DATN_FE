@@ -11,14 +11,18 @@ import NotFound from '@/views/user/NotFound'
 import Forbidden from '@/views/user/Forbidden'
 import routes from '@/configs/routes'
 import ServerError from '@/views/user/ServerError'
+import { useUserStore } from '@/app/store/userStore'
 
 function App() {
     const [isLogin, setIsLogin] = useState(false)
+    const user = useUserStore((state) => state.user)
 
     useEffect(() => {
         const isLoggedIn = getAccessTokenFromLocalStorage()
         if (isLoggedIn) setIsLogin(!!isLoggedIn)
     }, [isLogin, setIsLogin])
+
+    const privateRouter = user && privateRoutes(user)
 
     return (
         <Router>
@@ -44,7 +48,7 @@ function App() {
                         )
                     })}
 
-                    {privateRoutes?.map((route, index) => {
+                    {privateRouter?.map((route, index) => {
                         let Layout: React.ComponentType<any> = Dashboard || null
                         if (route.layout) {
                             Layout = route.layout as React.ComponentType<any>

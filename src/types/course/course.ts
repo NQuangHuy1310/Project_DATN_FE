@@ -57,7 +57,9 @@ export interface ILesson {
     id: number
     id_module: number
     lessonable_id: number
+    is_preview: 0 | 1
     lessonable_type: string
+    lessonable: ILessonAbleLeaning
     position: number
     thumbnail: string | null
     title: string

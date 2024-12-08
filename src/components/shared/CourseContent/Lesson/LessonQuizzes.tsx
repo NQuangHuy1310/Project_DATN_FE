@@ -84,7 +84,7 @@ const LessonQuizzes = ({ handleHiddenLesson, moduleId, canEdit }: LessonQuizzesP
         <>
             <form onSubmit={handleSubmit(handleSubmitForm)}>
                 <div className="space-y-2 rounded-lg bg-white p-4">
-                    <div className="flex flex-col gap-3 border-b-[1px] border-grey pb-4">
+                    <div className="flex flex-col gap-3">
                         <div className="flex gap-4">
                             <div className="space-y-1">
                                 <label className="text-xs text-muted-foreground">
@@ -115,6 +115,20 @@ const LessonQuizzes = ({ handleHiddenLesson, moduleId, canEdit }: LessonQuizzesP
                             {errors.description && (
                                 <div className="text-sm text-secondaryRed">{errors.description.message}</div>
                             )}
+                        </div>
+
+                        <div className="space-x-4 text-end">
+                            <Button
+                                type="button"
+                                variant="destructive"
+                                onClick={() => handleHiddenLesson?.(false)}
+                                disabled={isSubmitting}
+                            >
+                                Huỷ
+                            </Button>
+                            <Button type="submit" disabled={isSubmitting}>
+                                {data?.quiz ? 'Cập nhật' : 'Tạo mới'}
+                            </Button>
                         </div>
                     </div>
 
@@ -186,20 +200,6 @@ const LessonQuizzes = ({ handleHiddenLesson, moduleId, canEdit }: LessonQuizzesP
                                 </div>
                             </div>
                         ))}
-                    </div>
-
-                    <div className="space-x-4 text-end">
-                        <Button
-                            type="button"
-                            variant="destructive"
-                            onClick={() => handleHiddenLesson?.(false)}
-                            disabled={isSubmitting}
-                        >
-                            Huỷ
-                        </Button>
-                        <Button type="submit" disabled={isSubmitting}>
-                            {data?.quiz ? 'Cập nhật' : 'Tạo mới'}
-                        </Button>
                     </div>
                 </div>
             </form>

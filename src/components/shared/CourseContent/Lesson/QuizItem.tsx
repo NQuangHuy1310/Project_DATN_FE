@@ -103,11 +103,11 @@ const QuizItem = ({ lesson, moduleId, canEdit }: QuizItemProps) => {
                             let correctAnswer: number | number[]
 
                             if (row.question_type === 'one_choice') {
-                                correctAnswer = Number(row.correct_answer)
+                                correctAnswer = Number(row.correct_answer) - 1
                             } else {
                                 correctAnswer = row.correct_answer
                                     .split(',')
-                                    .map((answer: string) => Number(answer.trim()))
+                                    .map((answer: string) => Number(answer.trim()) - 1)
                             }
 
                             const payload = {
@@ -214,7 +214,7 @@ const QuizItem = ({ lesson, moduleId, canEdit }: QuizItemProps) => {
             <DialogAddQuestion openDialog={isOpenAddDialog} setOpenDialog={setIsOpenAddDialog} quizId={lesson.id!} />
 
             {/* LessonQuizzes */}
-            {isEditQuiz && <LessonQuizzes moduleId={moduleId} canEdit={canEdit} />}
+            {isEditQuiz && <LessonQuizzes moduleId={moduleId} canEdit={canEdit} handleHiddenLesson={setIsEditQuiz} />}
         </>
     )
 }

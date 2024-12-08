@@ -56,7 +56,8 @@ const Wallet = () => {
         (teacherBalanceData !== undefined && coin >= +teacherBalanceData.balance) ||
         isPending ||
         !selectedBank ||
-        !accountHolder
+        !accountHolder ||
+        coin % 100 !== 0
 
     const handleChangeSelectedBank = (value: string) => {
         setSelectedBank(value)
@@ -80,7 +81,7 @@ const Wallet = () => {
             account_number: accountNumber,
             account_holder: accountHolder
         }
-        if (payload && user) {
+        if (user) {
             await createRequestWithDraw([user.id, payload])
             setSelectedBank('')
             setAccountNumber('')
@@ -216,7 +217,7 @@ const Wallet = () => {
                         </div>
 
                         <div className="flex flex-col gap-2">
-                            {coin && coin > 10 && coin < 10000 ? (
+                            {coin && coin > 10 && coin < 10000 && coin % 100 === 0 ? (
                                 <span className="text-sm text-foreground">Số tiền nhận được {convertToVnd(coin)}</span>
                             ) : null}
 
@@ -232,6 +233,10 @@ const Wallet = () => {
                                 <span className="text-sm text-secondaryRed">
                                     Bạn không thể nhập số tiền lớn hơn {teacherBalanceData.balance} Xu
                                 </span>
+                            ) : null}
+
+                            {coin && coin % 100 !== 0 ? (
+                                <span className="text-sm text-secondaryRed">Số xu cần là bội số của 100!</span>
                             ) : null}
                         </div>
 

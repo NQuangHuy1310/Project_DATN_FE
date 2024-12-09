@@ -4,16 +4,15 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { FiPlus } from 'react-icons/fi'
 import { toast } from 'sonner'
 
-import { useProfile } from '@/app/hooks/accounts'
+import { useProfile, useUpdateProfile } from '@/app/hooks/accounts'
 import useGetUserProfile from '@/app/hooks/accounts/useGetUser'
-import { userApis } from '@/app/services/accounts'
 import { useUserStore } from '@/app/store'
 import Loading from '@/components/Common/Loading/Loading'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { ApiMessages, MessageErrors } from '@/constants'
+import { MessageErrors } from '@/constants'
 import { getImagesUrl, readFileAsDataUrl } from '@/lib'
 import { ProfileFormFields, profileSchema } from '@/validations'
 
@@ -30,6 +29,7 @@ const AccountProfile = () => {
 
     const { data: userProfile, isLoading } = useProfile()
     const { user: userData, profile } = useGetUserProfile()
+    const { mutateAsync: updateProfile } = useUpdateProfile()
     const setUser = useUserStore((state) => state.setUser)
     const setProfile = useUserStore((state) => state.setProfile)
 
@@ -67,25 +67,20 @@ const AccountProfile = () => {
             ...data,
             avatar: file
         }
-        const response = await userApis.updateProfile(payload)
-        setUser(response.user)
-        setProfile(response.profile)
-        toast.success(ApiMessages.success.updated)
+        await updateProfile(payload)
     }
 
     useEffect(() => {
-        if (userData && profile) {
+        if (userData || profile) {
             setValue('name', userData?.name || '')
-            setValue('address', profile?.address)
-            setValue('phone', profile?.phone)
-            setValue('experience', profile?.experience)
-            setValue('bio', profile?.bio)
+            setValue('address', profile?.address ?? '')
+            setValue('phone', profile?.phone ?? '')
+            setValue('experience', profile?.experience ?? '')
+            setValue('bio', profile?.bio ?? '')
         }
     }, [userProfile, setUser, setProfile, setValue, userData, profile])
 
-    if (isLoading) {
-        return <Loading />
-    }
+    if (isLoading) return <Loading />
 
     return (
         <div className="flex max-w-[500px] flex-col justify-start gap-7">

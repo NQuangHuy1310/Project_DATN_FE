@@ -1,22 +1,24 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
-import { userApis } from '@/app/services/accounts'
 import routes from '@/configs/routes'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { ChangePasswordFields, changePasswordSchema } from '@/validations'
-import { useState } from 'react'
 import { IoEyeOffSharp, IoEyeSharp } from 'react-icons/io5'
-import { toast } from 'sonner'
+import { useChangePassword } from '@/app/hooks/accounts'
 
 const ChangePassword = () => {
     const {
         register,
         handleSubmit,
+        reset,
         formState: { isSubmitting, errors }
     } = useForm<ChangePasswordFields>({ resolver: zodResolver(changePasswordSchema) })
+
+    const { mutateAsync } = useChangePassword()
 
     const [showCurrentPassword, setCurrentShowPassword] = useState(false)
     const [showNewPassword, setShowNewPassword] = useState(false)
@@ -30,8 +32,8 @@ const ChangePassword = () => {
     }
 
     const onSubmit: SubmitHandler<ChangePasswordFields> = async (data) => {
-        await userApis.changePassword(data)
-        toast.success('Bạn đã thay đổi mật khẩu thành công')
+        await mutateAsync(data)
+        reset()
     }
 
     return (

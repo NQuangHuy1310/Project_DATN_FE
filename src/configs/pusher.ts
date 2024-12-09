@@ -1,1 +1,1 @@
-export const PUSHER_KEY = '8bae3f5aa106f51c8669'
+export const PUSHER_KEY = 'de95cb159fd5ce02550b'

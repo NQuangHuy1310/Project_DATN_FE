@@ -4,6 +4,7 @@ import axiosClient from '@/configs/axiosClient'
 import {
     ICheckQuizLeaning,
     ICheckQuizLeaningPost,
+    ILesson,
     ILessonLeaning,
     ILessonProCess,
     IQuizLeaning,
@@ -44,5 +45,9 @@ export const lessonApi = {
     },
     checkCodeLeaning: async (idCode: number, output: string): Promise<any> => {
         return axiosClient.post(lessonUri.CHECK_CODE_LESSON(idCode), { output })
+    }
+    ,
+    lessonPreview: async (idLesson: number): Promise<ILesson> => {
+        return axiosClient.get(lessonUri.LESSON_PREVIEW(idLesson))
     }
 }

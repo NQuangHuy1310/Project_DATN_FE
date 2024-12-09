@@ -13,6 +13,7 @@ import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/compone
 
 const LeaningCourseVideo = ({
     slug,
+    idCourse,
     toggleTab,
     dataLesson,
     checkLesson,
@@ -22,6 +23,7 @@ const LeaningCourseVideo = ({
     onPlayVideo
 }: {
     slug: string
+    idCourse: number
     toggleTab: boolean
     dataLesson: ILessonLeaning
     checkLesson: number
@@ -238,6 +240,7 @@ const LeaningCourseVideo = ({
                         <span className="md:text-md text-sm">Thêm ghi chú tại {useFormatTime(currentVideoTime)}</span>
                     </Button>
                     <AddNode
+                        idCourse={idCourse}
                         lessonData={dataLesson}
                         open={nodeSheet}
                         setCheckNote={setCheckNote}

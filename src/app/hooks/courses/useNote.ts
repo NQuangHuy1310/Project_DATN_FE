@@ -13,7 +13,7 @@ export const useGetAllNote = (
     })
 }
 
-export const useAddNoteLesson = () => {
+export const useAddNoteLesson = (idCourse: number) => {
     const queryClient = useQueryClient()
 
     return useMutation<any, Error, [number, ILessonNotePost]>({
@@ -21,7 +21,7 @@ export const useAddNoteLesson = () => {
             return noteApi.addNoteLesson(lessonId, noteData)
         },
         onSuccess() {
-            queryClient.invalidateQueries({ queryKey: ['note-lesson-add'] })
+            queryClient.invalidateQueries({ queryKey: ['note', idCourse] })
         }
     })
 }

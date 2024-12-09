@@ -1,4 +1,4 @@
-import { useLessonById } from '@/app/hooks/courses/useLesson'
+import { useLessonPreview } from '@/app/hooks/courses/useLesson'
 import { Dialog, DialogContent } from '@/components/ui/dialog'
 import { getImagesUrl } from '@/lib/common'
 import iconLoading from '@/assets/loading.svg'
@@ -10,7 +10,7 @@ interface LessonPreviewProps {
 }
 
 const LessonPreview: React.FC<LessonPreviewProps> = ({ isOpen, onClose, idLesson }) => {
-    const { data: dataLesson, isLoading } = useLessonById(idLesson, false)
+    const { data: dataLesson, isLoading } = useLessonPreview(idLesson)
     const isYouTubeVideo = dataLesson?.lessonable?.type === 'url'
     const videoUrl = isYouTubeVideo
         ? `https://www.youtube.com/embed/${dataLesson.lessonable?.video_youtube_id}`

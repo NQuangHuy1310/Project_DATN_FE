@@ -2,6 +2,7 @@ import { toast } from 'sonner'
 import { lessonApi } from '@/app/services/courses/lessons'
 import {
     ICheckQuizLeaningPost,
+    ILesson,
     ILessonLeaning,
     ILessonProCess,
     IQuizLeaning,
@@ -112,5 +113,13 @@ export const useCheckCodeLeaning = (id: number, slug: string) => {
                 toast.error('Đã xảy ra lỗi khi cập nhật trạng thái bài học.')
             }
         }
+    })
+}
+export const useLessonPreview = (id: number, options?: Omit<UseQueryOptions<ILesson>, 'queryKey' | 'queryFn'>) => {
+    return useQuery<ILesson>({
+        ...options,
+        queryKey: ['lesson-preview', id],
+        enabled: !!id,
+        queryFn: () => lessonApi.lessonPreview(id)
     })
 }

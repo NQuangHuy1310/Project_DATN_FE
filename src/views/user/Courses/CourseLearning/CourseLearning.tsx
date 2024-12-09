@@ -579,6 +579,7 @@ const CourseLearning = () => {
                             {isQuizCheck == false && courseLesson.content_type === 'video' && (
                                 <LeaningCourseVideo
                                     slug={slug!}
+                                    idCourse={courseModule?.modules[0].id_course!}
                                     setCheckNote={setCheckNote}
                                     toggleTab={toggleTab}
                                     checkLesson={checkLesson[0].is_completed}

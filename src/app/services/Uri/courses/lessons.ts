@@ -7,5 +7,7 @@ export const lessonUri = {
     CHECK_QUIZ_LESSON: `${LESSON_URL}quiz/check-quiz`,
     CHECK_CODE_LESSON: (idCode: number) => `${LESSON_URL}coding/${idCode}/check-coding`,
     PROCESS_QUIZ: (idQuiz: number) => `${LESSON_URL}quiz/quiz-progress/${idQuiz}`,
-    GET_QUIZ_LEANING: (idUser: number, idQuiz: number) => `${LESSON_URL}quiz/result/${idUser}/${idQuiz}`
+    GET_QUIZ_LEANING: (idUser: number, idQuiz: number) => `${LESSON_URL}quiz/result/${idUser}/${idQuiz}`,
+    //PREVIEW
+    LESSON_PREVIEW: (idLesson: number) => `${LESSON_URL}preview/${idLesson}`
 }

@@ -16,11 +16,11 @@ import { useUserStore } from '@/app/store/userStore'
 function App() {
     const [isLogin, setIsLogin] = useState(false)
     const user = useUserStore((state) => state.user)
+    const isLoggedIn = getAccessTokenFromLocalStorage()
 
     useEffect(() => {
-        const isLoggedIn = getAccessTokenFromLocalStorage()
         if (isLoggedIn) setIsLogin(!!isLoggedIn)
-    }, [isLogin, setIsLogin])
+    }, [isLogin, setIsLogin, isLoggedIn])
 
     const privateRouter = user && privateRoutes(user)
 

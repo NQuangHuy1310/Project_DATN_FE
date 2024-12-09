@@ -39,11 +39,12 @@ export const useLogin = () => {
 
     return useMutation({
         mutationFn: (data: ILoginData) => authApis.login(data),
-        onSuccess: (data) => {
+        onSuccess: async (data) => {
             setUser(data.user)
             setProfile(data.profile)
             setAccessToken(data.access_token)
             navigate(routes.userDashboard)
+            toast.success('Đăng nhập thành công!, Chào mừng bạn quay trở lại.')
         }
     })
 }

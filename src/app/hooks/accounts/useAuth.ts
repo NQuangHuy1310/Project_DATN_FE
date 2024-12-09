@@ -1,6 +1,6 @@
 import { toast } from 'sonner'
 import { useNavigate } from 'react-router-dom'
-import { useMutation, useQuery, UseQueryOptions } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient, UseQueryOptions } from '@tanstack/react-query'
 
 import { authApis, userApis } from '@/app/services/accounts'
 import routes from '@/configs/routes'
@@ -14,7 +14,7 @@ import {
     IVerifyOtpData
 } from '@/types'
 import { useUserStore } from '@/app/store'
-import { setAccessToken } from '@/lib'
+import { removeAccessToken, setAccessToken } from '@/lib'
 
 export const useProfile = (options?: Omit<UseQueryOptions<IUserProfile>, 'queryKey' | 'queryFn'>) => {
     return useQuery<IUserProfile>({
@@ -108,6 +108,23 @@ export const useResetPassword = () => {
         },
         onError: () => {
             toast.error('Đặt lại mật khẩu không thành công. Vui lòng kiểm tra thông tin và thử lại.')
+        }
+    })
+}
+
+export const useLogout = () => {
+    const queryClient = useQueryClient()
+    const navigate = useNavigate()
+    const clearUserAndProfile = useUserStore((state) => state.clearUserAndProfile)
+
+    return useMutation({
+        mutationFn: authApis.logout,
+        onSuccess: () => {
+            removeAccessToken()
+            clearUserAndProfile()
+            navigate(routes.home)
+            toast.success('Đăng xuất thành công! Hẹn gặp lại bạn.')
+            queryClient.clear()
         }
     })
 }

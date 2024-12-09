@@ -1,21 +1,17 @@
 import { useEffect, useState } from 'react'
-import { NavLink, useNavigate } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import { MdError } from 'react-icons/md'
 
-import { authApis } from '@/app/services/accounts'
-import routes from '@/configs/routes'
-import { useUserStore } from '@/app/store'
 import { accountAside } from '@/constants'
-import { removeAccessToken } from '@/lib'
 import { Button } from '@/components/ui/button'
 import { DialogClose } from '@radix-ui/react-dialog'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogTitle } from '@/components/ui/dialog'
 import { FaChevronDown } from 'react-icons/fa'
 import { IAccountAside } from '@/types'
 import { LuUserCircle } from 'react-icons/lu'
+import { useLogout } from '@/app/hooks/accounts'
 
 const UserAside = () => {
-    const navigate = useNavigate()
     const [open, setOpen] = useState<boolean>(false)
     const [isMenuVisible, setMenuVisible] = useState<boolean>(false)
     const [selectedItem, setSelectedItem] = useState<IAccountAside>({
@@ -24,13 +20,10 @@ const UserAside = () => {
     })
     const [isSmallScreen, setIsSmallScreen] = useState<boolean>(window.innerWidth <= 1024)
 
-    const clearUserAndProfile = useUserStore((state) => state.clearUserAndProfile)
+    const { mutateAsync } = useLogout()
 
     const handleLogout = async () => {
-        await authApis.logout()
-        removeAccessToken()
-        clearUserAndProfile()
-        navigate(routes.home)
+        await mutateAsync()
     }
 
     useEffect(() => {

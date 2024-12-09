@@ -81,7 +81,7 @@ export const publicRoutes = [
 ]
 
 // Routes cần đăng nhập
-export const privateRoutes = (user: IUser) => [
+export const privateRoutes = (user?: IUser) => [
     // User dashboard
     { path: routes.accountHelp, layout: ProfileLayout, element: AccountHelp, title: 'Hỗ trợ' },
     { path: routes.accountProfile, layout: ProfileLayout, element: AccountProfile, title: 'Thông tin cá nhân' },
@@ -153,9 +153,10 @@ export const privateRoutes = (user: IUser) => [
     { path: routes.certification, layout: UserDashboardLayout, element: Certification, title: 'Chứng chỉ' },
 
     //Payment
-    { path: routes.discount, layout: UserDashboardLayout, element: Discount, title: 'Mã giảm giá của bạn' },
+    { path: routes.discount, layout: UserDashboardLayout, element: Discount, title: 'Mã giảm giá của bạn' }
+]
 
-    // Instructor Dashboard
+export const privateRoutesInstructor = [
     {
         path: routes.instructorDashboard,
         layout: InstructorDashboardLayout,

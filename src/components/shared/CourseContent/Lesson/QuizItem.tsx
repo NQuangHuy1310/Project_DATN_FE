@@ -14,6 +14,7 @@ import ConfirmDialog from '@/components/shared/ConfirmDialog'
 import LessonQuizzes from '@/components/shared/CourseContent/Lesson/LessonQuizzes'
 import DialogAddQuestion from '@/components/shared/CourseContent/Dialog/DialogAddQuestion'
 import { useDeleteLessonQuiz, useGetLessonQuiz, useImportQuestions } from '@/app/hooks/instructors'
+import { backendUrl } from '@/configs/baseUrl'
 
 interface QuizItemProps {
     lesson: ILessonQuiz
@@ -41,10 +42,32 @@ const QuizItem = ({ lesson, moduleId, canEdit }: QuizItemProps) => {
     }
 
     const handleDownload = () => {
-        Papa.parse('', {
-            download: true,
-            complete: function (results: any) {}
+        const token = localStorage.getItem('access_token')
+        fetch(`${backendUrl}teacher/manage/lesson/quiz/download-quiz-form`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
         })
+            .then((res) => {
+                if (!res.ok) {
+                    throw new Error('Failed to fetch the file')
+                }
+                const contentType = res.headers.get('Content-Type')
+                return res.blob().then((blob) => ({ blob, contentType }))
+            })
+            .then(({ blob }) => {
+                const url = window.URL.createObjectURL(blob)
+                const a = document.createElement('a')
+                a.href = url
+                a.download = 'quiz-form.csv'
+                document.body.appendChild(a)
+                a.click()
+                document.body.removeChild(a)
+                window.URL.revokeObjectURL(url)
+            })
+            .catch(() => {
+                toast.error('Tải file không thành công, vui lòng thử lại sau!')
+            })
     }
 
     const handleImportFile = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -146,7 +169,7 @@ const QuizItem = ({ lesson, moduleId, canEdit }: QuizItemProps) => {
         } else showMessage()
     }
 
-    if (isLoadingImport) return <Loading message="Đang import tài liệu, vui lòng chờ..." />
+    if (isLoadingImport) return <Loading message="Đang tải lên tài liệu, vui lòng chờ..." />
 
     return (
         <>

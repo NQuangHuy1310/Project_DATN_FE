@@ -310,6 +310,7 @@ export const useDeleteLessonQuiz = () => {
         },
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: ['modules'] })
+            await queryClient.invalidateQueries({ queryKey: ['quiz'] })
             await queryClient.invalidateQueries({ queryKey: ['mange-menu'] })
             toast.success('Xoá bài tập thành công!')
         }

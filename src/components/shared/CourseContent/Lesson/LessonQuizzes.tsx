@@ -45,6 +45,8 @@ const LessonQuizzes = ({ handleHiddenLesson, moduleId, canEdit }: LessonQuizzesP
     const [confirmDeleteQuestion, setConfirmDeleteQuestion] = useState<boolean>(false)
     const [imagePreview, setImagePreview] = useState<string>('')
     const [questionID, setQuestionID] = useState<number>(0)
+    const [selectMultiple, setSelectMultiple] = useState<boolean>(false)
+    const [selectedQuestions, setSelectedQuestions] = useState<number[] | undefined>([])
 
     const handleDeleteQuiz = async () => {
         if (canEdit) {
@@ -57,6 +59,8 @@ const LessonQuizzes = ({ handleHiddenLesson, moduleId, canEdit }: LessonQuizzesP
         setImagePreview(getImagesUrl(url))
         setOpenDialogPreview(true)
     }
+
+    const handleDeleteQuestions = async () => {}
 
     const handleSubmitForm: SubmitHandler<lessonQuiz> = async (formData) => {
         if (canEdit) {
@@ -117,7 +121,7 @@ const LessonQuizzes = ({ handleHiddenLesson, moduleId, canEdit }: LessonQuizzesP
                             )}
                         </div>
 
-                        <div className="space-x-4 text-end">
+                        <div className="space-x-3 text-end">
                             <Button
                                 type="button"
                                 variant="destructive"
@@ -125,6 +129,24 @@ const LessonQuizzes = ({ handleHiddenLesson, moduleId, canEdit }: LessonQuizzesP
                                 disabled={isSubmitting}
                             >
                                 Huỷ
+                            </Button>
+                            {selectMultiple && (
+                                <Button
+                                    type="button"
+                                    variant="destructive"
+                                    disabled={isSubmitting}
+                                    onClick={handleDeleteQuestions}
+                                >
+                                    Xoá đáp án đã chọn
+                                </Button>
+                            )}
+                            <Button
+                                type="button"
+                                className="bg-secondaryGreen hover:bg-secondaryGreen/90"
+                                disabled={isSubmitting}
+                                onClick={() => setSelectMultiple(!selectMultiple)}
+                            >
+                                {selectMultiple ? 'Bỏ' : 'Chọn'} nhiều đáp án
                             </Button>
                             <Button type="submit" disabled={isSubmitting}>
                                 {data?.quiz ? 'Cập nhật' : 'Tạo mới'}
@@ -139,16 +161,37 @@ const LessonQuizzes = ({ handleHiddenLesson, moduleId, canEdit }: LessonQuizzesP
                                 key={question.id}
                             >
                                 <div className="flex items-center justify-between">
-                                    <div className="flex items-center gap-4">
-                                        <h6 className="w-fit rounded-sm border-[1px] border-black/50 px-4 py-0.5 text-xs font-medium">
-                                            {index + 1}.{' '}
-                                            {question.type === 'one_choice' ? 'Một đáp án đúng' : 'Nhiều đáp án đúng'}
-                                        </h6>
-                                        {question.image_url && (
-                                            <div onClick={() => handleImageClick(question.image_url!)}>
-                                                <FaRegImage className="size-4 text-secondaryYellow" />
-                                            </div>
-                                        )}
+                                    <div className="flex items-center justify-center gap-2">
+                                        {selectMultiple ? (
+                                            <Input
+                                                checked={selectedQuestions?.includes(question.id)}
+                                                type="checkbox"
+                                                className="size-4"
+                                                onChange={() => {
+                                                    setSelectedQuestions((prev) => {
+                                                        const currentSelected = prev ?? []
+                                                        if (currentSelected.includes(question.id)) {
+                                                            return currentSelected.filter((id) => id !== question.id)
+                                                        } else {
+                                                            return [...currentSelected, question.id]
+                                                        }
+                                                    })
+                                                }}
+                                            />
+                                        ) : null}
+                                        <div className="flex items-center gap-4">
+                                            <h6 className="rounded-sm border-[1px] border-black/50 px-4 py-0.5 text-xs font-medium">
+                                                {index + 1}.{' '}
+                                                {question.type === 'one_choice'
+                                                    ? 'Một đáp án đúng'
+                                                    : 'Nhiều đáp án đúng'}
+                                            </h6>
+                                            {question.image_url && (
+                                                <div onClick={() => handleImageClick(question.image_url!)}>
+                                                    <FaRegImage className="size-4 text-secondaryYellow" />
+                                                </div>
+                                            )}
+                                        </div>
                                     </div>
                                     <div className="space-x-2">
                                         <Button

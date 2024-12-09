@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { FcGoogle } from 'react-icons/fc'
 import { FaFacebook } from 'react-icons/fa'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -9,11 +9,25 @@ import { IoEyeOffSharp, IoEyeSharp } from 'react-icons/io5'
 import routes from '@/configs/routes'
 
 import { Input } from '@/components/ui/input'
+import { backendUrl } from '@/configs/baseUrl'
 import { Button } from '@/components/ui/button'
 import { LoginFormFields, loginSchema } from '@/validations'
 import { useLogin } from '@/app/hooks/accounts'
 
 const Login = () => {
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        const accessToken = localStorage.getItem('access_token')
+        const user = localStorage.getItem('user_data')
+
+        console.log(user)
+
+        if (accessToken && user) {
+            navigate(routes.userDashboard)
+        }
+    }, [navigate])
+
     const {
         register,
         setError,
@@ -44,6 +58,18 @@ const Login = () => {
                     })
                 })
             }
+        }
+    }
+
+    const handleGoogleLogin = () => {
+        const popup = window.open(
+            `${backendUrl}auth/google`,
+            '_blank',
+            'width=800,height=600,top=100,left=100'
+        )
+
+        if (popup) {
+            popup.document.body.style.display = 'none'
         }
     }
 
@@ -125,6 +151,7 @@ const Login = () => {
                     <div className="w-full">
                         <div className="flex w-full flex-col gap-2 md:flex-row md:gap-5">
                             <Button
+                                onClick={handleGoogleLogin}
                                 disabled={isSubmitting}
                                 variant="outline"
                                 size="lg"

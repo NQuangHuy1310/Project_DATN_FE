@@ -20,7 +20,14 @@ import DialogProfile from '@/components/shared/DialogProfile'
 import { ICourseApproved } from '@/types/instructor'
 import { useGetUserById } from '@/app/hooks/accounts'
 import Loading from '@/components/Common/Loading/Loading'
-import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination'
+import {
+    Pagination,
+    PaginationContent,
+    PaginationItem,
+    PaginationLink,
+    PaginationNext,
+    PaginationPrevious
+} from '@/components/ui/pagination'
 
 const PerformanceStudents = () => {
     const navigate = useNavigate()
@@ -163,7 +170,7 @@ const PerformanceStudents = () => {
                         <p className="text-base font-medium text-muted-foreground">
                             Bạn chưa có khoá học nào, hãy tạo khoá học ngay.
                         </p>
-                        <Button size="lg" onClick={() => navigate(routes.createCourse)}>
+                        <Button size="lg" onClick={() => navigate(routes.instructorDashboard)}>
                             Tạo khoá học mới
                         </Button>
                     </div>
@@ -205,7 +212,9 @@ const PerformanceStudents = () => {
                                 <PaginationItem>
                                     <PaginationNext
                                         onClick={() => handlePageChange(page + 1)}
-                                        className={page === totalPages ? 'border' : 'cursor-pointer border bg-darkGrey/90'}
+                                        className={
+                                            page === totalPages ? 'border' : 'cursor-pointer border bg-darkGrey/90'
+                                        }
                                     />
                                 </PaginationItem>
                             </PaginationContent>

@@ -20,7 +20,14 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { ICourseApproved, ratingCourse } from '@/types/instructor'
 import { Textarea } from '@/components/ui/textarea'
-import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination'
+import {
+    Pagination,
+    PaginationContent,
+    PaginationItem,
+    PaginationLink,
+    PaginationNext,
+    PaginationPrevious
+} from '@/components/ui/pagination'
 
 const PerformanceRatings = () => {
     const navigate = useNavigate()
@@ -167,7 +174,7 @@ const PerformanceRatings = () => {
                         <p className="text-base font-medium text-muted-foreground">
                             Bạn chưa có khoá học nào, hãy tạo khoá học ngay.
                         </p>
-                        <Button size="lg" onClick={() => navigate(routes.createCourse)}>
+                        <Button size="lg" onClick={() => navigate(routes.instructorDashboard)}>
                             Tạo khoá học mới
                         </Button>
                     </div>
@@ -209,7 +216,9 @@ const PerformanceRatings = () => {
                                 <PaginationItem>
                                     <PaginationNext
                                         onClick={() => handlePageChange(page + 1)}
-                                        className={page === totalPages ? 'border' : 'cursor-pointer border bg-darkGrey/90'}
+                                        className={
+                                            page === totalPages ? 'border' : 'cursor-pointer border bg-darkGrey/90'
+                                        }
                                     />
                                 </PaginationItem>
                             </PaginationContent>

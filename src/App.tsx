@@ -2,15 +2,16 @@ import { useEffect, useState } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
 import { getAccessTokenFromLocalStorage } from '@/lib'
-import { privateRoutes, publicRoutes } from '@/constants'
+import { privateRoutes, privateRoutesInstructor, publicRoutes } from '@/constants'
 
+import routes from '@/configs/routes'
 import Login from '@/views/user/Auth/Login'
-import Dashboard from '@/app/layouts/UserLayouts/Dashboard'
-import HomeLayout from '@/app/layouts/AuthLayouts/HomeLayout'
 import NotFound from '@/views/user/NotFound'
 import Forbidden from '@/views/user/Forbidden'
-import routes from '@/configs/routes'
 import ServerError from '@/views/user/ServerError'
+import Dashboard from '@/app/layouts/UserLayouts/Dashboard'
+import HomeLayout from '@/app/layouts/AuthLayouts/HomeLayout'
+
 import { useUserStore } from '@/app/store/userStore'
 
 function App() {
@@ -48,7 +49,35 @@ function App() {
                         )
                     })}
 
-                    {privateRouter?.map((route, index) => {
+                    {privateRouter &&
+                        privateRouter?.map((route, index) => {
+                            let Layout: React.ComponentType<any> = Dashboard || null
+                            if (route.layout) {
+                                Layout = route.layout as React.ComponentType<any>
+                            }
+
+                            const Page = route.element
+
+                            return (
+                                <Route
+                                    key={index}
+                                    path={route.path}
+                                    element={
+                                        isLogin ? (
+                                            <Layout title={route?.title}>
+                                                <Page />
+                                            </Layout>
+                                        ) : (
+                                            <HomeLayout>
+                                                <Login />
+                                            </HomeLayout>
+                                        )
+                                    }
+                                />
+                            )
+                        })}
+
+                    {privateRoutesInstructor.map((route, index) => {
                         let Layout: React.ComponentType<any> = Dashboard || null
                         if (route.layout) {
                             Layout = route.layout as React.ComponentType<any>
@@ -61,19 +90,18 @@ function App() {
                                 key={index}
                                 path={route.path}
                                 element={
-                                    isLogin ? (
+                                    isLogin && user?.user_type === 'teacher' ? (
                                         <Layout title={route?.title}>
                                             <Page />
                                         </Layout>
                                     ) : (
-                                        <HomeLayout>
-                                            <Login />
-                                        </HomeLayout>
+                                        <Forbidden />
                                     )
                                 }
                             />
                         )
                     })}
+
                     <Route path="*" element={<NotFound />} />
                     <Route path={routes.forbidden} element={<Forbidden />} />
                     <Route path={routes.serverError} element={<ServerError />} />

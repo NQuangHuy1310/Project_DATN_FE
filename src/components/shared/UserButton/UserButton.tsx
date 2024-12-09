@@ -1,4 +1,5 @@
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+/* eslint-disable indent */
+import { Link, useLocation } from 'react-router-dom'
 import { LuLogOut } from 'react-icons/lu'
 import { TbUserHexagon } from 'react-icons/tb'
 import { IoSettingsOutline } from 'react-icons/io5'
@@ -16,27 +17,22 @@ import {
     DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { authApis } from '@/app/services/accounts'
-import { removeAccessToken } from '@/lib'
-import { useUserStore } from '@/app/store'
 import { validRoutesMember } from '@/constants'
 import { MdPostAdd } from 'react-icons/md'
 import { FaRegBookmark, FaRegUser } from 'react-icons/fa'
 import { RiBloggerLine } from 'react-icons/ri'
+import { useLogout } from '@/app/hooks/accounts'
 
 const UserButton = () => {
     const location = useLocation()
-    const navigate = useNavigate()
+
     const { user } = useGetUserProfile()
 
-    const clearUserAndProfile = useUserStore((state) => state.clearUserAndProfile)
+    const { mutateAsync } = useLogout()
 
     const handleLogout = async () => {
-        await authApis.logout()
-        removeAccessToken()
         removeQuestion()
-        clearUserAndProfile()
-        navigate(routes.home)
+        await mutateAsync()
     }
 
     return (

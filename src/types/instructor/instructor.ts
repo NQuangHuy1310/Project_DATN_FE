@@ -396,3 +396,7 @@ export interface ICodingContentData {
     result_code: string
     _method?: string
 }
+
+export interface IRatingReplyData {
+    reply: string
+}

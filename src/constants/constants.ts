@@ -181,12 +181,12 @@ export const lessonOptions = [
         type: 'document'
     },
     {
-        name: 'Bài tập trắc nghiệm',
-        type: 'quizzes'
-    },
-    {
         name: 'Bài tập coding',
         type: 'coding'
+    },
+    {
+        name: 'Bài tập trắc nghiệm',
+        type: 'quizzes'
     }
 ]
 

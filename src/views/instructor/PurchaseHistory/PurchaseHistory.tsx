@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 import { ICourseApproved } from '@/types/instructor'
-import { useGetCoursesApproved } from '@/app/hooks/instructors'
+import { useGetCoursesApproved, useHistoryBuyCourse } from '@/app/hooks/instructors'
 
 import {
     Select,
@@ -17,6 +17,7 @@ import { Button } from '@/components/ui/button'
 
 const PurchaseHistory = () => {
     const { data: courseData } = useGetCoursesApproved()
+    const { data: historyBuyCourseData } = useHistoryBuyCourse()
 
     const [courseId, setCourseId] = useState<number | undefined>(undefined)
 

@@ -24,6 +24,7 @@ import {
     IOverviewCourseData,
     IQuestionData,
     IQuiz,
+    IRatingReplyData,
     ITargetCourse,
     IUpdatePositionLessonData,
     IUpdatePositionModuleData,
@@ -472,6 +473,20 @@ export const useChangeLessonType = () => {
     })
 }
 
+export const useRatingReply = () => {
+    const queryClient = useQueryClient()
+
+    return useMutation<any, Error, [number, IRatingReplyData]>({
+        mutationFn: async ([commentID, replyData]) => {
+            return instructorApi.ratingReply(commentID, replyData)
+        },
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['instructorGetRatings'] })
+            toast.success('Trả lời đánh giá thành công! Cảm ơn bạn đã phản hồi.')
+        }
+    })
+}
+
 // Queries
 export const useGetCourses = (
     limit: number = 4,
@@ -577,5 +592,18 @@ export const useGetRatingsCourse = (
         ...options,
         queryKey: ['instructorGetRatings', courseID, limit, page, perPage],
         queryFn: () => instructorApi.getRatingsCourse(courseID, limit, page, perPage)
+    })
+}
+
+export const useHistoryBuyCourse = (
+    courseID?: number,
+    start_date?: string,
+    end_date?: string,
+    options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
+) => {
+    return useQuery({
+        ...options,
+        queryKey: ['historyBuyCourse', courseID, start_date, end_date],
+        queryFn: () => instructorApi.historyBuyCourse(courseID, start_date, end_date)
     })
 }

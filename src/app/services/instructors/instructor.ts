@@ -20,6 +20,7 @@ import {
     IOverviewCourseData,
     IQuestion,
     IQuestionData,
+    IRatingReplyData,
     ITargetCourse,
     IUpdatePositionLessonData,
     IUpdatePositionModuleData
@@ -178,5 +179,15 @@ export const instructorApi = {
     },
     getRatingsCourse: async (courseID?: number, limit?: number, page?: number, perPage?: number): Promise<any> => {
         return axiosClient.get(instructorUri.GET_RATINGS(courseID, limit, page, perPage))
+    },
+
+    // Lịch sử mua khoá học
+    historyBuyCourse: async (courseID?: number, start_date?: string, end_date?: string): Promise<any> => {
+        return axiosClient.get(instructorUri.HISTORY_BUY_COURSE(courseID, start_date, end_date))
+    },
+
+    // Giảng viên trả lời bình luận
+    ratingReply: async (commentID: number, replyData: IRatingReplyData): Promise<any> => {
+        return axiosClient.post(instructorUri.RATING_REPLY(commentID), replyData)
     }
 }

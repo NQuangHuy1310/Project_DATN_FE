@@ -71,7 +71,7 @@ const CourseModule = ({ module }: { module: IModule }) => {
                                 )}
                                 {item.content_type === 'document' &&
                                     `${calculateReadingTime(item.lessonable.content!)} phút`}
-                                {formatDuration(item.lessonable.duration!)}
+                                {item.content_type === 'video' && formatDuration(item.lessonable.duration!)}
                             </div>
                         </div>
                     ))}

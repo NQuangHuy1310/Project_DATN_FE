@@ -10,12 +10,14 @@ import { Sheet, SheetClose, SheetContent, SheetTitle } from '@/components/ui/she
 import { formats, modules } from '@/constants/quillConstants'
 
 const AddNote = ({
+    idCourse,
     lessonData,
     open,
     isOpen,
     currentVideoTime,
     setCheckNote
 }: {
+    idCourse: number
     lessonData: ILessonLeaning
     open: boolean
     isOpen: (open: boolean) => void
@@ -23,7 +25,7 @@ const AddNote = ({
     setCheckNote: Dispatch<SetStateAction<boolean>>
 }) => {
     const [content, setContent] = useState<string>()
-    const { mutateAsync: noteLessonAdd } = useAddNoteLesson()
+    const { mutateAsync: noteLessonAdd } = useAddNoteLesson(idCourse)
     const submitNote = async () => {
         await noteLessonAdd([
             lessonData.id,

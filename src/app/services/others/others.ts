@@ -29,7 +29,7 @@ export const learningPathApi = {
 }
 
 export const communicateChatAI = {
-    chatAI: async (question: string) => {
+    chatAI: async (question: string): Promise<{ answer: string }> => {
         return axiosClient.post(chatAIUri.CHAT_AI, { question })
     },
     filterChatAI: async (status: string) => {

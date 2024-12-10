@@ -74,7 +74,7 @@ const CourseHistory = () => {
                 )}
             </div>
             {limit !== courseHistory?.total_lessons && courseHistory?.course && courseHistory?.course.length > 0 && (
-                <Button variant="outline" onClick={() => setLimit(courseHistory?.total_lessons!)}>
+                <Button variant="outline" onClick={() => setLimit(courseHistory?.total_lessons)}>
                     Xem tất cả
                 </Button>
             )}

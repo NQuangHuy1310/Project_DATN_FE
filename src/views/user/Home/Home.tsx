@@ -15,8 +15,11 @@ import { formatDistanceToNow } from 'date-fns'
 import { vi } from 'date-fns/locale'
 import PostOutStanding from '@/components/shared/Post/PostOutStanding'
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
+import { useNavigate } from 'react-router-dom'
+import { getImagesUrl } from '@/lib'
 
 const Home = () => {
+    const navigate = useNavigate()
     const { data: ratings, isLoading: loadingRating } = useGetRatingHome()
     const { data: course_sales, isLoading: loadingSaleHome } = useCourseSaleHome()
     const { data: course_category = [], isLoading: loadingCourseCategory } = useCourseCategoryHome()
@@ -44,7 +47,7 @@ const Home = () => {
                         </div>
                     </div>
                     <div className="w-full">
-                        <CarouselContent className="w-full gap-4">
+                        <CarouselContent className="w-full gap-10">
                             {course_sales?.map((item, index) => (
                                 <CarouselItem key={index} className="w-full min-w-0 basis-full md:basis-[367px]">
                                     <Course key={index} data={item} page={routes.courseDetailNoLogin} />
@@ -74,7 +77,7 @@ const Home = () => {
                             <TabsContent key={category.id} value={category.name} className="flex flex-col gap-5">
                                 <Carousel className="w-full" opts={{ align: 'start' }}>
                                     <div className="w-full">
-                                        <CarouselContent className="w-full gap-4">
+                                        <CarouselContent className="w-full gap-8">
                                             {category.courses?.map((item, index) => (
                                                 <CarouselItem key={index} className="w-full min-w-0 basis-full md:basis-[367px]">
                                                     <Course key={index} data={item} page={routes.courseDetailNoLogin} />
@@ -125,7 +128,7 @@ const Home = () => {
                         <div key={index} className="w-full rounded-lg border bg-white px-7 py-3 md:max-w-[354px]">
                             <div className="flex space-x-4">
                                 <Avatar className="size-10 flex-shrink-0">
-                                    <AvatarImage src={item?.avatar || ''} alt={item.name} />
+                                    <AvatarImage src={getImagesUrl(item?.avatar || '')} alt={item.name} />
                                     <AvatarFallback className="flex size-10 items-center justify-center bg-slate-500/50 font-semibold">
                                         {item.name.charAt(0)}
                                     </AvatarFallback>
@@ -164,7 +167,7 @@ const Home = () => {
                         <h1 className="mb-4 text-xl font-semibold md:text-3xl lg:text-5xl">
                             Trở thành giảng viên ngay
                         </h1>
-                        <Button className="">Đăng kí ngay</Button>
+                        <Button onClick={() => navigate(routes.login)}>Đăng kí ngay</Button>
                     </div>
                 </div>
             </div>

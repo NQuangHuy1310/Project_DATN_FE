@@ -131,6 +131,7 @@ export const useGetCommentCourse = (
     return useQuery({
         ...options,
         queryKey: ['comments-course', id],
+        enabled: !!id,
         queryFn: () => courseApi.getComment(id)
     })
 }
@@ -156,6 +157,7 @@ export const useRegisterCourse = () => {
         },
         onSuccess: async () => {
             await Promise.all([
+                queryClient.invalidateQueries({ queryKey: ['course-detail'] }),
                 queryClient.invalidateQueries({ queryKey: ['register-course'] }),
                 queryClient.invalidateQueries({ queryKey: ['wishlist-course'] })
             ])

@@ -74,7 +74,7 @@ const InstructorDetail = () => {
                         <span>
                             {data?.dataTeacher.ratings_avg_rate % 1 === 0
                                 ? Math.floor(data?.dataTeacher.ratings_avg_rate)
-                                : data?.dataTeacher.ratings_avg_rate.toFixed(1)}
+                                : Number(data?.dataTeacher.ratings_avg_rate).toFixed(1)}
                             ({data?.dataTeacher.total_ratings} đánh giá)
                         </span>
                     </div>

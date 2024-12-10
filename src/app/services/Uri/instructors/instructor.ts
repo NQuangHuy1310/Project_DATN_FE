@@ -59,5 +59,14 @@ export const instructorUri = {
         `${INSTRUCTOR_URL}statistic/get-students${courseID ? `?course=${courseID}` : ''}?page=${page}${perPage ? `&perPage=${perPage}` : ''}&limit=${limit}`,
 
     GET_RATINGS: (courseID?: number, limit?: number, page?: number, perPage?: number) =>
-        `${INSTRUCTOR_URL}statistic/get-ratings${courseID ? `?course=${courseID}` : ''}?page=${page}${perPage ? `&perPage=${perPage}` : ''}&limit=${limit}`
+        `${INSTRUCTOR_URL}statistic/get-ratings${courseID ? `?course=${courseID}` : ''}?page=${page}${perPage ? `&perPage=${perPage}` : ''}&limit=${limit}`,
+
+    // Api lịch sử mua khoá học
+    HISTORY_BUY_COURSE: (courseID?: number, startDate?: string, endDate?: string) =>
+        `teacher/history-buy-course/id_user${courseID ? `?id_course=${courseID}` : ''}${startDate ? `&start_date=${startDate}` : ''}${endDate ? `&end_date=${endDate}` : ''}`,
+
+    // Giảng viên trả lời bình luận
+    RATING_REPLY: (commentID: number) => `${INSTRUCTOR_URL}rating/${commentID}/reply`
+
+    // Api roadmap
 }

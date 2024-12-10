@@ -301,13 +301,12 @@ const CourseDetail = () => {
                                         <div className="flex flex-col gap-2">
                                             <div className="flex h-2 w-full items-center overflow-hidden rounded bg-darkGrey/20">
                                                 <span
-                                                    className={`block h-full ${
-                                                        courseDetail?.level === 'Sơ cấp'
+                                                    className={`block h-full ${courseDetail?.level === 'Sơ cấp'
                                                             ? 'bg-secondaryYellow'
                                                             : courseDetail?.level === 'Trung cấp'
-                                                              ? 'bg-secondaryGreen'
-                                                              : 'bg-secondaryRed'
-                                                    }`}
+                                                                ? 'bg-secondaryGreen'
+                                                                : 'bg-secondaryRed'
+                                                        }`}
                                                     style={{ width: `${courseDetail?.progress_percent}%` }}
                                                 ></span>
                                                 <span
@@ -321,7 +320,7 @@ const CourseDetail = () => {
                                         </div>
                                     )
                                 ) : (courseDetail?.price && courseDetail?.price > 0) ||
-                                  (courseDetail?.price_sale && courseDetail?.price_sale > 0) ? (
+                                    (courseDetail?.price_sale && courseDetail?.price_sale > 0) ? (
                                     <div className="flex items-center gap-3">
                                         <div className="flex items-center gap-1">
                                             <div className="flex items-center gap-1">
@@ -409,8 +408,8 @@ const CourseDetail = () => {
                                         )}
                                     </div>
                                 ) : (!courseDetail?.price && !courseDetail?.price_sale) ||
-                                  (Math.floor(courseDetail?.price) === 0 &&
-                                      Math.floor(courseDetail?.price_sale) === 0) ? (
+                                    (Math.floor(courseDetail?.price) === 0 &&
+                                        Math.floor(courseDetail?.price_sale) === 0) ? (
                                     <div className="flex items-center gap-3">
                                         <Button
                                             className="block w-full rounded-md bg-primary py-2 text-center text-white"
@@ -517,65 +516,58 @@ const CourseDetail = () => {
                                 <h3 className="text-overflow cursor-pointer text-base font-bold text-black xl2:text-lg">
                                     {courseDetail?.name}
                                 </h3>
-                                {courseDetail?.is_course_bought === true ? (
-                                    courseDetail?.progress_percent === 100 ? (
-                                        <p className="text-base font-semibold text-orange-500">Đã hoàn thành</p>
-                                    ) : courseDetail?.progress_percent === 0 ? (
-                                        <p className="text-base font-semibold text-orange-500">Bắt đầu học</p>
-                                    ) : (
-                                        <div className="flex flex-col gap-2">
-                                            <div className="flex h-2 w-full items-center overflow-hidden rounded bg-darkGrey/20">
-                                                <span
-                                                    className={`block h-full ${
-                                                        courseDetail?.level === 'Sơ cấp'
-                                                            ? 'bg-secondaryYellow'
-                                                            : courseDetail?.level === 'Trung cấp'
-                                                              ? 'bg-secondaryYellow'
-                                                              : 'bg-secondaryRed'
-                                                    }`}
-                                                    style={{ width: `${courseDetail?.progress_percent}%` }}
-                                                ></span>
-                                                <span
-                                                    className="block h-full bg-darkGrey/20"
-                                                    style={{ width: `${100 - courseDetail?.progress_percent}%` }}
-                                                ></span>
+                                <div>
+                                    {courseDetail?.is_course_bought === true ? (
+                                        courseDetail?.progress_percent === 100 ? (
+                                            <p className="text-base font-semibold text-orange-500">Đã hoàn thành</p>
+                                        ) : courseDetail?.progress_percent === 0 ? (
+                                            <p className="text-base font-semibold text-orange-500">Bắt đầu học</p>
+                                        ) : (
+                                            <div className="flex flex-col gap-2">
+                                                <div className="flex h-2 w-full items-center overflow-hidden rounded bg-darkGrey/20">
+                                                    <span
+                                                        className={`block h-full ${courseDetail?.level === 'Sơ cấp'
+                                                                ? 'bg-secondaryYellow'
+                                                                : courseDetail?.level === 'Trung cấp'
+                                                                    ? 'bg-secondaryGreen'
+                                                                    : 'bg-secondaryRed'
+                                                            }`}
+                                                        style={{ width: `${courseDetail?.progress_percent}%` }}
+                                                    ></span>
+                                                    <span
+                                                        className="block h-full bg-darkGrey/20"
+                                                        style={{ width: `${100 - courseDetail?.progress_percent}%` }}
+                                                    ></span>
+                                                </div>
+                                                <span className="text-end text-sm font-medium">
+                                                    {courseDetail?.progress_percent}% hoàn thành
+                                                </span>
                                             </div>
-                                            <span className="text-end text-sm font-medium">
-                                                {courseDetail?.progress_percent}% hoàn thành
-                                            </span>
-                                        </div>
-                                    )
-                                ) : courseDetail?.price && courseDetail?.price !== 0 ? (
-                                    <div className="flex items-center gap-3">
-                                        <div className="flex items-center gap-1">
-                                            {courseDetail?.price_sale && courseDetail?.price_sale !== 0 ? (
+                                        )
+                                    ) : (courseDetail?.price && courseDetail?.price > 0) ||
+                                        (courseDetail?.price_sale && courseDetail?.price_sale > 0) ? (
+                                        <div className="flex items-center gap-3">
+                                            <div className="flex items-center gap-1">
                                                 <div className="flex items-center gap-1">
                                                     <TbCoinFilled className="size-5 text-yellow-500" />
                                                     <del className="font-semibold text-red-600">
                                                         {Math.floor(courseDetail?.price)}
                                                     </del>
                                                 </div>
-                                            ) : (
+                                            </div>
+                                            {courseDetail?.price_sale && courseDetail?.price_sale !== 0 && (
                                                 <div className="flex items-center gap-1">
                                                     <TbCoinFilled className="size-5 text-yellow-500" />
                                                     <p className="text-base font-semibold text-red-600">
-                                                        {Math.floor(courseDetail?.price)}
+                                                        {Math.floor(courseDetail?.price_sale)}
                                                     </p>
                                                 </div>
                                             )}
                                         </div>
-                                        {courseDetail?.price_sale && courseDetail?.price_sale !== 0 && (
-                                            <div className="flex items-center gap-1">
-                                                <TbCoinFilled className="size-5 text-yellow-500" />
-                                                <p className="text-base text-red-600">
-                                                    {Math.floor(courseDetail?.price_sale)}
-                                                </p>
-                                            </div>
-                                        )}
-                                    </div>
-                                ) : (
-                                    <span className="text-base font-semibold text-orange-500">Miễn phí</span>
-                                )}
+                                    ) : (
+                                        <span className="text-base font-semibold text-orange-500">Miễn phí</span>
+                                    )}
+                                </div>
 
                                 <div className="flex items-center gap-2">
                                     <Link to="" className="flex w-full items-center gap-2.5">
@@ -641,8 +633,8 @@ const CourseDetail = () => {
                                                 )}
                                             </div>
                                         ) : (!courseDetail?.price && !courseDetail?.price_sale) ||
-                                          (Math.floor(courseDetail?.price) === 0 &&
-                                              Math.floor(courseDetail?.price_sale) === 0) ? (
+                                            (Math.floor(courseDetail?.price) === 0 &&
+                                                Math.floor(courseDetail?.price_sale) === 0) ? (
                                             <div className="flex items-center gap-3">
                                                 <Button
                                                     className="block w-full rounded-md bg-primary py-2 text-center text-white"
@@ -736,9 +728,8 @@ const CourseDetail = () => {
                                                         <FaStar
                                                             key={star}
                                                             onClick={() => setValue('rate', star)}
-                                                            className={`cursor-pointer ${
-                                                                star <= rating ? 'text-yellow-500' : 'text-gray-300'
-                                                            } h-5 w-5 md:h-8 md:w-8`}
+                                                            className={`cursor-pointer ${star <= rating ? 'text-yellow-500' : 'text-gray-300'
+                                                                } h-5 w-5 md:h-8 md:w-8`}
                                                         />
                                                     ))}
                                                 </div>

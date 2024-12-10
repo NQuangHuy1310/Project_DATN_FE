@@ -170,6 +170,7 @@ const CourseDetailNoLogin = () => {
                         <div className="hidden w-full flex-shrink-0 transition-transform duration-500 lg:block">
                             {courseDetail && (
                                 <CourseToday
+
                                     id={courseDetail?.id ?? 0}
                                     total_student={courseDetail?.total_student ?? 0}
                                     lessons_count={courseDetail?.lessons_count ?? 0}
@@ -184,6 +185,9 @@ const CourseDetailNoLogin = () => {
                                     trailer={courseDetail?.trailer}
                                     price={courseDetail?.price}
                                     level={courseDetail?.level || ''}
+                                    ratings_count={courseDetail.ratings_count}
+                                    is_course_bought={courseDetail.is_course_bought}
+                                    progress_percent={courseDetail.progress_percent}
                                     page={routes.courseDetailNoLogin || routes.courseDetail}
                                 />
                             )}
@@ -215,6 +219,9 @@ const CourseDetailNoLogin = () => {
                                     trailer={courseDetail?.trailer}
                                     price={courseDetail?.price || 0}
                                     level={courseDetail?.level || ''}
+                                    ratings_count={courseDetail.ratings_count}
+                                    is_course_bought={courseDetail.is_course_bought}
+                                    progress_percent={courseDetail.progress_percent}
                                     page={routes.courseDetailNoLogin || routes.courseDetail}
                                 />
                             )}

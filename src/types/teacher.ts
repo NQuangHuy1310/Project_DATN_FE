@@ -8,7 +8,7 @@ export interface ITeacher {
     total_comments?: number
     ratings_avg_rate: number
     follow?: boolean
-    is_follow: boolean
+    is_follow?: boolean
 }
 
 export interface ITeacherAll {

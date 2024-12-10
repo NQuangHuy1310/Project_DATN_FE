@@ -32,8 +32,8 @@ const CommentCourse = ({ isOpen, setIsOpen, commentId }: IComment) => {
 
     const { user } = useGetUserProfile()
     const id = useGetSlugParams('id')
-    const idLesson = id.split('-')[1]
-    const numericId = parseInt(idLesson, 10)
+    const idLesson = id?.split('-')[1]
+    const numericId = parseInt(idLesson!, 10)
     const { data: comments } = useGetCommentCourse(numericId)
 
     const { mutateAsync: addComment } = useAddCommentCourse()

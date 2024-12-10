@@ -1,15 +1,16 @@
+import { Link, useNavigate } from 'react-router-dom'
+
+import { toast } from 'sonner'
+import { getImagesUrl } from '@/lib'
+import { vi } from 'date-fns/locale'
+import routes from '@/configs/routes'
 import { formatDistanceToNow } from 'date-fns'
 import { BsDot, BsThreeDots } from 'react-icons/bs'
-import { vi } from 'date-fns/locale'
+import Loading from '@/components/Common/Loading/Loading'
+import { useDeletePost, useGetMyPosts } from '@/app/hooks/posts'
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import { useDeletePost, useGetMyPosts } from '@/app/hooks/posts'
-import Loading from '@/components/Common/Loading/Loading'
-import { toast } from 'sonner'
-import { Link, useNavigate } from 'react-router-dom'
-import routes from '@/configs/routes'
-import { getImagesUrl } from '@/lib'
 
 const MyPosts = () => {
     const navigate = useNavigate()

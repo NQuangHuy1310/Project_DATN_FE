@@ -1,11 +1,13 @@
-import FilterBar from '@/components/shared/FilterBar/FilterBar'
-import Post from '@/components/shared/Post'
-import Loading from '@/components/Common/Loading/Loading'
-import { useGetPosts, useGetPostsByCategory, useGetPostsBySearch } from '@/app/hooks/posts'
-import { useGetCategoriesPost } from '@/app/hooks/categories'
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+
 import { getVisiblePages } from '@/lib'
+import Post from '@/components/shared/Post'
+import Loading from '@/components/Common/Loading/Loading'
+import FilterBar from '@/components/shared/FilterBar/FilterBar'
+
+import { useGetCategoriesPost } from '@/app/hooks/categories'
+import { useGetPosts, useGetPostsByCategory, useGetPostsBySearch } from '@/app/hooks/posts'
 import {
     Pagination,
     PaginationContent,

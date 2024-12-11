@@ -22,6 +22,7 @@ import {
     IModules,
     IOverviewCourse,
     IOverviewCourseData,
+    IPlasesData,
     IQuestionData,
     IQuiz,
     IRatingReplyData,
@@ -497,7 +498,6 @@ export const useCreateRoadmap = () => {
         },
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: ['roadmap'] })
-            toast.success('Tạo lộ trình thành công!')
         }
     })
 }
@@ -526,6 +526,47 @@ export const useDeleteRoadmap = () => {
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: ['roadmap'] })
             toast.success('Xoá lộ trình thành công!')
+        }
+    })
+}
+
+export const useCreatePhase = () => {
+    const queryClient = useQueryClient()
+
+    return useMutation<any, Error, IPlasesData>({
+        mutationFn: async (roadmapData) => {
+            return instructorApi.createPhase(roadmapData)
+        },
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['roadmap'] })
+        }
+    })
+}
+
+export const useUpdatePhase = () => {
+    const queryClient = useQueryClient()
+
+    return useMutation<any, Error, [number, IPlasesData]>({
+        mutationFn: async ([phaseID, roadmapData]) => {
+            return instructorApi.updatePhase(phaseID, roadmapData)
+        },
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['roadmap'] })
+            toast.success('Cập nhật giai đoạn thành công!')
+        }
+    })
+}
+
+export const useDeletePhase = () => {
+    const queryClient = useQueryClient()
+
+    return useMutation({
+        mutationFn: async (phaseID: number) => {
+            return instructorApi.deletePhase(phaseID)
+        },
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['roadmap'] })
+            toast.success('Xoá giai đoạn thành công!')
         }
     })
 }

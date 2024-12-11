@@ -8,11 +8,11 @@ import { useCreateRoadmap, useUpdateRoadmap } from '@/app/hooks/instructors'
 import placeholder from '@/assets/placeholder.jpg'
 import { MessageErrors } from '@/constants'
 import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { roadMap, roadMapSchema } from '@/validations'
 import { getImagesUrl, readFileAsDataUrl, validateFileSize } from '@/lib'
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { Button } from '@/components/ui/button'
 import { IRoadmap, IRoadmapData } from '@/types/instructor'
 
 interface AddRoadmapProps {
@@ -93,6 +93,14 @@ const AddRoadmap = ({ openDialog, setOpenDialog, roadmap }: AddRoadmapProps) => 
             setRoadmapImagePath(roadmapImagePath)
         }
     }, [roadmap, setValue])
+
+    useEffect(() => {
+        return () => {
+            reset()
+            setRoadmapImageFile(undefined)
+            setRoadmapImagePath(placeholder)
+        }
+    }, [reset, openDialog])
 
     return (
         <Dialog open={openDialog} onOpenChange={setOpenDialog}>

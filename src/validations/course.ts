@@ -87,13 +87,18 @@ export const codingContentSchema = z.object({
 })
 
 export const roadMapSchema = z.object({
-    name: z.string().min(10, MessageErrors.requiredField).max(60),
-    description: z.string().min(10, MessageErrors.requiredField),
-    sort_description: z.string().min(10, MessageErrors.requiredField)
+    name: z.string().min(1, MessageErrors.requiredField),
+    description: z.string().min(1, MessageErrors.requiredField),
+    sort_description: z.string().min(1, MessageErrors.requiredField)
 })
 
 export const ratingReplySchema = z.object({
     reply: z.string().min(1, MessageErrors.requiredField).max(1000, { message: 'Không được nhập quá 1000 ký tự' })
+})
+
+export const roadmapPhaseSchema = z.object({
+    name: z.string().min(1, MessageErrors.requiredField),
+    description: z.string().min(1, MessageErrors.requiredField)
 })
 
 export type createNewCourse = z.infer<typeof createNewCourseSchema>
@@ -115,3 +120,5 @@ export type codingContent = z.infer<typeof codingContentSchema>
 export type roadMap = z.infer<typeof roadMapSchema>
 
 export type ratingReply = z.infer<typeof ratingReplySchema>
+
+export type roadmapPhase = z.infer<typeof roadmapPhaseSchema>

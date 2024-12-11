@@ -60,6 +60,7 @@ export interface ICourses {
 export interface ICourseApproved {
     id: number
     name: string
+    thumbnail: string
 }
 
 export interface IOverviewCourse {
@@ -433,5 +434,14 @@ export interface IRoadmapData {
     description: string
     sort_description: string
     thumbnail: File | string
+    _method?: string
+}
+
+export interface IPlasesData {
+    roadmap_id: number
+    name: string
+    description: string
+    order: number
+    course_ids: number[]
     _method?: string
 }

@@ -18,6 +18,7 @@ import {
     IModule,
     IModuleData,
     IOverviewCourseData,
+    IPlasesData,
     IQuestion,
     IQuestionData,
     IRatingReplyData,
@@ -205,5 +206,14 @@ export const instructorApi = {
     },
     getRoadmap: async (): Promise<IRoadmap[]> => {
         return axiosClient.get(instructorUri.GET_ROADMAP)
+    },
+    createPhase: async (phaseData: IPlasesData): Promise<any> => {
+        return axiosClient.post(instructorUri.CREATE_PHASE, phaseData)
+    },
+    updatePhase: async (phaseID: number, phaseData: IPlasesData): Promise<any> => {
+        return axiosClient.post(instructorUri.UPDATE_PHASE(phaseID), phaseData)
+    },
+    deletePhase: async (phaseID: number): Promise<any> => {
+        return axiosClient.post(instructorUri.DELETE_PHASE(phaseID))
     }
 }

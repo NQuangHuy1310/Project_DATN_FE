@@ -73,5 +73,9 @@ export const instructorUri = {
     CREATE_ROADMAP: `${TEACHER_URL}roadmap`,
     UPDATE_ROADMAP: (roadmapID: number) => `${TEACHER_URL}roadmap/${roadmapID}`,
     DELETE_ROADMAP: (roadmapID: number) => `${TEACHER_URL}roadmap/${roadmapID}`,
-    GET_ROADMAP: `${TEACHER_URL}roadmap`
+    GET_ROADMAP: `${TEACHER_URL}roadmap`,
+
+    CREATE_PHASE: `${TEACHER_URL}roadmap/phase`,
+    UPDATE_PHASE: (phaseID: number) => `${TEACHER_URL}/roadmap/phase/${phaseID}`,
+    DELETE_PHASE: (phaseID: number) => `${TEACHER_URL}/roadmap/phase/${phaseID}`
 }

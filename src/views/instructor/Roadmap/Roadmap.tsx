@@ -11,14 +11,18 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import AddRoadmap from '@/views/instructor/Roadmap/AddRoadmap'
 import { IRoadmap } from '@/types/instructor'
 import ConfirmDialog from '@/components/shared/ConfirmDialog'
+import AddPhase from '@/views/instructor/Roadmap/AddPhase'
+import Loading from '@/components/Common/Loading/Loading'
+import PreviewRoadmap from '@/views/instructor/Roadmap/PreviewRoadmap'
 
 const Roadmap = () => {
-    const { data: roadmapData } = useGetRoadmap()
-
+    const { data: roadmapData, isLoading } = useGetRoadmap()
     const { mutateAsync: deleteRoadmap, isPending } = useDeleteRoadmap()
 
     const [openDialog, setOpenDialog] = useState<boolean>(false)
+    const [phaseDialog, setPhaseDialog] = useState<boolean>(false)
     const [confirmDialog, setConfirmDialog] = useState<boolean>(false)
+    const [openPreview, setOpenPreview] = useState<boolean>(false)
     const [roadmap, setRoadmap] = useState<IRoadmap | undefined>(undefined)
     const [roadmapId, setRoadmapId] = useState<number | undefined>(undefined)
 
@@ -26,6 +30,8 @@ const Roadmap = () => {
         if (!roadmapId) return
         await deleteRoadmap(roadmapId)
     }
+
+    if (isLoading) return <Loading />
 
     return (
         <>
@@ -45,9 +51,11 @@ const Roadmap = () => {
                 </div>
 
                 <div className="space-y-1">
-                    {roadmapData && <h5 className="text-xl font-medium">Danh sách lộ trình của tôi</h5>}
+                    {roadmapData && roadmapData?.length > 0 && (
+                        <h5 className="text-xl font-medium">Danh sách lộ trình của tôi</h5>
+                    )}
                     <div className="flex flex-wrap items-center gap-5">
-                        {roadmapData ? (
+                        {roadmapData &&
                             roadmapData.map((item, index) => (
                                 <div
                                     key={index}
@@ -60,10 +68,22 @@ const Roadmap = () => {
                                         </div>
                                         <div className="mt-auto flex flex-1 items-end">
                                             <div className="flex gap-2">
-                                                <Button size="sm">Thêm khoá học</Button>
+                                                <Button
+                                                    size="sm"
+                                                    onClick={() => {
+                                                        setPhaseDialog(!phaseDialog)
+                                                        setRoadmap(item)
+                                                    }}
+                                                >
+                                                    Thêm giai đoạn
+                                                </Button>
                                                 <Button
                                                     className="bg-secondaryGreen hover:bg-secondaryGreen/90"
                                                     size="sm"
+                                                    onClick={() => {
+                                                        setOpenPreview(!openPreview)
+                                                        setRoadmap(item)
+                                                    }}
                                                 >
                                                     Xem chi tiết
                                                 </Button>
@@ -107,8 +127,8 @@ const Roadmap = () => {
                                         </DropdownMenu>
                                     </div>
                                 </div>
-                            ))
-                        ) : (
+                            ))}
+                        {roadmapData && roadmapData.length <= 0 && (
                             <div className="flex h-full w-full flex-col items-center justify-center gap-4">
                                 <NoContent description="Bạn chưa có lộ trình nào, tạo lộ trình mới" />
                                 <Button onClick={() => setOpenDialog(true)}>Tạo lộ trình học tập</Button>
@@ -119,6 +139,8 @@ const Roadmap = () => {
             </div>
 
             <AddRoadmap openDialog={openDialog} setOpenDialog={setOpenDialog} roadmap={roadmap} />
+            <AddPhase open={phaseDialog} setOpen={setPhaseDialog} roadmap={roadmap} />
+            <PreviewRoadmap open={openPreview} setOpen={setOpenPreview} roadmap={roadmap} />
             <ConfirmDialog
                 title="Xoá lộ trình"
                 isPending={isPending}

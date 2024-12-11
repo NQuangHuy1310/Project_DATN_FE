@@ -1,47 +1,51 @@
 import { toast } from 'sonner'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { ChangeEvent, Dispatch, SetStateAction, useRef, useState } from 'react'
+import { ChangeEvent, Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { useCreateRoadmap } from '@/app/hooks/instructors'
+import { useCreateRoadmap, useUpdateRoadmap } from '@/app/hooks/instructors'
 
 import placeholder from '@/assets/placeholder.jpg'
 import { MessageErrors } from '@/constants'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { roadMap, roadMapSchema } from '@/validations'
-import { readFileAsDataUrl, validateFileSize } from '@/lib'
+import { getImagesUrl, readFileAsDataUrl, validateFileSize } from '@/lib'
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
+import { IRoadmap, IRoadmapData } from '@/types/instructor'
 
 interface AddRoadmapProps {
     openDialog: boolean
     setOpenDialog: Dispatch<SetStateAction<boolean>>
+    roadmap: IRoadmap | undefined
 }
 
-const AddRoadmap = ({ openDialog, setOpenDialog }: AddRoadmapProps) => {
+const AddRoadmap = ({ openDialog, setOpenDialog, roadmap }: AddRoadmapProps) => {
     const {
         register,
         handleSubmit,
         reset,
+        setValue,
         formState: { isSubmitting, errors }
     } = useForm<roadMap>({
         resolver: zodResolver(roadMapSchema)
     })
 
     const { mutateAsync: createRoadmap } = useCreateRoadmap()
+    const { mutateAsync: updateRoadmap } = useUpdateRoadmap()
 
-    const [courseImageFile, setCourseImageFile] = useState<File>()
-    const [courseImagePath, setCourseImagePath] = useState<string | undefined>(placeholder)
+    const [roadmapImageFile, setRoadmapImageFile] = useState<File>()
+    const [roadmapImagePath, setRoadmapImagePath] = useState<string | undefined>(placeholder)
     const courseImage = useRef<HTMLInputElement | null>(null)
 
     const handleUploadImage = async (e: ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]
         if (file && validateFileSize(file, 'image')) {
             try {
-                setCourseImageFile(file)
+                setRoadmapImageFile(file)
                 const imageUrl = await readFileAsDataUrl(file)
-                setCourseImagePath(imageUrl)
+                setRoadmapImagePath(imageUrl)
             } catch (error) {
                 const errorMessage = error instanceof Error ? error.message : MessageErrors.uploadFile
                 toast.error(errorMessage)
@@ -56,29 +60,46 @@ const AddRoadmap = ({ openDialog, setOpenDialog }: AddRoadmapProps) => {
     }
 
     const onSubmit: SubmitHandler<roadMap> = async (formData) => {
-        if (!courseImageFile) {
+        if (!roadmapImageFile && !roadmapImagePath) {
             toast.warning('Bạn cần tải lên hình ảnh cho lộ trình học tập.', {
                 description: 'Vui lòng chọn một hình ảnh phù hợp trước khi lưu thông tin lộ trình.'
             })
             return
         }
 
-        const payload = {
+        const payload: IRoadmapData = {
             ...formData,
-            thumbnail: courseImageFile
+            thumbnail: roadmapImageFile!
         }
 
-        await createRoadmap(payload)
+        if (roadmap) {
+            payload._method = 'PUT'
+            await updateRoadmap([roadmap.id, payload])
+        } else {
+            await createRoadmap(payload)
+        }
         setOpenDialog(false)
+        setRoadmapImageFile(undefined)
+        setRoadmapImagePath(placeholder)
         reset()
     }
+
+    useEffect(() => {
+        if (roadmap) {
+            const roadmapImagePath = getImagesUrl(roadmap.thumbnail)
+            setValue('name', roadmap.name)
+            setValue('sort_description', roadmap.sort_description)
+            setValue('description', roadmap.description)
+            setRoadmapImagePath(roadmapImagePath)
+        }
+    }, [roadmap, setValue])
 
     return (
         <Dialog open={openDialog} onOpenChange={setOpenDialog}>
             <DialogContent className="max-w-screen-lg" aria-describedby={undefined}>
                 <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
                     <DialogHeader>
-                        <DialogTitle className="text-xl">Tạo lộ trình học tập</DialogTitle>
+                        <DialogTitle className="text-xl">{roadmap ? 'Sửa' : 'Tạo'} lộ trình học tập</DialogTitle>
                     </DialogHeader>
                     <div className="flex flex-col gap-2.5">
                         <div className="space-y-0.5">
@@ -124,7 +145,7 @@ const AddRoadmap = ({ openDialog, setOpenDialog }: AddRoadmapProps) => {
                             <div className="flex items-start gap-8">
                                 <div className="h-[250px] w-[350px] flex-shrink-0 overflow-hidden rounded-md border border-gray-300">
                                     <img
-                                        src={courseImagePath ?? placeholder}
+                                        src={roadmapImagePath ?? placeholder}
                                         alt="Hình ảnh lộ trình"
                                         className="h-full w-full object-cover"
                                     />
@@ -170,7 +191,7 @@ const AddRoadmap = ({ openDialog, setOpenDialog }: AddRoadmapProps) => {
                                 Huỷ
                             </Button>
                             <Button type="submit" disabled={isSubmitting}>
-                                Lưu thông tin
+                                {roadmap ? 'Lưu thông tin' : 'Tạo mới'} lộ trình
                             </Button>
                         </div>
                     </DialogFooter>

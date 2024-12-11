@@ -45,39 +45,29 @@ const Communicate = () => {
             setQuestion('')
             setMessages((prev) => [...prev, { text: trimmedQuestion, type: 'user' }])
 
-            setMessages((prev) => [...prev, { text: '', type: 'ai', isTyping: true }])
-
             const response = await chatAI(trimmedQuestion)
             const answer = response?.answer || 'Không thể trả lời câu hỏi này.'
 
-            typeAnswer(answer)
+            await typeAnswer(answer)
         }
     }
 
-    const typeAnswer = (answer: string) => {
-        let currentIndex = 0
+    const typeAnswer = async (answer: string) => {
+        const typingMessage = { text: '', type: 'ai', isTyping: true }
+        setMessages((prev) => [...prev, typingMessage])
 
-        const interval = setInterval(() => {
-            setMessages((prev) => {
-                return prev.map((msg) => {
-                    if (msg.isTyping) {
-                        const updatedText = (msg.text || '') + (answer[currentIndex] || '')
-                        return {
-                            ...msg,
-                            text: updatedText
-                        }
-                    }
-                    return msg
-                })
-            })
+        for (let i = 0; i <= answer.length; i++) {
+            await new Promise((resolve) => setTimeout(resolve, 10))
+            setMessages((prev) =>
+                prev.map((msg, index) =>
+                    index === prev.length - 1 && msg.isTyping ? { ...msg, text: answer.slice(0, i) } : msg
+                )
+            )
+        }
 
-            currentIndex += 1
-
-            if (currentIndex >= answer.length) {
-                clearInterval(interval)
-                setMessages((prev) => prev.map((msg) => (msg.isTyping ? { ...msg, isTyping: false } : msg)))
-            }
-        }, 10)
+        setMessages((prev) =>
+            prev.map((msg, index) => (index === prev.length - 1 && msg.isTyping ? { ...msg, isTyping: false } : msg))
+        )
     }
 
     const handleStatusChange = (newStatus: string) => {

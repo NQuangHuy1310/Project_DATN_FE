@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { HiDotsVertical } from 'react-icons/hi'
 
-import { useGetRoadmap } from '@/app/hooks/instructors'
+import { useDeleteRoadmap, useGetRoadmap } from '@/app/hooks/instructors'
 
 import NoContent from '@/components/shared/NoContent/NoContent'
 import { getImagesUrl } from '@/lib'
@@ -9,11 +9,23 @@ import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 
 import AddRoadmap from '@/views/instructor/Roadmap/AddRoadmap'
+import { IRoadmap } from '@/types/instructor'
+import ConfirmDialog from '@/components/shared/ConfirmDialog'
 
 const Roadmap = () => {
     const { data: roadmapData } = useGetRoadmap()
 
+    const { mutateAsync: deleteRoadmap, isPending } = useDeleteRoadmap()
+
     const [openDialog, setOpenDialog] = useState<boolean>(false)
+    const [confirmDialog, setConfirmDialog] = useState<boolean>(false)
+    const [roadmap, setRoadmap] = useState<IRoadmap | undefined>(undefined)
+    const [roadmapId, setRoadmapId] = useState<number | undefined>(undefined)
+
+    const handleDelete = async () => {
+        if (!roadmapId) return
+        await deleteRoadmap(roadmapId)
+    }
 
     return (
         <>
@@ -75,8 +87,22 @@ const Roadmap = () => {
                                                 </Button>
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent side="bottom" align="end">
-                                                <DropdownMenuItem>Chỉnh sửa nội dung</DropdownMenuItem>
-                                                <DropdownMenuItem>Xoá lộ trình</DropdownMenuItem>
+                                                <DropdownMenuItem
+                                                    onClick={() => {
+                                                        setOpenDialog(!openDialog)
+                                                        setRoadmap(item)
+                                                    }}
+                                                >
+                                                    Chỉnh sửa lộ trình
+                                                </DropdownMenuItem>
+                                                <DropdownMenuItem
+                                                    onClick={() => {
+                                                        setConfirmDialog(!confirmDialog)
+                                                        setRoadmapId(item.id)
+                                                    }}
+                                                >
+                                                    Xoá lộ trình
+                                                </DropdownMenuItem>
                                             </DropdownMenuContent>
                                         </DropdownMenu>
                                     </div>
@@ -92,7 +118,15 @@ const Roadmap = () => {
                 </div>
             </div>
 
-            <AddRoadmap openDialog={openDialog} setOpenDialog={setOpenDialog} />
+            <AddRoadmap openDialog={openDialog} setOpenDialog={setOpenDialog} roadmap={roadmap} />
+            <ConfirmDialog
+                title="Xoá lộ trình"
+                isPending={isPending}
+                description="Bạn có chắc chắn muốn xoá lộ trình này không?"
+                confirmDialog={confirmDialog}
+                setConfirmDialog={setConfirmDialog}
+                handleDelete={handleDelete}
+            />
         </>
     )
 }

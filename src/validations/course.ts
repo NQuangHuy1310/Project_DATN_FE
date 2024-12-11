@@ -88,7 +88,8 @@ export const codingContentSchema = z.object({
 
 export const roadMapSchema = z.object({
     title: z.string().min(10, MessageErrors.requiredField).max(60),
-    description: z.string().min(10, MessageErrors.requiredField).max(60)
+    sort_description: z.string().min(10, MessageErrors.requiredField).max(60),
+    long_description: z.string().min(10, MessageErrors.requiredField)
 })
 
 export const ratingReplySchema = z.object({

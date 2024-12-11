@@ -21,6 +21,8 @@ import {
     IQuestion,
     IQuestionData,
     IRatingReplyData,
+    IRoadmap,
+    IRoadmapData,
     ITargetCourse,
     IUpdatePositionLessonData,
     IUpdatePositionModuleData
@@ -189,5 +191,19 @@ export const instructorApi = {
     // Giảng viên trả lời bình luận
     ratingReply: async (commentID: number, replyData: IRatingReplyData): Promise<any> => {
         return axiosClient.post(instructorUri.RATING_REPLY(commentID), replyData)
+    },
+
+    // Api roadmap
+    createRoadmap: async (roadmapData: IRoadmapData): Promise<any> => {
+        return axiosClient.post(instructorUri.CREATE_ROADMAP, roadmapData)
+    },
+    updateRoadMap: async (roadmapID: number, roadmapData: IRoadmapData): Promise<any> => {
+        return axiosClient.post(instructorUri.UPDATE_ROADMAP(roadmapID), roadmapData)
+    },
+    deleteRoadMap: async (roadmapID: number): Promise<any> => {
+        return axiosClient.delete(instructorUri.DELETE_ROADMAP(roadmapID))
+    },
+    getRoadmap: async (): Promise<IRoadmap[]> => {
+        return axiosClient.get(instructorUri.GET_ROADMAP)
     }
 }

@@ -213,15 +213,42 @@ export interface IUpdateModulePosition {
     position: number
 }
 
-export interface IUpdatePositionModuleData {
-    modules: IUpdateModulePosition[]
-    _method?: string
+export interface IRoadmap {
+    id: number
+    user_id: number
+    name: string
+    description: string
+    sort_description: string
+    thumbnail: string
+    phases: IPlases[]
+}
+
+export interface IPlases {
+    id: number
+    id_roadmap: number
+    name: string
+    description: string
+    order: number
+    courses: {
+        id: number
+        name: string
+        thumbnail: string
+        pivot: {
+            id_phase: number
+            id_course: number
+        }
+    }[]
 }
 
 // ----------- Request -------------------
 export interface ICreateCourseData {
     name: string
     id_category: string
+}
+
+export interface IUpdatePositionModuleData {
+    modules: IUpdateModulePosition[]
+    _method?: string
 }
 
 export interface ICourseStatusData {
@@ -399,4 +426,12 @@ export interface ICodingContentData {
 
 export interface IRatingReplyData {
     reply: string
+}
+
+export interface IRoadmapData {
+    name: string
+    description: string
+    sort_description: string
+    thumbnail: File | string
+    _method?: string
 }

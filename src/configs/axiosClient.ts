@@ -38,8 +38,8 @@ axiosClient.interceptors.response.use(
 
         if (response.status === ApiStatusCode.Success || ApiStatusCode.Created) {
             if (response.status === ApiStatusCode.Created) {
-                toast.success(ApiMessages.success.created, {
-                    description: message
+                toast.success(message, {
+                    description: ApiMessages.success.created
                 })
             }
 

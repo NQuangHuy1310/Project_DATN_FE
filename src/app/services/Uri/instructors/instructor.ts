@@ -1,4 +1,5 @@
 const INSTRUCTOR_URL = 'teacher/manage/'
+const TEACHER_URL = 'teacher/'
 
 export const instructorUri = {
     // Course
@@ -66,7 +67,11 @@ export const instructorUri = {
         `teacher/history-buy-course/id_user${courseID ? `?id_course=${courseID}` : ''}${startDate ? `&start_date=${startDate}` : ''}${endDate ? `&end_date=${endDate}` : ''}`,
 
     // Giảng viên trả lời bình luận
-    RATING_REPLY: (commentID: number) => `${INSTRUCTOR_URL}rating/${commentID}/reply`
+    RATING_REPLY: (commentID: number) => `${INSTRUCTOR_URL}rating/${commentID}/reply`,
 
     // Api roadmap
+    CREATE_ROADMAP: `${TEACHER_URL}roadmap`,
+    UPDATE_ROADMAP: (roadmapID: number) => `${TEACHER_URL}roadmap/${roadmapID}`,
+    DELETE_ROADMAP: (roadmapID: number) => `${TEACHER_URL}roadmap/${roadmapID}`,
+    GET_ROADMAP: `${TEACHER_URL}roadmap`
 }

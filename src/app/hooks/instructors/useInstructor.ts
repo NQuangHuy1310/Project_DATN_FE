@@ -25,6 +25,8 @@ import {
     IQuestionData,
     IQuiz,
     IRatingReplyData,
+    IRoadmap,
+    IRoadmapData,
     ITargetCourse,
     IUpdatePositionLessonData,
     IUpdatePositionModuleData,
@@ -482,7 +484,48 @@ export const useRatingReply = () => {
         },
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: ['instructorGetRatings'] })
-            toast.success('Trả lời đánh giá thành công! Cảm ơn bạn đã phản hồi.')
+        }
+    })
+}
+
+export const useCreateRoadmap = () => {
+    const queryClient = useQueryClient()
+
+    return useMutation<any, Error, IRoadmapData>({
+        mutationFn: async (roadmapData) => {
+            return instructorApi.createRoadmap(roadmapData)
+        },
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['roadmap'] })
+            toast.success('Tạo lộ trình thành công!')
+        }
+    })
+}
+
+export const useUpdateRoadmap = () => {
+    const queryClient = useQueryClient()
+
+    return useMutation<any, Error, [number, IRoadmapData]>({
+        mutationFn: async ([roadmapID, roadmapData]) => {
+            return instructorApi.updateRoadMap(roadmapID, roadmapData)
+        },
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['roadmap'] })
+            toast.success('Cập nhật lộ trình thành công!')
+        }
+    })
+}
+
+export const useDeleteRoadmap = () => {
+    const queryClient = useQueryClient()
+
+    return useMutation({
+        mutationFn: async (roadmapID: number) => {
+            return instructorApi.deleteRoadMap(roadmapID)
+        },
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['roadmap'] })
+            toast.success('Xoá lộ trình thành công!')
         }
     })
 }
@@ -605,5 +648,13 @@ export const useHistoryBuyCourse = (
         ...options,
         queryKey: ['historyBuyCourse', courseID, start_date, end_date],
         queryFn: () => instructorApi.historyBuyCourse(courseID, start_date, end_date)
+    })
+}
+
+export const useGetRoadmap = (options?: Omit<UseQueryOptions<IRoadmap[]>, 'queryKey' | 'queryFn'>) => {
+    return useQuery({
+        ...options,
+        queryKey: ['roadmap'],
+        queryFn: instructorApi.getRoadmap
     })
 }

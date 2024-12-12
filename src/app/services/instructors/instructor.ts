@@ -207,6 +207,9 @@ export const instructorApi = {
     getRoadmap: async (): Promise<IRoadmap[]> => {
         return axiosClient.get(instructorUri.GET_ROADMAP)
     },
+    getDetailRoadmap: async (roadmapID: number): Promise<IRoadmap> => {
+        return axiosClient.get(instructorUri.GET_DETAIL_ROADMAP(roadmapID))
+    },
     createPhase: async (phaseData: IPlasesData): Promise<any> => {
         return axiosClient.post(instructorUri.CREATE_PHASE, phaseData)
     },
@@ -214,6 +217,6 @@ export const instructorApi = {
         return axiosClient.post(instructorUri.UPDATE_PHASE(phaseID), phaseData)
     },
     deletePhase: async (phaseID: number): Promise<any> => {
-        return axiosClient.post(instructorUri.DELETE_PHASE(phaseID))
+        return axiosClient.delete(instructorUri.DELETE_PHASE(phaseID))
     }
 }

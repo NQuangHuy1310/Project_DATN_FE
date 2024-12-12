@@ -9,7 +9,6 @@ import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 
 import AddRoadmap from '@/views/instructor/Roadmap/AddRoadmap'
-import { IRoadmap } from '@/types/instructor'
 import ConfirmDialog from '@/components/shared/ConfirmDialog'
 import AddPhase from '@/views/instructor/Roadmap/AddPhase'
 import Loading from '@/components/Common/Loading/Loading'
@@ -23,8 +22,7 @@ const Roadmap = () => {
     const [phaseDialog, setPhaseDialog] = useState<boolean>(false)
     const [confirmDialog, setConfirmDialog] = useState<boolean>(false)
     const [openPreview, setOpenPreview] = useState<boolean>(false)
-    const [roadmap, setRoadmap] = useState<IRoadmap | undefined>(undefined)
-    const [roadmapId, setRoadmapId] = useState<number | undefined>(undefined)
+    const [roadmapId, setRoadmapId] = useState<number>(0)
 
     const handleDelete = async () => {
         if (!roadmapId) return
@@ -72,7 +70,6 @@ const Roadmap = () => {
                                                     size="sm"
                                                     onClick={() => {
                                                         setPhaseDialog(!phaseDialog)
-                                                        setRoadmap(item)
                                                     }}
                                                 >
                                                     Thêm giai đoạn
@@ -82,7 +79,7 @@ const Roadmap = () => {
                                                     size="sm"
                                                     onClick={() => {
                                                         setOpenPreview(!openPreview)
-                                                        setRoadmap(item)
+                                                        setRoadmapId(item.id)
                                                     }}
                                                 >
                                                     Xem chi tiết
@@ -110,7 +107,7 @@ const Roadmap = () => {
                                                 <DropdownMenuItem
                                                     onClick={() => {
                                                         setOpenDialog(!openDialog)
-                                                        setRoadmap(item)
+                                                        setRoadmapId(item.id)
                                                     }}
                                                 >
                                                     Chỉnh sửa lộ trình
@@ -138,9 +135,9 @@ const Roadmap = () => {
                 </div>
             </div>
 
-            <AddRoadmap openDialog={openDialog} setOpenDialog={setOpenDialog} roadmap={roadmap} />
-            <AddPhase open={phaseDialog} setOpen={setPhaseDialog} roadmap={roadmap} />
-            <PreviewRoadmap open={openPreview} setOpen={setOpenPreview} roadmap={roadmap} />
+            <AddRoadmap openDialog={openDialog} setOpenDialog={setOpenDialog} roadmapID={roadmapId} />
+            <AddPhase open={phaseDialog} setOpen={setPhaseDialog} roadmapID={roadmapId} />
+            <PreviewRoadmap open={openPreview} setOpen={setOpenPreview} roadmapID={roadmapId} />
             <ConfirmDialog
                 title="Xoá lộ trình"
                 isPending={isPending}

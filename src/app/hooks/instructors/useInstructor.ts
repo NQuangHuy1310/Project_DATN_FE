@@ -699,3 +699,15 @@ export const useGetRoadmap = (options?: Omit<UseQueryOptions<IRoadmap[]>, 'query
         queryFn: instructorApi.getRoadmap
     })
 }
+
+export const useGetDetailRoadmap = (
+    roadmapID: number,
+    options?: Omit<UseQueryOptions<IRoadmap>, 'queryKey' | 'queryFn'>
+) => {
+    return useQuery({
+        ...options,
+        enabled: !!roadmapID,
+        queryKey: ['detailRoadmap', roadmapID],
+        queryFn: () => instructorApi.getDetailRoadmap(roadmapID)
+    })
+}

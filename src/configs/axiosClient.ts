@@ -62,7 +62,7 @@ axiosClient.interceptors.response.use(
 
         if (status === ApiStatusCode.InternalServerError) {
             toast.error(ApiMessages.error.serverError)
-            window.location.href = routes.serverError
+            // window.location.href = routes.serverError
         }
 
         toast.error(error.response.data?.message)

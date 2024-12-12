@@ -24,3 +24,21 @@ export interface ITeacherDetail {
     totalFollower: number
     totalStudent: number
 }
+
+export interface HistoryBuyCourse {
+    current_page: number
+    data: HistoryBuyCourseData[]
+    path: string
+    per_page: number
+    total: number
+}
+
+interface HistoryBuyCourseData {
+    id: number
+    price: string
+    status: string
+    created_at: string
+    student_name: string
+    thumbnail: string
+    course_name: string
+}

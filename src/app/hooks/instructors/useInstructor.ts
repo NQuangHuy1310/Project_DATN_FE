@@ -34,6 +34,7 @@ import {
     RevenueData,
     StudentsCourse
 } from '@/types/instructor'
+import { HistoryBuyCourse } from '@/types'
 
 // Mutation
 export const useCreateCourse = () => {
@@ -639,15 +640,19 @@ export const useGetRatingsCourse = (
 }
 
 export const useHistoryBuyCourse = (
+    teacherId: number,
     courseID?: number,
+    limit?: number,
+    page?: number,
+    perPage?: number,
     start_date?: string,
     end_date?: string,
     options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
 ) => {
-    return useQuery({
+    return useQuery<HistoryBuyCourse>({
         ...options,
-        queryKey: ['historyBuyCourse', courseID, start_date, end_date],
-        queryFn: () => instructorApi.historyBuyCourse(courseID, start_date, end_date)
+        queryKey: ['historyBuyCourse', teacherId, courseID, limit, page, perPage, start_date, end_date],
+        queryFn: () => instructorApi.historyBuyCourse(teacherId, courseID, limit, page, perPage, start_date, end_date)
     })
 }
 

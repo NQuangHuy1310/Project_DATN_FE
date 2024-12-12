@@ -3,7 +3,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { ChangeEvent, Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { useCreateRoadmap, useUpdateRoadmap } from '@/app/hooks/instructors'
+import { useCreateRoadmap, useGetDetailRoadmap, useUpdateRoadmap } from '@/app/hooks/instructors'
 
 import placeholder from '@/assets/placeholder.jpg'
 import { MessageErrors } from '@/constants'
@@ -13,15 +13,15 @@ import { Textarea } from '@/components/ui/textarea'
 import { roadMap, roadMapSchema } from '@/validations'
 import { getImagesUrl, readFileAsDataUrl, validateFileSize } from '@/lib'
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { IRoadmap, IRoadmapData } from '@/types/instructor'
+import { IRoadmapData } from '@/types/instructor'
 
 interface AddRoadmapProps {
     openDialog: boolean
     setOpenDialog: Dispatch<SetStateAction<boolean>>
-    roadmap: IRoadmap | undefined
+    roadmapID: number
 }
 
-const AddRoadmap = ({ openDialog, setOpenDialog, roadmap }: AddRoadmapProps) => {
+const AddRoadmap = ({ openDialog, setOpenDialog, roadmapID }: AddRoadmapProps) => {
     const {
         register,
         handleSubmit,
@@ -34,6 +34,7 @@ const AddRoadmap = ({ openDialog, setOpenDialog, roadmap }: AddRoadmapProps) => 
 
     const { mutateAsync: createRoadmap } = useCreateRoadmap()
     const { mutateAsync: updateRoadmap } = useUpdateRoadmap()
+    const { data: roadmap } = useGetDetailRoadmap(roadmapID)
 
     const [roadmapImageFile, setRoadmapImageFile] = useState<File>()
     const [roadmapImagePath, setRoadmapImagePath] = useState<string | undefined>(placeholder)
@@ -72,9 +73,9 @@ const AddRoadmap = ({ openDialog, setOpenDialog, roadmap }: AddRoadmapProps) => 
             thumbnail: roadmapImageFile!
         }
 
-        if (roadmap) {
+        if (roadmapID) {
             payload._method = 'PUT'
-            await updateRoadmap([roadmap.id, payload])
+            await updateRoadmap([roadmapID, payload])
         } else {
             await createRoadmap(payload)
         }

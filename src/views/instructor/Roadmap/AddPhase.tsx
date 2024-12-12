@@ -2,22 +2,22 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { IRoadmap } from '@/types/instructor'
+import placeholder from '@/assets/placeholder.jpg'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { roadmapPhase, roadmapPhaseSchema } from '@/validations'
-import { useCreatePhase, useGetCoursesApproved } from '@/app/hooks/instructors'
+import { useCreatePhase, useGetCoursesApproved, useGetDetailRoadmap } from '@/app/hooks/instructors'
 import { getImagesUrl } from '@/lib'
 
 interface AddPhaseProps {
     open: boolean
     setOpen: Dispatch<SetStateAction<boolean>>
-    roadmap: IRoadmap | undefined
+    roadmapID: number
 }
 
-const AddPhase = ({ open, setOpen, roadmap }: AddPhaseProps) => {
+const AddPhase = ({ open, setOpen, roadmapID }: AddPhaseProps) => {
     const {
         register,
         handleSubmit,
@@ -28,6 +28,7 @@ const AddPhase = ({ open, setOpen, roadmap }: AddPhaseProps) => {
     })
 
     const { data: courseApproved } = useGetCoursesApproved()
+    const { data: roadmap } = useGetDetailRoadmap(roadmapID)
     const { mutateAsync: createPhase } = useCreatePhase()
 
     const [courseIds, setCourseIds] = useState<number[]>([])
@@ -37,11 +38,11 @@ const AddPhase = ({ open, setOpen, roadmap }: AddPhaseProps) => {
     }
 
     const onSubmit: SubmitHandler<roadmapPhase> = async (data) => {
-        if (roadmap) {
+        if (roadmapID) {
             const payload = {
                 ...data,
-                roadmap_id: roadmap?.id,
-                order: roadmap?.phases.length + 1,
+                roadmap_id: roadmapID,
+                order: (roadmap?.phases?.length ?? 0) + 1,
                 course_ids: courseIds
             }
             await createPhase(payload)
@@ -136,11 +137,15 @@ const AddPhase = ({ open, setOpen, roadmap }: AddPhaseProps) => {
                                                     .map((item) => (
                                                         <div
                                                             key={item.id}
-                                                            className="size-10 cursor-pointer overflow-hidden rounded-full"
+                                                            className="size-12 cursor-pointer overflow-hidden rounded-full border border-grey"
                                                             onClick={() => handleCourseClick(item.id)}
                                                         >
                                                             <img
-                                                                src={getImagesUrl(item.thumbnail)}
+                                                                src={
+                                                                    item.thumbnail
+                                                                        ? getImagesUrl(item.thumbnail)
+                                                                        : placeholder
+                                                                }
                                                                 alt={item.name}
                                                                 className="h-full w-full object-cover"
                                                             />

@@ -234,6 +234,9 @@ export interface IPlases {
         id: number
         name: string
         thumbnail: string
+        description: string
+        price: number
+        price_sale: number
         pivot: {
             id_phase: number
             id_course: number

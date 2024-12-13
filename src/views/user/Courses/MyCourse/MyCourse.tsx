@@ -16,7 +16,6 @@ import {
 import Loading from '@/components/Common/Loading/Loading'
 import { useDebounce } from '@/app/hooks/custom/useDebounce'
 
-
 const MyCourses = () => {
     const navigate = useNavigate()
     const location = useLocation()
@@ -41,7 +40,8 @@ const MyCourses = () => {
         if (filters.search !== undefined) setSearch(filters.search)
     }
 
-    const title = search && myCourseBySearch?.data && myCourseBySearch?.data.length > 0 ? `Kết quả cho "${search}"` : null
+    const title =
+        search && myCourseBySearch?.data && myCourseBySearch?.data.length > 0 ? `Kết quả cho "${search}"` : null
 
     useEffect(() => {
         const queryParams = new URLSearchParams()
@@ -65,14 +65,15 @@ const MyCourses = () => {
 
     const totalPages = Math.ceil((courseBought?.total ?? 0) / (courseBought?.per_page ?? 0))
     const visiblePages = getVisiblePages(totalPages, page, 5)
+
     if (isLoading) return <Loading />
+
     return (
         <div className="flex flex-col gap-7">
-            <FilterBar onFilterChange={handleFilterChange} placeholder="Tìm kiếm khóa học và người hướng dẫn" lever />
-            {search && myCourseBySearch?.data && myCourseBySearch?.data.length > 0 ?
-                <p className='text-lg font-medium text-darkGrey'>{title}</p>
-                : null
-            }
+            <FilterBar onFilterChange={handleFilterChange} placeholder="Tìm kiếm khóa học của bạn" lever />
+            {search && myCourseBySearch?.data && myCourseBySearch?.data.length > 0 ? (
+                <p className="text-lg font-medium text-darkGrey">{title}</p>
+            ) : null}
             <div className="flex flex-wrap gap-10">
                 {courseToShow && courseToShow.length > 0 ? (
                     courseToShow.map((item, index) => <CourseMyBought data={item} key={index} />)

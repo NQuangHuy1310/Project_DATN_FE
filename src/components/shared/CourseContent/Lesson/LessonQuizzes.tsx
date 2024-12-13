@@ -140,14 +140,17 @@ const LessonQuizzes = ({ handleHiddenLesson, moduleId, canEdit }: LessonQuizzesP
                                     Xoá đáp án đã chọn
                                 </Button>
                             )}
-                            <Button
-                                type="button"
-                                className="bg-secondaryGreen hover:bg-secondaryGreen/90"
-                                disabled={isSubmitting}
-                                onClick={() => setSelectMultiple(!selectMultiple)}
-                            >
-                                {selectMultiple ? 'Bỏ' : 'Chọn'} nhiều đáp án
-                            </Button>
+                            {data?.quiz?.questions && (
+                                <Button
+                                    type="button"
+                                    className="bg-secondaryGreen hover:bg-secondaryGreen/90"
+                                    disabled={isSubmitting}
+                                    onClick={() => setSelectMultiple(!selectMultiple)}
+                                >
+                                    {selectMultiple ? 'Bỏ' : 'Chọn'} nhiều đáp án
+                                </Button>
+                            )}
+
                             <Button type="submit" disabled={isSubmitting}>
                                 {data?.quiz ? 'Cập nhật' : 'Tạo mới'}
                             </Button>

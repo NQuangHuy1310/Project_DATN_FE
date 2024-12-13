@@ -28,6 +28,7 @@ import {
     IUpdatePositionLessonData,
     IUpdatePositionModuleData
 } from '@/types/instructor'
+import { HistoryBuyCourse } from '@/types'
 
 export const instructorApi = {
     createCourse: async (courseData: ICreateCourseData): Promise<ICreateCourse> => {
@@ -185,8 +186,18 @@ export const instructorApi = {
     },
 
     // Lịch sử mua khoá học
-    historyBuyCourse: async (courseID?: number, start_date?: string, end_date?: string): Promise<any> => {
-        return axiosClient.get(instructorUri.HISTORY_BUY_COURSE(courseID, start_date, end_date))
+    historyBuyCourse: async (
+        teacherId: number,
+        courseID?: number,
+        limit?: number,
+        page?: number,
+        perPage?: number,
+        start_date?: string,
+        end_date?: string
+    ): Promise<HistoryBuyCourse> => {
+        return axiosClient.get(
+            instructorUri.HISTORY_BUY_COURSE(teacherId, courseID, limit, page, perPage, start_date, end_date)
+        )
     },
 
     // Giảng viên trả lời bình luận

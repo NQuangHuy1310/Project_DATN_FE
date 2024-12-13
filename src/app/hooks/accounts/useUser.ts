@@ -4,6 +4,7 @@ import { useMutation, useQuery, useQueryClient, UseQueryOptions } from '@tanstac
 import { useUserStore } from '@/app/store'
 import { userApis } from '@/app/services/accounts'
 import { IChangePassword, IUpdateProfile, IUserData } from '@/types'
+import { IPosts } from '@/types/post'
 
 export const useGetUserById = (userId: number, options?: Omit<UseQueryOptions<IUserData>, 'queryKey' | 'queryFn'>) => {
     return useQuery({
@@ -36,5 +37,13 @@ export const useChangePassword = () => {
         onSuccess: () => {
             toast.success('Bạn đã thay đổi mật khẩu thành công')
         }
+    })
+}
+
+export const useAdminPost = (options?: Omit<UseQueryOptions<IPosts[]>, 'queryKey' | 'queryFn'>) => {
+    return useQuery({
+        ...options,
+        queryKey: ['admin-post'],
+        queryFn: () => userApis.getAdminPost()
     })
 }

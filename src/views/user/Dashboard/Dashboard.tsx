@@ -1,19 +1,42 @@
+import { useEffect, useState } from 'react'
+
+import { vi } from 'date-fns/locale'
 import routes from '@/configs/routes'
 import Course from '@/components/shared/Course'
 import Loading from '@/components/Common/Loading/Loading'
 import Teacher from '@/components/shared/Teacher'
-import { useCourseFree, useCoursePopulate, useCourseToday } from '@/app/hooks/courses/useCourse'
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
+import PostOutStanding from '@/components/shared/Post/PostOutStanding'
+import { useAdminPost } from '@/app/hooks/accounts/useUser'
 import { useInstructorMonth } from '@/app/hooks/instructors'
 import { useGetFeaturedPosts } from '@/app/hooks/posts'
-import PostOutStanding from '@/components/shared/Post/PostOutStanding'
+import { formatDistanceToNow } from 'date-fns'
+import { Dialog, DialogContent } from '@/components/ui/dialog'
+import { useCourseFree, useCoursePopulate, useCourseToday } from '@/app/hooks/courses/useCourse'
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
+
+import { FaCheckCircle } from 'react-icons/fa'
 
 const Dashboard = () => {
+    const [showAdminPost, setShowAdminPost] = useState(false)
+
     const { data: coursePopulate, isLoading } = useCoursePopulate()
     const { data: instructorMonth } = useInstructorMonth()
     const { data: courseFree } = useCourseFree()
     const { data: postFeatured } = useGetFeaturedPosts()
     const { data: courseToday } = useCourseToday()
+    const { data: adminPost } = useAdminPost()
+
+    const formatTime = (date: any) => {
+        return formatDistanceToNow(new Date(date), { addSuffix: true, locale: vi })
+    }
+
+    useEffect(() => {
+        const hasSeenAdminPost = localStorage.getItem('hasSeenAdminPost')
+        if (!hasSeenAdminPost && adminPost && adminPost.length > 0) {
+            setShowAdminPost(true)
+            localStorage.setItem('hasSeenAdminPost', 'true')
+        }
+    }, [adminPost])
 
     if (isLoading) return <Loading />
 
@@ -183,6 +206,32 @@ const Dashboard = () => {
                     </Carousel>
                 </div>
             )}
+            <Dialog open={showAdminPost} onOpenChange={(isOpen) => setShowAdminPost(isOpen)}>
+                <DialogContent className="flex max-h-[80vh] max-w-5xl flex-col gap-6 overflow-auto p-8">
+                    {adminPost &&
+                        adminPost.length > 0 &&
+                        adminPost.map((item, index) => (
+                            <div
+                                key={index}
+                                className={`flex flex-col gap-2 ${adminPost.length > 1 ? 'border-b pb-2' : ''}`}
+                            >
+                                <h2 className="flex items-center gap-2 text-lg font-semibold">
+                                    <span className="text-primary">#</span>
+                                    {item.title}
+                                </h2>
+                                <div dangerouslySetInnerHTML={{ __html: item?.content || '' }} />
+                                <p className="text-darkGrey">
+                                    Đăng bởi{' '}
+                                    <span className="text- inline-block font-semibold italic text-primary">
+                                        {item.user.name}
+                                        <FaCheckCircle className="ms-2 inline size-3 text-primary" />
+                                    </span>{' '}
+                                    - {formatTime(item.created_at)}
+                                </p>
+                            </div>
+                        ))}
+                </DialogContent>
+            </Dialog>
         </div>
     )
 }

@@ -58,5 +58,8 @@ export const userApis = {
     },
     getVoucherUser: async (slug: string): Promise<IVoucherDiscount> => {
         return axiosClient.get(userUri.VOUCHER_USER(slug))
+    },
+    getAdminPost: async (): Promise<any> => {
+        return axiosClient.get(userUri.ADMIN_POST)
     }
 }

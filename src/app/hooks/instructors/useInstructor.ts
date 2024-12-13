@@ -539,6 +539,7 @@ export const useCreatePhase = () => {
         },
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: ['roadmap'] })
+            await queryClient.invalidateQueries({ queryKey: ['detailRoadmap'] })
         }
     })
 }
@@ -551,7 +552,7 @@ export const useUpdatePhase = () => {
             return instructorApi.updatePhase(phaseID, roadmapData)
         },
         onSuccess: async () => {
-            await queryClient.invalidateQueries({ queryKey: ['roadmap'] })
+            await queryClient.invalidateQueries({ queryKey: ['detailRoadmap'] })
             toast.success('Cập nhật giai đoạn thành công!')
         }
     })
@@ -565,7 +566,7 @@ export const useDeletePhase = () => {
             return instructorApi.deletePhase(phaseID)
         },
         onSuccess: async () => {
-            await queryClient.invalidateQueries({ queryKey: ['roadmap'] })
+            await queryClient.invalidateQueries({ queryKey: ['detailRoadmap'] })
             toast.success('Xoá giai đoạn thành công!')
         }
     })

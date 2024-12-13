@@ -19,9 +19,10 @@ interface AddRoadmapProps {
     openDialog: boolean
     setOpenDialog: Dispatch<SetStateAction<boolean>>
     roadmapID: number
+    setRoadmapId: Dispatch<SetStateAction<number>>
 }
 
-const AddRoadmap = ({ openDialog, setOpenDialog, roadmapID }: AddRoadmapProps) => {
+const AddRoadmap = ({ openDialog, setOpenDialog, roadmapID, setRoadmapId }: AddRoadmapProps) => {
     const {
         register,
         handleSubmit,
@@ -34,7 +35,7 @@ const AddRoadmap = ({ openDialog, setOpenDialog, roadmapID }: AddRoadmapProps) =
 
     const { mutateAsync: createRoadmap } = useCreateRoadmap()
     const { mutateAsync: updateRoadmap } = useUpdateRoadmap()
-    const { data: roadmap } = useGetDetailRoadmap(roadmapID)
+    const { data: roadmap, refetch } = useGetDetailRoadmap(roadmapID)
 
     const [roadmapImageFile, setRoadmapImageFile] = useState<File>()
     const [roadmapImagePath, setRoadmapImagePath] = useState<string | undefined>(placeholder)
@@ -60,6 +61,14 @@ const AddRoadmap = ({ openDialog, setOpenDialog, roadmapID }: AddRoadmapProps) =
         }
     }
 
+    const handleClose = () => {
+        setOpenDialog(false)
+        reset()
+        setRoadmapImageFile(undefined)
+        setRoadmapImagePath(placeholder)
+        setRoadmapId(0)
+    }
+
     const onSubmit: SubmitHandler<roadMap> = async (formData) => {
         if (!roadmapImageFile && !roadmapImagePath) {
             toast.warning('Bạn cần tải lên hình ảnh cho lộ trình học tập.', {
@@ -70,10 +79,10 @@ const AddRoadmap = ({ openDialog, setOpenDialog, roadmapID }: AddRoadmapProps) =
 
         const payload: IRoadmapData = {
             ...formData,
-            thumbnail: roadmapImageFile!
+            thumbnail: roadmapImageFile ?? ''
         }
 
-        if (roadmapID) {
+        if (roadmapID && roadmap) {
             payload._method = 'PUT'
             await updateRoadmap([roadmapID, payload])
         } else {
@@ -82,29 +91,22 @@ const AddRoadmap = ({ openDialog, setOpenDialog, roadmapID }: AddRoadmapProps) =
         setOpenDialog(false)
         setRoadmapImageFile(undefined)
         setRoadmapImagePath(placeholder)
+        setRoadmapId(0)
         reset()
     }
 
     useEffect(() => {
-        if (roadmap) {
-            const roadmapImagePath = getImagesUrl(roadmap.thumbnail)
+        if (roadmap && roadmapID) {
+            const roadmapImagePath = roadmap.thumbnail ? getImagesUrl(roadmap.thumbnail) : placeholder
             setValue('name', roadmap.name)
             setValue('sort_description', roadmap.sort_description)
             setValue('description', roadmap.description)
             setRoadmapImagePath(roadmapImagePath)
         }
-    }, [roadmap, setValue])
-
-    useEffect(() => {
-        return () => {
-            reset()
-            setRoadmapImageFile(undefined)
-            setRoadmapImagePath(placeholder)
-        }
-    }, [reset, openDialog])
+    }, [roadmap, setValue, refetch, roadmapID])
 
     return (
-        <Dialog open={openDialog} onOpenChange={setOpenDialog}>
+        <Dialog open={openDialog} onOpenChange={handleClose}>
             <DialogContent className="max-w-screen-lg" aria-describedby={undefined}>
                 <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
                     <DialogHeader>
@@ -191,12 +193,7 @@ const AddRoadmap = ({ openDialog, setOpenDialog, roadmapID }: AddRoadmapProps) =
                             Tạo khoá học
                         </Button>
                         <div className="flex items-center gap-4">
-                            <Button
-                                type="button"
-                                onClick={() => setOpenDialog(false)}
-                                variant="destructive"
-                                disabled={isSubmitting}
-                            >
+                            <Button type="button" onClick={handleClose} variant="destructive" disabled={isSubmitting}>
                                 Huỷ
                             </Button>
                             <Button type="submit" disabled={isSubmitting}>

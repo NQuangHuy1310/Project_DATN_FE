@@ -8,26 +8,32 @@ import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { roadmapPhase, roadmapPhaseSchema } from '@/validations'
-import { useCreatePhase, useGetCoursesApproved, useGetDetailRoadmap } from '@/app/hooks/instructors'
+import { useCreatePhase, useGetCoursesApproved, useGetDetailRoadmap, useUpdatePhase } from '@/app/hooks/instructors'
 import { getImagesUrl } from '@/lib'
+import { IPlases, IPlasesData } from '@/types/instructor'
 
 interface AddPhaseProps {
     open: boolean
     setOpen: Dispatch<SetStateAction<boolean>>
     roadmapID: number
+    setRoadmapId: Dispatch<SetStateAction<number>>
+    phaseData?: IPlases
 }
 
-const AddPhase = ({ open, setOpen, roadmapID }: AddPhaseProps) => {
+const AddPhase = ({ open, setOpen, roadmapID, phaseData, setRoadmapId }: AddPhaseProps) => {
     const {
         register,
         handleSubmit,
         reset,
+        setValue,
         formState: { isSubmitting, errors }
     } = useForm<roadmapPhase>({
         resolver: zodResolver(roadmapPhaseSchema)
     })
 
     const { data: courseApproved } = useGetCoursesApproved()
+    const { mutateAsync: updatePhase } = useUpdatePhase()
+
     const { data: roadmap } = useGetDetailRoadmap(roadmapID)
     const { mutateAsync: createPhase } = useCreatePhase()
 
@@ -38,26 +44,35 @@ const AddPhase = ({ open, setOpen, roadmapID }: AddPhaseProps) => {
     }
 
     const onSubmit: SubmitHandler<roadmapPhase> = async (data) => {
-        if (roadmapID) {
-            const payload = {
-                ...data,
-                roadmap_id: roadmapID,
-                order: (roadmap?.phases?.length ?? 0) + 1,
-                course_ids: courseIds
-            }
-            await createPhase(payload)
-            setOpen(false)
-            reset()
-            setCourseIds([])
+        const payload: IPlasesData = {
+            ...data,
+            roadmap_id: roadmapID ?? 0,
+            order: (roadmap?.phases?.length ?? 0) + 1,
+            course_ids: courseIds
         }
+        if (roadmapID && !phaseData) {
+            await createPhase(payload)
+        } else if (phaseData) {
+            payload._method = 'PUT'
+            await updatePhase([phaseData.id, payload])
+        }
+        reset()
+        setCourseIds([])
+        setOpen(false)
+        setRoadmapId(0)
     }
 
     useEffect(() => {
-        return () => {
-            reset()
-            setCourseIds([])
+        if (phaseData) {
+            setValue('name', phaseData.name)
+            setValue('description', phaseData.description)
+            const ids: number[] = phaseData.courses.reduce((accumulator: number[], course: any) => {
+                accumulator.push(course.id)
+                return accumulator
+            }, [])
+            setCourseIds(ids)
         }
-    }, [reset, open])
+    }, [phaseData, setValue, reset])
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
@@ -65,7 +80,8 @@ const AddPhase = ({ open, setOpen, roadmapID }: AddPhaseProps) => {
                 <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
                     <DialogHeader>
                         <DialogTitle>
-                            Thêm giai đoạn cho lộ trình <span className="text-secondaryGreen">{roadmap?.name}</span>
+                            {phaseData ? 'Chỉnh sửa' : ' Thêm '} giai đoạn cho lộ trình{' '}
+                            <span className="text-secondaryGreen">{roadmap?.name}</span>
                         </DialogTitle>
                     </DialogHeader>
                     <div className="flex flex-col gap-4">
@@ -173,7 +189,7 @@ const AddPhase = ({ open, setOpen, roadmapID }: AddPhaseProps) => {
                                 Huỷ
                             </Button>
                             <Button type="submit" disabled={isSubmitting}>
-                                Thêm mới giai đoạn
+                                {phaseData ? 'Lưu thông tin' : ' Thêm mới'} giai đoạn
                             </Button>
                         </div>
                     </DialogFooter>

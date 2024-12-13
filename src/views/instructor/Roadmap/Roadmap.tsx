@@ -1,13 +1,16 @@
+import { toast } from 'sonner'
 import { useState } from 'react'
 import { HiDotsVertical } from 'react-icons/hi'
 
+import { IRoadmap } from '@/types/instructor'
 import { useDeleteRoadmap, useGetRoadmap } from '@/app/hooks/instructors'
 
-import NoContent from '@/components/shared/NoContent/NoContent'
 import { getImagesUrl } from '@/lib'
 import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 
+import placeholderImage from '@/assets/placeholder.jpg'
+import NoContent from '@/components/shared/NoContent/NoContent'
 import AddRoadmap from '@/views/instructor/Roadmap/AddRoadmap'
 import ConfirmDialog from '@/components/shared/ConfirmDialog'
 import AddPhase from '@/views/instructor/Roadmap/AddPhase'
@@ -27,6 +30,20 @@ const Roadmap = () => {
     const handleDelete = async () => {
         if (!roadmapId) return
         await deleteRoadmap(roadmapId)
+        setRoadmapId(0)
+    }
+
+    const handlePreview = (item: IRoadmap) => {
+        if (item.phases.length === 0) {
+            toast.warning('Lộ trình này hiện tại chưa có giai đoạn nào.', {
+                description: 'Hãy thêm giai đoạn để bắt đầu!'
+            })
+            setRoadmapId(item.id)
+            setPhaseDialog(true)
+        } else {
+            setOpenPreview(!openPreview)
+            setRoadmapId(item.id)
+        }
     }
 
     if (isLoading) return <Loading />
@@ -78,8 +95,7 @@ const Roadmap = () => {
                                                     className="bg-secondaryGreen hover:bg-secondaryGreen/90"
                                                     size="sm"
                                                     onClick={() => {
-                                                        setOpenPreview(!openPreview)
-                                                        setRoadmapId(item.id)
+                                                        handlePreview(item)
                                                     }}
                                                 >
                                                     Xem chi tiết
@@ -91,7 +107,7 @@ const Roadmap = () => {
                                     <div className="flex h-full flex-col items-end justify-between">
                                         <div className="h-[100px] w-[100px] overflow-hidden rounded-full border-[4px] border-primary">
                                             <img
-                                                src={getImagesUrl(item.thumbnail)}
+                                                src={item.thumbnail ? getImagesUrl(item.thumbnail) : placeholderImage}
                                                 alt={item.name}
                                                 className="h-full w-full object-cover"
                                                 loading="lazy"
@@ -135,8 +151,13 @@ const Roadmap = () => {
                 </div>
             </div>
 
-            <AddRoadmap openDialog={openDialog} setOpenDialog={setOpenDialog} roadmapID={roadmapId} />
-            <AddPhase open={phaseDialog} setOpen={setPhaseDialog} roadmapID={roadmapId} />
+            <AddRoadmap
+                openDialog={openDialog}
+                setOpenDialog={setOpenDialog}
+                roadmapID={roadmapId}
+                setRoadmapId={setRoadmapId}
+            />
+            <AddPhase open={phaseDialog} setOpen={setPhaseDialog} roadmapID={roadmapId} setRoadmapId={setRoadmapId} />
             <PreviewRoadmap open={openPreview} setOpen={setOpenPreview} roadmapID={roadmapId} />
             <ConfirmDialog
                 title="Xoá lộ trình"

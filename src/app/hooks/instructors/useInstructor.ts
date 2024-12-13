@@ -688,7 +688,7 @@ export const useHistoryBuyCourse = (
     perPage?: number,
     start_date?: string,
     end_date?: string,
-    options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
+    options?: Omit<UseQueryOptions<HistoryBuyCourse>, 'queryKey' | 'queryFn'>
 ) => {
     return useQuery<HistoryBuyCourse>({
         ...options,

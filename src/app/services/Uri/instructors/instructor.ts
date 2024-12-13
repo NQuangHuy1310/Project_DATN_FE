@@ -1,6 +1,16 @@
 const INSTRUCTOR_URL = 'teacher/manage/'
 const TEACHER_URL = 'teacher/'
 
+const createQueryParams = (params: Record<string, any>): string => {
+    const query: string[] = []
+    for (const [key, value] of Object.entries(params)) {
+        if (value !== undefined) {
+            query.push(`${key}=${encodeURIComponent(value)}`)
+        }
+    }
+    return query.length ? `?${query.join('&')}` : ''
+}
+
 export const instructorUri = {
     // Course
     CREATE_COURSE: 'teacher/course',
@@ -63,8 +73,25 @@ export const instructorUri = {
         `${INSTRUCTOR_URL}statistic/get-ratings${courseID ? `?course=${courseID}` : ''}?page=${page}${perPage ? `&perPage=${perPage}` : ''}&limit=${limit}`,
 
     // Api lịch sử mua khoá học
-    HISTORY_BUY_COURSE: (teacherId: number, courseID?: number, limit?: number, page?: number, perPage?: number, startDate?: string, endDate?: string) =>
-        `teacher/history-buy-course/${teacherId}/${courseID ? `?id_course=${courseID}` : ''}?page=${page}${perPage ? `&perPage=${perPage}` : ''}&limit=${limit}${startDate ? `&start_date=${startDate}` : ''}${endDate ? `&end_date=${endDate}` : ''}`,
+    HISTORY_BUY_COURSE: (
+        teacherId: number,
+        courseID?: number,
+        limit?: number,
+        page?: number,
+        perPage?: number,
+        startDate?: string,
+        endDate?: string
+    ): string => {
+        const queryString = createQueryParams({
+            id_course: courseID,
+            page,
+            perPage,
+            limit,
+            start_date: startDate,
+            end_date: endDate
+        })
+        return `teacher/history-buy-course/${teacherId}${queryString}`
+    },
 
     // Giảng viên trả lời bình luận
     RATING_REPLY: (commentID: number) => `${INSTRUCTOR_URL}rating/${commentID}/reply`,

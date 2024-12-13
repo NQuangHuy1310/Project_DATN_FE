@@ -205,7 +205,10 @@ const CourseDetail = () => {
                                 <div className="flex items-center gap-1">
                                     <IoIosStar className="size-5 text-primary" />
                                     <span>
-                                        {courseDetail?.ratings_avg_rate ?? 0} ({courseDetail?.ratings_count} đánh giá)
+                                        {Number(courseDetail?.ratings_avg_rate) % 1 === 0
+                                            ? Math.floor(Number(courseDetail?.ratings_avg_rate))
+                                            : Number(courseDetail?.ratings_avg_rate).toFixed(1)}
+                                         ({courseDetail?.ratings_count} đánh giá)
                                     </span>
                                 </div>
 
@@ -302,10 +305,10 @@ const CourseDetail = () => {
                                             <div className="flex h-2 w-full items-center overflow-hidden rounded bg-darkGrey/20">
                                                 <span
                                                     className={`block h-full ${courseDetail?.level === 'Sơ cấp'
-                                                            ? 'bg-secondaryYellow'
-                                                            : courseDetail?.level === 'Trung cấp'
-                                                                ? 'bg-secondaryGreen'
-                                                                : 'bg-secondaryRed'
+                                                        ? 'bg-secondaryYellow'
+                                                        : courseDetail?.level === 'Trung cấp'
+                                                            ? 'bg-secondaryGreen'
+                                                            : 'bg-secondaryRed'
                                                         }`}
                                                     style={{ width: `${courseDetail?.progress_percent}%` }}
                                                 ></span>
@@ -527,10 +530,10 @@ const CourseDetail = () => {
                                                 <div className="flex h-2 w-full items-center overflow-hidden rounded bg-darkGrey/20">
                                                     <span
                                                         className={`block h-full ${courseDetail?.level === 'Sơ cấp'
-                                                                ? 'bg-secondaryYellow'
-                                                                : courseDetail?.level === 'Trung cấp'
-                                                                    ? 'bg-secondaryGreen'
-                                                                    : 'bg-secondaryRed'
+                                                            ? 'bg-secondaryYellow'
+                                                            : courseDetail?.level === 'Trung cấp'
+                                                                ? 'bg-secondaryGreen'
+                                                                : 'bg-secondaryRed'
                                                             }`}
                                                         style={{ width: `${courseDetail?.progress_percent}%` }}
                                                     ></span>

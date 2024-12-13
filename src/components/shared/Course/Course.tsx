@@ -13,7 +13,7 @@ import { formatDuration, getImagesUrl } from '@/lib'
 import routes from '@/configs/routes'
 import { TbCoinFilled } from 'react-icons/tb'
 
-const Course = ({ data, progressLesson }: { data: ICourse; progressLesson?: number; page?: string }) => {
+const Course = ({ data, progressLesson, page }: { data: ICourse; progressLesson?: number; page?: string }) => {
     const navigate = useNavigate()
     const totalTime = formatDuration((data?.total_duration_video as unknown as number) || 0)
     const stars = [...Array(5)].map((_, index) => {
@@ -25,7 +25,7 @@ const Course = ({ data, progressLesson }: { data: ICourse; progressLesson?: numb
     return (
         <div className="card flex w-full cursor-text flex-col gap-3 shadow-md hover:shadow-[0px_40px_100px_0px_#0000000d] hover:transition-all md:w-[360px]">
             <Link
-                to={routes.courseDetail.replace(':slug', data.slug)}
+                to={page == routes.courseDetailNoLogin ? `/course/${data.slug}` : `/courses/${data.slug}`}
                 className="flex flex-col gap-2"
             >
                 <div className="relative h-[160px] flex-shrink-0 cursor-pointer">

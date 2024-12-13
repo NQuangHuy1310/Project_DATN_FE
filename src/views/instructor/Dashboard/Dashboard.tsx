@@ -48,12 +48,13 @@ const Dashboard = () => {
 
     const queryParams = new URLSearchParams(location.search)
     const initialPage = parseInt(queryParams.get('page') || '1', 5)
+    const initialSearchValue = queryParams.get('query') || ''
 
     const [page, setPage] = useState(initialPage)
     const [openDialog, setOpenDialog] = useState(false)
     const [selectedCategory, setSelectedCategory] = useState<string | undefined>()
     const [sort, setSort] = useState<string>('latest')
-    const [searchValue, setSearchValue] = useState<string>('')
+    const [searchValue, setSearchValue] = useState<string>(initialSearchValue)
 
     const debouncedSearchValue = useDebounce(searchValue, 500)
 
@@ -94,6 +95,16 @@ const Dashboard = () => {
             navigate(location.pathname, { replace: true })
         }
     }, [page, navigate, location.pathname])
+
+    useEffect(() => {
+        const params = new URLSearchParams(location.search)
+        if (debouncedSearchValue) {
+            params.set('query', debouncedSearchValue)
+        } else {
+            params.delete('query')
+        }
+        navigate(`${location.pathname}?${params.toString()}`, { replace: true })
+    }, [debouncedSearchValue, location.pathname, location.search, navigate])
 
     return (
         <>

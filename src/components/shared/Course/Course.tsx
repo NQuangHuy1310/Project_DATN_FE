@@ -41,7 +41,6 @@ const Course = ({ data, progressLesson, page }: { data: ICourse; progressLesson?
                 <h3 className="text-overflow cursor-pointer text-base font-bold text-black md:text-lg">{data.name}</h3>
             </Link>
             <div className="flex flex-col gap-2.5">
-
                 <div>
                     {data?.price > 0 || data?.price_sale > 0 ? (
                         <div className="flex items-center gap-3">
@@ -63,7 +62,9 @@ const Course = ({ data, progressLesson, page }: { data: ICourse; progressLesson?
                             {data?.price_sale > 0 && (
                                 <div className="flex items-center gap-1">
                                     <TbCoinFilled className="size-5 text-yellow-500" />
-                                    <p className="text-base font-semibold text-red-600">{Math.floor(data?.price_sale)}</p>
+                                    <p className="text-base font-semibold text-red-600">
+                                        {Math.floor(data?.price_sale)}
+                                    </p>
                                 </div>
                             )}
                         </div>

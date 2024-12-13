@@ -101,7 +101,9 @@ const PurchaseHistory = () => {
 
     const totalPages = Math.ceil((historyBuyCourseData?.total ?? 0) / (historyBuyCourseData?.per_page ?? 0))
     const visiblePages = getVisiblePages(totalPages, page, 5)
+
     if (isLoading) return <Loading />
+
     return (
         <div>
             <div className="flex flex-col gap-8">

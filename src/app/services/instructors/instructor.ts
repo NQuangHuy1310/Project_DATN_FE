@@ -175,8 +175,8 @@ export const instructorApi = {
     },
 
     // Statistic
-    instructorStatistic: async (): Promise<any> => {
-        return axiosClient.get(instructorUri.STATISTIC)
+    instructorStatistic: async (time?: string): Promise<any> => {
+        return axiosClient.get(instructorUri.STATISTIC(time))
     },
     getStudentsCourse: async (courseID?: number, limit?: number, page?: number, perPage?: number): Promise<any> => {
         return axiosClient.get(instructorUri.GET_STUDENTS(courseID, limit, page, perPage))

@@ -645,11 +645,11 @@ export const useGetLessonQuiz = (id: number, options?: Omit<UseQueryOptions<IQui
     })
 }
 
-export const useStatistic = (options?: Omit<UseQueryOptions<RevenueData>, 'queryKey' | 'queryFn'>) => {
+export const useStatistic = (time?: string, options?: Omit<UseQueryOptions<RevenueData>, 'queryKey' | 'queryFn'>) => {
     return useQuery({
         ...options,
-        queryKey: ['instructorStatistic'],
-        queryFn: instructorApi.instructorStatistic
+        queryKey: ['instructorStatistic', time],
+        queryFn: () => instructorApi.instructorStatistic(time)
     })
 }
 
@@ -684,16 +684,16 @@ export const useGetRatingsCourse = (
 export const useHistoryBuyCourse = (
     teacherId: number,
     courseID?: number,
-    limit?: number,
+    limit: number = 6,
     page?: number,
-    perPage?: number,
+    perPage: number = 6,
     start_date?: string,
     end_date?: string,
     options?: Omit<UseQueryOptions<HistoryBuyCourse>, 'queryKey' | 'queryFn'>
 ) => {
     return useQuery<HistoryBuyCourse>({
         ...options,
-        queryKey: ['historyBuyCourse', teacherId, courseID, limit, page, perPage, start_date, end_date],
+        queryKey: ['historyBuyCourse', courseID, limit, page, perPage, start_date, end_date],
         queryFn: () => instructorApi.historyBuyCourse(teacherId, courseID, limit, page, perPage, start_date, end_date)
     })
 }

@@ -65,7 +65,7 @@ export const instructorUri = {
     DELETE_QUESTION: (questionID: number) => `${INSTRUCTOR_URL}lesson/quiz/${questionID}/delete-question-and-option`,
 
     // Statistic
-    STATISTIC: `${INSTRUCTOR_URL}statistic`,
+    STATISTIC: (time: string = 'all') => `${INSTRUCTOR_URL}statistic?time=${time}`,
     GET_STUDENTS: (courseID?: number, limit?: number, page?: number, perPage?: number) =>
         `${INSTRUCTOR_URL}statistic/get-students${courseID ? `?course=${courseID}` : ''}?page=${page}${perPage ? `&perPage=${perPage}` : ''}&limit=${limit}`,
 

@@ -1,18 +1,19 @@
 import { IoIosStar } from 'react-icons/io'
 import { MdListAlt } from 'react-icons/md'
+import { FaUserFriends } from 'react-icons/fa'
+import { RiUserFollowFill } from 'react-icons/ri'
 
+import Course from '@/components/shared/Course'
+import Roadmap from '@/components/shared/Roadmap/Roadmap'
+import Loading from '@/components/Common/Loading/Loading'
+import NoContent from '@/components/shared/NoContent/NoContent'
 import { Button } from '@/components/ui/button'
+import { getImagesUrl } from '@/lib'
 import useGetUserProfile from '@/app/hooks/accounts/useGetUser'
 import { TeacherStatus } from '@/constants/constants'
 import { useGetIdParams } from '@/app/hooks/common/useCustomParams'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { useInstructorById } from '@/app/hooks/instructors/useInstructorClient'
-import { FaUserFriends } from 'react-icons/fa'
-import { getImagesUrl } from '@/lib'
-import { RiUserFollowFill } from 'react-icons/ri'
-import Loading from '@/components/Common/Loading/Loading'
-import NoContent from '@/components/shared/NoContent/NoContent'
-import Course from '@/components/shared/Course'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { useCheckFollowTeacher, useFollowTeacher, useUnFollowTeacher } from '@/app/hooks/accounts/useFlowTeacher'
 
 const InstructorDetail = () => {
@@ -37,6 +38,7 @@ const InstructorDetail = () => {
     if (isLoading) return <Loading />
 
     if (!data) return <NoContent />
+
     return (
         <div className="flex flex-col gap-5">
             <div className="card flex flex-col-reverse gap-7 md:flex-col">
@@ -109,6 +111,14 @@ const InstructorDetail = () => {
                     <NoContent />
                 )}
             </div>
+            {data.roadmaps && data.roadmaps.length > 0 && (
+                <div className="flex flex-col gap-4">
+                    <h2 className="text-2xl font-semibold">Lộ trình học tập</h2>
+                    <div className="flex flex-wrap justify-center gap-5 md:justify-start">
+                        {data.roadmaps && data.roadmaps.map((item, index) => <Roadmap key={index} data={item} />)}
+                    </div>
+                </div>
+            )}
         </div>
     )
 }

@@ -26,6 +26,15 @@ const Dashboard = ({ children, title }: { children: React.ReactNode; title: stri
         }
     }, [isSidebarOpen])
 
+    useEffect(() => {
+        document.title = title
+
+        // cleanup
+        return () => {
+            document.title = 'Coursea'
+        }
+    }, [title])
+
     return (
         <div className="flex">
             <UserSidebar isOpen={isSidebarOpen} isSidebar={sidebar} handleSidebar={handleSidebar} />

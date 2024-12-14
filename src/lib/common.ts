@@ -25,6 +25,10 @@ export const removeAccessToken = (): void => {
     localStorage.removeItem('access_token')
 }
 
+export const removeAdminPost = (): void => {
+    localStorage.removeItem('hasSeenAdminPost')
+}
+
 export const removeQuestion = (): void => {
     localStorage.removeItem('selectedOptions')
     localStorage.removeItem('currentQuestion')

@@ -14,7 +14,7 @@ import {
     IVerifyOtpData
 } from '@/types'
 import { useUserStore } from '@/app/store'
-import { removeAccessToken, setAccessToken } from '@/lib'
+import { removeAccessToken, removeAdminPost, setAccessToken } from '@/lib'
 
 export const useProfile = (options?: Omit<UseQueryOptions<IUserProfile>, 'queryKey' | 'queryFn'>) => {
     return useQuery<IUserProfile>({
@@ -122,6 +122,7 @@ export const useLogout = () => {
         onSuccess: () => {
             removeAccessToken()
             clearUserAndProfile()
+            removeAdminPost()
             navigate(routes.home)
             toast.success('Đăng xuất thành công! Hẹn gặp lại bạn.')
             queryClient.clear()

@@ -48,6 +48,9 @@ export interface ICourseItem {
     user: IUser
     category: ICourseCategory
     tags: any[]
+    bills_count: number
+    ratings_avg_rate: number
+    ratings_count: number
 }
 
 export interface ICourses {

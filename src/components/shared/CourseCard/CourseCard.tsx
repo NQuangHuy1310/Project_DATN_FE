@@ -12,6 +12,11 @@ import { ICourseItem } from '@/types/instructor'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import ConfirmDialog from '@/components/shared/ConfirmDialog'
 
+interface CourseCardProps {
+    courseItem: ICourseItem
+    isShowInfo?: boolean
+}
+
 const courseStatus = (status: string) => {
     return (
         <strong>
@@ -23,8 +28,21 @@ const courseStatus = (status: string) => {
     )
 }
 
-const CourseCard = ({ name, id, status, thumbnail, submited_at: submittedAt, category, is_active }: ICourseItem) => {
+const CourseCard = ({ courseItem, isShowInfo }: CourseCardProps) => {
     const navigate = useNavigate()
+
+    const {
+        name,
+        id,
+        status,
+        thumbnail,
+        submited_at: submittedAt,
+        category,
+        is_active,
+        total_student,
+        ratings_count,
+        bills_count
+    } = courseItem
 
     const { mutateAsync: deleteCourse, isPending } = useDeleteCourse()
     const { mutateAsync: disableCourse } = useDisableCourse()
@@ -68,13 +86,32 @@ const CourseCard = ({ name, id, status, thumbnail, submited_at: submittedAt, cat
                         <div className="flex w-[300px] flex-shrink-0 flex-col gap-1">
                             <h4 className="text-xl font-semibold">{truncate(name, 25)}</h4>
                             <div className="flex flex-col items-start gap-1">
-                                <p className="text-sm">
-                                    Danh mục: <strong>{category.name}</strong>
-                                </p>
-                                <p className="text-sm">
-                                    Ngày đăng ký: <strong>{formatDate}</strong>
-                                </p>
-                                <p className="text-sm">Trạng thái: {courseStatus(status)}</p>
+                                {isShowInfo ? (
+                                    <>
+                                        <p className="text-sm">
+                                            Danh mục: <strong>{category.name}</strong>
+                                        </p>
+                                        <p className="text-sm">
+                                            Tổng học sinh: <strong>{total_student}</strong>
+                                        </p>
+                                        <p className="text-sm">
+                                            Tổng đánh giá: <strong>{ratings_count}</strong>
+                                        </p>
+                                        <p className="text-sm">
+                                            Tổng số lượt bán: <strong>{bills_count}</strong>
+                                        </p>
+                                    </>
+                                ) : (
+                                    <>
+                                        <p className="text-sm">
+                                            Danh mục: <strong>{category.name}</strong>
+                                        </p>
+                                        <p className="text-sm">
+                                            Ngày đăng ký: <strong>{formatDate}</strong>
+                                        </p>
+                                        <p className="text-sm">Trạng thái: {courseStatus(status)}</p>
+                                    </>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -84,8 +121,10 @@ const CourseCard = ({ name, id, status, thumbnail, submited_at: submittedAt, cat
                             <BsThreeDots className="size-5" />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" sideOffset={5}>
-                            <DropdownMenuItem onClick={redirectToCourse}>Chỉnh sửa khoá học</DropdownMenuItem>
-                            <DropdownMenuItem>Xem trước khoá học</DropdownMenuItem>
+                            {status !== 'approved' && (
+                                <DropdownMenuItem onClick={redirectToCourse}>Chỉnh sửa khoá học</DropdownMenuItem>
+                            )}
+
                             {status === 'approved' ? (
                                 <DropdownMenuItem onClick={handleActiveCourse}>
                                     {is_active === 0 ? 'Hiển thị' : 'Ẩn'} khoá học

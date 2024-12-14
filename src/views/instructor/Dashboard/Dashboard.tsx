@@ -155,7 +155,7 @@ const Dashboard = () => {
                 <div className="flex flex-shrink-0 flex-wrap gap-8">
                     {courseData &&
                         courseData?.data.length > 0 &&
-                        courseData?.data.map((item) => <CourseCard key={item.id} {...item} />)}{' '}
+                        courseData?.data.map((item) => <CourseCard key={item.id} courseItem={item} />)}{' '}
                 </div>
 
                 {courseData?.data.length === 0 && (

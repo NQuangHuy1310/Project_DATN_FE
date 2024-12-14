@@ -114,19 +114,21 @@ const LessonItem = ({ lesson, canEdit }: LessonItemProps) => {
                         )}
                     </div>
                     <div className="flex items-center gap-2">
-                        <Select value={selectedLessonType} onValueChange={handleChangeSelectedLessonType}>
-                            <SelectTrigger className="flex h-[36px] w-[36px] items-center justify-center gap-0 border-none">
-                                <Button size="icon" variant="ghost">
-                                    <FaExchangeAlt className="size-4" />
-                                </Button>
-                            </SelectTrigger>
-                            <SelectContent align="end" className="p-1">
-                                <SelectGroup>
-                                    <SelectItem value="document">Tài liệu</SelectItem>
-                                    <SelectItem value="video">Video bài giảng</SelectItem>
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select>
+                        {content_type !== 'coding' && (
+                            <Select value={selectedLessonType} onValueChange={handleChangeSelectedLessonType}>
+                                <SelectTrigger className="flex h-[36px] w-[36px] items-center justify-center gap-0 border-none">
+                                    <Button size="icon" variant="ghost">
+                                        <FaExchangeAlt className="size-4" />
+                                    </Button>
+                                </SelectTrigger>
+                                <SelectContent align="end" className="p-1">
+                                    <SelectGroup>
+                                        <SelectItem value="document">Tài liệu</SelectItem>
+                                        <SelectItem value="video">Video bài giảng</SelectItem>
+                                    </SelectGroup>
+                                </SelectContent>
+                            </Select>
+                        )}
 
                         <Button
                             size="icon"

@@ -14,6 +14,7 @@ import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import CourseCard from '@/components/shared/CourseCard'
 
 const chartConfig = {
     views: {
@@ -42,12 +43,14 @@ const PerformanceOverview = () => {
 
     const monthlyRevenue = statisticData?.monthly_revenue || {}
 
-    const chartData = Object.entries(monthlyRevenue).map(([month, revenue]) => {
-        return {
-            date: `2024-${month.padStart(2, '0')}-01`,
-            desktop: parseFloat((revenue / 1).toFixed(2))
-        }
-    })
+    const chartData = Object.entries(monthlyRevenue)
+        .sort(([monthA], [monthB]) => parseInt(monthA) - parseInt(monthB))
+        .map(([month, revenue]) => {
+            return {
+                date: `2024-${month.padStart(2, '0')}-01`,
+                desktop: parseFloat((revenue / 1).toFixed(2))
+            }
+        })
 
     const handleChange = (value: string) => {
         setSelectedFilter(value)
@@ -150,13 +153,13 @@ const PerformanceOverview = () => {
                     </div>
                     <div className="space-y-2">
                         <h5 className="text-base font-medium text-foreground">Khóa Học Nổi Bật Của Bạn</h5>
-                        {/* {statisticData && statisticData.top_courses.length > 0 ? (
+                        {statisticData && statisticData.top_courses.length > 0 ? (
                             statisticData.top_courses.map((course) => {
-                                return <div></div>
+                                return <CourseCard courseItem={course} key={course.id} isShowInfo />
                             })
                         ) : (
                             <p className="text-sm text-muted-foreground">Hiện tại không có khóa học nổi bật nào.</p>
-                        )} */}
+                        )}
                     </div>
                 </div>
             ) : (

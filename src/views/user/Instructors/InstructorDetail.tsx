@@ -111,12 +111,14 @@ const InstructorDetail = () => {
                     <NoContent />
                 )}
             </div>
-            <div className="flex flex-col gap-4">
-                <h2 className="text-2xl font-semibold">Lộ trình học tập</h2>
-                <div className="flex flex-wrap justify-center gap-5 md:justify-start">
-                    {data.roadmaps && data.roadmaps.map((item, index) => <Roadmap key={index} data={item} />)}
+            {data.roadmaps && data.roadmaps.length > 0 && (
+                <div className="flex flex-col gap-4">
+                    <h2 className="text-2xl font-semibold">Lộ trình học tập</h2>
+                    <div className="flex flex-wrap justify-center gap-5 md:justify-start">
+                        {data.roadmaps && data.roadmaps.map((item, index) => <Roadmap key={index} data={item} />)}
+                    </div>
                 </div>
-            </div>
+            )}
         </div>
     )
 }

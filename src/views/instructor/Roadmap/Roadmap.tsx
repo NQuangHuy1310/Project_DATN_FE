@@ -87,6 +87,7 @@ const Roadmap = () => {
                                                     size="sm"
                                                     onClick={() => {
                                                         setPhaseDialog(!phaseDialog)
+                                                        setRoadmapId(item.id)
                                                     }}
                                                 >
                                                     Thêm giai đoạn

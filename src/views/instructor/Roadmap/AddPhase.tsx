@@ -1,15 +1,16 @@
+import { toast } from 'sonner'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
-import { zodResolver } from '@hookform/resolvers/zod'
 
 import placeholder from '@/assets/placeholder.jpg'
+import { getImagesUrl } from '@/lib'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { roadmapPhase, roadmapPhaseSchema } from '@/validations'
 import { useCreatePhase, useGetCoursesApproved, useGetDetailRoadmap, useUpdatePhase } from '@/app/hooks/instructors'
-import { getImagesUrl } from '@/lib'
 import { IPlases, IPlasesData } from '@/types/instructor'
 
 interface AddPhaseProps {
@@ -44,6 +45,11 @@ const AddPhase = ({ open, setOpen, roadmapID, phaseData, setRoadmapId }: AddPhas
     }
 
     const onSubmit: SubmitHandler<roadmapPhase> = async (data) => {
+        if (courseIds.length === 0) {
+            toast.warning('Bạn cần chọn ít nhất 1 khóa học cho giai đoạn')
+            return
+        }
+
         const payload: IPlasesData = {
             ...data,
             roadmap_id: roadmapID ?? 0,

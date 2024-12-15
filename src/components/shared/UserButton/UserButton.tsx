@@ -22,6 +22,9 @@ import { MdPostAdd } from 'react-icons/md'
 import { FaRegBookmark, FaRegUser } from 'react-icons/fa'
 import { RiBloggerLine } from 'react-icons/ri'
 import { useLogout } from '@/app/hooks/accounts'
+import { useUserStore } from '@/app/store'
+import { useEffect } from 'react'
+import echo from '@/configs/echo'
 
 const UserButton = () => {
     const location = useLocation()
@@ -29,6 +32,30 @@ const UserButton = () => {
     const { user } = useGetUserProfile()
 
     const { mutateAsync } = useLogout()
+
+    const users = useUserStore((state) => state.user)
+    const setUser = useUserStore((state) => state.setUser)
+
+    useEffect(() => {
+        if (!users?.id) return
+        const channel = echo.private(`App.Models.User.${users.id}`)
+
+        channel.notification(async (data: any) => {
+            if (data.user_type == 'register_teacher') {
+                if (data.status == true) {
+                    setUser({
+                        ...users,
+                        status: 'approved',
+                        user_type: 'teacher'
+                    })
+                }
+            }
+        })
+
+        return () => {
+            echo.leaveChannel(`App.Models.User.${users?.id}`)
+        }
+    }, [])
 
     const handleLogout = async () => {
         removeQuestion()

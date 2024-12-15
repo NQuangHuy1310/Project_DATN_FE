@@ -27,6 +27,7 @@ import {
     PaginationPrevious
 } from '@/components/ui/pagination'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { toast } from 'sonner'
 
 const PurchaseHistory = () => {
     const navigate = useNavigate()
@@ -41,13 +42,7 @@ const PurchaseHistory = () => {
     const [tempDateStart, setTempDateStart] = useState<string>('')
 
     const { data: courseData } = useGetCoursesApproved()
-    const { data: historyBuyCourseData, isLoading } = useHistoryBuyCourse(
-        6,
-        page,
-        6,
-        dateStart,
-        dateEnd
-    )
+    const { data: historyBuyCourseData, isLoading } = useHistoryBuyCourse(6, page, 6, dateStart, dateEnd)
 
     const handleSelectCourse = (value: string) => {
         if (value === 'all') {
@@ -70,8 +65,27 @@ const PurchaseHistory = () => {
     }
 
     const handleSearch = () => {
-        setDateStart(tempDateStart)
-        setDateEnd(tempDateEnd)
+        const now = new Date()
+        const formattedNow = `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')}`
+
+        const validDateStart = tempDateStart && !isNaN(new Date(tempDateStart).getTime()) ? tempDateStart : null
+        const validDateEnd = tempDateEnd && !isNaN(new Date(tempDateEnd).getTime()) ? tempDateEnd : null
+
+        if (!validDateStart && !validDateEnd) {
+            toast.error('Vui lòng nhập thời gian bắt đầu.')
+            return
+        }
+
+        if (validDateStart && new Date(validDateStart) > now) {
+            toast.error('Ngày bắt đầu không được lớn hơn ngày hiện tại.')
+            return
+        }
+        //Nếu như không nhập thì mặc định sẽ là ngày hôm nay
+        const finalDateStart = validDateStart || formattedNow
+        const finalDateEnd = validDateEnd || formattedNow
+
+        setDateStart(finalDateStart)
+        setDateEnd(finalDateEnd)
         setPage(1)
     }
 

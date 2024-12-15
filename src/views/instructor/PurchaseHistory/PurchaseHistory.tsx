@@ -14,7 +14,6 @@ import {
 } from '@/components/ui/select'
 import { DatePicker } from '@/components/ui/date-picker'
 import { Button } from '@/components/ui/button'
-import { useUserStore } from '@/app/store'
 import { TbCoinFilled } from 'react-icons/tb'
 import Loading from '@/components/Common/Loading/Loading'
 import NoContent from '@/components/shared/NoContent/NoContent'
@@ -41,12 +40,8 @@ const PurchaseHistory = () => {
     const [tempDateEnd, setTempDateEnd] = useState<string>('')
     const [tempDateStart, setTempDateStart] = useState<string>('')
 
-    const user = useUserStore((state) => state.user)
-
     const { data: courseData } = useGetCoursesApproved()
     const { data: historyBuyCourseData, isLoading } = useHistoryBuyCourse(
-        user?.id || 0,
-        courseId,
         6,
         page,
         6,
@@ -85,14 +80,6 @@ const PurchaseHistory = () => {
         return `${date.toLocaleDateString()}`
     }
 
-    useEffect(() => {
-        if (page !== 1) {
-            navigate(`?page=${page}`, { replace: true })
-        } else {
-            navigate(location.pathname, { replace: true })
-        }
-    }, [page, navigate, location.pathname])
-
     const handlePageChange = (newPage: number) => {
         if (newPage !== page && newPage >= 1 && newPage <= (historyBuyCourseData?.total || 1)) {
             setPage(newPage)
@@ -101,6 +88,14 @@ const PurchaseHistory = () => {
 
     const totalPages = Math.ceil((historyBuyCourseData?.total ?? 0) / (historyBuyCourseData?.per_page ?? 0))
     const visiblePages = getVisiblePages(totalPages, page, 5)
+
+    useEffect(() => {
+        if (page !== 1) {
+            navigate(`?page=${page}`, { replace: true })
+        } else {
+            navigate(location.pathname, { replace: true })
+        }
+    }, [page, navigate, location.pathname])
 
     if (isLoading) return <Loading />
 

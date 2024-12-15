@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react'
 import InstructorHeader from '@/app/layouts/InstructorLayouts/Components/InstructorHeader/InstructorHeader'
 import InstructorSidebar from '@/app/layouts/InstructorLayouts/Components/InstructorSidebar/InstructorSidebar'
 
+const headerHeight = 64
+
 const InstructorDashboard = ({ children, title }: { children: React.ReactNode; title: string }) => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false)
     const [sidebar, setSidebar] = useState<boolean>(false)
@@ -40,8 +42,13 @@ const InstructorDashboard = ({ children, title }: { children: React.ReactNode; t
             <InstructorSidebar isOpen={isSidebarOpen} isSidebar={sidebar} handleSidebar={handleSidebar} />
             <article className={`w-full ${sidebar ? 'lg:ps-64' : 'lg:ps-24'}`}>
                 <InstructorHeader isSidebar={sidebar} toggleSidebar={toggleSidebar} title={title} />
-                <main className="mt-headerHight min-h-screen w-full bg-softGrey p-4">
-                    <div className="min-h-screen w-full rounded-md bg-white p-6">{children}</div>
+                <main className="mt-headerHight w-full bg-softGrey p-4">
+                    <div
+                        style={{ minHeight: `calc(95vh - ${headerHeight}px)` }}
+                        className="h-full w-full rounded-md bg-white p-6"
+                    >
+                        {children}
+                    </div>
                 </main>
             </article>
             {isSidebarOpen && (

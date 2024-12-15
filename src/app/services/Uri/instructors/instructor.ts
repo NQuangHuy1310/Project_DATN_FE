@@ -74,8 +74,6 @@ export const instructorUri = {
 
     // Api lịch sử mua khoá học
     HISTORY_BUY_COURSE: (
-        teacherId: number,
-        courseID?: number,
         limit?: number,
         page?: number,
         perPage?: number,
@@ -83,14 +81,13 @@ export const instructorUri = {
         endDate?: string
     ): string => {
         const queryString = createQueryParams({
-            id_course: courseID,
             page,
             perPage,
             limit,
             start_date: startDate,
             end_date: endDate
         })
-        return `teacher/history-buy-course/${teacherId}${queryString}`
+        return `teacher/history-buy-course${queryString}`
     },
 
     // Giảng viên trả lời bình luận

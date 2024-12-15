@@ -682,8 +682,6 @@ export const useGetRatingsCourse = (
 }
 
 export const useHistoryBuyCourse = (
-    teacherId: number,
-    courseID?: number,
     limit: number = 6,
     page?: number,
     perPage: number = 6,
@@ -693,8 +691,8 @@ export const useHistoryBuyCourse = (
 ) => {
     return useQuery<HistoryBuyCourse>({
         ...options,
-        queryKey: ['historyBuyCourse', courseID, limit, page, perPage, start_date, end_date],
-        queryFn: () => instructorApi.historyBuyCourse(teacherId, courseID, limit, page, perPage, start_date, end_date)
+        queryKey: ['historyBuyCourse', limit, page, perPage, start_date, end_date],
+        queryFn: () => instructorApi.historyBuyCourse(limit, page, perPage, start_date, end_date)
     })
 }
 

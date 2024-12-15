@@ -560,54 +560,33 @@ export const accountMessages: IAccoutMessage[] = [
     },
     {
         user: {
-            name: 'Fiona Blue',
-            avatar: 'https://randomuser.me/api/portraits/women/8.jpg',
+            name: 'Edward Green',
+            avatar: 'https://randomuser.me/api/portraits/men/7.jpg',
             is_active: true
         },
-        time: 120,
-        message: "Let's catch up next week.",
-        is_Read: true
-    },
-    {
-        user: {
-            name: 'George Grey',
-            avatar: 'https://randomuser.me/api/portraits/men/9.jpg',
-            is_active: true
-        },
-        time: 150,
-        message: 'I have sent you the calendar invite.',
+        time: 90,
+        message: 'Could you clarify the last point?',
         is_Read: false
     },
     {
         user: {
-            name: 'Hannah Yellow',
-            avatar: 'https://randomuser.me/api/portraits/women/10.jpg',
+            name: 'Edward Green',
+            avatar: 'https://randomuser.me/api/portraits/men/7.jpg',
             is_active: true
         },
-        time: 240,
-        message: 'Looking forward to our meeting!',
-        is_Read: true
+        time: 90,
+        message: 'Could you clarify the last point?',
+        is_Read: false
     },
     {
         user: {
-            name: 'Jane Smith',
-            avatar: 'https://randomuser.me/api/portraits/women/2.jpg',
+            name: 'Edward Green',
+            avatar: 'https://randomuser.me/api/portraits/men/7.jpg',
             is_active: true
         },
-        time: 10,
-        message: 'Did you finish the report?',
-        is_Read: true
-    },
-
-    {
-        user: {
-            name: 'Jane Smith',
-            avatar: 'https://randomuser.me/api/portraits/women/2.jpg',
-            is_active: true
-        },
-        time: 10,
-        message: 'Did you finish the report?',
-        is_Read: true
+        time: 90,
+        message: 'Could you clarify the last point?',
+        is_Read: false
     }
 ]
 export const transaction: IRecharge[] = [

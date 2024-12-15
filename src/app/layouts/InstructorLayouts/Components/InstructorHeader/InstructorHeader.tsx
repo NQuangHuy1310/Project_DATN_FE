@@ -14,7 +14,7 @@ function InstructorHeader({
 }) {
     return (
         <header
-            className={`fixed left-0 right-0 z-40 flex h-headerHight items-center justify-between border-b bg-white px-8 md:border-none ${isSidebar ? 'lg:left-64' : 'lg:left-24'} `}
+            className={`fixed left-0 right-0 z-50 flex h-headerHight items-center justify-between border-b bg-white px-8 md:border-none ${isSidebar ? 'lg:left-64' : 'lg:left-24'} `}
         >
             <FaBars className="cursor-pointer text-2xl text-darkGrey lg:hidden" onClick={toggleSidebar} />
             <div className="hidden lg:block">

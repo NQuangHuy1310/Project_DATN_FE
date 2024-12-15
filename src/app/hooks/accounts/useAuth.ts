@@ -44,7 +44,7 @@ export const useLogin = () => {
             setProfile(data.profile)
             setAccessToken(data.access_token)
             navigate(routes.userDashboard)
-            toast.success('Đăng nhập thành công!, Chào mừng bạn quay trở lại.')
+            toast.success('Đăng nhập thành công!')
         }
     })
 }
@@ -124,7 +124,6 @@ export const useLogout = () => {
             clearUserAndProfile()
             removeAdminPost()
             navigate(routes.home)
-            toast.success('Đăng xuất thành công! Hẹn gặp lại bạn.')
             queryClient.clear()
         }
     })

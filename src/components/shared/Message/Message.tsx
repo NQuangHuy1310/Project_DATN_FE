@@ -1,8 +1,10 @@
+import { HiArrowRight } from 'react-icons/hi'
+import { RiSendPlaneFill } from 'react-icons/ri'
+
+import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { IMessage } from '@/types/communicate'
-import { HiArrowRight } from 'react-icons/hi'
-import { RiSendPlaneFill } from 'react-icons/ri'
 
 const Message = ({ messages, handleToggle }: { messages: IMessage[]; handleToggle: () => void }) => {
     return (
@@ -22,20 +24,24 @@ const Message = ({ messages, handleToggle }: { messages: IMessage[]; handleToggl
                     {messages.map((msg, index) => (
                         <div
                             key={index}
-                            className={`flex ${msg.fromUser ? 'gap-x-3' : 'justify-end gap-x-3 space-x-reverse'}`}
+                            className={cn('flex', msg.fromUser ? 'gap-x-3' : 'justify-end gap-x-3 space-x-reverse')}
                         >
                             {msg.fromUser && <img className="h-8 w-8 rounded-full" src={msg.user.avatar!} alt="" />}
 
                             <div className="flex flex-col gap-1">
                                 <p
-                                    className={`${
+                                    className={cn(
+                                        'rounded-lg p-3 text-xs',
                                         msg.fromUser ? 'bg-gray-100' : 'bg-blue-500 text-white'
-                                    } rounded-lg p-3 text-xs`}
+                                    )}
                                 >
                                     {msg.text}
                                 </p>
                                 <span
-                                    className={`flex text-[10px] text-darkGrey ${msg.fromUser ? 'justify-start' : 'justify-end'}`}
+                                    className={cn(
+                                        'flex text-[10px] text-darkGrey',
+                                        msg.fromUser ? 'justify-start' : 'justify-end'
+                                    )}
                                 >
                                     {msg.time}
                                 </span>
@@ -47,7 +53,12 @@ const Message = ({ messages, handleToggle }: { messages: IMessage[]; handleToggl
                 </div>
             </div>
             <div className="flex gap-2 border-t px-4 py-2">
-                <Input type="text" className="w-full rounded-md border p-2" placeholder="Nhập nội dung tin nhắn ..." />
+                <Input
+                    type="text"
+                    className="w-full rounded-md border p-2"
+                    autoFocus
+                    placeholder="Nhập nội dung tin nhắn ..."
+                />
                 <Button className="h-full rounded-md bg-blue-500 px-3 py-2 text-white">
                     <RiSendPlaneFill className="size-5" />
                 </Button>

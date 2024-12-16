@@ -47,7 +47,6 @@ const routes = {
     transaction: '/transaction',
 
     // Leaning-path
-    learningPaths: '/learning-paths',
     courseLeaningPath: '/learning-paths/:slug',
 
     //Payment

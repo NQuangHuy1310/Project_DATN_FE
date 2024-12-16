@@ -4,7 +4,6 @@ import Course from '@/components/shared/Course'
 import routes from '@/configs/routes'
 import Loading from '@/components/Common/Loading/Loading'
 import { Button } from '@/components/ui/button'
-import CountdownTime from '@/components/shared/CountDownTime'
 import { useGetRatingHome } from '@/app/hooks/ratings/useRating'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -35,7 +34,6 @@ const Home = () => {
                     <div className="flex justify-between items-center">
                         <div className="flex gap-4 px-5 py-5 lg:px-0">
                             <h3 className="text-xl font-semibold md:text-2xl">Khóa học giảm giá</h3>
-                            <CountdownTime hours={1} minutes={24} seconds={1} />
                         </div>
                         <div className="flex w-20 gap-2 text-right">
                             <CarouselPrevious className="!translate-y-0 !shadow-none" />
@@ -172,7 +170,7 @@ const Home = () => {
                         <h1 className="mb-4 text-xl font-semibold md:text-3xl lg:text-5xl">
                             Trở thành giảng viên ngay
                         </h1>
-                        <Button onClick={() => navigate(routes.login)}>Đăng kí ngay</Button>
+                        <Button onClick={() => navigate(routes.login)}>Tham gia ngay</Button>
                     </div>
                 </div>
             </div>

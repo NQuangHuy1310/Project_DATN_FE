@@ -58,7 +58,6 @@ import CourseWishList from '@/views/user/Courses/CourseWishList'
 import PerformanceStudents from '@/views/instructor/Performance/PerformanceStudents'
 import Certification from '@/views/user/Certification/Certification'
 import CourseHistory from '@/views/user/Courses/CourseHistory'
-import LearningPath from '@/views/user/LearningPath'
 import LearningPathCourse from '@/views/user/LearningPath/LearningPathCourse'
 import PerformanceRatings from '@/views/instructor/Performance/PerformanceRatings'
 import Communicate from '@/views/user/ComunicateAi/Communicate'
@@ -140,8 +139,6 @@ export const privateRoutes = (user?: IUser) => [
     // wallet
     { path: routes.wallet, layout: UserDashboardLayout, element: Transaction, title: 'Nạp tiền vào tài khoản' },
     { path: routes.communicate, layout: UserDashboardLayout, element: Communicate, title: 'Chat AI' },
-    // LearningPath
-    { path: routes.learningPaths, layout: UserDashboardLayout, element: LearningPath, title: 'Lộ trình học tập' },
     {
         path: routes.courseLeaningPath,
         layout: UserDashboardLayout,

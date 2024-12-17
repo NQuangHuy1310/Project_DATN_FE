@@ -35,19 +35,6 @@ const Header = () => {
 
     const queryClient = useQueryClient()
 
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (boxRef.current && !boxRef.current.contains(event.target as Node)) {
-                setVisible(false)
-            }
-        }
-
-        document.addEventListener('mousedown', handleClickOutside)
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside)
-        }
-    }, [])
-
     const debouncedSearch = useDebounce(search, 500)
     const { data: dataSearch, isLoading: loadingSearch } = useSearch(debouncedSearch)
 
@@ -90,6 +77,19 @@ const Header = () => {
             channel.unbind_all()
             channel.unsubscribe()
             pusher.disconnect()
+        }
+    }, [queryClient])
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (boxRef.current && !boxRef.current.contains(event.target as Node)) {
+                setVisible(false)
+            }
+        }
+
+        document.addEventListener('mousedown', handleClickOutside)
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside)
         }
     }, [])
 

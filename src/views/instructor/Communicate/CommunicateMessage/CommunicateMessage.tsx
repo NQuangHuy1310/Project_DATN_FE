@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { CiSearch } from 'react-icons/ci'
 import { FaPlus } from 'react-icons/fa6'
 import { GoDotFill } from 'react-icons/go'
@@ -14,6 +14,8 @@ import { accountMessages, messages } from '@/constants/mockData'
 const CommunicateMessage = () => {
     const [togglePage, setTogglePage] = useState<boolean>(false)
 
+    const [receiverId, setReceiverId] = useState<string | null>(null)
+
     const handleToggle = () => setTogglePage((prev) => !prev)
 
     const renderMessageTime = (time: number) => {
@@ -21,6 +23,12 @@ const CommunicateMessage = () => {
         if (time < 120) return '1 giờ trước'
         return `${Math.floor(time / 60)} giờ trước`
     }
+
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search)
+        const id = params.get('receiver_to')
+        setReceiverId(id)
+    }, [])
 
     return (
         <div className="relative grid h-[850px] grid-cols-12 overflow-y-hidden">
@@ -86,7 +94,7 @@ const CommunicateMessage = () => {
                     block: !togglePage
                 })}
             >
-                <Message handleToggle={handleToggle} messages={messages} />
+                <Message handleToggle={handleToggle} messages={messages} receiverId={receiverId} />
             </div>
 
             {togglePage && (

@@ -173,7 +173,7 @@ export const privateRoutesInstructor = [
         path: routes.instructorMessage,
         layout: InstructorDashboardLayout,
         element: CommunicateMessage,
-        title: 'Tin nhắn'
+        title: 'Đoạn chat'
     },
     {
         path: routes.instructorPerformanceOverview,

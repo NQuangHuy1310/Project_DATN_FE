@@ -1,10 +1,13 @@
 import { useState } from 'react'
 import { CiSearch } from 'react-icons/ci'
+import { FaPlus } from 'react-icons/fa6'
 import { GoDotFill } from 'react-icons/go'
 import { IoCheckmarkDoneSharp } from 'react-icons/io5'
 
 import { cn } from '@/lib/utils'
 import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import Message from '@/components/shared/Message/Message'
 import { accountMessages, messages } from '@/constants/mockData'
 
@@ -20,7 +23,7 @@ const CommunicateMessage = () => {
     }
 
     return (
-        <div className="relative grid h-[800px] grid-cols-12 overflow-y-hidden">
+        <div className="relative grid h-[850px] grid-cols-12 overflow-y-hidden">
             <div
                 className={cn(
                     'scrollbar-hide z-40 col-span-4 h-full w-1/2 transform overflow-y-auto border-r transition-transform',
@@ -28,10 +31,23 @@ const CommunicateMessage = () => {
                     'md:relative md:col-span-4 md:h-full md:w-full md:translate-x-0'
                 )}
             >
-                <div className="sticky top-0 w-full border-b bg-white p-2">
-                    <div className="relative">
-                        <Input type="text" className="w-full" placeholder="Tìm kiếm người dùng" />
-                        <CiSearch className="absolute right-2 top-1/2 size-5 -translate-y-1/2 transform" />
+                <div className="sticky top-0 w-full border-b bg-white px-1 py-2.5">
+                    <div className="flex items-center gap-4">
+                        <div className="relative w-[90%]">
+                            <Input type="text" className="w-full" placeholder="Tìm kiếm người dùng" />
+                            <CiSearch className="absolute right-2 top-1/2 size-5 -translate-y-1/2 transform" />
+                        </div>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="outline" size="icon">
+                                    <FaPlus className="size-4 text-primary" />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent className="w-[200px]" align="end">
+                                <DropdownMenuItem>Tạo nhóm chat</DropdownMenuItem>
+                                <DropdownMenuItem>Nhắn tin đến</DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     </div>
                 </div>
                 <div className="h-full bg-white p-2">

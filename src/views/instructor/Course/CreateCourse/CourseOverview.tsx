@@ -99,6 +99,8 @@ const CourseOverview = memo(({ status }: { status: ICourseStatus }) => {
             }
 
             if (courseVideoPath && courseImagePath && !courseImageFile && !courseVideoFile) {
+                payload.thumbnail = courseImagePath
+                payload.trailer = courseVideoPath
                 return await createOverviewCourse([id!, payload])
             }
 

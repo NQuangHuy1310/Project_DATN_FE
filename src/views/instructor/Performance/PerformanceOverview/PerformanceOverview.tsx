@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { FaUsers } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
@@ -41,16 +41,18 @@ const PerformanceOverview = () => {
     const { data: courseData } = useGetCourses()
     const { data: statisticData } = useStatistic(selectedFilter)
 
-    const monthlyRevenue = statisticData?.monthly_revenue || {}
+    const monthlyRevenue = useMemo(() => statisticData?.monthly_revenue || {}, [statisticData])
 
-    const chartData = Object.entries(monthlyRevenue)
-        .sort(([monthA], [monthB]) => parseInt(monthA) - parseInt(monthB))
-        .map(([month, revenue]) => {
-            return {
-                date: `2024-${month.padStart(2, '0')}-01`,
-                desktop: parseFloat((revenue / 1).toFixed(2))
-            }
-        })
+    const chartData = useCallback(
+        () =>
+            Object.entries(monthlyRevenue)
+                .sort(([monthA], [monthB]) => parseInt(monthA) - parseInt(monthB))
+                .map(([month, revenue]) => ({
+                    date: `2024-${month.padStart(2, '0')}-01`,
+                    desktop: parseFloat((revenue / 1).toFixed(2))
+                })),
+        [monthlyRevenue]
+    )
 
     const handleChange = (value: string) => {
         setSelectedFilter(value)
@@ -119,7 +121,7 @@ const PerformanceOverview = () => {
                             </CardHeader>
                             <CardContent className="px-2 sm:p-6">
                                 <ChartContainer config={chartConfig} className="aspect-auto h-[250px] w-full">
-                                    <BarChart data={chartData}>
+                                    <BarChart data={chartData()}>
                                         <CartesianGrid vertical={false} />
                                         <XAxis
                                             dataKey="date"
@@ -153,13 +155,15 @@ const PerformanceOverview = () => {
                     </div>
                     <div className="space-y-2">
                         <h5 className="text-base font-medium text-foreground">Khóa Học Nổi Bật Của Bạn</h5>
-                        {statisticData && statisticData.top_courses.length > 0 ? (
-                            statisticData.top_courses.map((course) => {
-                                return <CourseCard courseItem={course} key={course.id} isShowInfo />
-                            })
-                        ) : (
-                            <p className="text-sm text-muted-foreground">Hiện tại không có khóa học nổi bật nào.</p>
-                        )}
+                        <div className="flex flex-wrap gap-4">
+                            {statisticData && statisticData.top_courses.length > 0 ? (
+                                statisticData.top_courses.map((course) => {
+                                    return <CourseCard courseItem={course} key={course.id} isShowInfo />
+                                })
+                            ) : (
+                                <p className="text-sm text-muted-foreground">Hiện tại không có khóa học nổi bật nào.</p>
+                            )}
+                        </div>
                     </div>
                 </div>
             ) : (

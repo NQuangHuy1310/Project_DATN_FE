@@ -20,6 +20,10 @@ const DialogProfile = ({ openDialog, setOpenDialog, userData }: DialogProfilePro
 
     const { profile } = userData ?? {}
 
+    const handleNavigateToChat = () => {
+        navigate(`${routes.instructorMessage}?receiver_to=${userData?.id}`)
+    }
+
     return (
         <Dialog open={openDialog} onOpenChange={setOpenDialog}>
             <DialogContent
@@ -54,8 +58,8 @@ const DialogProfile = ({ openDialog, setOpenDialog, userData }: DialogProfilePro
                     </div>
 
                     <div className="flex items-center gap-2">
-                        <Button variant="default" className="flex-1">
-                            Theo dõi
+                        <Button variant="default" className="flex-1" onClick={handleNavigateToChat}>
+                            Nhắn tin
                         </Button>
                         <Button
                             variant="outline"

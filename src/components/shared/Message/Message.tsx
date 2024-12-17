@@ -1,25 +1,60 @@
+import { useEffect, useRef } from 'react'
 import { HiArrowRight } from 'react-icons/hi'
 import { RiSendPlaneFill } from 'react-icons/ri'
 
 import { cn } from '@/lib/utils'
-import { Button } from '@/components/ui/button'
 import { IMessage } from '@/types/communicate'
+import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
-const Message = ({ messages, handleToggle }: { messages: IMessage[]; handleToggle: () => void }) => {
+import { getImagesUrl } from '@/lib'
+import { useGetUserById } from '@/app/hooks/accounts'
+
+interface IMessageProps {
+    receiverId: string | null
+    messages: IMessage[]
+    handleToggle: () => void
+}
+
+const Message = ({ messages, handleToggle, receiverId }: IMessageProps) => {
+    const { data: userData } = useGetUserById(receiverId ? Number(receiverId) : undefined)
+
+    const messagesEndRef = useRef<HTMLDivElement | null>(null)
+    const messagesContainerRef = useRef<HTMLDivElement | null>(null)
+
+    useEffect(() => {
+        const container = messagesContainerRef.current
+        if (container && messagesEndRef.current) {
+            const isAtBottom = container.scrollHeight - container.scrollTop === container.clientHeight
+            if (isAtBottom) {
+                messagesEndRef.current.scrollIntoView({ behavior: 'smooth' })
+            }
+        }
+    }, [messages])
+
     return (
         <div className="flex h-full w-full flex-col justify-between">
-            <div className="w-full flex-1">
+            <div className="w-full flex-1" ref={messagesContainerRef}>
                 <div className="flex items-center border-b">
                     <HiArrowRight className="mx-4 my-1 size-5 cursor-pointer md:hidden" onClick={handleToggle} />
                     <div className="flex items-center gap-x-4 py-2 md:px-4">
-                        <img className="h-10 w-10 rounded-full" src={messages[0].user.avatar!} alt="" />
+                        <Avatar className="size-9 cursor-pointer">
+                            <AvatarImage
+                                className="object-cover"
+                                src={getImagesUrl(userData?.avatar || '')}
+                                alt={userData?.name}
+                            />
+                            <AvatarFallback className="bg-slate-500/50 text-xl font-semibold text-white">
+                                {userData?.name.charAt(0).toUpperCase()}
+                            </AvatarFallback>
+                        </Avatar>
                         <div className="flex flex-col">
-                            <p className="text-lg font-semibold">{messages[0].user.name}</p>
-                            <p className="text-xs text-green-500">Online</p>
+                            <p className="text-lg font-semibold">{userData?.name}</p>
                         </div>
                     </div>
                 </div>
+
                 <div className="flex max-h-[700px] flex-col gap-4 overflow-y-auto p-4">
                     {messages.map((msg, index) => (
                         <div
@@ -48,13 +83,14 @@ const Message = ({ messages, handleToggle }: { messages: IMessage[]; handleToggl
                             {!msg.fromUser && <img className="h-10 w-10 rounded-full" src={msg.user.avatar!} alt="" />}
                         </div>
                     ))}
+                    <div ref={messagesEndRef} />
                 </div>
             </div>
             <div className="flex items-center gap-2 border-t p-4">
                 <Textarea
                     className="w-full rounded-md border p-2"
                     autoFocus
-                    placeholder="Nhập nội dung tin nhắn ..."
+                    placeholder={`Nhập tin nhắn tới ${userData?.name}`}
                     rows={2}
                 />
                 <div className="">

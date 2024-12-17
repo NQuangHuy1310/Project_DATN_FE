@@ -3,13 +3,13 @@ import { RiSendPlaneFill } from 'react-icons/ri'
 
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { IMessage } from '@/types/communicate'
+import { Textarea } from '@/components/ui/textarea'
 
 const Message = ({ messages, handleToggle }: { messages: IMessage[]; handleToggle: () => void }) => {
     return (
         <div className="flex h-full w-full flex-col justify-between">
-            <div className="w-full">
+            <div className="w-full flex-1">
                 <div className="flex items-center border-b">
                     <HiArrowRight className="mx-4 my-1 size-5 cursor-pointer md:hidden" onClick={handleToggle} />
                     <div className="flex items-center gap-x-4 py-2 md:px-4">
@@ -20,14 +20,13 @@ const Message = ({ messages, handleToggle }: { messages: IMessage[]; handleToggl
                         </div>
                     </div>
                 </div>
-                <div className="flex flex-col gap-4 overflow-y-auto p-4">
+                <div className="flex max-h-[700px] flex-col gap-4 overflow-y-auto p-4">
                     {messages.map((msg, index) => (
                         <div
                             key={index}
                             className={cn('flex', msg.fromUser ? 'gap-x-3' : 'justify-end gap-x-3 space-x-reverse')}
                         >
                             {msg.fromUser && <img className="h-8 w-8 rounded-full" src={msg.user.avatar!} alt="" />}
-
                             <div className="flex flex-col gap-1">
                                 <p
                                     className={cn(
@@ -46,22 +45,23 @@ const Message = ({ messages, handleToggle }: { messages: IMessage[]; handleToggl
                                     {msg.time}
                                 </span>
                             </div>
-
                             {!msg.fromUser && <img className="h-10 w-10 rounded-full" src={msg.user.avatar!} alt="" />}
                         </div>
                     ))}
                 </div>
             </div>
-            <div className="flex gap-2 border-t px-4 py-2">
-                <Input
-                    type="text"
+            <div className="flex items-center gap-2 border-t p-4">
+                <Textarea
                     className="w-full rounded-md border p-2"
                     autoFocus
                     placeholder="Nhập nội dung tin nhắn ..."
+                    rows={2}
                 />
-                <Button className="h-full rounded-md bg-blue-500 px-3 py-2 text-white">
-                    <RiSendPlaneFill className="size-5" />
-                </Button>
+                <div className="">
+                    <Button className="h-full rounded-md bg-blue-500 px-3 py-2 text-white">
+                        <RiSendPlaneFill className="size-5" />
+                    </Button>
+                </div>
             </div>
         </div>
     )

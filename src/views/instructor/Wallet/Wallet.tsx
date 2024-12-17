@@ -159,8 +159,14 @@ const Wallet = () => {
                         <div className="flex flex-col gap-3 p-5">
                             <h4 className="text-lg font-medium">Quy tắc rút tiền</h4>
                             <div className="flex flex-col gap-3">
-                                <p>Số tiền tối thiểu mỗi lần rút : 100.000 VNĐ</p>
-                                <p>Số tiền tối đa mỗi lần rút : 10.000.000 VNĐ</p>
+                                <span className="flex items-center gap-1">
+                                    Số xu tối thiểu mỗi lần rút :
+                                    <TbCoinFilled className="size-4 text-secondaryYellow" /> 100
+                                </span>
+                                <span className="flex items-center gap-1">
+                                    Số xu tối đa mỗi lần rút :
+                                    <TbCoinFilled className="size-4 text-secondaryYellow" /> 10000
+                                </span>
                             </div>
                         </div>
                     </div>

@@ -66,6 +66,7 @@ import Profile from '@/views/user/Profile'
 import Roadmap from '@/views/instructor/Roadmap'
 import PurchaseHistory from '@/views/instructor/PurchaseHistory'
 import Transaction from '@/views/user/wallet/transaction'
+import PostDetailNoLogin from '@/views/user/Posts/PostDetailNoLogin'
 
 // Routes không cần đăng nhập
 export const publicRoutes = [
@@ -76,7 +77,9 @@ export const publicRoutes = [
     { path: routes.forgotPassword, layout: HomeLayout, element: ForgotPassword },
     { path: routes.courseDetailNoLogin, layout: HomeLayout, element: CourseDetailNoLogin },
     { path: routes.courseOutstanding, layout: HomeLayout, element: CourseOutstanding },
-    { path: routes.postFeatured, layout: HomeLayout, element: PostFeatured }
+    { path: routes.postFeatured, layout: HomeLayout, element: PostFeatured },
+    { path: routes.postDetailNoLogin, layout: HomeLayout, element: PostDetailNoLogin }
+
 ]
 
 // Routes cần đăng nhập

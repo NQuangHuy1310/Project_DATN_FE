@@ -15,30 +15,24 @@ import { useGetIdParams } from '@/app/hooks/common/useCustomParams'
 import { useInstructorById } from '@/app/hooks/instructors/useInstructorClient'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { useCheckFollowTeacher, useFollowTeacher, useUnFollowTeacher } from '@/app/hooks/accounts/useFlowTeacher'
-import { useState } from 'react'
 
 const InstructorDetail = () => {
-    const [loading, setLoading] = useState<boolean>(false)
     const instructorId = useGetIdParams('id')
     const { data, isLoading } = useInstructorById(instructorId!)
-    const { mutateAsync: flowTeacher } = useFollowTeacher()
-    const { mutateAsync: unFlowTeacher } = useUnFollowTeacher()
+    const { mutateAsync: flowTeacher, isPending: follow } = useFollowTeacher()
+    const { mutateAsync: unFlowTeacher, isPending: unFollow } = useUnFollowTeacher()
     const { user } = useGetUserProfile()
     const { data: checkFollow } = useCheckFollowTeacher(user?.id ?? 0, data?.dataTeacher.id ?? 0)
 
     const handleFlowTeacher = async () => {
-        setLoading(true)
         if (data?.dataTeacher) {
             await flowTeacher([{ following_id: data?.dataTeacher.id }])
-            setLoading(false)
         }
     }
 
     const handleUnFlowTeacher = async () => {
-        setLoading(true)
         if (data?.dataTeacher) {
             await unFlowTeacher([{ following_id: data?.dataTeacher.id }])
-            setLoading(false)
         }
     }
 
@@ -92,7 +86,7 @@ const InstructorDetail = () => {
                         {user?.id !== data?.dataTeacher?.id && (
                             <>
                                 {checkFollow?.action === 'follow' && (
-                                    <Button variant="default" className="w-full py-3" onClick={handleFlowTeacher} disabled={loading}>
+                                    <Button variant="default" className="w-full py-3" onClick={handleFlowTeacher} disabled={follow}>
                                         {TeacherStatus.follow}
                                     </Button>
                                 )}
@@ -101,7 +95,7 @@ const InstructorDetail = () => {
                                         variant="outline"
                                         className="w-full py-3 duration-500 hover:bg-red-400 hover:text-white"
                                         onClick={handleUnFlowTeacher}
-                                        disabled={loading}
+                                        disabled={unFollow}
                                     >
                                         {TeacherStatus.unFollow}
                                     </Button>

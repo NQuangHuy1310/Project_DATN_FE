@@ -23,7 +23,7 @@ const Course = ({ data, progressLesson, page }: { data: ICourse; progressLesson?
     })
 
     return (
-        <div className="card flex w-full cursor-text flex-col gap-3 shadow-md hover:shadow-[0px_40px_100px_0px_#0000000d] hover:transition-all md:w-[360px]">
+        <div className="card flex w-full cursor-text flex-col gap-3 shadow-md hover:shadow-[0px_40px_100px_0px_#0000000d] hover:transition-all md:w-[330px]">
             <Link
                 to={page == routes.courseDetailNoLogin ? `/course/${data.slug}` : `/courses/${data.slug}`}
                 className="flex flex-col gap-2"

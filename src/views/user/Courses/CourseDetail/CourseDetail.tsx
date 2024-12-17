@@ -57,7 +57,7 @@ const CourseDetail = () => {
     const [isProcessing, setIsProcessing] = useState<boolean>(false)
     const handleToggleCourse = () => setToggleCourse(!toggleCourse)
     const [toggleCourse, setToggleCourse] = useState<boolean>(false)
-    const [loading, setLoading] = useState<boolean>(false)
+
     const [isPending, setIsPending] = useState<boolean>(false)
 
     const { user } = useGetUserProfile()
@@ -65,8 +65,8 @@ const CourseDetail = () => {
 
     const { mutateAsync: addRating } = useCreateRating()
     const { mutateAsync: registerCourse } = useRegisterCourse()
-    const { mutateAsync: followTeacher } = useFollowTeacher()
-    const { mutateAsync: unFollowTeacher } = useUnFollowTeacher()
+    const { mutateAsync: followTeacher, isPending: follow } = useFollowTeacher()
+    const { mutateAsync: unFollowTeacher, isPending: unFollow } = useUnFollowTeacher()
     const { mutateAsync: addWishList } = useAddWishList()
     const { mutateAsync: unWishList } = useUnWishList()
     const totalTime = formatDuration((courseDetail?.total_duration_video as unknown as number) || 0)
@@ -111,18 +111,14 @@ const CourseDetail = () => {
         navigate(routes.myCourses)
     }
     const handleFollowTeacher = async () => {
-        setLoading(true)
         if (courseDetail?.user) {
             await followTeacher([{ following_id: courseDetail?.user?.id }])
-            setLoading(false)
         }
     }
 
     const handleUnFollowTeacher = async () => {
-        setLoading(true)
         if (courseDetail?.user) {
             await unFollowTeacher([{ following_id: courseDetail?.user?.id }])
-            setLoading(false)
         }
     }
 
@@ -192,7 +188,7 @@ const CourseDetail = () => {
                                                     variant="default"
                                                     className="w-full py-3"
                                                     onClick={handleFollowTeacher}
-                                                    disabled={loading}
+                                                    disabled={follow}
                                                 >
                                                     {TeacherStatus.follow}
                                                 </Button>
@@ -202,7 +198,7 @@ const CourseDetail = () => {
                                                     variant="outline"
                                                     className="w-full py-3 duration-500 hover:bg-red-400 hover:text-white"
                                                     onClick={handleUnFollowTeacher}
-                                                    disabled={loading}
+                                                    disabled={unFollow}
                                                 >
                                                     {TeacherStatus.unFollow}
                                                 </Button>

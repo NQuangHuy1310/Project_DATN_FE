@@ -63,6 +63,7 @@ const routes = {
     myPosts: '/posts/me',
     myBookmarks: '/posts/bookmarks/me',
     postFeatured: '/posts-featured',
+    postDetailNoLogin: '/posts/:slug',
 
     // Instructor dashboard
     instructorDashboard: '/instructor/dashboard',

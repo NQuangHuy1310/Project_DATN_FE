@@ -12,7 +12,7 @@ export const useGetUserById = (
 ) => {
     return useQuery({
         ...options,
-        enabled: userId !== undefined,
+        enabled: userId !== undefined && userId !== 0,
         queryKey: ['getUserById', userId],
         queryFn: () => userApis.getUserById(userId!)
     })

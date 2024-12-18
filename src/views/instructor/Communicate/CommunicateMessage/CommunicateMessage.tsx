@@ -1,12 +1,14 @@
 import { useState } from 'react'
 import { vi } from 'date-fns/locale'
 import { FaPlus } from 'react-icons/fa6'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { parse, formatDistanceToNow } from 'date-fns'
 
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import Message from '@/components/shared/Message/Message'
+import Loading from '@/components/Common/Loading/Loading'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable'
@@ -15,13 +17,12 @@ import { useGetUserById } from '@/app/hooks/accounts'
 import { useDebounce } from '@/app/hooks/custom/useDebounce'
 import { useGetConversationById, useGetConversations, useSearchChat } from '@/app/hooks/chats'
 
-import Message from '@/components/shared/Message/Message'
-import { getImagesUrl } from '@/lib'
+import { getImagesUrl, truncate } from '@/lib'
 import { cn } from '@/lib/utils'
-import Loading from '@/components/Common/Loading/Loading'
 
 const CommunicateMessage = () => {
     const location = useLocation()
+    const navigate = useNavigate()
     const queryParams = new URLSearchParams(location.search)
     const receiverTo = queryParams.get('receiver_to')
 
@@ -32,19 +33,22 @@ const CommunicateMessage = () => {
 
     const { data: userData } = useGetUserById(Number(receiverTo))
     const { data: conversationsData, isLoading: getConversations } = useGetConversations()
-    const { data: conversationData, isLoading: getConversation } = useGetConversationById(
-        Number(receiverTo),
-        Number(conversationId)
-    )
+    const { data: conversationData } = useGetConversationById(Number(receiverTo), Number(conversationId))
     const { data: searchConversation } = useSearchChat(debounce)
 
-    if (getConversations || getConversation) return <Loading />
+    const handleSetConversationId = (conversationId: number) => {
+        setConversationId(conversationId)
+        queryParams.delete('receiver_to')
+        navigate({ search: queryParams.toString() })
+    }
+
+    if (getConversations) return <Loading />
 
     return (
         <ResizablePanelGroup direction="horizontal" className="!h-[800px] rounded-lg border">
             <ResizablePanel defaultSize={25} className="h-full p-4">
                 <div className="flex h-full flex-col gap-4">
-                    <div className="flex flex-shrink-0 flex-col gap-2">
+                    <div className="flex flex-shrink-0 flex-col gap-2 border-b">
                         <div className="flex items-center gap-4">
                             <div className="w-[90%]">
                                 <Input
@@ -87,7 +91,7 @@ const CommunicateMessage = () => {
                                         >
                                             <div
                                                 className="flex items-center gap-3"
-                                                onClick={() => setConversationId(message.conversation_id)}
+                                                onClick={() => handleSetConversationId(message.conversation_id)}
                                             >
                                                 <div className="flex-shrink-0">
                                                     <Avatar>
@@ -102,8 +106,10 @@ const CommunicateMessage = () => {
                                                     </Avatar>
                                                 </div>
                                                 <div className="flex flex-col">
-                                                    <p className="font-semibold">{message.name}</p>
-                                                    <p className="text-sm">{message.last_message}</p>
+                                                    <p className="text-sm font-semibold">{message.name}</p>
+                                                    <p className="text-xs text-muted-foreground">
+                                                        {truncate(message.last_message, 40)}
+                                                    </p>
                                                 </div>
                                             </div>
 
@@ -112,21 +118,35 @@ const CommunicateMessage = () => {
                                                 <p
                                                     className={cn(
                                                         'size-2 rounded-full',
-                                                        message.is_read === 1 ? 'bg-secondaryRed' : 'bg-secondaryYellow'
+                                                        message.is_read === 1 ? 'bg-secondaryRed' : 'bg-transparent'
                                                     )}
                                                 ></p>
                                             </div>
                                         </div>
                                     )
                                 })}
-                            {conversationsData?.conversations.length === 0 && <p>Bạn chưa có đoạn chat nào</p>}
+                            {conversationsData?.conversations.length === 0 && (
+                                <div className="flex h-full flex-col items-center justify-center gap-2">
+                                    <p className="text-base font-medium">Bạn chưa có đoạn chat nào</p>
+                                </div>
+                            )}
                         </div>
                     </ScrollArea>
                 </div>
             </ResizablePanel>
             <ResizableHandle />
             <ResizablePanel defaultSize={75} className="p-4">
-                {conversationData ? <Message messageData={conversationData} userData={userData} /> : null}
+                {conversationId ? (
+                    <Message messageData={conversationData} userData={userData} />
+                ) : receiverTo ? (
+                    <Message userData={userData} receiverId={receiverTo} />
+                ) : (
+                    <div className="flex h-full w-full items-center justify-center">
+                        <p className="rounded-full bg-secondaryGreen p-2 text-white">
+                            Chọn một đoạn chat để bắt đầu trò chuyện
+                        </p>
+                    </div>
+                )}
             </ResizablePanel>
         </ResizablePanelGroup>
     )

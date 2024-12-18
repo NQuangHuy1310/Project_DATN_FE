@@ -26,6 +26,7 @@ const routes = {
 
     //CHAT AI
     communicate: '/communicate',
+    chat: '/chats',
 
     // Instructor routes
     instructor: '/instructors',

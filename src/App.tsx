@@ -90,7 +90,7 @@ function App() {
                                 key={index}
                                 path={route.path}
                                 element={
-                                    isLogin && user?.user_type === 'teacher' ? (
+                                    user?.user_type === 'teacher' ? (
                                         <Layout title={route?.title}>
                                             <Page />
                                         </Layout>

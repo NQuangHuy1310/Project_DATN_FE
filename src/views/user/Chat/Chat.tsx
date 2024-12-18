@@ -20,7 +20,7 @@ import { useGetConversationById, useGetConversations, useSearchChat } from '@/ap
 import { getImagesUrl, truncate } from '@/lib'
 import { cn } from '@/lib/utils'
 
-const CommunicateMessage = () => {
+const Chat = () => {
     const location = useLocation()
     const navigate = useNavigate()
     const queryParams = new URLSearchParams(location.search)
@@ -45,21 +45,18 @@ const CommunicateMessage = () => {
     if (getConversations) return <Loading />
 
     return (
-        <ResizablePanelGroup direction="horizontal" className="!h-[800px] rounded-lg border">
+        <ResizablePanelGroup direction="horizontal" className="!h-[800px] rounded-lg border bg-white">
             <ResizablePanel defaultSize={25} className="h-full p-4">
                 <div className="flex h-full flex-col gap-4">
                     <div className="flex flex-shrink-0 flex-col gap-2 border-b">
                         <div className="flex items-center gap-4">
-                            <div className="w-[90%]">
+                            <div className="w-full">
                                 <Input
                                     placeholder="Tìm kiếm đoạn chat"
                                     value={keySearch}
                                     onChange={(e) => setKeySearch(e.target.value)}
                                 />
                             </div>
-                            <Button variant="outline" size="icon">
-                                <FaPlus className="size-5 text-primary" />
-                            </Button>
                         </div>
                         <Tabs defaultValue="all">
                             <TabsList className="grid w-[200px] grid-cols-2 gap-4">
@@ -153,4 +150,4 @@ const CommunicateMessage = () => {
     )
 }
 
-export default CommunicateMessage
+export default Chat

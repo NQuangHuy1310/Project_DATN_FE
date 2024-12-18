@@ -1,5 +1,6 @@
 import { chatApi } from '@/app/services/chats/chat'
-import { useQuery, UseQueryOptions } from '@tanstack/react-query'
+import { IConversation, IConversationById, ISendMessageData } from '@/types/chats'
+import { useMutation, useQuery, useQueryClient, UseQueryOptions } from '@tanstack/react-query'
 
 export const useSearchChat = (query: string, options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>) => {
     return useQuery({
@@ -11,7 +12,7 @@ export const useSearchChat = (query: string, options?: Omit<UseQueryOptions<any>
 
 export const useGetConversations = (
     limit: number = 10,
-    options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
+    options?: Omit<UseQueryOptions<IConversation>, 'queryKey' | 'queryFn'>
 ) => {
     return useQuery({
         ...options,
@@ -21,22 +22,25 @@ export const useGetConversations = (
 }
 
 export const useGetConversationById = (
-    id: number,
     receiver_id?: number,
     conversation_id?: number,
-    options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
+    options?: Omit<UseQueryOptions<IConversationById>, 'queryKey' | 'queryFn'>
 ) => {
     return useQuery({
         ...options,
-        queryKey: ['getConversationById', id, receiver_id, conversation_id],
-        queryFn: () => chatApi.getConversationById(id, receiver_id, conversation_id)
+        enabled: !!receiver_id || !!conversation_id,
+        queryKey: ['getConversationById', receiver_id, conversation_id],
+        queryFn: () => chatApi.getConversationById(receiver_id, conversation_id)
     })
 }
 
-export const useSendMessage = (data: any, options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>) => {
-    return useQuery({
-        ...options,
-        queryKey: ['sendMessage', data],
-        queryFn: () => chatApi.sendMessage(data)
+export const useSendMessage = () => {
+    const queryClient = useQueryClient()
+
+    return useMutation({
+        mutationFn: (data: ISendMessageData) => chatApi.sendMessage(data),
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['getConversations'] })
+        }
     })
 }

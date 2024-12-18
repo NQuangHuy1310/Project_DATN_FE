@@ -1,106 +1,134 @@
-import { useEffect, useState } from 'react'
-import { CiSearch } from 'react-icons/ci'
+import { useState } from 'react'
+import { vi } from 'date-fns/locale'
 import { FaPlus } from 'react-icons/fa6'
-import { GoDotFill } from 'react-icons/go'
-import { IoCheckmarkDoneSharp } from 'react-icons/io5'
+import { useLocation } from 'react-router-dom'
+import { parse, formatDistanceToNow } from 'date-fns'
 
-import { cn } from '@/lib/utils'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable'
+
+import { useGetUserById } from '@/app/hooks/accounts'
+import { useDebounce } from '@/app/hooks/custom/useDebounce'
+import { useGetConversationById, useGetConversations, useSearchChat } from '@/app/hooks/chats'
+
 import Message from '@/components/shared/Message/Message'
-import { accountMessages, messages } from '@/constants/mockData'
+import { getImagesUrl } from '@/lib'
+import { cn } from '@/lib/utils'
+import Loading from '@/components/Common/Loading/Loading'
 
 const CommunicateMessage = () => {
-    const [togglePage, setTogglePage] = useState<boolean>(false)
+    const location = useLocation()
+    const queryParams = new URLSearchParams(location.search)
+    const receiverTo = queryParams.get('receiver_to')
 
-    const [receiverId, setReceiverId] = useState<string | null>(null)
+    const [conversationId, setConversationId] = useState<number | null>(null)
+    const [keySearch, setKeySearch] = useState('')
 
-    const handleToggle = () => setTogglePage((prev) => !prev)
+    const debounce = useDebounce(keySearch, 300)
 
-    const renderMessageTime = (time: number) => {
-        if (time < 60) return `${time} phút trước`
-        if (time < 120) return '1 giờ trước'
-        return `${Math.floor(time / 60)} giờ trước`
-    }
+    const { data: userData } = useGetUserById(Number(receiverTo))
+    const { data: conversationsData, isLoading: getConversations } = useGetConversations()
+    const { data: conversationData, isLoading: getConversation } = useGetConversationById(
+        Number(receiverTo),
+        Number(conversationId)
+    )
+    const { data: searchConversation } = useSearchChat(debounce)
 
-    useEffect(() => {
-        const params = new URLSearchParams(window.location.search)
-        const id = params.get('receiver_to')
-        setReceiverId(id)
-    }, [])
+    if (getConversations || getConversation) return <Loading />
 
     return (
-        <div className="relative grid h-[850px] grid-cols-12 overflow-y-hidden">
-            <div
-                className={cn(
-                    'scrollbar-hide z-40 col-span-4 h-full w-1/2 transform overflow-y-auto border-r transition-transform',
-                    togglePage ? 'translate-x-0' : '-translate-x-full',
-                    'md:relative md:col-span-4 md:h-full md:w-full md:translate-x-0'
-                )}
-            >
-                <div className="sticky top-0 w-full border-b bg-white px-1 py-2.5">
-                    <div className="flex items-center gap-4">
-                        <div className="relative w-[90%]">
-                            <Input type="text" className="w-full" placeholder="Tìm kiếm người dùng" />
-                            <CiSearch className="absolute right-2 top-1/2 size-5 -translate-y-1/2 transform" />
-                        </div>
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button variant="outline" size="icon">
-                                    <FaPlus className="size-4 text-primary" />
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent className="w-[200px]" align="end">
-                                <DropdownMenuItem>Tạo nhóm chat</DropdownMenuItem>
-                                <DropdownMenuItem>Nhắn tin đến</DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-                    </div>
-                </div>
-                <div className="h-full bg-white p-2">
-                    <div className="flex flex-col gap-2">
-                        {accountMessages.map((msg: any, index: number) => (
-                            <div
-                                key={index}
-                                className="flex w-full cursor-pointer items-center space-x-3 border-b py-2"
-                            >
-                                <img className="h-8 w-8 rounded-full" src={msg.user.avatar} alt={msg.user.name} />
-                                <div className="flex w-full flex-col gap-1">
-                                    <div className="flex w-full items-center justify-between gap-1">
-                                        <p className="text-sm font-semibold text-gray-800">{msg.user.name}</p>
-                                        <span className="text-[10px] text-gray-500">{renderMessageTime(msg.time)}</span>
-                                    </div>
-                                    <div className="flex w-full justify-between">
-                                        <p className={`line-clamp-2 text-xs ${msg.is_Read ? '' : 'font-bold'}`}>
-                                            {msg.message}
-                                        </p>
-                                        {msg.is_Read ? (
-                                            <IoCheckmarkDoneSharp className="size-3 text-primary" />
-                                        ) : (
-                                            <GoDotFill className="size-3 text-red-600" />
-                                        )}
-                                    </div>
-                                </div>
+        <ResizablePanelGroup direction="horizontal" className="!h-[800px] rounded-lg border">
+            <ResizablePanel defaultSize={25} className="h-full p-4">
+                <div className="flex h-full flex-col gap-4">
+                    <div className="flex flex-shrink-0 flex-col gap-2">
+                        <div className="flex items-center gap-4">
+                            <div className="w-[90%]">
+                                <Input
+                                    placeholder="Tìm kiếm đoạn chat"
+                                    value={keySearch}
+                                    onChange={(e) => setKeySearch(e.target.value)}
+                                />
                             </div>
-                        ))}
+                            <Button variant="outline" size="icon">
+                                <FaPlus className="size-5 text-primary" />
+                            </Button>
+                        </div>
+                        <Tabs defaultValue="all">
+                            <TabsList className="grid w-[200px] grid-cols-2 gap-4">
+                                <TabsTrigger value="all">Tất cả</TabsTrigger>
+                                <TabsTrigger value="unread">Chưa đọc</TabsTrigger>
+                            </TabsList>
+                            <TabsContent value="all"></TabsContent>
+                            <TabsContent value="unread"></TabsContent>
+                        </Tabs>
                     </div>
+                    <ScrollArea className="flex h-full flex-1 flex-col gap-2">
+                        <div className="flex flex-col gap-4">
+                            {conversationsData &&
+                                conversationsData.conversations?.map((message, index) => {
+                                    const lastMessageDate = parse(
+                                        message.last_message_time,
+                                        'yyyy-MM-dd HH:mm:ss',
+                                        new Date()
+                                    )
+                                    const timeDifference = formatDistanceToNow(lastMessageDate, {
+                                        locale: vi,
+                                        addSuffix: true
+                                    })
+
+                                    return (
+                                        <div
+                                            key={index}
+                                            className="flex cursor-pointer items-center justify-between gap-4 border-b border-grey pb-4"
+                                        >
+                                            <div
+                                                className="flex items-center gap-3"
+                                                onClick={() => setConversationId(message.conversation_id)}
+                                            >
+                                                <div className="flex-shrink-0">
+                                                    <Avatar>
+                                                        <AvatarImage
+                                                            className="object-cover"
+                                                            src={getImagesUrl(message?.avatar || '')}
+                                                            alt={message?.name}
+                                                        />
+                                                        <AvatarFallback className="bg-slate-500/50 text-xl font-semibold text-white">
+                                                            {message?.name.charAt(0).toUpperCase()}
+                                                        </AvatarFallback>
+                                                    </Avatar>
+                                                </div>
+                                                <div className="flex flex-col">
+                                                    <p className="font-semibold">{message.name}</p>
+                                                    <p className="text-sm">{message.last_message}</p>
+                                                </div>
+                                            </div>
+
+                                            <div className="flex flex-col items-end justify-center gap-2">
+                                                <p>{timeDifference}</p>
+                                                <p
+                                                    className={cn(
+                                                        'size-2 rounded-full',
+                                                        message.is_read === 1 ? 'bg-secondaryRed' : 'bg-secondaryYellow'
+                                                    )}
+                                                ></p>
+                                            </div>
+                                        </div>
+                                    )
+                                })}
+                            {conversationsData?.conversations.length === 0 && <p>Bạn chưa có đoạn chat nào</p>}
+                        </div>
+                    </ScrollArea>
                 </div>
-            </div>
-
-            <div
-                className={cn('col-span-12 w-full bg-white md:col-span-8', {
-                    'hidden md:block': togglePage,
-                    block: !togglePage
-                })}
-            >
-                <Message handleToggle={handleToggle} messages={messages} receiverId={receiverId} />
-            </div>
-
-            {togglePage && (
-                <div className="fixed inset-0 z-30 bg-black bg-opacity-50 md:hidden" onClick={handleToggle} />
-            )}
-        </div>
+            </ResizablePanel>
+            <ResizableHandle />
+            <ResizablePanel defaultSize={75} className="p-4">
+                {conversationData ? <Message messageData={conversationData} userData={userData} /> : null}
+            </ResizablePanel>
+        </ResizablePanelGroup>
     )
 }
 

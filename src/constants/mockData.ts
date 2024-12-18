@@ -487,6 +487,39 @@ export const messages: IMessage[] = [
     },
     {
         user: {
+            name: 'Emerson Levin',
+            is_active: true,
+            user_type: 'member',
+            avatar: 'https://images.unsplash.com/photo-1640951613773-54706e06851d?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+        },
+        text: 'Nam libero tempore, cum soluta nobis...',
+        time: 'Today 11:55',
+        fromUser: true
+    },
+    {
+        user: {
+            name: 'Emerson Levin',
+            is_active: true,
+            user_type: 'member',
+            avatar: 'https://images.unsplash.com/photo-1640951613773-54706e06851d?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+        },
+        text: 'Nam libero tempore, cum soluta nobis...',
+        time: 'Today 11:55',
+        fromUser: true
+    },
+    {
+        user: {
+            name: 'Emerson Levin',
+            is_active: true,
+            user_type: 'member',
+            avatar: 'https://images.unsplash.com/photo-1640951613773-54706e06851d?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+        },
+        text: 'Nam libero tempore, cum soluta nobis...',
+        time: 'Today 11:55',
+        fromUser: true
+    },
+    {
+        user: {
             name: 'Jakob Calzoni',
             is_active: true,
             user_type: 'member',

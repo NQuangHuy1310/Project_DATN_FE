@@ -358,7 +358,11 @@ const Wallet = () => {
                 <Dialog open={isOpen} onOpenChange={handleClose}>
                     <DialogContent className="max-h-[80vh] max-w-5xl overflow-auto">
                         {selectedImage && (
-                            <img className="h-full w-full rounded-sm" src={selectedImage} alt="Chi tiết" />
+                            <img
+                                className="h-full w-full rounded-sm"
+                                src={getImagesUrl(selectedImage)}
+                                alt="Chi tiết"
+                            />
                         )}
                     </DialogContent>
                 </Dialog>

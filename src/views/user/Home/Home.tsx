@@ -23,8 +23,6 @@ const Home = () => {
         const accessToken = localStorage.getItem('access_token')
         const user = localStorage.getItem('user_data')
 
-        console.log(user)
-
         if (accessToken && user) {
             navigate(routes.userDashboard)
         }

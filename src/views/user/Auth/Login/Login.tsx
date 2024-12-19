@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { FcGoogle } from 'react-icons/fc'
 import { FaFacebook } from 'react-icons/fa'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -14,6 +14,19 @@ import { LoginFormFields, loginSchema } from '@/validations'
 import { useLogin } from '@/app/hooks/accounts'
 
 const Login = () => {
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        const accessToken = localStorage.getItem('access_token')
+        const user = localStorage.getItem('user_data')
+
+        console.log(user)
+
+        if (accessToken && user) {
+            navigate(routes.userDashboard)
+        }
+    }, [navigate])
+
     const {
         register,
         setError,

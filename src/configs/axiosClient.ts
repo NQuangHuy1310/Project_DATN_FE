@@ -53,15 +53,15 @@ axiosClient.interceptors.response.use(
     (response: AxiosResponse) => {
         const { message, data } = response.data
 
-        if ([ApiStatusCode.Success, ApiStatusCode.Created].includes(response.status)) {
+        if (response.status === ApiStatusCode.Success || ApiStatusCode.Created) {
             if (response.status === ApiStatusCode.Created) {
                 toast.success(message, {
                     description: ApiMessages.success.created
                 })
             }
+
             return data
         }
-        return response
     },
     async (error) => {
         const status = error.response?.status

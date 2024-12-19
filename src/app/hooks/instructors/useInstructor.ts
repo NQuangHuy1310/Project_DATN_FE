@@ -146,6 +146,20 @@ export const useOverviewCourse = () => {
     })
 }
 
+export const useUpdateCoursePriceSale = () => {
+    const queryClient = useQueryClient()
+
+    return useMutation<any, Error, [number, any]>({
+        mutationFn: async ([courseId, priceSale]) => {
+            return instructorApi.updatePriceSale(courseId, priceSale)
+        },
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['instructorCourse'] })
+            toast.success('Cập nhật giá khuyến mãi thành công!')
+        }
+    })
+}
+
 export const useCreateModule = () => {
     const queryClient = useQueryClient()
 

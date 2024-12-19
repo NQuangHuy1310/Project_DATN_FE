@@ -24,6 +24,7 @@ export const instructorUri = {
     DELETE_COURSE: (courseID: string) => `${INSTRUCTOR_URL}${courseID}/delete-course`,
     TARGET_COURSE: (courseId: string) => `${INSTRUCTOR_URL}${courseId}/target-student`,
     OVERVIEW_COURSE: (courseId: string) => `${INSTRUCTOR_URL}${courseId}/overview`,
+    UPDATE_PRICE_SALE: (courseId: number) => `${TEACHER_URL}course/${courseId}/update-price-sale`,
 
     // Module
     GET_MODULE: (courseId: string) => `${INSTRUCTOR_URL}${courseId}/curriculum`,

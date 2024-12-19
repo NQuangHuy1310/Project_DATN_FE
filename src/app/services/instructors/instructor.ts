@@ -79,6 +79,9 @@ export const instructorApi = {
     getOverviewCourse: async (courseId: string): Promise<any> => {
         return axiosClient.get(instructorUri.OVERVIEW_COURSE(courseId))
     },
+    updatePriceSale: async (courseId: number, data: any): Promise<any> => {
+        return axiosClient.post(instructorUri.UPDATE_PRICE_SALE(courseId), data)
+    },
 
     // Api module
     createModule: async (courseId: string, moduleData: IModuleData): Promise<IModule> => {

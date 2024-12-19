@@ -7,10 +7,11 @@ import { useDeleteCourse, useDisableCourse, useEnableCourse } from '@/app/hooks/
 
 import placeholderImage from '@/assets/placeholder.jpg'
 import routes from '@/configs/routes'
-import { getImagesUrl, truncate } from '@/lib'
+import { formatPrice, getImagesUrl, truncate } from '@/lib'
 import { ICourseItem } from '@/types/instructor'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import ConfirmDialog from '@/components/shared/ConfirmDialog'
+import DialogChangePrice from '@/components/shared/CourseCard/DialogChangePrice'
 
 interface CourseCardProps {
     courseItem: ICourseItem
@@ -41,13 +42,16 @@ const CourseCard = ({ courseItem, isShowInfo }: CourseCardProps) => {
         is_active,
         total_student,
         ratings_count,
-        bills_count
+        bills_count,
+        price,
+        price_sale
     } = courseItem
 
     const { mutateAsync: deleteCourse, isPending } = useDeleteCourse()
     const { mutateAsync: disableCourse } = useDisableCourse()
     const { mutateAsync: enableCourse } = useEnableCourse()
     const [isShowConfirm, setIsShowConfirm] = useState<boolean>(false)
+    const [isShowDialogChangePrice, setIsShowDialogChangePrice] = useState<boolean>(false)
     const thumbnailImage = getImagesUrl(thumbnail ?? '')
     const formatDate = submittedAt ? format(new Date(submittedAt), 'dd/MM/yyyy') : 'Chưa đăng ký'
 
@@ -103,6 +107,17 @@ const CourseCard = ({ courseItem, isShowInfo }: CourseCardProps) => {
                                     </>
                                 ) : (
                                     <>
+                                        {price && price_sale ? (
+                                            <div className="flex items-center gap-2 text-sm font-semibold">
+                                                <p className="text-secondaryGreen line-through">{formatPrice(price)}</p>
+                                                <p> - </p>
+                                                <p className="text-base text-primary">{formatPrice(price_sale)}</p>
+                                            </div>
+                                        ) : (
+                                            <p className="text-base font-semibold text-secondaryRed">
+                                                Giá - Chưa cập nhật
+                                            </p>
+                                        )}
                                         <p className="text-sm">
                                             Danh mục: <strong>{category.name}</strong>
                                         </p>
@@ -121,10 +136,12 @@ const CourseCard = ({ courseItem, isShowInfo }: CourseCardProps) => {
                             <BsThreeDots className="size-5" />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" sideOffset={5}>
-                            {status !== 'approved' && (
-                                <DropdownMenuItem onClick={redirectToCourse}>Chỉnh sửa khoá học</DropdownMenuItem>
+                            <DropdownMenuItem onClick={redirectToCourse}>Chỉnh sửa khoá học</DropdownMenuItem>
+                            {status === 'approved' && (
+                                <DropdownMenuItem onClick={() => setIsShowDialogChangePrice(!isShowDialogChangePrice)}>
+                                    Chỉnh sửa giá
+                                </DropdownMenuItem>
                             )}
-
                             {status === 'approved' ? (
                                 <DropdownMenuItem onClick={handleActiveCourse}>
                                     {is_active === 0 ? 'Hiển thị' : 'Ẩn'} khoá học
@@ -145,6 +162,12 @@ const CourseCard = ({ courseItem, isShowInfo }: CourseCardProps) => {
                 confirmDialog={isShowConfirm}
                 setConfirmDialog={setIsShowConfirm}
                 handleDelete={handleDeleteCourse}
+            />
+
+            <DialogChangePrice
+                open={isShowDialogChangePrice}
+                setOpen={setIsShowDialogChangePrice}
+                courseData={courseItem}
             />
         </>
     )

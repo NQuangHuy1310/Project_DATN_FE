@@ -1,14 +1,10 @@
 import { Link } from 'react-router-dom'
 
 import { IoIosStar } from 'react-icons/io'
-import { FaRegUser } from 'react-icons/fa'
-import { IoTimeOutline } from 'react-icons/io5'
-import { FaRegCirclePlay } from 'react-icons/fa6'
 import { RiMoneyDollarCircleFill } from 'react-icons/ri'
 
 import Loading from '@/components/Common/Loading/Loading'
 import { Button } from '@/components/ui/button'
-import useFormatTime from '@/app/hooks/common/useFomatTime'
 import { CourseLevel } from '@/components/shared/Course/CourseLevel'
 import { getImagesUrl } from '@/lib'
 import { useGetSlugParams } from '@/app/hooks/common/useCustomParams'
@@ -131,22 +127,6 @@ const Certification = () => {
                             <div className="flex items-center gap-1">
                                 <IoIosStar className="size-5 text-primary" />
                                 <span>5</span>
-                            </div>
-                        </div>
-                        <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-1.5">
-                                <FaRegUser className="size-4 text-darkGrey" />
-                                <p className="font-medium text-black">{detailCertification?.course?.total_student}</p>
-                            </div>
-                            <div className="flex items-center gap-1.5">
-                                <FaRegCirclePlay className="size-4 text-darkGrey" />
-                                <p className="font-medium text-black">{detailCertification?.course?.total_lessons}</p>
-                            </div>
-                            <div className="flex items-center gap-1.5">
-                                <IoTimeOutline className="size-4 text-darkGrey" />
-                                <p className="font-medium text-black">
-                                    {useFormatTime(detailCertification?.course?.duration!)}
-                                </p>
                             </div>
                         </div>
                     </div>

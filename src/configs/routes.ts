@@ -9,6 +9,9 @@ const routes = {
     forgotPassword: '/forgot-password',
     resetPassword: '/reset-password',
 
+    // gg login
+    googleCallback: '/auth/google/callback',
+
     notification: '/notifications',
 
     // User dashboard routes

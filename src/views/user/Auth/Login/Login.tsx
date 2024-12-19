@@ -9,6 +9,7 @@ import { IoEyeOffSharp, IoEyeSharp } from 'react-icons/io5'
 import routes from '@/configs/routes'
 
 import { Input } from '@/components/ui/input'
+import { backendUrl } from '@/configs/baseUrl'
 import { Button } from '@/components/ui/button'
 import { LoginFormFields, loginSchema } from '@/validations'
 import { useLogin } from '@/app/hooks/accounts'
@@ -57,6 +58,18 @@ const Login = () => {
                     })
                 })
             }
+        }
+    }
+
+    const handleGoogleLogin = () => {
+        const popup = window.open(
+            `${backendUrl}auth/google`,
+            '_blank',
+            'width=800,height=600,top=100,left=100'
+        )
+
+        if (popup) {
+            popup.document.body.style.display = 'none'
         }
     }
 
@@ -138,6 +151,7 @@ const Login = () => {
                     <div className="w-full">
                         <div className="flex w-full flex-col gap-2 md:flex-row md:gap-5">
                             <Button
+                                onClick={handleGoogleLogin}
                                 disabled={isSubmitting}
                                 variant="outline"
                                 size="lg"

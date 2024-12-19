@@ -15,6 +15,7 @@ import Login from '@/views/user/Auth/Login'
 import Register from '@/views/user/Auth/Register'
 import ChangePassword from '@/views/user/Auth/ChangePassword'
 import ForgotPassword from '@/views/user/Auth/ForgotPassword'
+import GoogleLogin from '@/views/user/Auth/GoogleLogin'
 
 // Account
 import AccountHelp from '@/views/user/Account/AccountHelp'
@@ -66,6 +67,7 @@ import Profile from '@/views/user/Profile'
 import Roadmap from '@/views/instructor/Roadmap'
 import PurchaseHistory from '@/views/instructor/PurchaseHistory'
 import Transaction from '@/views/user/wallet/transaction'
+import EmptyLayout from '@/app/layouts/EmptyLayouts'
 import PostDetailNoLogin from '@/views/user/Posts/PostDetailNoLogin'
 import Chat from '@/views/user/Chat'
 
@@ -73,6 +75,7 @@ import Chat from '@/views/user/Chat'
 export const publicRoutes = [
     { path: routes.home, layout: HomeLayout, element: Home },
     { path: routes.login, layout: HomeLayout, element: Login },
+    { path: routes.googleCallback, layout: EmptyLayout, element: GoogleLogin },
     { path: routes.resetPassword, layout: HomeLayout, element: ChangePassword },
     { path: routes.register, layout: HomeLayout, element: Register },
     { path: routes.forgotPassword, layout: HomeLayout, element: ForgotPassword },

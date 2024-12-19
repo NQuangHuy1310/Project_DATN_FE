@@ -65,15 +65,9 @@ function App() {
                                     key={index}
                                     path={route.path}
                                     element={
-                                        isLogin ? (
-                                            <Layout title={route?.title}>
-                                                <Page />
-                                            </Layout>
-                                        ) : (
-                                            <HomeLayout>
-                                                <Login />
-                                            </HomeLayout>
-                                        )
+                                        <Layout title={route?.title}>
+                                            <Page />
+                                        </Layout>
                                     }
                                 />
                             )

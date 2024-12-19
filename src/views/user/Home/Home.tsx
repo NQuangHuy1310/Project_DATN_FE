@@ -14,9 +14,20 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { useNavigate } from 'react-router-dom'
 import { getImagesUrl } from '@/lib'
 import HomePosts from '@/components/shared/Post/HomePosts'
+import { useEffect } from 'react'
 
 const Home = () => {
     const navigate = useNavigate()
+
+    useEffect(() => {
+        const accessToken = localStorage.getItem('access_token')
+        const user = localStorage.getItem('user_data')
+
+        if (accessToken && user) {
+            navigate(routes.userDashboard)
+        }
+    }, [navigate])
+    
     const { data: ratings, isLoading: loadingRating } = useGetRatingHome()
 
     const { data: course_sales, isLoading: loadingSaleHome } = useCourseSaleHome()

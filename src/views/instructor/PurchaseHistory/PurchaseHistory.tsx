@@ -80,7 +80,13 @@ const PurchaseHistory = () => {
             toast.error('Ngày bắt đầu không được lớn hơn ngày hiện tại.')
             return
         }
-        //Nếu như không nhập thì mặc định sẽ là ngày hôm nay
+
+        if (validDateStart && validDateEnd && new Date(validDateStart) > new Date(validDateEnd)) {
+            toast.error('Ngày bắt đầu không được lớn hơn ngày kết thúc.')
+            return
+        }
+
+        // Nếu như không nhập thì mặc định sẽ là ngày hôm nay
         const finalDateStart = validDateStart || formattedNow
         const finalDateEnd = validDateEnd || formattedNow
 

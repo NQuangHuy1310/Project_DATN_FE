@@ -320,13 +320,12 @@ const Wallet = () => {
                                             </td>
                                             <td className="px-6 py-4">
                                                 <div
-                                                    className={`${
-                                                        item.status === 'Hoàn thành'
+                                                    className={`${item.status === 'Hoàn thành'
                                                             ? 'bg-secondaryGreen'
                                                             : item.status === 'Thất bại'
-                                                              ? 'bg-secondaryRed'
-                                                              : 'bg-secondaryYellow'
-                                                    } w-fit rounded-lg px-2 py-1 text-center text-xs text-white`}
+                                                                ? 'bg-secondaryRed'
+                                                                : 'bg-secondaryYellow'
+                                                        } w-fit rounded-lg px-2 py-1 text-center text-xs text-white`}
                                                 >
                                                     {item.status}
                                                 </div>
@@ -335,7 +334,7 @@ const Wallet = () => {
                                                 {item.photo_evidence ? (
                                                     <img
                                                         className="h-14 w-20 cursor-pointer rounded-sm object-cover"
-                                                        src={item.photo_evidence}
+                                                        src={getImagesUrl(item.photo_evidence)}
                                                         alt=""
                                                         onClick={() => handleImageClick(item.photo_evidence!)}
                                                     />

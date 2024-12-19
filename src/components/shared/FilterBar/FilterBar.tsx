@@ -136,8 +136,8 @@ const FilterBar = ({
                         </SelectTrigger>
                         <SelectContent side="bottom" align="end">
                             <SelectGroup>
-                                <SelectItem value="A-Z">A - Z</SelectItem>
-                                <SelectItem value="Z-A">Z - A</SelectItem>
+                                <SelectItem value="a-z">A - Z</SelectItem>
+                                <SelectItem value="z-a">Z - A</SelectItem>
                             </SelectGroup>
                         </SelectContent>
                     </Select>

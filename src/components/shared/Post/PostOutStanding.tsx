@@ -22,7 +22,7 @@ const PostOutStanding = ({ image, title, name, avatar, slug, content }: PostProp
     }
     return (
         <div className="flex w-full max-w-[360px] flex-col gap-4 rounded-lg border p-4 shadow-md">
-            <Link to={routes.postDetailNoLogin.replace(':slug', slug)} className='flex flex-col gap-2'>
+            <Link to={routes.postsDetail.replace(':slug', slug)} className='flex flex-col gap-2'>
                 <div className="h-[170px] w-full overflow-hidden rounded-lg">
                     <img src={getImagesUrl(image)} alt={title} className="h-full w-full object-cover" />
                 </div>

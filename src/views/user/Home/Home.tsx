@@ -10,10 +10,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useCourseCategoryHome, useCourseSaleHome } from '@/app/hooks/courses/useCourse'
 import { useGetFeaturedPosts } from '@/app/hooks/posts'
 import Banners from '@/components/shared/Banner/Banners'
-import PostOutStanding from '@/components/shared/Post/PostOutStanding'
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
 import { useNavigate } from 'react-router-dom'
 import { getImagesUrl } from '@/lib'
+import HomePosts from '@/components/shared/Post/HomePosts'
 
 const Home = () => {
     const navigate = useNavigate()
@@ -69,7 +69,7 @@ const Home = () => {
                     <div className="p-4">
                         {course_category.map((category) => (
                             <TabsContent key={category.id} value={category.name} className="flex flex-col gap-5">
-                                <Carousel className="w-full" opts={{ align: 'start' }}>
+                                {category.courses && category.courses.length > 0 && <Carousel className="w-full" opts={{ align: 'start' }}>
                                     <div className="w-full">
                                         <CarouselContent className="w-full gap-8">
                                             {category.courses?.map((item, index) => (
@@ -79,7 +79,8 @@ const Home = () => {
                                             ))}
                                         </CarouselContent>
                                     </div>
-                                </Carousel>
+                                </Carousel>}
+
                             </TabsContent>
                         ))}
                     </div>
@@ -98,7 +99,7 @@ const Home = () => {
                         <CarouselContent className="w-full gap-4">
                             {postFeatured && postFeatured.length > 0 && postFeatured?.map((post, index) => (
                                 <CarouselItem key={index} className="w-full min-w-0 basis-full md:basis-[367px]">
-                                    <PostOutStanding
+                                    <HomePosts
                                         key={index}
                                         image={post.thumbnail}
                                         title={post.title}

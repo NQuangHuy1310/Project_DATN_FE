@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
 import { FcGoogle } from 'react-icons/fc'
-import { FaFacebook } from 'react-icons/fa'
+import { Link, useNavigate } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { IoEyeOffSharp, IoEyeSharp } from 'react-icons/io5'
@@ -16,17 +15,6 @@ import { useLogin } from '@/app/hooks/accounts'
 
 const Login = () => {
     const navigate = useNavigate()
-
-    useEffect(() => {
-        const accessToken = localStorage.getItem('access_token')
-        const user = localStorage.getItem('user_data')
-
-        console.log(user)
-
-        if (accessToken && user) {
-            navigate(routes.userDashboard)
-        }
-    }, [navigate])
 
     const {
         register,
@@ -62,16 +50,21 @@ const Login = () => {
     }
 
     const handleGoogleLogin = () => {
-        const popup = window.open(
-            `${backendUrl}auth/google`,
-            '_blank',
-            'width=800,height=600,top=100,left=100'
-        )
+        const popup = window.open(`${backendUrl}auth/google`, '_blank', 'width=800,height=600,top=100,left=100')
 
         if (popup) {
             popup.document.body.style.display = 'none'
         }
     }
+
+    useEffect(() => {
+        const accessToken = localStorage.getItem('access_token')
+        const user = localStorage.getItem('user_data')
+
+        if (accessToken && user) {
+            navigate(routes.userDashboard)
+        }
+    }, [navigate])
 
     return (
         <div className="flex h-screen w-full items-center justify-center">
@@ -159,15 +152,6 @@ const Login = () => {
                             >
                                 <FcGoogle className="size-5" />
                                 <span className="text-base font-medium lg:text-sm">Google</span>
-                            </Button>
-                            <Button
-                                disabled={isSubmitting}
-                                variant="outline"
-                                size="lg"
-                                className="flex flex-1 gap-2 p-2"
-                            >
-                                <FaFacebook className="size-5 text-blue-600" />
-                                <span className="text-base font-medium lg:text-sm">Facebook</span>
                             </Button>
                         </div>
                         <div className="mt-5 text-center">

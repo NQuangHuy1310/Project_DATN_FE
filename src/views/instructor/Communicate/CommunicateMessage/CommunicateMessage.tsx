@@ -20,12 +20,15 @@ import { useGetConversationById, useGetConversations, useSearchChat } from '@/ap
 
 import { cn } from '@/lib/utils'
 import { getImagesUrl, truncate } from '@/lib'
+import echo from '@/configs/echo'
+import { useUserStore } from '@/app/store'
 
 const CommunicateMessage = () => {
     const location = useLocation()
     const navigate = useNavigate()
     const queryParams = new URLSearchParams(location.search)
     const receiverTo = queryParams.get('receiver_to')
+    const user = useUserStore((state) => state.user)
 
     const [conversationId, setConversationId] = useState<number | null>(null)
     const [keySearch, setKeySearch] = useState('')
@@ -36,7 +39,7 @@ const CommunicateMessage = () => {
     const debounce = useDebounce(keySearch, 300)
 
     const { data: userData } = useGetUserById(Number(receiverId))
-    const { data: conversationsData, isLoading: getConversations } = useGetConversations()
+    const { data: conversationsData, isLoading: getConversations, refetch } = useGetConversations()
     const { data: conversationData } = useGetConversationById(Number(receiverId), Number(conversationId))
     const { data: searchConversation, isLoading: loadingSearch } = useSearchChat(debounce)
 
@@ -58,6 +61,21 @@ const CommunicateMessage = () => {
             document.removeEventListener('mousedown', handleClickOutside)
         }
     }, [])
+
+    useEffect(() => {
+        if (conversationData?.conversation_id) {
+            const channel = echo.private(`conversation.${conversationData?.conversation_id}`)
+            channel.listen('MessageSent', async (data: any) => {
+                if (data.sender_id !== user?.id) {
+                    refetch()
+                }
+            })
+        }
+
+        return () => {
+            echo.leaveChannel(`conversation.${conversationData?.conversation_id}`)
+        }
+    }, [conversationData?.conversation_id, refetch, user?.id])
 
     if (getConversations) return <Loading />
 

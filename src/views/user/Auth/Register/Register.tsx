@@ -1,7 +1,6 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { FcGoogle } from 'react-icons/fc'
-import { FaFacebook } from 'react-icons/fa'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { IoEyeOffSharp, IoEyeSharp } from 'react-icons/io5'
@@ -15,6 +14,7 @@ import OTPDialog from '@/components/shared/OTPDialog'
 import { setAccessToken } from '@/lib'
 import { useRegister, useResendOtp, useVerifyOtp } from '@/app/hooks/accounts'
 import { RegisterFormFields, registerSchema } from '@/validations'
+import { backendUrl } from '@/configs/baseUrl'
 
 const Register = () => {
     const {
@@ -24,6 +24,7 @@ const Register = () => {
         handleSubmit,
         formState: { isSubmitting, errors }
     } = useForm<RegisterFormFields>({ resolver: zodResolver(registerSchema) })
+    const navigate = useNavigate()
     const setUser = useUserStore((state) => state.setUser)
     const setProfile = useUserStore((state) => state.setProfile)
 
@@ -69,6 +70,23 @@ const Register = () => {
         const email = getValues('email')
         await resendOtp({ email })
     }
+
+    const handleGoogleLogin = () => {
+        const popup = window.open(`${backendUrl}auth/google`, '_blank', 'width=800,height=600,top=100,left=100')
+
+        if (popup) {
+            popup.document.body.style.display = 'none'
+        }
+    }
+
+    useEffect(() => {
+        const accessToken = localStorage.getItem('access_token')
+        const user = localStorage.getItem('user_data')
+
+        if (accessToken && user) {
+            navigate(routes.userDashboard)
+        }
+    }, [navigate])
 
     return (
         <>
@@ -184,18 +202,10 @@ const Register = () => {
                                     variant="outline"
                                     size="lg"
                                     className="flex flex-1 gap-2 p-2"
+                                    onClick={handleGoogleLogin}
                                 >
                                     <FcGoogle className="size-5" />
                                     <span className="text-base font-medium lg:text-sm">Google</span>
-                                </Button>
-                                <Button
-                                    disabled={isSubmitting}
-                                    variant="outline"
-                                    size="lg"
-                                    className="flex flex-1 gap-2 p-2"
-                                >
-                                    <FaFacebook className="size-5 text-blue-600" />
-                                    <span className="text-base font-medium lg:text-sm">Facebook</span>
                                 </Button>
                             </div>
                             <div className="mt-5 text-center">

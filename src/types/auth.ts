@@ -7,7 +7,7 @@ export interface IUser {
     is_active: boolean
     user_type: 'member' | 'admin' | 'teacher'
     created_at?: string
-    status: 'pending' | 'approved' | 'inject'
+    status: 'pending' | 'approved' | 'inject' | 'rejected'
 }
 
 export interface IProfile {

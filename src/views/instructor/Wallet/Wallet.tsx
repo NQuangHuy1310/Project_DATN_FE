@@ -28,8 +28,12 @@ import {
     PaginationPrevious
 } from '@/components/ui/pagination'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { Dialog, DialogContent } from '@/components/ui/dialog'
 
 const Wallet = () => {
+    const [isOpen, setIsOpen] = useState(false)
+    const [selectedImage, setSelectedImage] = useState<string | null>(null)
+
     const navigate = useNavigate()
     const location = useLocation()
 
@@ -72,6 +76,16 @@ const Wallet = () => {
         } else {
             setCoin(undefined)
         }
+    }
+
+    const handleImageClick = (imageSrc: string) => {
+        setSelectedImage(imageSrc)
+        setIsOpen(true)
+    }
+
+    const handleClose = () => {
+        setIsOpen(false)
+        setSelectedImage(null)
     }
 
     const handleSubmitData = async () => {
@@ -276,6 +290,9 @@ const Wallet = () => {
                                             Trạng thái
                                         </th>
                                         <th scope="col" className="px-6 py-3">
+                                            Minh chứng
+                                        </th>
+                                        <th scope="col" className="px-6 py-3">
                                             Ghi chú
                                         </th>
                                         <th scope="col" className="px-6 py-3">
@@ -292,14 +309,40 @@ const Wallet = () => {
                                             >
                                                 {index + 1}
                                             </th>
-                                            <td className="flex items-center gap-1 px-6 py-4">
-                                                <TbCoinFilled className="size-5 text-secondaryYellow" />
-                                                {parseFloat(item.coin.toString())}
+                                            <td className="px-6 py-4">
+                                                <div className="flex items-center gap-1">
+                                                    <TbCoinFilled className="size-5 text-secondaryYellow" />
+                                                    {parseFloat(item.coin.toString())}
+                                                </div>
                                             </td>
                                             <td className="px-6 py-4">
                                                 {Math.floor(item.amount ?? 0).toLocaleString('vi-VN')} VNĐ
                                             </td>
-                                            <td className="px-6 py-4">{item.status}</td>
+                                            <td className="px-6 py-4">
+                                                <div
+                                                    className={`${
+                                                        item.status === 'Hoàn thành'
+                                                            ? 'bg-secondaryGreen'
+                                                            : item.status === 'Thất bại'
+                                                              ? 'bg-secondaryRed'
+                                                              : 'bg-secondaryYellow'
+                                                    } w-fit rounded-lg px-2 py-1 text-center text-xs text-white`}
+                                                >
+                                                    {item.status}
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                {item.photo_evidence ? (
+                                                    <img
+                                                        className="h-14 w-20 cursor-pointer rounded-sm object-cover"
+                                                        src={item.photo_evidence}
+                                                        alt=""
+                                                        onClick={() => handleImageClick(item.photo_evidence!)}
+                                                    />
+                                                ) : (
+                                                    'Không có minh chứng'
+                                                )}
+                                            </td>
                                             <td className="px-6 py-4">{item.note ?? 'Không có'}</td>
                                             <td className="px-6 py-4">{item.approver_name ?? 'Chưa có người duyệt'}</td>
                                         </tr>
@@ -311,6 +354,14 @@ const Wallet = () => {
                         )}
                     </>
                 )}
+
+                <Dialog open={isOpen} onOpenChange={handleClose}>
+                    <DialogContent className="max-h-[80vh] max-w-5xl overflow-auto">
+                        {selectedImage && (
+                            <img className="h-full w-full rounded-sm" src={selectedImage} alt="Chi tiết" />
+                        )}
+                    </DialogContent>
+                </Dialog>
 
                 {totalPages > 1 && (
                     <div className="mt-4 flex justify-center">

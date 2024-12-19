@@ -1,8 +1,7 @@
 import { useLessonPreview } from '@/app/hooks/courses/useLesson'
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { getImagesUrl } from '@/lib/common'
 import iconLoading from '@/assets/loading.svg'
-import { Button } from '@/components/ui/button'
 
 interface LessonPreviewProps {
     isOpen: boolean

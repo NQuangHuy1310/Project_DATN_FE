@@ -37,6 +37,7 @@ export interface IRequestWithDrawData {
     bank_name: string
     account_number: string
     account_holder: string
+    photo_evidence?: string
     name?: string
     status?: string
     note?: string

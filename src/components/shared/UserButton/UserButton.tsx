@@ -48,6 +48,11 @@ const UserButton = () => {
                         status: 'approved',
                         user_type: 'teacher'
                     })
+                } else {
+                    setUser({
+                        ...users,
+                        status: 'rejected'
+                    })
                 }
             }
         })
@@ -89,7 +94,8 @@ const UserButton = () => {
                         </Link>
                         <DropdownMenuSeparator />
                         {validRoutesMember.some((route) => location.pathname.includes(route)) &&
-                            (user?.user_type === 'teacher' && user.status === 'approved') ? (
+                        user?.user_type === 'teacher' &&
+                        user.status === 'approved' ? (
                             <Link to={routes.instructorDashboard}>
                                 <DropdownMenuItem className="flex items-center gap-2">
                                     <FaRegUser className="size-4 w-8" />
@@ -104,8 +110,10 @@ const UserButton = () => {
                                 </DropdownMenuItem>
                             </Link>
                         )}
-                        {(user?.user_type == 'member' && !user?.status &&
-                            user.status !== 'approved' && user.status !== 'pending') && (
+                        {user?.user_type == 'member' &&
+                            !user?.status &&
+                            user.status !== 'approved' &&
+                            user.status !== 'pending' && (
                                 <Link to={routes.instructorRegister}>
                                     <DropdownMenuItem className="flex items-center gap-2">
                                         <TbUserHexagon className="size-4 w-8" />
@@ -115,6 +123,16 @@ const UserButton = () => {
                                     </DropdownMenuItem>
                                 </Link>
                             )}
+                        {user?.status == 'rejected' && (
+                            <Link to={routes.instructorRegister}>
+                                <DropdownMenuItem className="flex items-center gap-2">
+                                    <TbUserHexagon className="size-4 w-8" />
+                                    <span className="whitespace-nowrap text-sm font-medium">
+                                        Đăng ký lại giảng viên
+                                    </span>
+                                </DropdownMenuItem>
+                            </Link>
+                        )}
                         <DropdownMenuSeparator />
                         <Link to={routes.newPost}>
                             <DropdownMenuItem className="flex items-center gap-2">

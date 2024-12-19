@@ -52,6 +52,18 @@ export const courseOverviewSchema = z
             path: ['price_sale']
         }
     )
+    .refine(
+        (values) => {
+            const priceValue = values.price ? parseFloat(values.price) : null
+            if (priceValue !== null && priceValue > 0 && values.price_sale) {
+                return parseFloat(values.price_sale) >= priceValue * 0.3
+            }
+        },
+        {
+            message: 'Giá khuyến mãi không được nhỏ hơn 30% giá gốc',
+            path: ['price_sale']
+        }
+    )
 
 export const courseModuleSchema = z.object({
     title: z.string().min(1, MessageErrors.requiredField),

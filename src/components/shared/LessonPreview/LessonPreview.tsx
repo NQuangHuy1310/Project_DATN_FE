@@ -74,9 +74,6 @@ const LessonPreview: React.FC<LessonPreviewProps> = ({ isOpen, onClose, idLesson
                     </DialogTitle>
                 </DialogHeader>
                 {renderContent()}
-                <DialogFooter>
-                    <Button>Mua khóa học</Button>
-                </DialogFooter>
             </DialogContent>
         </Dialog>
     )

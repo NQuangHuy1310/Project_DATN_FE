@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import { CiBookmark } from 'react-icons/ci'
 import { BsThreeDots } from 'react-icons/bs'
 import { IoFlagSharp } from 'react-icons/io5'
-import { IoFilterSharp } from 'react-icons/io5'
 import { FaFacebookSquare, FaLink } from 'react-icons/fa'
 
 import routes from '@/configs/routes'
@@ -12,7 +11,6 @@ import { getImagesUrl } from '@/lib'
 import { useGetFeaturedPosts } from '@/app/hooks/posts'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu'
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { formatDistanceToNow } from 'date-fns'
 import { vi } from 'date-fns/locale'
 
@@ -31,20 +29,7 @@ const PostFeatured = () => {
         <div>
             <Banners />
             <div className="mx-auto flex max-w-[1200px] items-center gap-4 px-5 py-9 lg:px-0">
-                <h2 className="text-xl font-medium">Danh sách bài viết</h2>
-                <Select>
-                    <SelectTrigger>
-                        <IoFilterSharp className="size-4" />
-                        <SelectValue placeholder="Sắp xếp" />
-                    </SelectTrigger>
-                    <SelectContent side="bottom" align="end">
-                        <SelectGroup>
-                            <SelectItem value="all">Tất cả</SelectItem>
-                            <SelectItem value="a-z">Bài viết nổi bật</SelectItem>
-                            <SelectItem value="z-a">Bài viết mới nhất</SelectItem>
-                        </SelectGroup>
-                    </SelectContent>
-                </Select>
+                <h2 className="text-2xl font-semibold">Danh sách bài viết</h2>
             </div>
 
             <div className="container-main pb-10">

@@ -58,7 +58,6 @@ import CourseWishList from '@/views/user/Courses/CourseWishList'
 import PerformanceStudents from '@/views/instructor/Performance/PerformanceStudents'
 import Certification from '@/views/user/Certification/Certification'
 import CourseHistory from '@/views/user/Courses/CourseHistory'
-import LearningPath from '@/views/user/LearningPath'
 import LearningPathCourse from '@/views/user/LearningPath/LearningPathCourse'
 import PerformanceRatings from '@/views/instructor/Performance/PerformanceRatings'
 import Communicate from '@/views/user/ComunicateAi/Communicate'
@@ -67,6 +66,7 @@ import Profile from '@/views/user/Profile'
 import Roadmap from '@/views/instructor/Roadmap'
 import PurchaseHistory from '@/views/instructor/PurchaseHistory'
 import Transaction from '@/views/user/wallet/transaction'
+import PostDetailNoLogin from '@/views/user/Posts/PostDetailNoLogin'
 import Chat from '@/views/user/Chat'
 
 // Routes không cần đăng nhập
@@ -78,7 +78,9 @@ export const publicRoutes = [
     { path: routes.forgotPassword, layout: HomeLayout, element: ForgotPassword },
     { path: routes.courseDetailNoLogin, layout: HomeLayout, element: CourseDetailNoLogin },
     { path: routes.courseOutstanding, layout: HomeLayout, element: CourseOutstanding },
-    { path: routes.postFeatured, layout: HomeLayout, element: PostFeatured }
+    { path: routes.postFeatured, layout: HomeLayout, element: PostFeatured },
+    { path: routes.postDetailNoLogin, layout: HomeLayout, element: PostDetailNoLogin }
+
 ]
 
 // Routes cần đăng nhập
@@ -141,8 +143,6 @@ export const privateRoutes = (user?: IUser) => [
     // wallet
     { path: routes.wallet, layout: UserDashboardLayout, element: Transaction, title: 'Nạp tiền vào tài khoản' },
     { path: routes.communicate, layout: UserDashboardLayout, element: Communicate, title: 'Chat AI' },
-    // LearningPath
-    { path: routes.learningPaths, layout: UserDashboardLayout, element: LearningPath, title: 'Lộ trình học tập' },
     {
         path: routes.courseLeaningPath,
         layout: UserDashboardLayout,

@@ -14,10 +14,19 @@ import { Dialog, DialogContent } from '@/components/ui/dialog'
 import { useCourseFree, useCoursePopulate, useCourseToday } from '@/app/hooks/courses/useCourse'
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
 
-import { FaCheckCircle } from 'react-icons/fa'
+import { FaCheckCircle, FaRegUser } from 'react-icons/fa'
+import { Link, useNavigate } from 'react-router-dom'
+import { formatDuration, getImagesUrl } from '@/lib'
+import { CourseLevel } from '@/components/shared/Course/CourseLevel'
+import { TbCoinFilled } from 'react-icons/tb'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { FaRegCirclePlay } from 'react-icons/fa6'
+import { IoTimeOutline } from 'react-icons/io5'
+import { IoMdStar } from 'react-icons/io'
 
 const Dashboard = () => {
     const [showAdminPost, setShowAdminPost] = useState(false)
+    const navigate = useNavigate()
 
     const { data: coursePopulate, isLoading } = useCoursePopulate()
     const { data: instructorMonth } = useInstructorMonth()
@@ -29,6 +38,16 @@ const Dashboard = () => {
     const formatTime = (date: any) => {
         return formatDistanceToNow(new Date(date), { addSuffix: true, locale: vi })
     }
+
+    const Star = (star: number) => {
+        const stars = [...Array(5)].map((_, index) => {
+            const fullStar = index < Math.floor(star)
+            const halfStar = index === Math.floor(star) && star % 1 !== 0
+            return { fullStar, halfStar }
+        })
+        return stars
+    }
+
 
     useEffect(() => {
         const hasSeenAdminPost = localStorage.getItem('hasSeenAdminPost')
@@ -198,7 +217,110 @@ const Dashboard = () => {
                                 {courseToday &&
                                     courseToday?.map((item, index) => (
                                         <CarouselItem key={index} className="w-full min-w-0 basis-full !p-0">
-                                            <Course data={item} key={index} />
+                                            <div className="card flex w-full cursor-text flex-col gap-3 shadow-md hover:shadow-[0px_40px_100px_0px_#0000000d] hover:transition-all md:w-[300px]">
+                                                <Link
+                                                    to={routes.courseDetail.replace(':slug', item.slug)}
+                                                    className="flex flex-col gap-2"
+                                                >
+                                                    <div className="relative h-[140px] flex-shrink-0 cursor-pointer">
+                                                        <img
+                                                            src={getImagesUrl(item.thumbnail!)}
+                                                            alt={item.name}
+                                                            className="h-full w-full rounded-lg object-cover"
+                                                        />
+                                                        <div className="absolute bottom-2.5 left-2.5">
+                                                            <CourseLevel courseLevel={item.level!} />
+                                                        </div>
+                                                    </div>
+                                                    <h3 className="text-overflow cursor-pointer text-base font-bold text-black md:text-lg">{item.name}</h3>
+                                                </Link>
+                                                <div className="flex flex-col gap-2.5">
+                                                    <div>
+                                                        {item?.price > 0 || item?.price_sale > 0 ? (
+                                                            <div className="flex items-center gap-3">
+                                                                <div className="flex items-center gap-1">
+                                                                    {item?.price_sale > 0 ? (
+                                                                        <div className="flex items-center gap-1">
+                                                                            <TbCoinFilled className="size-5 text-yellow-500" />
+                                                                            <del className="font-semibold text-red-600">{Math.floor(item?.price)}</del>
+                                                                        </div>
+                                                                    ) : (
+                                                                        <div className="flex items-center gap-1">
+                                                                            <TbCoinFilled className="size-5 text-yellow-500" />
+                                                                            <p className="text-base font-semibold text-red-600">
+                                                                                {Math.floor(item?.price)}
+                                                                            </p>
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+                                                                {item?.price_sale > 0 && (
+                                                                    <div className="flex items-center gap-1">
+                                                                        <TbCoinFilled className="size-5 text-yellow-500" />
+                                                                        <p className="text-base font-semibold text-red-600">
+                                                                            {Math.floor(item?.price_sale)}
+                                                                        </p>
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                        ) : (
+                                                            <span className="text-base font-semibold text-orange-500">Miễn phí</span>
+                                                        )}
+                                                    </div>
+
+                                                    <div
+                                                        onClick={() => navigate(routes.instructorDetail.replace(':id', String(item.id_user)))}
+                                                        className={`flex ${!item.is_course_bought ? 'mt-2.5' : ''} cursor-pointer`}
+                                                    >
+                                                        {item.user && (
+                                                            <div className="flex w-fit items-center gap-2">
+                                                                <Avatar className="size-8 flex-shrink-0">
+                                                                    <AvatarImage src={getImagesUrl(item.user?.avatar || '')} alt={item.user.name} />
+                                                                    <AvatarFallback className="flex size-8 items-center justify-center bg-slate-500/50 font-semibold">
+                                                                        {item.user.name.charAt(0)}
+                                                                    </AvatarFallback>
+                                                                </Avatar>
+                                                                <p className="flex-1">{item.user.name}</p>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                    <div className="flex items-center gap-1">
+                                                        <span className="ml-1 font-semibold">
+                                                            {(Number(item.ratings_avg_rate) % 1 === 0
+                                                                ? Math.floor(Number(item.ratings_avg_rate))
+                                                                : Number(item.ratings_avg_rate).toFixed(1)) || '0'}
+                                                        </span>
+
+                                                        {Star(item.ratings_avg_rate!).map((star, starIndex) => (
+                                                            <div key={starIndex} className="relative">
+                                                                <IoMdStar className="size-4 text-gray-300" />
+                                                                {star.fullStar && <IoMdStar className="absolute left-0 top-0 size-4 text-primary" />}
+                                                                {star.halfStar && (
+                                                                    <IoMdStar
+                                                                        className="absolute left-0 top-0 size-4 text-primary"
+                                                                        style={{ clipPath: 'inset(0 50% 0 0)' }}
+                                                                    />
+                                                                )}
+                                                            </div>
+                                                        ))}
+                                                        <span className="ml-1 font-medium text-darkGrey">({item.ratings_count} đánh giá)</span>
+                                                    </div>
+                                                    <div className="flex items-center justify-between">
+                                                        <div className="flex items-center gap-1.5">
+                                                            <FaRegUser className="size-5 text-darkGrey" />
+                                                            <p className="font-medium text-black">{item.total_student}</p>
+                                                        </div>
+                                                        <div className="flex items-center gap-1.5">
+                                                            <FaRegCirclePlay className="size-5 text-darkGrey" />
+                                                            <p className="font-medium text-black">{item.total_lessons}</p>
+                                                        </div>
+                                                        <div className="flex items-center gap-1.5">
+                                                            <IoTimeOutline className="size-5 text-darkGrey" />
+                                                            <p className="font-medium text-black">{formatDuration((item?.total_duration_video as unknown as number) || 0)}</p>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
                                         </CarouselItem>
                                     ))}
                             </CarouselContent>

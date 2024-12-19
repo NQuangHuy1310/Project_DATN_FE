@@ -13,6 +13,7 @@ import Dashboard from '@/app/layouts/UserLayouts/Dashboard'
 import HomeLayout from '@/app/layouts/AuthLayouts/HomeLayout'
 
 import { useUserStore } from '@/app/store/userStore'
+import ScrollToTop from '@/components/shared/ScrollToTop/ScrollToTop'
 
 function App() {
     const [isLogin, setIsLogin] = useState(false)
@@ -27,6 +28,7 @@ function App() {
 
     return (
         <Router>
+            <ScrollToTop />
             <div className="App">
                 <Routes>
                     {publicRoutes.map((route, index) => {

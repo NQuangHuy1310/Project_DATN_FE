@@ -1,7 +1,13 @@
-import { useGetWishList, useGetWishListBySearch } from '@/app/hooks/courses/useCourse'
+import { useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
+
+import { getVisiblePages } from '@/lib'
 import { useDebounce } from '@/app/hooks/custom/useDebounce'
-import Loading from '@/components/Common/Loading/Loading'
+import { useGetWishList, useGetWishListBySearch } from '@/app/hooks/courses/useCourse'
+
+import noContent from '@/assets/no-content.jpg'
 import Course from '@/components/shared/Course'
+import Loading from '@/components/Common/Loading/Loading'
 import FilterBar from '@/components/shared/FilterBar/FilterBar'
 import {
     Pagination,
@@ -11,10 +17,6 @@ import {
     PaginationNext,
     PaginationPrevious
 } from '@/components/ui/pagination'
-import { getVisiblePages } from '@/lib'
-import { useEffect, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
-
 const CourseWishList = () => {
     const navigate = useNavigate()
     const location = useLocation()
@@ -27,7 +29,7 @@ const CourseWishList = () => {
     const [level, setLevel] = useState(queryParams.get('level') || '')
     const [search, setSearch] = useState(queryParams.get('search') || '')
 
-    const { data: wishList, isLoading } = useGetWishList(category, level, arrange, page, 6)
+    const { data: wishList, isLoading } = useGetWishList(category, level, arrange, page, 8)
     const debounceValue = useDebounce(search, 500)
     const { data: wishListBySearch } = useGetWishListBySearch(debounceValue)
 
@@ -83,7 +85,7 @@ const CourseWishList = () => {
                     <div className="flex w-full justify-center">
                         <div className="flex flex-col gap-2 text-center">
                             <img
-                                src="https://gcdnb.pbrd.co/images/7xbVj5PXiOQY.png"
+                                src={noContent}
                                 className="w-full max-w-[350px]"
                                 alt=""
                             />

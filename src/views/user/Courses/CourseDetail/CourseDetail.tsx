@@ -57,6 +57,7 @@ const CourseDetail = () => {
     const [isProcessing, setIsProcessing] = useState<boolean>(false)
     const handleToggleCourse = () => setToggleCourse(!toggleCourse)
     const [toggleCourse, setToggleCourse] = useState<boolean>(false)
+
     const [isPending, setIsPending] = useState<boolean>(false)
 
     const { user } = useGetUserProfile()
@@ -64,8 +65,8 @@ const CourseDetail = () => {
 
     const { mutateAsync: addRating } = useCreateRating()
     const { mutateAsync: registerCourse } = useRegisterCourse()
-    const { mutateAsync: followTeacher } = useFollowTeacher()
-    const { mutateAsync: unFollowTeacher } = useUnFollowTeacher()
+    const { mutateAsync: followTeacher, isPending: follow } = useFollowTeacher()
+    const { mutateAsync: unFollowTeacher, isPending: unFollow } = useUnFollowTeacher()
     const { mutateAsync: addWishList } = useAddWishList()
     const { mutateAsync: unWishList } = useUnWishList()
     const totalTime = formatDuration((courseDetail?.total_duration_video as unknown as number) || 0)
@@ -187,6 +188,7 @@ const CourseDetail = () => {
                                                     variant="default"
                                                     className="w-full py-3"
                                                     onClick={handleFollowTeacher}
+                                                    disabled={follow}
                                                 >
                                                     {TeacherStatus.follow}
                                                 </Button>
@@ -196,6 +198,7 @@ const CourseDetail = () => {
                                                     variant="outline"
                                                     className="w-full py-3 duration-500 hover:bg-red-400 hover:text-white"
                                                     onClick={handleUnFollowTeacher}
+                                                    disabled={unFollow}
                                                 >
                                                     {TeacherStatus.unFollow}
                                                 </Button>
@@ -305,13 +308,12 @@ const CourseDetail = () => {
                                         <div className="flex flex-col gap-2">
                                             <div className="flex h-2 w-full items-center overflow-hidden rounded bg-darkGrey/20">
                                                 <span
-                                                    className={`block h-full ${
-                                                        courseDetail?.level === 'Sơ cấp'
-                                                            ? 'bg-secondaryYellow'
-                                                            : courseDetail?.level === 'Trung cấp'
-                                                              ? 'bg-secondaryGreen'
-                                                              : 'bg-secondaryRed'
-                                                    }`}
+                                                    className={`block h-full ${courseDetail?.level === 'Sơ cấp'
+                                                        ? 'bg-secondaryYellow'
+                                                        : courseDetail?.level === 'Trung cấp'
+                                                            ? 'bg-secondaryGreen'
+                                                            : 'bg-secondaryRed'
+                                                        }`}
                                                     style={{ width: `${courseDetail?.progress_percent}%` }}
                                                 ></span>
                                                 <span
@@ -325,7 +327,7 @@ const CourseDetail = () => {
                                         </div>
                                     )
                                 ) : (courseDetail?.price && courseDetail?.price > 0) ||
-                                  (courseDetail?.price_sale && courseDetail?.price_sale > 0) ? (
+                                    (courseDetail?.price_sale && courseDetail?.price_sale > 0) ? (
                                     <div className="flex items-center gap-3">
                                         <div className="flex items-center gap-1">
                                             <div className="flex items-center gap-1">
@@ -413,8 +415,8 @@ const CourseDetail = () => {
                                         )}
                                     </div>
                                 ) : (!courseDetail?.price && !courseDetail?.price_sale) ||
-                                  (Math.floor(courseDetail?.price) === 0 &&
-                                      Math.floor(courseDetail?.price_sale) === 0) ? (
+                                    (Math.floor(courseDetail?.price) === 0 &&
+                                        Math.floor(courseDetail?.price_sale) === 0) ? (
                                     <div className="flex items-center gap-3">
                                         <Button
                                             className="block w-full rounded-md bg-primary py-2 text-center text-white"
@@ -531,13 +533,12 @@ const CourseDetail = () => {
                                             <div className="flex flex-col gap-2">
                                                 <div className="flex h-2 w-full items-center overflow-hidden rounded bg-darkGrey/20">
                                                     <span
-                                                        className={`block h-full ${
-                                                            courseDetail?.level === 'Sơ cấp'
-                                                                ? 'bg-secondaryYellow'
-                                                                : courseDetail?.level === 'Trung cấp'
-                                                                  ? 'bg-secondaryGreen'
-                                                                  : 'bg-secondaryRed'
-                                                        }`}
+                                                        className={`block h-full ${courseDetail?.level === 'Sơ cấp'
+                                                            ? 'bg-secondaryYellow'
+                                                            : courseDetail?.level === 'Trung cấp'
+                                                                ? 'bg-secondaryGreen'
+                                                                : 'bg-secondaryRed'
+                                                            }`}
                                                         style={{ width: `${courseDetail?.progress_percent}%` }}
                                                     ></span>
                                                     <span
@@ -551,7 +552,7 @@ const CourseDetail = () => {
                                             </div>
                                         )
                                     ) : (courseDetail?.price && courseDetail?.price > 0) ||
-                                      (courseDetail?.price_sale && courseDetail?.price_sale > 0) ? (
+                                        (courseDetail?.price_sale && courseDetail?.price_sale > 0) ? (
                                         <div className="flex items-center gap-3">
                                             <div className="flex items-center gap-1">
                                                 <div className="flex items-center gap-1">
@@ -639,8 +640,8 @@ const CourseDetail = () => {
                                                 )}
                                             </div>
                                         ) : (!courseDetail?.price && !courseDetail?.price_sale) ||
-                                          (Math.floor(courseDetail?.price) === 0 &&
-                                              Math.floor(courseDetail?.price_sale) === 0) ? (
+                                            (Math.floor(courseDetail?.price) === 0 &&
+                                                Math.floor(courseDetail?.price_sale) === 0) ? (
                                             <div className="flex items-center gap-3">
                                                 <Button
                                                     className="block w-full rounded-md bg-primary py-2 text-center text-white"
@@ -734,9 +735,8 @@ const CourseDetail = () => {
                                                         <FaStar
                                                             key={star}
                                                             onClick={() => setValue('rate', star)}
-                                                            className={`cursor-pointer ${
-                                                                star <= rating ? 'text-yellow-500' : 'text-gray-300'
-                                                            } h-5 w-5 md:h-8 md:w-8`}
+                                                            className={`cursor-pointer ${star <= rating ? 'text-yellow-500' : 'text-gray-300'
+                                                                } h-5 w-5 md:h-8 md:w-8`}
                                                         />
                                                     ))}
                                                 </div>

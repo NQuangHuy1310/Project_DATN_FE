@@ -1,9 +1,14 @@
+import { useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
+
+import { getVisiblePages } from '@/lib'
+import noContent from '@/assets/no-content.jpg'
+import { useDebounce } from '@/app/hooks/custom/useDebounce'
+import { useCourseMyBought, useGetMyCourseBySearch } from '@/app/hooks/accounts/useMyBought'
+
+import Loading from '@/components/Common/Loading/Loading'
 import FilterBar from '@/components/shared/FilterBar/FilterBar'
 import CourseMyBought from '@/components/shared/Course/CourseMyBought'
-import { useCourseMyBought, useGetMyCourseBySearch } from '@/app/hooks/accounts/useMyBought'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { useEffect, useState } from 'react'
-import { getVisiblePages } from '@/lib'
 import {
     Pagination,
     PaginationContent,
@@ -13,8 +18,6 @@ import {
     PaginationPrevious
 } from '@/components/ui/pagination'
 
-import Loading from '@/components/Common/Loading/Loading'
-import { useDebounce } from '@/app/hooks/custom/useDebounce'
 
 const MyCourses = () => {
     const navigate = useNavigate()
@@ -28,7 +31,7 @@ const MyCourses = () => {
     const [level, setLevel] = useState(queryParams.get('level') || '')
     const [search, setSearch] = useState(queryParams.get('search') || '')
 
-    const { data: courseBought, isLoading } = useCourseMyBought(category, level, arrange, page, 6)
+    const { data: courseBought, isLoading } = useCourseMyBought(category, level, arrange, page, 8)
     const debounceValue = useDebounce(search, 500)
     const { data: myCourseBySearch } = useGetMyCourseBySearch(debounceValue)
     const courseToShow = search ? myCourseBySearch?.data : courseBought?.data
@@ -74,7 +77,7 @@ const MyCourses = () => {
             {search && myCourseBySearch?.data && myCourseBySearch?.data.length > 0 ? (
                 <p className="text-lg font-medium text-darkGrey">{title}</p>
             ) : null}
-            <div className="flex flex-wrap gap-10">
+            <div className="flex flex-wrap gap-5">
                 {courseToShow && courseToShow.length > 0 ? (
                     courseToShow.map((item, index) => <CourseMyBought data={item} key={index} />)
                 ) : search ? (
@@ -85,7 +88,7 @@ const MyCourses = () => {
                     <div className="flex w-full justify-center">
                         <div className="flex flex-col gap-2 text-center">
                             <img
-                                src="https://gcdnb.pbrd.co/images/7xbVj5PXiOQY.png"
+                                src={noContent}
                                 className="w-full max-w-[350px]"
                                 alt=""
                             />

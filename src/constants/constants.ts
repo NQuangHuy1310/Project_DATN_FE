@@ -56,11 +56,6 @@ export const sidebarList = [
         path: routes.posts
     },
     {
-        title: 'Lộ trình',
-        icon: FaRoad,
-        path: routes.learningPaths
-    },
-    {
         title: 'Ví',
         icon: IoWalletSharp,
         path: routes.wallet

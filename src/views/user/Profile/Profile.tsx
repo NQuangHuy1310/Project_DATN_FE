@@ -48,7 +48,7 @@ const Profile = () => {
                         </AvatarFallback>
                     </Avatar>
 
-                    <h1 className="text-center text-xl font-bold md:mb-5 md:mt-auto md:flex-shrink-0 md:text-2xl">
+                    <h1 className="text-center text-xl font-bold md:mb-8 md:mt-auto md:flex-shrink-0 md:text-2xl">
                         {profileUser?.user?.name}
                     </h1>
                 </div>
@@ -58,7 +58,7 @@ const Profile = () => {
                     <div className="grid grid-cols-12 gap-5">
                         <div className="col-span-12 md:col-span-6">
                             {/* About Section */}
-                            <div className="rounded-xl border bg-white p-4 shadow-lg">
+                            <div className="rounded-xl border bg-white p-5 shadow-lg">
                                 <h2 className="text-xl font-semibold">Giới thiệu</h2>
                                 <div className="mt-4 flex flex-col gap-3">
                                     {user?.bio && (
@@ -87,7 +87,7 @@ const Profile = () => {
                         </div>
                         <div className="col-span-12 md:col-span-6">
                             {/* About Section */}
-                            <div className="h-full rounded-xl border bg-white p-4 shadow-lg">
+                            <div className="h-full rounded-xl border bg-white p-5 shadow-lg">
                                 <div className="flex flex-col gap-2">
                                     <h2 className="text-xl font-semibold">Hoạt động gần đây</h2>
                                     <p>Chưa có hoạt động nào</p>

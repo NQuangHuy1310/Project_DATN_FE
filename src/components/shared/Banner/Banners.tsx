@@ -25,9 +25,6 @@ const Banners = () => {
                                         {banner.title}
                                     </h1>
                                     <p className="text-xs md:text-sm lg:text-base">{banner.content}</p>
-                                    <div className="flex items-center gap-4">
-                                        <Button onClick={() => navigate(routes.login)} className="border border-white px-8 py-[19px]">Đăng ký ngay</Button>
-                                    </div>
                                 </div>
                                 <div className="px-5 lg:px-0">
                                     <img

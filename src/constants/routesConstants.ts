@@ -67,6 +67,7 @@ import Roadmap from '@/views/instructor/Roadmap'
 import PurchaseHistory from '@/views/instructor/PurchaseHistory'
 import Transaction from '@/views/user/wallet/transaction'
 import PostDetailNoLogin from '@/views/user/Posts/PostDetailNoLogin'
+import Chat from '@/views/user/Chat'
 
 // Routes không cần đăng nhập
 export const publicRoutes = [
@@ -153,7 +154,9 @@ export const privateRoutes = (user?: IUser) => [
     { path: routes.certification, layout: UserDashboardLayout, element: Certification, title: 'Chứng chỉ' },
 
     //Payment
-    { path: routes.discount, layout: UserDashboardLayout, element: Discount, title: 'Mã giảm giá của bạn' }
+    { path: routes.discount, layout: UserDashboardLayout, element: Discount, title: 'Mã giảm giá của bạn' },
+
+    { path: routes.chat, layout: UserDashboardLayout, element: Chat, title: 'Đoạn chat của tôi' }
 ]
 
 export const privateRoutesInstructor = [
@@ -173,7 +176,7 @@ export const privateRoutesInstructor = [
         path: routes.instructorMessage,
         layout: InstructorDashboardLayout,
         element: CommunicateMessage,
-        title: 'Tin nhắn'
+        title: 'Đoạn chat'
     },
     {
         path: routes.instructorPerformanceOverview,

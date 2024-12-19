@@ -6,12 +6,15 @@ import { userApis } from '@/app/services/accounts'
 import { IChangePassword, IUpdateProfile, IUserData } from '@/types'
 import { IPosts } from '@/types/post'
 
-export const useGetUserById = (userId: number, options?: Omit<UseQueryOptions<IUserData>, 'queryKey' | 'queryFn'>) => {
+export const useGetUserById = (
+    userId: number | undefined,
+    options?: Omit<UseQueryOptions<IUserData>, 'queryKey' | 'queryFn'>
+) => {
     return useQuery({
         ...options,
-        enabled: userId !== undefined,
+        enabled: userId !== undefined && userId !== 0,
         queryKey: ['getUserById', userId],
-        queryFn: () => userApis.getUserById(userId)
+        queryFn: () => userApis.getUserById(userId!)
     })
 }
 

@@ -1,8 +1,9 @@
-import { useState } from 'react'
+/* eslint-disable indent */
 import { vi } from 'date-fns/locale'
 import { FaPlus } from 'react-icons/fa6'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useEffect, useRef, useState } from 'react'
 import { parse, formatDistanceToNow } from 'date-fns'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -17,8 +18,8 @@ import { useGetUserById } from '@/app/hooks/accounts'
 import { useDebounce } from '@/app/hooks/custom/useDebounce'
 import { useGetConversationById, useGetConversations, useSearchChat } from '@/app/hooks/chats'
 
-import { getImagesUrl, truncate } from '@/lib'
 import { cn } from '@/lib/utils'
+import { getImagesUrl, truncate } from '@/lib'
 
 const Chat = () => {
     const location = useLocation()
@@ -28,19 +29,35 @@ const Chat = () => {
 
     const [conversationId, setConversationId] = useState<number | null>(null)
     const [keySearch, setKeySearch] = useState('')
+    const [visible, setVisible] = useState(false)
+    const [receiverId, setReceiverId] = useState<number>(Number(receiverTo))
+    const boxRef = useRef<HTMLDivElement>(null)
 
     const debounce = useDebounce(keySearch, 300)
 
-    const { data: userData } = useGetUserById(Number(receiverTo))
+    const { data: userData } = useGetUserById(Number(receiverId))
     const { data: conversationsData, isLoading: getConversations } = useGetConversations()
-    const { data: conversationData } = useGetConversationById(Number(receiverTo), Number(conversationId))
-    const { data: searchConversation } = useSearchChat(debounce)
+    const { data: conversationData } = useGetConversationById(Number(receiverId), Number(conversationId))
+    const { data: searchConversation, isLoading: loadingSearch } = useSearchChat(debounce)
 
     const handleSetConversationId = (conversationId: number) => {
         setConversationId(conversationId)
         queryParams.delete('receiver_to')
         navigate({ search: queryParams.toString() })
     }
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (boxRef.current && !boxRef.current.contains(event.target as Node)) {
+                setVisible(false)
+            }
+        }
+
+        document.addEventListener('mousedown', handleClickOutside)
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside)
+        }
+    }, [])
 
     if (getConversations) return <Loading />
 
@@ -50,13 +67,95 @@ const Chat = () => {
                 <div className="flex h-full flex-col gap-4">
                     <div className="flex flex-shrink-0 flex-col gap-2 border-b">
                         <div className="flex items-center gap-4">
-                            <div className="w-full">
+                            <div className="relative w-[90%]">
                                 <Input
                                     placeholder="Tìm kiếm đoạn chat"
                                     value={keySearch}
                                     onChange={(e) => setKeySearch(e.target.value)}
+                                    onClick={() => setVisible(true)}
                                 />
+                                {searchConversation && visible && (
+                                    <div
+                                        ref={boxRef}
+                                        className="absolute top-[120%] z-40 max-h-[75vh] w-full overflow-y-auto rounded-lg border bg-white px-4 py-3 shadow"
+                                    >
+                                        <div className="flex flex-col gap-4">
+                                            <div className="flex items-center gap-2">
+                                                {loadingSearch && (
+                                                    <div className="flex items-center justify-center">
+                                                        <div className="h-5 w-5 animate-spin rounded-full border-2 border-darkGrey border-t-transparent"></div>
+                                                    </div>
+                                                )}
+                                            </div>
+                                            {searchConversation?.instructors &&
+                                                searchConversation.instructors.length > 0 && (
+                                                    <>
+                                                        <div className="flex items-center justify-between border-b pb-3">
+                                                            <h2 className="text-base font-semibold">Giảng viên</h2>
+                                                        </div>
+                                                        <div className="flex flex-col gap-3 py-4">
+                                                            {searchConversation?.instructors.map((user, index) => (
+                                                                <div
+                                                                    className="flex cursor-pointer items-center gap-2 rounded-md p-3 hover:bg-softGrey"
+                                                                    key={index}
+                                                                    onClick={() => setReceiverId(user.id)}
+                                                                >
+                                                                    <Avatar className="size-9 cursor-pointer">
+                                                                        <AvatarImage
+                                                                            className="object-cover"
+                                                                            src={getImagesUrl(user.avatar || '')}
+                                                                            alt={user.name}
+                                                                        />
+                                                                        <AvatarFallback className="bg-slate-500/50 text-xl font-semibold text-white">
+                                                                            {user.name.charAt(0).toUpperCase()}
+                                                                        </AvatarFallback>
+                                                                    </Avatar>
+                                                                    <h3 className="w-[300px] overflow-hidden truncate whitespace-nowrap text-base">
+                                                                        {user.name}
+                                                                    </h3>
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    </>
+                                                )}
+
+                                            {searchConversation?.students && searchConversation.students.length > 0 && (
+                                                <>
+                                                    <div className="flex items-center justify-between border-b pb-3">
+                                                        <h2 className="text-base font-semibold">Học viên</h2>
+                                                    </div>
+                                                    <div className="flex flex-col gap-3 py-4">
+                                                        {searchConversation?.students.map((user, index) => (
+                                                            <div
+                                                                className="flex cursor-pointer items-center gap-2 rounded-md p-3 hover:bg-softGrey"
+                                                                key={index}
+                                                                onClick={() => setReceiverId(user.id)}
+                                                            >
+                                                                <Avatar className="size-9 cursor-pointer">
+                                                                    <AvatarImage
+                                                                        className="object-cover"
+                                                                        src={getImagesUrl(user.avatar || '')}
+                                                                        alt={user.name}
+                                                                    />
+                                                                    <AvatarFallback className="bg-slate-500/50 text-xl font-semibold text-white">
+                                                                        {user.name.charAt(0).toUpperCase()}
+                                                                    </AvatarFallback>
+                                                                </Avatar>
+                                                                <h3 className="w-[300px] overflow-hidden truncate whitespace-nowrap text-base">
+                                                                    {user.name}
+                                                                </h3>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                </>
+                                            )}
+                                        </div>
+                                    </div>
+                                )}
                             </div>
+                            <Button variant="outline" size="icon">
+                                <FaPlus className="size-5 text-primary" />
+                            </Button>
                         </div>
                         <Tabs defaultValue="all">
                             <TabsList className="grid w-[200px] grid-cols-2 gap-4">
@@ -116,7 +215,7 @@ const Chat = () => {
                                                 <p
                                                     className={cn(
                                                         'size-2 rounded-full',
-                                                        message.is_read === 1 ? 'bg-secondaryRed' : 'bg-transparent'
+                                                        message.is_read !== 1 ? 'bg-secondaryRed' : 'bg-transparent'
                                                     )}
                                                 ></p>
                                             </div>
@@ -136,8 +235,8 @@ const Chat = () => {
             <ResizablePanel defaultSize={75} className="p-4">
                 {conversationId ? (
                     <Message messageData={conversationData} userData={userData} />
-                ) : receiverTo ? (
-                    <Message userData={userData} receiverId={receiverTo} />
+                ) : receiverId ? (
+                    <Message messageData={conversationData} userData={userData} receiverId={receiverId?.toString()} />
                 ) : (
                     <div className="flex h-full w-full items-center justify-center">
                         <p className="rounded-full bg-secondaryGreen p-2 text-white">

@@ -14,7 +14,7 @@ interface DialogChangePriceProps {
 }
 
 const DialogChangePrice = ({ courseData, open, setOpen }: DialogChangePriceProps) => {
-    const { mutateAsync } = useUpdateCoursePriceSale()
+    const { mutateAsync, isPending } = useUpdateCoursePriceSale()
 
     const [coursePrice, setCoursePriceSale] = useState<number>(+courseData.price_sale)
 
@@ -60,15 +60,16 @@ const DialogChangePrice = ({ courseData, open, setOpen }: DialogChangePriceProps
                             type="number"
                             value={formatPrice(coursePrice)}
                             onChange={(e) => setCoursePriceSale(+e.target.value)}
+                            disabled={isPending}
                         />
                         <span className="text-xs text-darkGrey">Giá khuyến mãi của khoá học</span>
                     </div>
                 </div>
                 <DialogFooter>
-                    <Button type="button" onClick={() => setOpen(false)} variant="destructive">
+                    <Button type="button" onClick={() => setOpen(false)} variant="destructive" disabled={isPending}>
                         Hủy
                     </Button>
-                    <Button type="submit" onClick={handleSubmit}>
+                    <Button type="submit" onClick={handleSubmit} disabled={isPending}>
                         Lưu giá khóa học
                     </Button>
                 </DialogFooter>

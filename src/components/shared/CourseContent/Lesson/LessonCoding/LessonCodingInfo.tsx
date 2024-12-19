@@ -120,7 +120,7 @@ const LessonCodingInfo = ({ moduleId, setVisible, lessonId, setLessonID, canEdit
                                 <div className="text-sm text-secondaryRed">{errors.language.message}</div>
                             )}
                             {lessonData && (
-                                <span className="text-xs text-muted-foreground">
+                                <span className="text-sm text-secondaryRed">
                                     Nếu bạn thay đổi ngôn ngữ thì mã nguồn của bạn sẽ bị xoá.
                                 </span>
                             )}

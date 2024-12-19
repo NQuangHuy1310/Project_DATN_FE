@@ -13,6 +13,7 @@ import { getImagesUrl } from '@/lib'
 import { useSendMessage } from '@/app/hooks/chats'
 import { IConversationById, IMessage } from '@/types/chats'
 import echo from '@/configs/echo'
+import { useUserStore } from '@/app/store'
 
 interface IMessageProps {
     receiverId?: string | null
@@ -22,6 +23,7 @@ interface IMessageProps {
 
 const Message = ({ messageData, receiverId, userData }: IMessageProps) => {
     const { mutateAsync: sendMessage, isPending } = useSendMessage()
+    const user = useUserStore((state) => state.user)
 
     const [message, setMessage] = useState('')
     const [messages, setMessages] = useState<IMessage[] | undefined>(undefined)
@@ -47,6 +49,20 @@ const Message = ({ messageData, receiverId, userData }: IMessageProps) => {
         }
 
         await sendMessage(payload)
+        setMessages((prev: any) => {
+            return [
+                ...(prev || []),
+                {
+                    content: message,
+                    created_at: '',
+                    sender: {
+                        avatar: '',
+                        id: '',
+                        name: ''
+                    }
+                }
+            ]
+        })
         setMessage('')
 
         setTimeout(() => {
@@ -68,12 +84,33 @@ const Message = ({ messageData, receiverId, userData }: IMessageProps) => {
         if (messageData?.conversation_id) {
             const channel = echo.private(`conversation.${messageData?.conversation_id}`)
             channel.listen('MessageSent', async (data: any) => {
-                if (data.sender_id !== userData?.id) {
-                    setMessages((prev) => [...(prev || []), data])
+                if (data.sender_id === user?.id) {
+                    setMessages((prev) => {
+                        if (prev && prev.length > 0) {
+                            const lastMessage = prev[prev.length - 1]
+
+                            return [
+                                ...prev.slice(0, prev.length - 1),
+                                {
+                                    ...lastMessage,
+                                    ...data
+                                }
+                            ]
+                        }
+                        return [data]
+                    })
+                } else {
+                    setMessages((prev) => {
+                        return [...(prev || []), data]
+                    })
                 }
             })
         }
-    }, [messageData?.conversation_id, messageData?.receiver_id, userData?.id])
+
+        return () => {
+            echo.leaveChannel(`conversation.${messageData?.conversation_id}`)
+        }
+    }, [messageData?.conversation_id, messageData?.receiver_id, user?.id])
 
     return (
         <div className="h-full w-full flex-col gap-4">

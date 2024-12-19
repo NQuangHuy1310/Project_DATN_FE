@@ -157,7 +157,7 @@ const PurchaseHistory = () => {
                         </Button>
                     </div>
                 </div>
-                {historyBuyCourseData ? (
+                {historyBuyCourseData && historyBuyCourseData.data && historyBuyCourseData.data.length > 0 ? (
                     <table className="w-full text-left text-sm text-black rtl:text-right">
                         <thead className="bg-gray-50 text-xs uppercase text-darkGrey">
                             <tr>

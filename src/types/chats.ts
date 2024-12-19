@@ -47,3 +47,20 @@ export interface IMessage {
     }
     type: 'text'
 }
+
+export interface ISearchMessageData {
+    instructors: IInstructor[]
+    students: IStudent[]
+}
+
+export interface IInstructor {
+    avatar: string | null
+    id: number
+    name: string
+}
+
+export interface IStudent {
+    avatar: string | null
+    id: number
+    name: string
+}

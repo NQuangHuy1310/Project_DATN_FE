@@ -11,7 +11,8 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { IUserData } from '@/types'
 import { getImagesUrl } from '@/lib'
 import { useSendMessage } from '@/app/hooks/chats'
-import { IConversationById } from '@/types/chats'
+import { IConversationById, IMessage } from '@/types/chats'
+import echo from '@/configs/echo'
 
 interface IMessageProps {
     receiverId?: string | null
@@ -23,7 +24,8 @@ const Message = ({ messageData, receiverId, userData }: IMessageProps) => {
     const { mutateAsync: sendMessage, isPending } = useSendMessage()
 
     const [message, setMessage] = useState('')
-    const scrollRef = useRef<HTMLDivElement | null>(null)
+    const [messages, setMessages] = useState<IMessage[] | undefined>(undefined)
+    const messagesEndRef = useRef<HTMLDivElement | null>(null)
     const inputRef = useRef<HTMLTextAreaElement | null>(null)
 
     const handleSendMessage = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -53,16 +55,31 @@ const Message = ({ messageData, receiverId, userData }: IMessageProps) => {
     }
 
     useEffect(() => {
-        if (scrollRef.current) {
-            scrollRef.current.scrollTop = scrollRef.current.scrollHeight
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+    }, [messages])
+
+    useEffect(() => {
+        if (messageData) {
+            setMessages(messageData?.messages.slice().reverse())
         }
-    }, [messageData?.messages])
+    }, [messageData?.messages, messageData])
+
+    useEffect(() => {
+        if (messageData?.conversation_id) {
+            const channel = echo.private(`conversation.${messageData?.conversation_id}`)
+            channel.listen('MessageSent', async (data: any) => {
+                if (data.sender_id !== userData?.id) {
+                    setMessages((prev) => [...(prev || []), data])
+                }
+            })
+        }
+    }, [messageData?.conversation_id, messageData?.receiver_id, userData?.id])
 
     return (
         <div className="h-full w-full flex-col gap-4">
             <div className="flex flex-shrink-0 items-center border-b">
                 <div className="flex items-center gap-x-4 p-4">
-                    {messageData && (
+                    {messageData && !receiverId && (
                         <>
                             <Avatar className="size-9 cursor-pointer">
                                 <AvatarImage
@@ -99,64 +116,61 @@ const Message = ({ messageData, receiverId, userData }: IMessageProps) => {
                 </div>
             </div>
 
-            <ScrollArea className="flex h-[620px] flex-col p-4" ref={scrollRef}>
-                {messageData &&
-                    messageData?.messages
-                        .slice()
-                        .reverse()
-                        .map((message, index) => {
-                            const isSender = messageData.receiver_id === message.sender.id
+            <ScrollArea className="flex h-[620px] flex-col p-4">
+                {messages &&
+                    messageData &&
+                    messages.map((message, index) => {
+                        const isSender = messageData.receiver_id === message.sender.id
+                        const sendTime = new Date(message.created_at).toLocaleTimeString('vi-VN', {
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        })
 
-                            return (
-                                <div
-                                    key={index}
-                                    className={cn(
-                                        'flex',
-                                        isSender ? 'my-2 justify-start gap-x-3' : 'my-2 justify-end gap-x-3'
-                                    )}
-                                >
-                                    {isSender && (
-                                        <div className="flex items-center gap-2">
-                                            <Avatar className="size-9 cursor-pointer">
-                                                <AvatarImage
-                                                    className="object-cover"
-                                                    src={getImagesUrl(messageData?.receiver_avatar || '')}
-                                                    alt={messageData.receiver_name}
-                                                />
-                                                <AvatarFallback className="bg-slate-500/50 text-xl font-semibold text-white">
-                                                    {messageData.receiver_name.charAt(0).toUpperCase()}
-                                                </AvatarFallback>
-                                            </Avatar>
-                                            <div className="flex w-full max-w-[500px] flex-col gap-4">
-                                                <p className="rounded-lg bg-primary p-3 text-xs text-white">
-                                                    {message.content}
-                                                </p>
+                        return (
+                            <div
+                                key={index}
+                                className={cn(
+                                    'flex',
+                                    isSender ? 'my-4 justify-start gap-x-3' : 'my-2 justify-end gap-x-3'
+                                )}
+                            >
+                                {isSender && (
+                                    <div className="flex items-start gap-2.5">
+                                        <Avatar className="size-9 cursor-pointer">
+                                            <AvatarImage
+                                                className="object-cover"
+                                                src={getImagesUrl(messageData?.receiver_avatar || '')}
+                                                alt={messageData.receiver_name}
+                                            />
+                                            <AvatarFallback className="bg-slate-500/50 text-xl font-semibold text-white">
+                                                {messageData.receiver_name.charAt(0).toUpperCase()}
+                                            </AvatarFallback>
+                                        </Avatar>
+                                        <div className="flex w-full max-w-[360px] flex-col gap-1">
+                                            <div className="flex items-center space-x-2 rtl:space-x-reverse">
+                                                <span className="text-sm font-semibold text-gray-900">
+                                                    {messageData.receiver_name}
+                                                </span>
+                                                <span className="text-sm font-normal text-gray-500">{sendTime}</span>
+                                            </div>
+                                            <div className="leading-1.5 flex flex-col rounded-e-xl rounded-es-xl border-gray-200 bg-gray-100 p-4">
+                                                <p className="text-sm font-normal text-gray-900">{message.content}</p>
                                             </div>
                                         </div>
-                                    )}
+                                    </div>
+                                )}
 
-                                    {!isSender && (
-                                        <div className="flex items-end gap-2">
-                                            <div className="flex w-full max-w-[500px] flex-col gap-4">
-                                                <p className="rounded-lg bg-primary p-3 text-xs text-white">
-                                                    {message.content}
-                                                </p>
-                                            </div>
-                                            {/* <Avatar className="size-9 cursor-pointer">
-                                                <AvatarImage
-                                                    className="object-cover"
-                                                    src={getImagesUrl(message.sender.avatar || '')}
-                                                    alt={message.sender.name}
-                                                />
-                                                <AvatarFallback className="bg-slate-500/50 text-xl font-semibold text-white">
-                                                    {message.sender.name.charAt(0).toUpperCase()}
-                                                </AvatarFallback>
-                                            </Avatar> */}
+                                {!isSender && (
+                                    <div className="flex max-w-[400px] items-start gap-2.5">
+                                        <div className="leading-1.5 flex flex-col rounded-s-xl rounded-br-xl bg-primary p-4">
+                                            <p className="text-sm font-normal text-white">{message.content}</p>
                                         </div>
-                                    )}
-                                </div>
-                            )
-                        })}
+                                    </div>
+                                )}
+                            </div>
+                        )
+                    })}{' '}
+                <div ref={messagesEndRef} />
             </ScrollArea>
 
             <div className="flex flex-shrink-0 items-center gap-2 border-t p-4">

@@ -1,8 +1,11 @@
 import { chatApi } from '@/app/services/chats/chat'
-import { IConversation, IConversationById, ISendMessageData } from '@/types/chats'
+import { IConversation, IConversationById, ISearchMessageData, ISendMessageData } from '@/types/chats'
 import { useMutation, useQuery, useQueryClient, UseQueryOptions } from '@tanstack/react-query'
 
-export const useSearchChat = (query: string, options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>) => {
+export const useSearchChat = (
+    query: string,
+    options?: Omit<UseQueryOptions<ISearchMessageData>, 'queryKey' | 'queryFn'>
+) => {
     return useQuery({
         ...options,
         queryKey: ['searchChat', query],

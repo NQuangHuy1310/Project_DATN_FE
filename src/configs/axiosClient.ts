@@ -78,7 +78,7 @@ axiosClient.interceptors.response.use(
         } else if (status === ApiStatusCode.InternalServerError) {
             toast.error(ApiMessages.error.serverError)
         } else {
-            // toast.error(error.response.data?.message || 'Something went wrong!')
+            toast.error(error.response.data?.message || 'Xảy ra lỗi không xác định !')
         }
 
         // Xử lý lỗi 401 (Unauthorized)

@@ -130,7 +130,7 @@ const LessonQuizzes = ({ handleHiddenLesson, moduleId, canEdit }: LessonQuizzesP
                             >
                                 Huỷ
                             </Button>
-                            {selectMultiple && (
+                            {/* {selectMultiple && (
                                 <Button
                                     type="button"
                                     variant="destructive"
@@ -149,7 +149,7 @@ const LessonQuizzes = ({ handleHiddenLesson, moduleId, canEdit }: LessonQuizzesP
                                 >
                                     {selectMultiple ? 'Bỏ' : 'Chọn'} nhiều đáp án
                                 </Button>
-                            )}
+                            )} */}
 
                             <Button type="submit" disabled={isSubmitting}>
                                 {data?.quiz ? 'Cập nhật' : 'Tạo mới'}

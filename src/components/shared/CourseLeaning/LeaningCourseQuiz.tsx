@@ -1,3 +1,5 @@
+/* eslint-disable indent */
+/* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
 import { useEffect, useState } from 'react'
 
 import { toast } from 'sonner'

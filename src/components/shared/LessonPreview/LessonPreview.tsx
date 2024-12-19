@@ -1,5 +1,5 @@
-import { useLessonById } from '@/app/hooks/courses/useLesson'
-import { Dialog, DialogContent } from '@/components/ui/dialog'
+import { useLessonPreview } from '@/app/hooks/courses/useLesson'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { getImagesUrl } from '@/lib/common'
 import iconLoading from '@/assets/loading.svg'
 
@@ -10,7 +10,7 @@ interface LessonPreviewProps {
 }
 
 const LessonPreview: React.FC<LessonPreviewProps> = ({ isOpen, onClose, idLesson }) => {
-    const { data: dataLesson, isLoading } = useLessonById(idLesson, false)
+    const { data: dataLesson, isLoading } = useLessonPreview(idLesson)
     const isYouTubeVideo = dataLesson?.lessonable?.type === 'url'
     const videoUrl = isYouTubeVideo
         ? `https://www.youtube.com/embed/${dataLesson.lessonable?.video_youtube_id}`
@@ -19,11 +19,12 @@ const LessonPreview: React.FC<LessonPreviewProps> = ({ isOpen, onClose, idLesson
     const renderContent = () => {
         if (isLoading) {
             return (
-                <div className="absolute inset-0 top-1/2 z-[999] flex -translate-y-1/4 justify-center bg-opacity-50">
+                <div className="flex justify-center bg-opacity-50">
                     <div className="flex flex-col items-center space-y-4 rounded-lg bg-white p-4">
                         <div className="h-[80px] w-[80px]">
                             <img src={iconLoading} alt="Loading" />
                         </div>
+                        <span className="font-medium text-muted-foreground">Đang tải dữ liệu bài học </span>
                     </div>
                 </div>
             )
@@ -35,7 +36,7 @@ const LessonPreview: React.FC<LessonPreviewProps> = ({ isOpen, onClose, idLesson
                     <iframe
                         id="youtube-player"
                         key={videoUrl}
-                        className="mx-auto min-h-[300px] w-full max-w-5xl bg-black md:min-h-[520px]"
+                        className="mx-auto min-h-[300px] w-full max-w-5xl rounded-md bg-black md:min-h-[520px]"
                         src={`${videoUrl}?enablejsapi=1`}
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen
@@ -46,7 +47,7 @@ const LessonPreview: React.FC<LessonPreviewProps> = ({ isOpen, onClose, idLesson
                     controls
                     key={videoUrl}
                     src={videoUrl}
-                    className="mx-auto min-h-[300px] w-full max-w-5xl bg-black md:min-h-[520px]"
+                    className="mx-auto min-h-[300px] w-full max-w-5xl rounded-md bg-black md:min-h-[520px]"
                 ></video>
             )
         }
@@ -65,7 +66,14 @@ const LessonPreview: React.FC<LessonPreviewProps> = ({ isOpen, onClose, idLesson
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="h-full max-h-[70vh] max-w-5xl">{renderContent()}</DialogContent>
+            <DialogContent className="min-h-32: h-fit max-w-screen-lg" aria-describedby={undefined}>
+                <DialogHeader>
+                    <DialogTitle className="font-semibold">
+                        Xem trước bài học - <span className="text-primary">{dataLesson?.title}</span>
+                    </DialogTitle>
+                </DialogHeader>
+                {renderContent()}
+            </DialogContent>
         </Dialog>
     )
 }

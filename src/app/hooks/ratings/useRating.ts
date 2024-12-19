@@ -1,9 +1,9 @@
 import { ratingsApi } from '@/app/services/ratings/rating'
-import { IRating, IRatingCreate } from '@/types/course/rating'
+import { IRating, IRatingCreate, IRatingHome } from '@/types/course/rating'
 import { useMutation, useQuery, useQueryClient, UseQueryOptions } from '@tanstack/react-query'
 
-export const useGetRatingHome = (options?: Omit<UseQueryOptions<IRating[]>, 'queryKey' | 'queryFn'>) => {
-    return useQuery<IRating[]>({
+export const useGetRatingHome = (options?: Omit<UseQueryOptions<IRatingHome[]>, 'queryKey' | 'queryFn'>) => {
+    return useQuery<IRatingHome[]>({
         ...options,
         queryKey: ['rating-home'],
         queryFn: () => ratingsApi.getRatingHome()

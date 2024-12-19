@@ -7,10 +7,16 @@ import { useDeleteCourse, useDisableCourse, useEnableCourse } from '@/app/hooks/
 
 import placeholderImage from '@/assets/placeholder.jpg'
 import routes from '@/configs/routes'
-import { getImagesUrl, truncate } from '@/lib'
+import { formatPrice, getImagesUrl, truncate } from '@/lib'
 import { ICourseItem } from '@/types/instructor'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import ConfirmDialog from '@/components/shared/ConfirmDialog'
+import DialogChangePrice from '@/components/shared/CourseCard/DialogChangePrice'
+
+interface CourseCardProps {
+    courseItem: ICourseItem
+    isShowInfo?: boolean
+}
 
 const courseStatus = (status: string) => {
     return (
@@ -23,13 +29,29 @@ const courseStatus = (status: string) => {
     )
 }
 
-const CourseCard = ({ name, id, status, thumbnail, submited_at: submittedAt, category, is_active }: ICourseItem) => {
+const CourseCard = ({ courseItem, isShowInfo }: CourseCardProps) => {
     const navigate = useNavigate()
+
+    const {
+        name,
+        id,
+        status,
+        thumbnail,
+        submited_at: submittedAt,
+        category,
+        is_active,
+        total_student,
+        ratings_count,
+        bills_count,
+        price,
+        price_sale
+    } = courseItem
 
     const { mutateAsync: deleteCourse, isPending } = useDeleteCourse()
     const { mutateAsync: disableCourse } = useDisableCourse()
     const { mutateAsync: enableCourse } = useEnableCourse()
     const [isShowConfirm, setIsShowConfirm] = useState<boolean>(false)
+    const [isShowDialogChangePrice, setIsShowDialogChangePrice] = useState<boolean>(false)
     const thumbnailImage = getImagesUrl(thumbnail ?? '')
     const formatDate = submittedAt ? format(new Date(submittedAt), 'dd/MM/yyyy') : 'Chưa đăng ký'
 
@@ -68,13 +90,43 @@ const CourseCard = ({ name, id, status, thumbnail, submited_at: submittedAt, cat
                         <div className="flex w-[300px] flex-shrink-0 flex-col gap-1">
                             <h4 className="text-xl font-semibold">{truncate(name, 25)}</h4>
                             <div className="flex flex-col items-start gap-1">
-                                <p className="text-sm">
-                                    Danh mục: <strong>{category.name}</strong>
-                                </p>
-                                <p className="text-sm">
-                                    Ngày đăng ký: <strong>{formatDate}</strong>
-                                </p>
-                                <p className="text-sm">Trạng thái: {courseStatus(status)}</p>
+                                {isShowInfo ? (
+                                    <>
+                                        <p className="text-sm">
+                                            Danh mục: <strong>{category.name}</strong>
+                                        </p>
+                                        <p className="text-sm">
+                                            Tổng học sinh: <strong>{total_student}</strong>
+                                        </p>
+                                        <p className="text-sm">
+                                            Tổng đánh giá: <strong>{ratings_count}</strong>
+                                        </p>
+                                        <p className="text-sm">
+                                            Tổng số lượt bán: <strong>{bills_count}</strong>
+                                        </p>
+                                    </>
+                                ) : (
+                                    <>
+                                        {price && price_sale ? (
+                                            <div className="flex items-center gap-2 text-sm font-semibold">
+                                                <p className="text-secondaryGreen line-through">{formatPrice(price)}</p>
+                                                <p> - </p>
+                                                <p className="text-base text-primary">{formatPrice(price_sale)}</p>
+                                            </div>
+                                        ) : (
+                                            <p className="text-base font-semibold text-secondaryRed">
+                                                Giá - Chưa cập nhật
+                                            </p>
+                                        )}
+                                        <p className="text-sm">
+                                            Danh mục: <strong>{category.name}</strong>
+                                        </p>
+                                        <p className="text-sm">
+                                            Ngày đăng ký: <strong>{formatDate}</strong>
+                                        </p>
+                                        <p className="text-sm">Trạng thái: {courseStatus(status)}</p>
+                                    </>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -85,7 +137,11 @@ const CourseCard = ({ name, id, status, thumbnail, submited_at: submittedAt, cat
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" sideOffset={5}>
                             <DropdownMenuItem onClick={redirectToCourse}>Chỉnh sửa khoá học</DropdownMenuItem>
-                            <DropdownMenuItem>Xem trước khoá học</DropdownMenuItem>
+                            {status === 'approved' && (
+                                <DropdownMenuItem onClick={() => setIsShowDialogChangePrice(!isShowDialogChangePrice)}>
+                                    Chỉnh sửa giá
+                                </DropdownMenuItem>
+                            )}
                             {status === 'approved' ? (
                                 <DropdownMenuItem onClick={handleActiveCourse}>
                                     {is_active === 0 ? 'Hiển thị' : 'Ẩn'} khoá học
@@ -106,6 +162,12 @@ const CourseCard = ({ name, id, status, thumbnail, submited_at: submittedAt, cat
                 confirmDialog={isShowConfirm}
                 setConfirmDialog={setIsShowConfirm}
                 handleDelete={handleDeleteCourse}
+            />
+
+            <DialogChangePrice
+                open={isShowDialogChangePrice}
+                setOpen={setIsShowDialogChangePrice}
+                courseData={courseItem}
             />
         </>
     )

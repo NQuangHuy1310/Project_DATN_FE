@@ -1,4 +1,15 @@
 const INSTRUCTOR_URL = 'teacher/manage/'
+const TEACHER_URL = 'teacher/'
+
+const createQueryParams = (params: Record<string, any>): string => {
+    const query: string[] = []
+    for (const [key, value] of Object.entries(params)) {
+        if (value !== undefined) {
+            query.push(`${key}=${encodeURIComponent(value)}`)
+        }
+    }
+    return query.length ? `?${query.join('&')}` : ''
+}
 
 export const instructorUri = {
     // Course
@@ -13,6 +24,7 @@ export const instructorUri = {
     DELETE_COURSE: (courseID: string) => `${INSTRUCTOR_URL}${courseID}/delete-course`,
     TARGET_COURSE: (courseId: string) => `${INSTRUCTOR_URL}${courseId}/target-student`,
     OVERVIEW_COURSE: (courseId: string) => `${INSTRUCTOR_URL}${courseId}/overview`,
+    UPDATE_PRICE_SALE: (courseId: number) => `${TEACHER_URL}course/${courseId}/update-price-sale`,
 
     // Module
     GET_MODULE: (courseId: string) => `${INSTRUCTOR_URL}${courseId}/curriculum`,
@@ -54,10 +66,42 @@ export const instructorUri = {
     DELETE_QUESTION: (questionID: number) => `${INSTRUCTOR_URL}lesson/quiz/${questionID}/delete-question-and-option`,
 
     // Statistic
-    STATISTIC: `${INSTRUCTOR_URL}statistic`,
+    STATISTIC: (time: string = 'all') => `${INSTRUCTOR_URL}statistic?time=${time}`,
     GET_STUDENTS: (courseID?: number, limit?: number, page?: number, perPage?: number) =>
         `${INSTRUCTOR_URL}statistic/get-students${courseID ? `?course=${courseID}` : ''}?page=${page}${perPage ? `&perPage=${perPage}` : ''}&limit=${limit}`,
 
     GET_RATINGS: (courseID?: number, limit?: number, page?: number, perPage?: number) =>
-        `${INSTRUCTOR_URL}statistic/get-ratings${courseID ? `?course=${courseID}` : ''}?page=${page}${perPage ? `&perPage=${perPage}` : ''}&limit=${limit}`
+        `${INSTRUCTOR_URL}statistic/get-ratings${courseID ? `?course=${courseID}` : ''}?page=${page}${perPage ? `&perPage=${perPage}` : ''}&limit=${limit}`,
+
+    // Api lịch sử mua khoá học
+    HISTORY_BUY_COURSE: (
+        limit?: number,
+        page?: number,
+        perPage?: number,
+        startDate?: string,
+        endDate?: string
+    ): string => {
+        const queryString = createQueryParams({
+            page,
+            perPage,
+            limit,
+            start_date: startDate,
+            end_date: endDate
+        })
+        return `teacher/history-buy-course${queryString}`
+    },
+
+    // Giảng viên trả lời bình luận
+    RATING_REPLY: (commentID: number) => `${INSTRUCTOR_URL}rating/${commentID}/reply`,
+
+    // Api roadmap
+    CREATE_ROADMAP: `${TEACHER_URL}roadmap`,
+    UPDATE_ROADMAP: (roadmapID: number) => `${TEACHER_URL}roadmap/${roadmapID}`,
+    DELETE_ROADMAP: (roadmapID: number) => `${TEACHER_URL}roadmap/${roadmapID}`,
+    GET_ROADMAP: `${TEACHER_URL}roadmap`,
+    GET_DETAIL_ROADMAP: (roadmapID: number) => `${TEACHER_URL}roadmap/${roadmapID}`,
+
+    CREATE_PHASE: `${TEACHER_URL}roadmap/phase`,
+    UPDATE_PHASE: (phaseID: number) => `${TEACHER_URL}roadmap/phase/${phaseID}`,
+    DELETE_PHASE: (phaseID: number) => `${TEACHER_URL}roadmap/phase/${phaseID}`
 }

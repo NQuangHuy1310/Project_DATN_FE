@@ -8,6 +8,7 @@ import { IModule } from '@/types/course/course.ts'
 import { formatDuration } from '@/lib'
 import { HiQuestionMarkCircle } from 'react-icons/hi'
 import LessonPreview from '@/components/shared/LessonPreview/LessonPreview'
+import { RiCodeBoxFill } from 'react-icons/ri'
 
 const CourseModule = ({ module }: { module: IModule }) => {
     const [isShowLesson, setIsShowLesson] = useState<boolean>(false)
@@ -58,6 +59,7 @@ const CourseModule = ({ module }: { module: IModule }) => {
                                     <MdOutlinePlayCircleOutline className="size-5 text-primary" />
                                 )}
                                 {item.content_type === 'document' && <IoIosDocument className="size-5 text-primary" />}
+                                {item.content_type === 'coding' && <RiCodeBoxFill className="size-5 text-primary" />}
                                 <h6 className="text-sm font-semibold">{item.title}</h6>
                             </div>
                             <div className="flex items-center gap-4">
@@ -69,9 +71,13 @@ const CourseModule = ({ module }: { module: IModule }) => {
                                         Xem trước
                                     </span>
                                 )}
-                                {item.content_type === 'document' &&
-                                    `${calculateReadingTime(item.lessonable.content!)} phút`}
-                                {formatDuration(item.lessonable.duration!)}
+                                <div className='w-16'>
+                                    {item.content_type === 'document' &&
+                                        `${calculateReadingTime(item.lessonable.content!)} phút`}
+                                    {item.content_type === 'video' && formatDuration(item.lessonable.duration!)}
+                                    {item.content_type === 'coding' &&
+                                        '2 phút'}
+                                </div>
                             </div>
                         </div>
                     ))}

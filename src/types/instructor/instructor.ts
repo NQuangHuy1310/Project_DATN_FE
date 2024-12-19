@@ -48,6 +48,9 @@ export interface ICourseItem {
     user: IUser
     category: ICourseCategory
     tags: any[]
+    bills_count: number
+    ratings_avg_rate: number
+    ratings_count: number
 }
 
 export interface ICourses {
@@ -60,6 +63,7 @@ export interface ICourses {
 export interface ICourseApproved {
     id: number
     name: string
+    thumbnail: string
 }
 
 export interface IOverviewCourse {
@@ -213,15 +217,45 @@ export interface IUpdateModulePosition {
     position: number
 }
 
-export interface IUpdatePositionModuleData {
-    modules: IUpdateModulePosition[]
-    _method?: string
+export interface IRoadmap {
+    id: number
+    user_id: number
+    name: string
+    description: string
+    sort_description: string
+    thumbnail: string
+    phases: IPlases[]
+}
+
+export interface IPlases {
+    id: number
+    id_roadmap: number
+    name: string
+    description: string
+    order: number
+    courses: {
+        id: number
+        name: string
+        thumbnail: string
+        description: string
+        price: number
+        price_sale: number
+        pivot: {
+            id_phase: number
+            id_course: number
+        }
+    }[]
 }
 
 // ----------- Request -------------------
 export interface ICreateCourseData {
     name: string
     id_category: string
+}
+
+export interface IUpdatePositionModuleData {
+    modules: IUpdateModulePosition[]
+    _method?: string
 }
 
 export interface ICourseStatusData {
@@ -394,5 +428,26 @@ export interface ICodingContentData {
     sample_code: string
     output: string
     result_code: string
+    _method?: string
+}
+
+export interface IRatingReplyData {
+    reply: string
+}
+
+export interface IRoadmapData {
+    name: string
+    description: string
+    sort_description: string
+    thumbnail: File | string
+    _method?: string
+}
+
+export interface IPlasesData {
+    roadmap_id: number
+    name: string
+    description: string
+    order: number
+    course_ids: number[]
     _method?: string
 }

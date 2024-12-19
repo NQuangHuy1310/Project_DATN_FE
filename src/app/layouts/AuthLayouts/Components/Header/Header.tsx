@@ -9,7 +9,6 @@ import { IoIosArrowDown, IoIosSearch } from 'react-icons/io'
 
 import logo from '@/assets/Union.svg'
 import routes from '@/configs/routes'
-import TopBar from '@/components/shared/TopBar'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import UserButton from '@/components/shared/UserButton'
@@ -17,10 +16,8 @@ import { useSearch } from '@/app/hooks/others'
 import { useDebounce } from '@/app/hooks/custom/useDebounce'
 import useGetUserProfile from '@/app/hooks/accounts/useGetUser'
 import { useGetCategories } from '@/app/hooks/categories'
-import { useGetNewVoucher } from '@/app/hooks/payment'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { getAccessTokenFromLocalStorage, getImagesUrl } from '@/lib/common'
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import Pusher from 'pusher-js'
 import { PUSHER_KEY } from '@/configs/pusher'
 import { useQueryClient } from '@tanstack/react-query'
@@ -35,19 +32,6 @@ const Header = () => {
 
     const queryClient = useQueryClient()
 
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (boxRef.current && !boxRef.current.contains(event.target as Node)) {
-                setVisible(false)
-            }
-        }
-
-        document.addEventListener('mousedown', handleClickOutside)
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside)
-        }
-    }, [])
-
     const debouncedSearch = useDebounce(search, 500)
     const { data: dataSearch, isLoading: loadingSearch } = useSearch(debouncedSearch)
 
@@ -55,9 +39,6 @@ const Header = () => {
     const toggleDropdown = () => setIsOpen((prev) => !prev)
 
     const { data: categories = [] } = useGetCategories()
-    const { data: newVoucher } = useGetNewVoucher()
-    const voucher = newVoucher?.voucher?.[0] ?? null
-
     const token = getAccessTokenFromLocalStorage()
     const { user } = useGetUserProfile()
 
@@ -91,13 +72,25 @@ const Header = () => {
             channel.unsubscribe()
             pusher.disconnect()
         }
+    }, [queryClient])
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (boxRef.current && !boxRef.current.contains(event.target as Node)) {
+                setVisible(false)
+            }
+        }
+
+        document.addEventListener('mousedown', handleClickOutside)
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside)
+        }
     }, [])
 
     return (
         <header>
-            {voucher ? <TopBar endTime={voucher.end_time} voucherCode={voucher.code} /> : null}
-            <div className="z-50 h-[120px] border-b-[1px] bg-white shadow-sm">
-                <div className="mx-auto h-full max-w-[1200px] px-5 py-3 lg:px-2">
+            <div className="z-50 h-[130px] border-b-[1px] bg-white shadow-sm">
+                <div className="mx-auto h-full max-w-[1200px] px-5 py-5 lg:px-2">
                     <div className="flex items-center justify-between gap-2">
                         <div className="flex items-center gap-4 md:gap-10">
                             <FaBars onClick={toggleMenu} className="block size-5 cursor-pointer lg:hidden" />
@@ -111,147 +104,131 @@ const Header = () => {
                                 </div>
                                 <p className="hidden text-2xl font-semibold lg:block">Coursea</p>
                             </Link>
-                            <div className="hidden md:block">
-                                <Select>
-                                    <SelectTrigger className="!h-[35px] min-w-[100px] text-primary hover:text-primary lg:!h-[40px] lg:min-w-[130px]">
-                                        <SelectValue placeholder="Danh mục" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectGroup>
-                                            {categories.map((cate, index) => (
-                                                <SelectItem value={cate.name} key={index}>
-                                                    {cate.name}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectGroup>
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                            <div className="relative hidden w-full min-w-[400px] lg:block">
-                                <Input
-                                    placeholder="Tìm kiếm hoá học, bài viết, video,..."
-                                    className="w-full rounded-full px-4 caret-primary"
-                                    onChange={(e) => setSearch(e.target.value)}
-                                    onClick={() => setVisible(true)}
-                                />
-                                {search.length > 0 && visible && (
-                                    <div
-                                        ref={boxRef}
-                                        className="absolute top-[120%] z-40 max-h-[75vh] w-full overflow-y-auto rounded-lg border bg-white px-4 py-3 shadow"
-                                    >
-                                        <div className="flex flex-col gap-4">
-                                            <div className="flex items-center gap-2">
-                                                {loadingSearch && search.length > 1 ? (
-                                                    <div className="flex items-center justify-center">
-                                                        <div className="h-5 w-5 animate-spin rounded-full border-2 border-darkGrey border-t-transparent"></div>
-                                                    </div>
-                                                ) : (
-                                                    <IoSearchOutline className="size-5 text-primary" />
-                                                )}
-                                                <span className="text-darkGrey">Kết quả cho '{search}'</span>
-                                            </div>
-                                            {dataSearch?.courses && dataSearch.courses.length > 0 && (
-                                                <div>
-                                                    <div className="flex items-center justify-between border-b pb-3">
-                                                        <h2 className="text-base font-semibold">KHÓA HỌC</h2>
-                                                        <Link
-                                                            className="text-sm text-darkGrey"
-                                                            to={routes.courseOutstanding}
-                                                        >
-                                                            Xem thêm
-                                                        </Link>
-                                                    </div>
-                                                    <div className="flex flex-col gap-3 py-4">
-                                                        {dataSearch?.courses.map((course, index) => (
-                                                            <Link
-                                                                to={routes.courseDetailNoLogin.replace(
-                                                                    ':slug',
-                                                                    course.slug
-                                                                )}
-                                                                key={index}
-                                                                className="flex items-center gap-4"
-                                                            >
-                                                                <img
-                                                                    src={getImagesUrl(course.thumbnail)}
-                                                                    alt={course.name}
-                                                                    className="h-10 w-10 rounded-full"
-                                                                />
-                                                                <h3 className="w-[300px] overflow-hidden truncate whitespace-nowrap text-base">
-                                                                    {course.name}
-                                                                </h3>
-                                                            </Link>
-                                                        ))}
-                                                    </div>
-                                                </div>
-                                            )}
-                                            {dataSearch?.posts && dataSearch.posts.length > 0 && (
-                                                <div>
-                                                    <div className="flex items-center justify-between border-b pb-3">
-                                                        <h2 className="text-base font-semibold">BÀI VIẾT</h2>
-                                                        <Link className="text-sm text-darkGrey" to={routes.posts}>
-                                                            Xem thêm
-                                                        </Link>
-                                                    </div>
-                                                    <div className="flex flex-col gap-3 py-4">
-                                                        {dataSearch?.posts.map((post, index) => (
-                                                            <Link
-                                                                to={routes.postsDetail.replace(':slug', post.slug)}
-                                                                key={index}
-                                                                className="flex items-center gap-4"
-                                                            >
-                                                                <img
-                                                                    src={getImagesUrl(post.thumbnail)}
-                                                                    alt={post.title}
-                                                                    className="h-10 w-10 rounded-full"
-                                                                />
-                                                                <h3 className="w-[300px] overflow-hidden truncate whitespace-nowrap text-base">
-                                                                    {post.title}
-                                                                </h3>
-                                                            </Link>
-                                                        ))}
-                                                    </div>
-                                                </div>
-                                            )}
-                                            {dataSearch?.teachers && dataSearch.teachers.length > 0 && (
-                                                <div>
-                                                    <div className="flex items-center justify-between border-b pb-2">
-                                                        <h2 className="text-base font-semibold">NGƯỜI HƯỚNG DẪN</h2>
-                                                        <Link className="text-sm text-darkGrey" to={routes.instructor}>
-                                                            Xem thêm
-                                                        </Link>
-                                                    </div>
-                                                    <div className="flex flex-col gap-3 py-3">
-                                                        {dataSearch?.teachers.map((user, index) => (
-                                                            <Link
-                                                                to={routes.instructorDetail.replace(
-                                                                    ':id',
-                                                                    String(user.id)
-                                                                )}
-                                                                key={index}
-                                                                className="flex items-center gap-4"
-                                                            >
-                                                                <Avatar className="size-7 cursor-pointer md:size-10">
-                                                                    <AvatarImage
-                                                                        className="object-cover"
-                                                                        src={getImagesUrl(user?.avatar || '')}
-                                                                        alt={user?.name}
-                                                                    />
-                                                                    <AvatarFallback className="bg-slate-500/50 text-xl font-semibold text-white">
-                                                                        {user?.name.charAt(0)}
-                                                                    </AvatarFallback>
-                                                                </Avatar>
-                                                                <h3 className="text-base">{user.name}</h3>
-                                                            </Link>
-                                                        ))}
-                                                    </div>
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
 
+                        </div>
+                        <div className="relative hidden w-full max-w-[400px] lg:block">
+                            <Input
+                                placeholder="Tìm kiếm hoá học, bài viết, video,..."
+                                className="w-full rounded-full px-4 caret-primary"
+                                onChange={(e) => setSearch(e.target.value)}
+                                onClick={() => setVisible(true)}
+                            />
+                            {search.length > 0 && visible && (
+                                <div
+                                    ref={boxRef}
+                                    className="absolute top-[120%] z-40 max-h-[75vh] w-full overflow-y-auto rounded-lg border bg-white px-4 py-3 shadow"
+                                >
+                                    <div className="flex flex-col gap-4">
+                                        <div className="flex items-center gap-2">
+                                            {loadingSearch && search.length > 1 ? (
+                                                <div className="flex items-center justify-center">
+                                                    <div className="h-5 w-5 animate-spin rounded-full border-2 border-darkGrey border-t-transparent"></div>
+                                                </div>
+                                            ) : (
+                                                <IoSearchOutline className="size-5 text-primary" />
+                                            )}
+                                            <span className="text-darkGrey">Kết quả cho '{search}'</span>
+                                        </div>
+                                        {dataSearch?.courses && dataSearch.courses.length > 0 && (
+                                            <div>
+                                                <div className="flex items-center justify-between border-b pb-3">
+                                                    <h2 className="text-base font-semibold">KHÓA HỌC</h2>
+                                                    <Link
+                                                        className="text-sm text-darkGrey"
+                                                        to={routes.courseOutstanding}
+                                                    >
+                                                        Xem thêm
+                                                    </Link>
+                                                </div>
+                                                <div className="flex flex-col gap-3 py-4">
+                                                    {dataSearch?.courses.map((course, index) => (
+                                                        <Link
+                                                            to={routes.courseDetailNoLogin.replace(
+                                                                ':slug',
+                                                                course.slug
+                                                            )}
+                                                            key={index}
+                                                            className="flex items-center gap-4"
+                                                        >
+                                                            <img
+                                                                src={getImagesUrl(course.thumbnail)}
+                                                                alt={course.name}
+                                                                className="h-10 w-10 rounded-full"
+                                                            />
+                                                            <h3 className="w-[300px] overflow-hidden truncate whitespace-nowrap text-base">
+                                                                {course.name}
+                                                            </h3>
+                                                        </Link>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+                                        {dataSearch?.posts && dataSearch.posts.length > 0 && (
+                                            <div>
+                                                <div className="flex items-center justify-between border-b pb-3">
+                                                    <h2 className="text-base font-semibold">BÀI VIẾT</h2>
+                                                    <Link className="text-sm text-darkGrey" to={routes.posts}>
+                                                        Xem thêm
+                                                    </Link>
+                                                </div>
+                                                <div className="flex flex-col gap-3 py-4">
+                                                    {dataSearch?.posts.map((post, index) => (
+                                                        <Link
+                                                            to={routes.postsDetail.replace(':slug', post.slug)}
+                                                            key={index}
+                                                            className="flex items-center gap-4"
+                                                        >
+                                                            <img
+                                                                src={getImagesUrl(post.thumbnail)}
+                                                                alt={post.title}
+                                                                className="h-10 w-10 rounded-full"
+                                                            />
+                                                            <h3 className="w-[300px] overflow-hidden truncate whitespace-nowrap text-base">
+                                                                {post.title}
+                                                            </h3>
+                                                        </Link>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+                                        {dataSearch?.teachers && dataSearch.teachers.length > 0 && (
+                                            <div>
+                                                <div className="flex items-center justify-between border-b pb-2">
+                                                    <h2 className="text-base font-semibold">NGƯỜI HƯỚNG DẪN</h2>
+                                                    <Link className="text-sm text-darkGrey" to={routes.instructor}>
+                                                        Xem thêm
+                                                    </Link>
+                                                </div>
+                                                <div className="flex flex-col gap-3 py-3">
+                                                    {dataSearch?.teachers.map((user, index) => (
+                                                        <Link
+                                                            to={routes.instructorDetail.replace(
+                                                                ':id',
+                                                                String(user.id)
+                                                            )}
+                                                            key={index}
+                                                            className="flex items-center gap-4"
+                                                        >
+                                                            <Avatar className="size-7 cursor-pointer md:size-10">
+                                                                <AvatarImage
+                                                                    className="object-cover"
+                                                                    src={getImagesUrl(user?.avatar || '')}
+                                                                    alt={user?.name}
+                                                                />
+                                                                <AvatarFallback className="bg-slate-500/50 text-xl font-semibold text-white">
+                                                                    {user?.name.charAt(0)}
+                                                                </AvatarFallback>
+                                                            </Avatar>
+                                                            <h3 className="text-base">{user.name}</h3>
+                                                        </Link>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
                         <div className="flex items-center gap-2">
                             {token && user ? (
                                 <div className="flex items-center gap-2">

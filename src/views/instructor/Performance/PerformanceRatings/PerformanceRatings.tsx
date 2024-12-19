@@ -1,10 +1,12 @@
 import { useState } from 'react'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { FaRegHeart, FaStar, FaStarHalfAlt } from 'react-icons/fa'
 
 import routes from '@/configs/routes'
 import noContent from '@/assets/no-content.jpg'
-import { useGetCoursesApproved, useGetRatingsCourse } from '@/app/hooks/instructors'
+import { useGetCoursesApproved, useGetRatingsCourse, useRatingReply } from '@/app/hooks/instructors'
 import {
     Select,
     SelectContent,
@@ -28,8 +30,17 @@ import {
     PaginationNext,
     PaginationPrevious
 } from '@/components/ui/pagination'
+import { ratingReply, ratingReplySchema } from '@/validations'
 
 const PerformanceRatings = () => {
+    const {
+        register,
+        handleSubmit,
+        formState: { isSubmitting, errors },
+        reset
+    } = useForm<ratingReply>({
+        resolver: zodResolver(ratingReplySchema)
+    })
     const navigate = useNavigate()
     const location = useLocation()
 
@@ -43,6 +54,7 @@ const PerformanceRatings = () => {
 
     const { data: courseData } = useGetCoursesApproved()
     const { data: ratingsData } = useGetRatingsCourse(courseId, 8, page, 4)
+    const { mutateAsync } = useRatingReply()
 
     const handleSelectCourse = (value: string) => {
         if (value === 'all') {
@@ -59,6 +71,12 @@ const PerformanceRatings = () => {
     }
     const totalPages = Math.ceil((ratingsData?.ratings.total ?? 0) / (ratingsData?.ratings?.per_page ?? 0))
     const visiblePages = getVisiblePages(totalPages, page, 5)
+
+    const handleSubmitForm: SubmitHandler<ratingReply> = async (data) => {
+        if (comment) await mutateAsync([comment?.id, data])
+        reset()
+        setOpenDialog(false)
+    }
 
     return (
         <>
@@ -228,11 +246,11 @@ const PerformanceRatings = () => {
             </div>
 
             <Dialog open={openDialog} onOpenChange={setOpenDialog}>
-                <DialogContent className="rounded-lg p-6 shadow-lg sm:max-w-screen-md">
+                <DialogContent className="rounded-lg p-6 shadow-lg sm:max-w-screen-md" aria-describedby={undefined}>
                     <DialogHeader>
                         <DialogTitle className="text-xl font-semibold">Phản hồi đánh giá</DialogTitle>
                     </DialogHeader>
-                    <div className="flex flex-col gap-6">
+                    <form onSubmit={handleSubmit(handleSubmitForm)} className="flex flex-col gap-6">
                         <div className="flex flex-col gap-4 rounded-lg border border-gray-300 bg-white p-4 shadow-sm">
                             <div className="flex items-start gap-4">
                                 <Avatar className="size-10 cursor-pointer">
@@ -275,11 +293,24 @@ const PerformanceRatings = () => {
                             </div>
                         </div>
 
-                        <div className="flex items-center justify-center gap-3">
-                            <Textarea placeholder="Nhập phản hồi ..." className="w-full max-w-md" autoFocus />
-                            <Button size="lg">Gửi</Button>
+                        <div className="flex flex-col items-center justify-center gap-2">
+                            <div className="w-full space-y-1">
+                                <Textarea
+                                    autoFocus
+                                    {...register('reply')}
+                                    className="w-full"
+                                    placeholder="Nhập phản hồi của bạn ..."
+                                    disabled={isSubmitting}
+                                />
+                                {errors.reply && (
+                                    <div className="text-sm text-secondaryRed">{errors.reply.message}</div>
+                                )}
+                            </div>
+                            <Button size="lg" disabled={isSubmitting}>
+                                Trả lời
+                            </Button>
                         </div>
-                    </div>
+                    </form>
                 </DialogContent>
             </Dialog>
         </>

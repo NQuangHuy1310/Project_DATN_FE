@@ -484,6 +484,149 @@ export const messages: IMessage[] = [
         text: 'Nam libero tempore, cum soluta nobis...',
         time: 'Today 11:55',
         fromUser: true
+    },
+    {
+        user: {
+            name: 'Emerson Levin',
+            is_active: true,
+            user_type: 'member',
+            avatar: 'https://images.unsplash.com/photo-1640951613773-54706e06851d?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+        },
+        text: 'Nam libero tempore, cum soluta nobis...',
+        time: 'Today 11:55',
+        fromUser: true
+    },
+    {
+        user: {
+            name: 'Emerson Levin',
+            is_active: true,
+            user_type: 'member',
+            avatar: 'https://images.unsplash.com/photo-1640951613773-54706e06851d?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+        },
+        text: 'Nam libero tempore, cum soluta nobis...',
+        time: 'Today 11:55',
+        fromUser: true
+    },
+    {
+        user: {
+            name: 'Emerson Levin',
+            is_active: true,
+            user_type: 'member',
+            avatar: 'https://images.unsplash.com/photo-1640951613773-54706e06851d?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+        },
+        text: 'Nam libero tempore, cum soluta nobis...',
+        time: 'Today 11:55',
+        fromUser: true
+    },
+    {
+        user: {
+            name: 'Jakob Calzoni',
+            is_active: true,
+            user_type: 'member',
+            avatar: 'https://images.unsplash.com/photo-1640951613773-54706e06851d?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+        },
+        text: 'Yes sure, Any problem to implement the course?',
+        time: 'Today 11:52',
+        fromUser: false
+    },
+    {
+        user: {
+            name: 'Emerson Levin',
+            is_active: true,
+            user_type: 'member',
+            avatar: 'https://images.unsplash.com/photo-1640951613773-54706e06851d?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+        },
+        text: 'Nam libero tempore, cum soluta nobis...',
+        time: 'Today 11:55',
+        fromUser: true
+    },
+    {
+        user: {
+            name: 'Jakob Calzoni',
+            is_active: true,
+            user_type: 'member',
+            avatar: 'https://images.unsplash.com/photo-1640951613773-54706e06851d?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+        },
+        text: 'Yes sure, Any problem to implement the course?',
+        time: 'Today 11:52',
+        fromUser: false
+    },
+    {
+        user: {
+            name: 'Emerson Levin',
+            is_active: true,
+            user_type: 'member',
+            avatar: 'https://images.unsplash.com/photo-1640951613773-54706e06851d?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+        },
+        text: 'Nam libero tempore, cum soluta nobis...',
+        time: 'Today 11:55',
+        fromUser: true
+    },
+    {
+        user: {
+            name: 'Jakob Calzoni',
+            is_active: true,
+            user_type: 'member',
+            avatar: 'https://images.unsplash.com/photo-1640951613773-54706e06851d?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+        },
+        text: 'Yes sure, Any problem to implement the course?',
+        time: 'Today 11:52',
+        fromUser: false
+    },
+    {
+        user: {
+            name: 'Emerson Levin',
+            is_active: true,
+            user_type: 'member',
+            avatar: 'https://images.unsplash.com/photo-1640951613773-54706e06851d?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+        },
+        text: 'Nam libero tempore, cum soluta nobis...',
+        time: 'Today 11:55',
+        fromUser: true
+    },
+    {
+        user: {
+            name: 'Jakob Calzoni',
+            is_active: true,
+            user_type: 'member',
+            avatar: 'https://images.unsplash.com/photo-1640951613773-54706e06851d?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+        },
+        text: 'Yes sure, Any problem to implement the course?',
+        time: 'Today 11:52',
+        fromUser: false
+    },
+    {
+        user: {
+            name: 'Emerson Levin',
+            is_active: true,
+            user_type: 'member',
+            avatar: 'https://images.unsplash.com/photo-1640951613773-54706e06851d?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+        },
+        text: 'Nam libero tempore, cum soluta nobis...',
+        time: 'Today 11:55',
+        fromUser: true
+    },
+    {
+        user: {
+            name: 'Jakob Calzoni',
+            is_active: true,
+            user_type: 'member',
+            avatar: 'https://images.unsplash.com/photo-1640951613773-54706e06851d?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+        },
+        text: 'Yes sure, Any problem to implement the course?',
+        time: 'Today 11:52',
+        fromUser: false
+    },
+    {
+        user: {
+            name: 'Emerson Levin',
+            is_active: true,
+            user_type: 'member',
+            avatar: 'https://images.unsplash.com/photo-1640951613773-54706e06851d?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+        },
+        text: 'Nam libero tempore, cum soluta nobis...',
+        time: 'Today 11:55',
+        fromUser: true
     }
 ]
 
@@ -560,54 +703,33 @@ export const accountMessages: IAccoutMessage[] = [
     },
     {
         user: {
-            name: 'Fiona Blue',
-            avatar: 'https://randomuser.me/api/portraits/women/8.jpg',
+            name: 'Edward Green',
+            avatar: 'https://randomuser.me/api/portraits/men/7.jpg',
             is_active: true
         },
-        time: 120,
-        message: "Let's catch up next week.",
-        is_Read: true
-    },
-    {
-        user: {
-            name: 'George Grey',
-            avatar: 'https://randomuser.me/api/portraits/men/9.jpg',
-            is_active: true
-        },
-        time: 150,
-        message: 'I have sent you the calendar invite.',
+        time: 90,
+        message: 'Could you clarify the last point?',
         is_Read: false
     },
     {
         user: {
-            name: 'Hannah Yellow',
-            avatar: 'https://randomuser.me/api/portraits/women/10.jpg',
+            name: 'Edward Green',
+            avatar: 'https://randomuser.me/api/portraits/men/7.jpg',
             is_active: true
         },
-        time: 240,
-        message: 'Looking forward to our meeting!',
-        is_Read: true
+        time: 90,
+        message: 'Could you clarify the last point?',
+        is_Read: false
     },
     {
         user: {
-            name: 'Jane Smith',
-            avatar: 'https://randomuser.me/api/portraits/women/2.jpg',
+            name: 'Edward Green',
+            avatar: 'https://randomuser.me/api/portraits/men/7.jpg',
             is_active: true
         },
-        time: 10,
-        message: 'Did you finish the report?',
-        is_Read: true
-    },
-
-    {
-        user: {
-            name: 'Jane Smith',
-            avatar: 'https://randomuser.me/api/portraits/women/2.jpg',
-            is_active: true
-        },
-        time: 10,
-        message: 'Did you finish the report?',
-        is_Read: true
+        time: 90,
+        message: 'Could you clarify the last point?',
+        is_Read: false
     }
 ]
 export const transaction: IRecharge[] = [

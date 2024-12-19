@@ -13,7 +13,7 @@ import { formatDuration, getImagesUrl } from '@/lib'
 import routes from '@/configs/routes'
 import { TbCoinFilled } from 'react-icons/tb'
 
-const Course = ({ data, progressLesson }: { data: ICourse; progressLesson?: number; page?: string }) => {
+const Course = ({ data, progressLesson, page }: { data: ICourse; progressLesson?: number; page?: string }) => {
     const navigate = useNavigate()
     const totalTime = formatDuration((data?.total_duration_video as unknown as number) || 0)
     const stars = [...Array(5)].map((_, index) => {
@@ -23,9 +23,9 @@ const Course = ({ data, progressLesson }: { data: ICourse; progressLesson?: numb
     })
 
     return (
-        <div className="card flex w-full cursor-text flex-col gap-3 shadow-md hover:shadow-[0px_40px_100px_0px_#0000000d] hover:transition-all md:w-[360px]">
+        <div className="card flex w-full cursor-text flex-col gap-3 shadow-md hover:shadow-[0px_40px_100px_0px_#0000000d] hover:transition-all md:w-[330px]">
             <Link
-                to={routes.courseDetail.replace(':slug', data.slug)}
+                to={page == routes.courseDetailNoLogin ? `/course/${data.slug}` : `/courses/${data.slug}`}
                 className="flex flex-col gap-2"
             >
                 <div className="relative h-[160px] flex-shrink-0 cursor-pointer">
@@ -41,7 +41,6 @@ const Course = ({ data, progressLesson }: { data: ICourse; progressLesson?: numb
                 <h3 className="text-overflow cursor-pointer text-base font-bold text-black md:text-lg">{data.name}</h3>
             </Link>
             <div className="flex flex-col gap-2.5">
-
                 <div>
                     {data?.price > 0 || data?.price_sale > 0 ? (
                         <div className="flex items-center gap-3">
@@ -63,7 +62,9 @@ const Course = ({ data, progressLesson }: { data: ICourse; progressLesson?: numb
                             {data?.price_sale > 0 && (
                                 <div className="flex items-center gap-1">
                                     <TbCoinFilled className="size-5 text-yellow-500" />
-                                    <p className="text-base font-semibold text-red-600">{Math.floor(data?.price_sale)}</p>
+                                    <p className="text-base font-semibold text-red-600">
+                                        {Math.floor(data?.price_sale)}
+                                    </p>
                                 </div>
                             )}
                         </div>

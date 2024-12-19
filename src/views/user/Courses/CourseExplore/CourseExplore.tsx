@@ -28,7 +28,7 @@ const CoursesExplore = () => {
     const [level, setLevel] = useState(queryParams.get('level') || '')
     const [search, setSearch] = useState(queryParams.get('search') || '')
 
-    const { data: allCourses, isLoading } = useGetAllCourses(category, level, arrange, page, 6)
+    const { data: allCourses, isLoading } = useGetAllCourses(category, level, arrange, page, 8)
 
     const debounceValue = useDebounce(search, 500)
 

@@ -5,6 +5,7 @@ import { GrHistory } from 'react-icons/gr'
 import { LuUserCircle } from 'react-icons/lu'
 import { PiStudentBold } from 'react-icons/pi'
 import { IoSettingsOutline } from 'react-icons/io5'
+import { IoChatboxEllipsesOutline } from 'react-icons/io5'
 import { MdSecurity, MdArticle, MdHistory } from 'react-icons/md'
 import { TbMessageDots, TbUserHexagon } from 'react-icons/tb'
 import { HiBookOpen, HiOutlineTemplate } from 'react-icons/hi'
@@ -55,11 +56,6 @@ export const sidebarList = [
         path: routes.posts
     },
     {
-        title: 'Lộ trình',
-        icon: FaRoad,
-        path: routes.learningPaths
-    },
-    {
         title: 'Ví',
         icon: IoWalletSharp,
         path: routes.wallet
@@ -68,6 +64,11 @@ export const sidebarList = [
         title: 'Chat AI',
         icon: IoChatboxOutline,
         path: routes.communicate
+    },
+    {
+        title: 'Tin nhắn',
+        icon: IoChatboxEllipsesOutline,
+        path: routes.chat
     }
 ]
 
@@ -181,12 +182,12 @@ export const lessonOptions = [
         type: 'document'
     },
     {
-        name: 'Bài tập trắc nghiệm',
-        type: 'quizzes'
-    },
-    {
         name: 'Bài tập coding',
         type: 'coding'
+    },
+    {
+        name: 'Bài tập trắc nghiệm',
+        type: 'quizzes'
     }
 ]
 

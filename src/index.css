@@ -11,6 +11,10 @@
         @apply bg-background text-sm text-black;
     }
 
+    img {
+        @apply object-cover;
+    }
+
     .container-main {
         @apply mx-auto max-w-[1200px] px-5 lg:px-0;
     }

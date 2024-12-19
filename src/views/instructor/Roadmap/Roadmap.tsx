@@ -1,155 +1,173 @@
+import { toast } from 'sonner'
 import { useState } from 'react'
-import { SubmitHandler, useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
+import { HiDotsVertical } from 'react-icons/hi'
 
-import { useGetCoursesApproved } from '@/app/hooks/instructors'
+import { IRoadmap } from '@/types/instructor'
+import { useDeleteRoadmap, useGetRoadmap } from '@/app/hooks/instructors'
 
-import Banner from '@/assets/banner.png'
+import { getImagesUrl } from '@/lib'
 import { Button } from '@/components/ui/button'
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle
-} from '@/components/ui/dialog'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { roadMap, roadMapSchema } from '@/validations'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+
+import placeholderImage from '@/assets/placeholder.jpg'
+import NoContent from '@/components/shared/NoContent/NoContent'
+import AddRoadmap from '@/views/instructor/Roadmap/AddRoadmap'
+import ConfirmDialog from '@/components/shared/ConfirmDialog'
+import AddPhase from '@/views/instructor/Roadmap/AddPhase'
+import Loading from '@/components/Common/Loading/Loading'
+import PreviewRoadmap from '@/views/instructor/Roadmap/PreviewRoadmap'
 
 const Roadmap = () => {
-    const {
-        register,
-        handleSubmit,
-        formState: { isSubmitting, errors }
-    } = useForm<roadMap>({
-        resolver: zodResolver(roadMapSchema)
-    })
+    const { data: roadmapData, isLoading } = useGetRoadmap()
+    const { mutateAsync: deleteRoadmap, isPending } = useDeleteRoadmap()
 
-    const { data: courseData } = useGetCoursesApproved()
     const [openDialog, setOpenDialog] = useState<boolean>(false)
-    const [selectedCourse, setSelectedCourse] = useState<number[]>([])
+    const [phaseDialog, setPhaseDialog] = useState<boolean>(false)
+    const [confirmDialog, setConfirmDialog] = useState<boolean>(false)
+    const [openPreview, setOpenPreview] = useState<boolean>(false)
+    const [roadmapId, setRoadmapId] = useState<number>(0)
 
-    const onSubmit: SubmitHandler<roadMap> = async (formData) => {}
+    const handleDelete = async () => {
+        if (!roadmapId) return
+        await deleteRoadmap(roadmapId)
+        setRoadmapId(0)
+    }
+
+    const handlePreview = (item: IRoadmap) => {
+        if (item.phases.length === 0) {
+            toast.warning('Lộ trình này hiện tại chưa có giai đoạn nào.', {
+                description: 'Hãy thêm giai đoạn để bắt đầu!'
+            })
+            setRoadmapId(item.id)
+            setPhaseDialog(true)
+        } else {
+            setOpenPreview(!openPreview)
+            setRoadmapId(item.id)
+        }
+    }
+
+    if (isLoading) return <Loading />
 
     return (
         <>
-            <div>
-                <div className="flex items-start justify-between">
-                    <div className="flex max-w-[900px] flex-shrink-0 flex-col gap-4">
-                        <div className="w-full flex-shrink-0 space-y-3">
-                            <h5 className="text-2xl font-extrabold">Lộ Trình Học Tập</h5>
-                            <p className="text-sm">
-                                Bạn sẽ thiết kế lộ trình học tập chi tiết, giúp học viên dễ dàng theo dõi và đạt được
-                                mục tiêu học tập. Hãy chuẩn bị cho một lộ trình thú vị và bổ ích, nơi bạn sẽ phát triển
-                                kỹ năng và kiến thức cần thiết để thành công!
-                            </p>
-                        </div>
-                        <div className="flex-1">
-                            <Button size="lg" onClick={() => setOpenDialog(!openDialog)}>
-                                Thêm mới lộ trình
-                            </Button>
-                        </div>
+            <div className="flex flex-col gap-6">
+                <div className="flex w-full items-center justify-between">
+                    <div className="w-full max-w-[900px] space-y-3">
+                        <h4 className="text-2xl font-extrabold">Lộ Trình Học Tập</h4>
+                        <p className="text-sm">
+                            Bạn sẽ thiết kế lộ trình học tập chi tiết, giúp học viên dễ dàng theo dõi và đạt được mục
+                            tiêu học tập. Hãy chuẩn bị cho một lộ trình thú vị và bổ ích, nơi bạn sẽ phát triển kỹ năng
+                            và kiến thức cần thiết để thành công!
+                        </p>
                     </div>
-                    <div className="h-[300px] w-fit">
-                        <img src={Banner} alt="Banner" className="h-full w-full rounded-md object-cover shadow-lg" />
-                    </div>
+                    <Button size="lg" onClick={() => setOpenDialog(true)}>
+                        Thêm mới lộ trình
+                    </Button>
                 </div>
 
-                <div className=""></div>
-                <div className=""></div>
+                <div className="space-y-1">
+                    {roadmapData && roadmapData?.length > 0 && (
+                        <h5 className="text-xl font-medium">Danh sách lộ trình của tôi</h5>
+                    )}
+                    <div className="flex flex-wrap items-center gap-5">
+                        {roadmapData &&
+                            roadmapData.map((item, index) => (
+                                <div
+                                    key={index}
+                                    className="flex h-[200px] w-[500px] items-start justify-between rounded-md border-2 border-softGrey p-4"
+                                >
+                                    <div className="flex h-full w-full max-w-[300px] flex-shrink-0 flex-col gap-1 overflow-hidden">
+                                        <div className="flex h-fit flex-shrink-0 flex-col">
+                                            <h6 className="text-lg font-semibold">{item.name}</h6>
+                                            <p className="text-sm">{item.sort_description}</p>
+                                        </div>
+                                        <div className="mt-auto flex flex-1 items-end">
+                                            <div className="flex gap-2">
+                                                <Button
+                                                    size="sm"
+                                                    onClick={() => {
+                                                        setPhaseDialog(!phaseDialog)
+                                                        setRoadmapId(item.id)
+                                                    }}
+                                                >
+                                                    Thêm giai đoạn
+                                                </Button>
+                                                <Button
+                                                    className="bg-secondaryGreen hover:bg-secondaryGreen/90"
+                                                    size="sm"
+                                                    onClick={() => {
+                                                        handlePreview(item)
+                                                    }}
+                                                >
+                                                    Xem chi tiết
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex h-full flex-col items-end justify-between">
+                                        <div className="h-[100px] w-[100px] overflow-hidden rounded-full border-[4px] border-primary">
+                                            <img
+                                                src={item.thumbnail ? getImagesUrl(item.thumbnail) : placeholderImage}
+                                                alt={item.name}
+                                                className="h-full w-full object-cover"
+                                                loading="lazy"
+                                            />
+                                        </div>
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger asChild>
+                                                <Button size="icon" variant="outline">
+                                                    <HiDotsVertical className="size-4" />
+                                                </Button>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent side="bottom" align="end">
+                                                <DropdownMenuItem
+                                                    onClick={() => {
+                                                        setOpenDialog(!openDialog)
+                                                        setRoadmapId(item.id)
+                                                    }}
+                                                >
+                                                    Chỉnh sửa lộ trình
+                                                </DropdownMenuItem>
+                                                <DropdownMenuItem
+                                                    onClick={() => {
+                                                        setConfirmDialog(!confirmDialog)
+                                                        setRoadmapId(item.id)
+                                                    }}
+                                                >
+                                                    Xoá lộ trình
+                                                </DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                    </div>
+                                </div>
+                            ))}
+                        {roadmapData && roadmapData.length <= 0 && (
+                            <div className="flex h-full w-full flex-col items-center justify-center gap-4">
+                                <NoContent description="Bạn chưa có lộ trình nào, tạo lộ trình mới" />
+                                <Button onClick={() => setOpenDialog(true)}>Tạo lộ trình học tập</Button>
+                            </div>
+                        )}
+                    </div>
+                </div>
             </div>
 
-            <Dialog open={openDialog} onOpenChange={setOpenDialog}>
-                <DialogContent className="max-w-[700px]">
-                    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-                        <DialogHeader>
-                            <DialogTitle className="text-xl">Thêm lộ trình</DialogTitle>
-                            <DialogDescription>
-                                Vui lòng nhập thông tin chi tiết về lộ trình học tập mới. Điều này sẽ giúp học viên dễ
-                                dàng theo dõi và đạt được mục tiêu học tập của họ.
-                            </DialogDescription>
-                        </DialogHeader>
-                        <div className="flex flex-col gap-2.5">
-                            <div className="space-y-0.5">
-                                <label className="text-sm text-muted-foreground">Nhập tên lộ trình học tập</label>
-                                <Input
-                                    autoFocus
-                                    type="text"
-                                    {...register('title')}
-                                    placeholder="Ví dụ: Lộ trình học Front-end"
-                                    disabled={isSubmitting}
-                                />
-                                {errors.title && (
-                                    <div className="text-sm text-secondaryRed">{errors.title.message}</div>
-                                )}
-                            </div>
-
-                            <div className="space-y-0.5">
-                                <label className="text-sm text-muted-foreground">Mô tả ngắn gọn về lộ trình này</label>
-                                <Textarea
-                                    rows={3}
-                                    {...register('description')}
-                                    placeholder="Ví dụ: Front-end là người xây dựng giao diện website..."
-                                    disabled={isSubmitting}
-                                />
-                                {errors.description && (
-                                    <div className="text-sm text-secondaryRed">{errors.description.message}</div>
-                                )}
-                            </div>
-
-                            <div className="space-y-0.5">
-                                <label className="text-sm text-muted-foreground">
-                                    Chọn các khoá học trong lộ trình này
-                                </label>
-
-                                <div className="flex items-center gap-2">
-                                    {courseData?.length ? (
-                                        courseData.map((course) => {
-                                            const isSelected = selectedCourse.includes(course.id)
-                                            return (
-                                                <div
-                                                    key={course.id}
-                                                    className={`cursor-pointer rounded-md border p-3 text-sm font-medium ${isSelected ? 'bg-secondaryGreen/90 text-white' : 'border-grey'}`}
-                                                    onClick={() =>
-                                                        setSelectedCourse((prev) =>
-                                                            isSelected
-                                                                ? prev.filter((id) => id !== course.id)
-                                                                : [...prev, course.id]
-                                                        )
-                                                    }
-                                                >
-                                                    {course.name}
-                                                </div>
-                                            )
-                                        })
-                                    ) : (
-                                        <p className="text-sm text-secondaryRed">
-                                            Bạn không có khoá học nào để chọn, vui lòng tạo khoá học mới.
-                                        </p>
-                                    )}
-                                </div>
-
-                                {selectedCourse.length === 0 && courseData && courseData?.length > 0 && (
-                                    <p className="text-sm text-secondaryRed">Bạn cần chọn ít nhất một khóa học.</p>
-                                )}
-                            </div>
-                        </div>
-                        <DialogFooter className="flex w-full items-center !justify-between">
-                            <Button type="button">Tạo khoá học</Button>
-                            <div className="flex items-center gap-4">
-                                <Button type="submit" onClick={() => setOpenDialog(false)} variant="destructive">
-                                    Huỷ
-                                </Button>
-                                <Button type="submit" disabled={isSubmitting}>
-                                    Lưu thông tin
-                                </Button>
-                            </div>
-                        </DialogFooter>
-                    </form>
-                </DialogContent>
-            </Dialog>
+            <AddRoadmap
+                openDialog={openDialog}
+                setOpenDialog={setOpenDialog}
+                roadmapID={roadmapId}
+                setRoadmapId={setRoadmapId}
+            />
+            <AddPhase open={phaseDialog} setOpen={setPhaseDialog} roadmapID={roadmapId} setRoadmapId={setRoadmapId} />
+            <PreviewRoadmap open={openPreview} setOpen={setOpenPreview} roadmapID={roadmapId} />
+            <ConfirmDialog
+                title="Xoá lộ trình"
+                isPending={isPending}
+                description="Bạn có chắc chắn muốn xoá lộ trình này không?"
+                confirmDialog={confirmDialog}
+                setConfirmDialog={setConfirmDialog}
+                handleDelete={handleDelete}
+            />
         </>
     )
 }

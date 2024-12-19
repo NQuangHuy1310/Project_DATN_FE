@@ -22,7 +22,7 @@ const CourseMyBought = ({ data, progressLesson }: { data: ICourse; progressLesso
     })
 
     return (
-        <div className="card flex w-full cursor-text flex-col gap-4 shadow-md hover:shadow-[0px_40px_100px_0px_#0000000d] hover:transition-all md:w-[360px]">
+        <div className="card flex w-full cursor-text flex-col gap-4 shadow-md hover:shadow-[0px_40px_100px_0px_#0000000d] hover:transition-all md:w-[330px]">
             <Link to={routes.courseDetail.replace(':slug', data.slug)}>
                 <div className="relative h-[160px] flex-shrink-0 cursor-pointer">
                     <img

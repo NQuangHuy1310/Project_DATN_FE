@@ -101,11 +101,11 @@ const CourseToday = ({
             {user?.id !== currentUser?.id && (
                 <div className="w-full">
                     {price == 0 ? (
-                        <Button onClick={() => navigate(routes.courseLeaning.replace(':slug', slug))}>Học ngay</Button>
+                        <Button className='w-full' onClick={() => navigate(routes.login)}>Đăng ký ngay</Button>
                     ) : page === routes.courseDetailNoLogin || page === routes.courseDetail ? (
                         <Link
                             className="block w-full rounded-md bg-primary py-2 text-center text-white"
-                            to={`/payment/course/${slug}`}
+                            to={routes.login}
                         >
                             Mua khoá học
                         </Link>

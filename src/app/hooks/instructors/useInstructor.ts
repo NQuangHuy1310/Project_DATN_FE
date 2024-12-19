@@ -22,8 +22,12 @@ import {
     IModules,
     IOverviewCourse,
     IOverviewCourseData,
+    IPlasesData,
     IQuestionData,
     IQuiz,
+    IRatingReplyData,
+    IRoadmap,
+    IRoadmapData,
     ITargetCourse,
     IUpdatePositionLessonData,
     IUpdatePositionModuleData,
@@ -31,6 +35,7 @@ import {
     RevenueData,
     StudentsCourse
 } from '@/types/instructor'
+import { HistoryBuyCourse } from '@/types'
 
 // Mutation
 export const useCreateCourse = () => {
@@ -137,6 +142,20 @@ export const useOverviewCourse = () => {
             await queryClient.invalidateQueries({ queryKey: ['overviewCourse'] })
             await queryClient.invalidateQueries({ queryKey: ['mange-menu'] })
             toast.success('Cập nhật thông tin khoá học thành công!')
+        }
+    })
+}
+
+export const useUpdateCoursePriceSale = () => {
+    const queryClient = useQueryClient()
+
+    return useMutation<any, Error, [number, any]>({
+        mutationFn: async ([courseId, priceSale]) => {
+            return instructorApi.updatePriceSale(courseId, priceSale)
+        },
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['instructorCourse'] })
+            toast.success('Cập nhật giá khuyến mãi thành công!')
         }
     })
 }
@@ -472,6 +491,102 @@ export const useChangeLessonType = () => {
     })
 }
 
+export const useRatingReply = () => {
+    const queryClient = useQueryClient()
+
+    return useMutation<any, Error, [number, IRatingReplyData]>({
+        mutationFn: async ([commentID, replyData]) => {
+            return instructorApi.ratingReply(commentID, replyData)
+        },
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['instructorGetRatings'] })
+        }
+    })
+}
+
+export const useCreateRoadmap = () => {
+    const queryClient = useQueryClient()
+
+    return useMutation<any, Error, IRoadmapData>({
+        mutationFn: async (roadmapData) => {
+            return instructorApi.createRoadmap(roadmapData)
+        },
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['roadmap'] })
+        }
+    })
+}
+
+export const useUpdateRoadmap = () => {
+    const queryClient = useQueryClient()
+
+    return useMutation<any, Error, [number, IRoadmapData]>({
+        mutationFn: async ([roadmapID, roadmapData]) => {
+            return instructorApi.updateRoadMap(roadmapID, roadmapData)
+        },
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['roadmap'] })
+            toast.success('Cập nhật lộ trình thành công!')
+        }
+    })
+}
+
+export const useDeleteRoadmap = () => {
+    const queryClient = useQueryClient()
+
+    return useMutation({
+        mutationFn: async (roadmapID: number) => {
+            return instructorApi.deleteRoadMap(roadmapID)
+        },
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['roadmap'] })
+            toast.success('Xoá lộ trình thành công!')
+        }
+    })
+}
+
+export const useCreatePhase = () => {
+    const queryClient = useQueryClient()
+
+    return useMutation<any, Error, IPlasesData>({
+        mutationFn: async (roadmapData) => {
+            return instructorApi.createPhase(roadmapData)
+        },
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['roadmap'] })
+            await queryClient.invalidateQueries({ queryKey: ['detailRoadmap'] })
+        }
+    })
+}
+
+export const useUpdatePhase = () => {
+    const queryClient = useQueryClient()
+
+    return useMutation<any, Error, [number, IPlasesData]>({
+        mutationFn: async ([phaseID, roadmapData]) => {
+            return instructorApi.updatePhase(phaseID, roadmapData)
+        },
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['detailRoadmap'] })
+            toast.success('Cập nhật giai đoạn thành công!')
+        }
+    })
+}
+
+export const useDeletePhase = () => {
+    const queryClient = useQueryClient()
+
+    return useMutation({
+        mutationFn: async (phaseID: number) => {
+            return instructorApi.deletePhase(phaseID)
+        },
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['detailRoadmap'] })
+            toast.success('Xoá giai đoạn thành công!')
+        }
+    })
+}
+
 // Queries
 export const useGetCourses = (
     limit: number = 4,
@@ -544,11 +659,11 @@ export const useGetLessonQuiz = (id: number, options?: Omit<UseQueryOptions<IQui
     })
 }
 
-export const useStatistic = (options?: Omit<UseQueryOptions<RevenueData>, 'queryKey' | 'queryFn'>) => {
+export const useStatistic = (time?: string, options?: Omit<UseQueryOptions<RevenueData>, 'queryKey' | 'queryFn'>) => {
     return useQuery({
         ...options,
-        queryKey: ['instructorStatistic'],
-        queryFn: instructorApi.instructorStatistic
+        queryKey: ['instructorStatistic', time],
+        queryFn: () => instructorApi.instructorStatistic(time)
     })
 }
 
@@ -577,5 +692,40 @@ export const useGetRatingsCourse = (
         ...options,
         queryKey: ['instructorGetRatings', courseID, limit, page, perPage],
         queryFn: () => instructorApi.getRatingsCourse(courseID, limit, page, perPage)
+    })
+}
+
+export const useHistoryBuyCourse = (
+    limit: number = 6,
+    page?: number,
+    perPage: number = 6,
+    start_date?: string,
+    end_date?: string,
+    options?: Omit<UseQueryOptions<HistoryBuyCourse>, 'queryKey' | 'queryFn'>
+) => {
+    return useQuery<HistoryBuyCourse>({
+        ...options,
+        queryKey: ['historyBuyCourse', limit, page, perPage, start_date, end_date],
+        queryFn: () => instructorApi.historyBuyCourse(limit, page, perPage, start_date, end_date)
+    })
+}
+
+export const useGetRoadmap = (options?: Omit<UseQueryOptions<IRoadmap[]>, 'queryKey' | 'queryFn'>) => {
+    return useQuery({
+        ...options,
+        queryKey: ['roadmap'],
+        queryFn: instructorApi.getRoadmap
+    })
+}
+
+export const useGetDetailRoadmap = (
+    roadmapID: number,
+    options?: Omit<UseQueryOptions<IRoadmap>, 'queryKey' | 'queryFn'>
+) => {
+    return useQuery({
+        ...options,
+        enabled: !!roadmapID,
+        queryKey: ['detailRoadmap', roadmapID],
+        queryFn: () => instructorApi.getDetailRoadmap(roadmapID)
     })
 }

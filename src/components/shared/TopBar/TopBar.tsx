@@ -33,7 +33,9 @@ const TopBar = ({ endTime, voucherCode }: CountdownProps) => {
     }, [])
 
     const formatNumber = (num: number) => (num < 10 ? `0${num}` : num)
-    const hours = Math.floor(totalSeconds / 3600)
+
+    const days = Math.floor(totalSeconds / (24 * 3600))
+    const hours = Math.floor((totalSeconds % (24 * 3600)) / 3600)
     const minutes = Math.floor((totalSeconds % 3600) / 60)
     const seconds = totalSeconds % 60
 
@@ -50,11 +52,14 @@ const TopBar = ({ endTime, voucherCode }: CountdownProps) => {
                 <IoClose className="text-2xl" />
             </button>
             <span className="text-base font-medium">
-                Mã giảm giá mới: <b>{voucherCode}</b> | Giảm giá cho mọi khóa học
+                Mã giảm giá mới: <b>{voucherCode}</b>
             </span>
             <span className="text-base font-bold">
-                Mã giảm giá kết thúc sau: {formatNumber(hours)} giờ {formatNumber(minutes)} phút {formatNumber(seconds)}{' '}
-                giây
+                {days > 0 ? (
+                    <>Mã giảm giá kết thúc sau: {days} ngày {formatNumber(hours)} giờ {formatNumber(minutes)} phút {formatNumber(seconds)} giây</>
+                ) : (
+                    <>Mã giảm giá kết thúc sau: {formatNumber(hours)} giờ {formatNumber(minutes)} phút {formatNumber(seconds)} giây</>
+                )}
             </span>
         </div>
     )

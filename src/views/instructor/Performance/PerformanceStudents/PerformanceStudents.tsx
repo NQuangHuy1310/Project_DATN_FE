@@ -147,7 +147,15 @@ const PerformanceStudents = () => {
                                             >
                                                 Xem thông tin
                                             </Button>
-                                            <Button variant="outline" size="sm">
+                                            <Button
+                                                variant="outline"
+                                                size="sm"
+                                                onClick={() =>
+                                                    navigate(
+                                                        `${routes.instructorMessage}?receiver_to=${student.id_user}`
+                                                    )
+                                                }
+                                            >
                                                 Nhắn tin
                                             </Button>
                                         </div>

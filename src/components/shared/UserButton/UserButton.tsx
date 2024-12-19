@@ -22,6 +22,9 @@ import { MdPostAdd } from 'react-icons/md'
 import { FaRegBookmark, FaRegUser } from 'react-icons/fa'
 import { RiBloggerLine } from 'react-icons/ri'
 import { useLogout } from '@/app/hooks/accounts'
+import { useUserStore } from '@/app/store'
+import { useEffect } from 'react'
+import echo from '@/configs/echo'
 
 const UserButton = () => {
     const location = useLocation()
@@ -29,6 +32,35 @@ const UserButton = () => {
     const { user } = useGetUserProfile()
 
     const { mutateAsync } = useLogout()
+
+    const users = useUserStore((state) => state.user)
+    const setUser = useUserStore((state) => state.setUser)
+
+    useEffect(() => {
+        if (!users?.id) return
+        const channel = echo.private(`App.Models.User.${users.id}`)
+
+        channel.notification(async (data: any) => {
+            if (data.user_type == 'register_teacher') {
+                if (data.status == true) {
+                    setUser({
+                        ...users,
+                        status: 'approved',
+                        user_type: 'teacher'
+                    })
+                } else {
+                    setUser({
+                        ...users,
+                        status: 'rejected'
+                    })
+                }
+            }
+        })
+
+        return () => {
+            echo.leaveChannel(`App.Models.User.${users?.id}`)
+        }
+    }, [])
 
     const handleLogout = async () => {
         removeQuestion()
@@ -62,8 +94,8 @@ const UserButton = () => {
                         </Link>
                         <DropdownMenuSeparator />
                         {validRoutesMember.some((route) => location.pathname.includes(route)) &&
-                        ((user?.user_type === 'teacher' && user.status == 'approved') ||
-                            (user?.user_type === 'admin' && user.status == 'approved')) ? (
+                        user?.user_type === 'teacher' &&
+                        user.status === 'approved' ? (
                             <Link to={routes.instructorDashboard}>
                                 <DropdownMenuItem className="flex items-center gap-2">
                                     <FaRegUser className="size-4 w-8" />
@@ -78,13 +110,25 @@ const UserButton = () => {
                                 </DropdownMenuItem>
                             </Link>
                         )}
-                        {((user?.user_type !== 'member' && !user?.status) ||
-                            (user.status !== 'approved' && user.status !== 'pending')) && (
+                        {user?.user_type == 'member' &&
+                            !user?.status &&
+                            user.status !== 'approved' &&
+                            user.status !== 'pending' && (
+                                <Link to={routes.instructorRegister}>
+                                    <DropdownMenuItem className="flex items-center gap-2">
+                                        <TbUserHexagon className="size-4 w-8" />
+                                        <span className="whitespace-nowrap text-sm font-medium">
+                                            Đăng ký thành giảng viên
+                                        </span>
+                                    </DropdownMenuItem>
+                                </Link>
+                            )}
+                        {user?.status == 'rejected' && (
                             <Link to={routes.instructorRegister}>
                                 <DropdownMenuItem className="flex items-center gap-2">
                                     <TbUserHexagon className="size-4 w-8" />
                                     <span className="whitespace-nowrap text-sm font-medium">
-                                        Đăng ký thành giảng viên
+                                        Đăng ký lại giảng viên
                                     </span>
                                 </DropdownMenuItem>
                             </Link>

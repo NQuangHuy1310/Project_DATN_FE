@@ -1,11 +1,11 @@
 import axios from 'axios'
-import { IRating, IRatingCreate } from '@/types/course/rating'
+import { IRating, IRatingCreate, IRatingHome } from '@/types/course/rating'
 import axiosClient from '@/configs/axiosClient'
 import { ratingUri } from '../Uri/ratings/rating'
 import { backendUrl } from '@/configs/baseUrl'
 
 export const ratingsApi = {
-    getRatingHome: async (): Promise<any> => {
+    getRatingHome: async (): Promise<IRatingHome[]> => {
         return axiosClient.get(ratingUri.GET_RATING_HOME())
     },
 

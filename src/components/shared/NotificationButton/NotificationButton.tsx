@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
 import { vi } from 'date-fns/locale'
@@ -23,12 +24,16 @@ import {
     useGetNotification,
     useMarkAsRead
 } from '@/app/hooks/notifications/notifications'
+import echo from '@/configs/echo'
 import routes from '@/configs/routes'
+import { useUserStore } from '@/app/store'
 import useGetUserProfile from '@/app/hooks/accounts/useGetUser'
+import { useQueryClient } from '@tanstack/react-query'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 const NotificationButton = () => {
     const { user } = useGetUserProfile()
+    const queryClient = useQueryClient()
     // Lấy tất cả thông báo
     const { data: dataNotification } = useGetNotification(10)
 
@@ -47,6 +52,32 @@ const NotificationButton = () => {
     const formatTime = (date: any) => {
         return formatDistanceToNow(new Date(date), { addSuffix: true, locale: vi })
     }
+
+    const users = useUserStore((state) => state.user)
+
+    useEffect(() => {
+        if (!users?.id) return
+        const channel = echo.private(`App.Models.User.${users.id}`)
+
+        channel.notification(async (data: any) => {
+            if (data) {
+                await Promise.all([
+                    queryClient.invalidateQueries({
+                        queryKey: ['notifications', 10],
+                        exact: true
+                    }),
+                    queryClient.invalidateQueries({
+                        queryKey: ['getAllAndUnRead'],
+                        exact: true
+                    })
+                ])
+            }
+        })
+
+        return () => {
+            echo.leaveChannel(`App.Models.User.${users?.id}`)
+        }
+    }, [])
 
     const handleDeleteNotification = async (id: string) => {
         await deleteNotification(id)

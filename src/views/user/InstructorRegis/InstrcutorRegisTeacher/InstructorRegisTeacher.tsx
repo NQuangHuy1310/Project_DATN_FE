@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import routes from '@/configs/routes'
@@ -18,11 +18,21 @@ import {
     AlertDialogHeader,
     AlertDialogTitle
 } from '@/components/ui/alert-dialog'
+import { useUserStore } from '@/app/store'
 
 const InstructorRegis = () => {
     const [checkProfile, setCheckProfile] = useState<boolean>(false)
     const { profile } = useGetUserProfile()
     const navigate = useNavigate()
+
+    const user = useUserStore((state) => state.user)
+
+    useEffect(() => {
+        if (user?.status == 'approved') {
+            navigate(routes.userDashboard)
+        }
+    }, [])
+
     const handleCheckProfile = () => {
         if (!profile) {
             setCheckProfile(true)

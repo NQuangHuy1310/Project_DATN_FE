@@ -1,27 +1,29 @@
 import { IoIosStar } from 'react-icons/io'
 import { MdListAlt } from 'react-icons/md'
+import { FaUserFriends } from 'react-icons/fa'
+import { RiUserFollowFill } from 'react-icons/ri'
 
+import Course from '@/components/shared/Course'
+import Roadmap from '@/components/shared/Roadmap/Roadmap'
+import Loading from '@/components/Common/Loading/Loading'
+import NoContent from '@/components/shared/NoContent/NoContent'
 import { Button } from '@/components/ui/button'
+import { getImagesUrl } from '@/lib'
 import useGetUserProfile from '@/app/hooks/accounts/useGetUser'
 import { TeacherStatus } from '@/constants/constants'
 import { useGetIdParams } from '@/app/hooks/common/useCustomParams'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { useInstructorById } from '@/app/hooks/instructors/useInstructorClient'
-import { FaUserFriends } from 'react-icons/fa'
-import { getImagesUrl } from '@/lib'
-import { RiUserFollowFill } from 'react-icons/ri'
-import Loading from '@/components/Common/Loading/Loading'
-import NoContent from '@/components/shared/NoContent/NoContent'
-import Course from '@/components/shared/Course'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { useCheckFollowTeacher, useFollowTeacher, useUnFollowTeacher } from '@/app/hooks/accounts/useFlowTeacher'
 
 const InstructorDetail = () => {
     const instructorId = useGetIdParams('id')
     const { data, isLoading } = useInstructorById(instructorId!)
-    const { mutateAsync: flowTeacher } = useFollowTeacher()
-    const { mutateAsync: unFlowTeacher } = useUnFollowTeacher()
+    const { mutateAsync: flowTeacher, isPending: follow } = useFollowTeacher()
+    const { mutateAsync: unFlowTeacher, isPending: unFollow } = useUnFollowTeacher()
     const { user } = useGetUserProfile()
     const { data: checkFollow } = useCheckFollowTeacher(user?.id ?? 0, data?.dataTeacher.id ?? 0)
+
     const handleFlowTeacher = async () => {
         if (data?.dataTeacher) {
             await flowTeacher([{ following_id: data?.dataTeacher.id }])
@@ -37,6 +39,7 @@ const InstructorDetail = () => {
     if (isLoading) return <Loading />
 
     if (!data) return <NoContent />
+
     return (
         <div className="flex flex-col gap-5">
             <div className="card flex flex-col-reverse gap-7 md:flex-col">
@@ -74,7 +77,7 @@ const InstructorDetail = () => {
                         <span>
                             {data?.dataTeacher.ratings_avg_rate % 1 === 0
                                 ? Math.floor(data?.dataTeacher.ratings_avg_rate)
-                                : data?.dataTeacher.ratings_avg_rate.toFixed(1)}
+                                : Number(data?.dataTeacher.ratings_avg_rate).toFixed(1)}
                             ({data?.dataTeacher.total_ratings} đánh giá)
                         </span>
                     </div>
@@ -83,7 +86,7 @@ const InstructorDetail = () => {
                         {user?.id !== data?.dataTeacher?.id && (
                             <>
                                 {checkFollow?.action === 'follow' && (
-                                    <Button variant="default" className="w-full py-3" onClick={handleFlowTeacher}>
+                                    <Button variant="default" className="w-full py-3" onClick={handleFlowTeacher} disabled={follow}>
                                         {TeacherStatus.follow}
                                     </Button>
                                 )}
@@ -92,6 +95,7 @@ const InstructorDetail = () => {
                                         variant="outline"
                                         className="w-full py-3 duration-500 hover:bg-red-400 hover:text-white"
                                         onClick={handleUnFlowTeacher}
+                                        disabled={unFollow}
                                     >
                                         {TeacherStatus.unFollow}
                                     </Button>
@@ -109,6 +113,14 @@ const InstructorDetail = () => {
                     <NoContent />
                 )}
             </div>
+            {data.roadmaps && data.roadmaps.length > 0 && (
+                <div className="flex flex-col gap-4">
+                    <h2 className="text-2xl font-semibold">Lộ trình học tập</h2>
+                    <div className="flex flex-wrap justify-center gap-5 md:justify-start">
+                        {data.roadmaps && data.roadmaps.map((item, index) => <Roadmap key={index} data={item} />)}
+                    </div>
+                </div>
+            )}
         </div>
     )
 }

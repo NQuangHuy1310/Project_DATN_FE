@@ -67,7 +67,7 @@ const Payment = ({
             setVoucherCode('')
             setDiscountValue(0)
         } else if (user && voucherCode) {
-            const data = await applyVoucher([user?.id, discount ? discount : voucherCode])
+            const data = await applyVoucher([courseData?.id, discount ? discount : voucherCode])
             if (data.status === 'error') toast.error(data.message)
             const voucher = data.voucher
             if (voucher) {
@@ -188,7 +188,9 @@ const Payment = ({
                                     <div className="flex flex-wrap items-center gap-5">
                                         <div className="flex items-center gap-1">
                                             <IoIosStar className="size-5 text-primary" />
-                                            <span className="text-sm font-medium">{courseData?.ratings_avg_rate}</span>
+                                            <span className="text-sm font-medium">{(Number(courseData.ratings_avg_rate) % 1 === 0
+                                                ? Math.floor(Number(courseData.ratings_avg_rate))
+                                                : Number(courseData.ratings_avg_rate).toFixed(1)) || '0'}</span>
                                         </div>
                                         <div>
                                             <span className="flex items-center gap-1.5 text-sm font-medium">

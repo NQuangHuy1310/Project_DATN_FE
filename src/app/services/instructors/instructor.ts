@@ -18,12 +18,17 @@ import {
     IModule,
     IModuleData,
     IOverviewCourseData,
+    IPlasesData,
     IQuestion,
     IQuestionData,
+    IRatingReplyData,
+    IRoadmap,
+    IRoadmapData,
     ITargetCourse,
     IUpdatePositionLessonData,
     IUpdatePositionModuleData
 } from '@/types/instructor'
+import { HistoryBuyCourse } from '@/types'
 
 export const instructorApi = {
     createCourse: async (courseData: ICreateCourseData): Promise<ICreateCourse> => {
@@ -73,6 +78,9 @@ export const instructorApi = {
     },
     getOverviewCourse: async (courseId: string): Promise<any> => {
         return axiosClient.get(instructorUri.OVERVIEW_COURSE(courseId))
+    },
+    updatePriceSale: async (courseId: number, data: any): Promise<any> => {
+        return axiosClient.post(instructorUri.UPDATE_PRICE_SALE(courseId), data)
     },
 
     // Api module
@@ -170,13 +178,55 @@ export const instructorApi = {
     },
 
     // Statistic
-    instructorStatistic: async (): Promise<any> => {
-        return axiosClient.get(instructorUri.STATISTIC)
+    instructorStatistic: async (time?: string): Promise<any> => {
+        return axiosClient.get(instructorUri.STATISTIC(time))
     },
     getStudentsCourse: async (courseID?: number, limit?: number, page?: number, perPage?: number): Promise<any> => {
         return axiosClient.get(instructorUri.GET_STUDENTS(courseID, limit, page, perPage))
     },
     getRatingsCourse: async (courseID?: number, limit?: number, page?: number, perPage?: number): Promise<any> => {
         return axiosClient.get(instructorUri.GET_RATINGS(courseID, limit, page, perPage))
+    },
+
+    // Lịch sử mua khoá học
+    historyBuyCourse: async (
+        limit?: number,
+        page?: number,
+        perPage?: number,
+        start_date?: string,
+        end_date?: string
+    ): Promise<HistoryBuyCourse> => {
+        return axiosClient.get(instructorUri.HISTORY_BUY_COURSE(limit, page, perPage, start_date, end_date))
+    },
+
+    // Giảng viên trả lời bình luận
+    ratingReply: async (commentID: number, replyData: IRatingReplyData): Promise<any> => {
+        return axiosClient.post(instructorUri.RATING_REPLY(commentID), replyData)
+    },
+
+    // Api roadmap
+    createRoadmap: async (roadmapData: IRoadmapData): Promise<any> => {
+        return axiosClient.post(instructorUri.CREATE_ROADMAP, roadmapData)
+    },
+    updateRoadMap: async (roadmapID: number, roadmapData: IRoadmapData): Promise<any> => {
+        return axiosClient.post(instructorUri.UPDATE_ROADMAP(roadmapID), roadmapData)
+    },
+    deleteRoadMap: async (roadmapID: number): Promise<any> => {
+        return axiosClient.delete(instructorUri.DELETE_ROADMAP(roadmapID))
+    },
+    getRoadmap: async (): Promise<IRoadmap[]> => {
+        return axiosClient.get(instructorUri.GET_ROADMAP)
+    },
+    getDetailRoadmap: async (roadmapID: number): Promise<IRoadmap> => {
+        return axiosClient.get(instructorUri.GET_DETAIL_ROADMAP(roadmapID))
+    },
+    createPhase: async (phaseData: IPlasesData): Promise<any> => {
+        return axiosClient.post(instructorUri.CREATE_PHASE, phaseData)
+    },
+    updatePhase: async (phaseID: number, phaseData: IPlasesData): Promise<any> => {
+        return axiosClient.post(instructorUri.UPDATE_PHASE(phaseID), phaseData)
+    },
+    deletePhase: async (phaseID: number): Promise<any> => {
+        return axiosClient.delete(instructorUri.DELETE_PHASE(phaseID))
     }
 }
